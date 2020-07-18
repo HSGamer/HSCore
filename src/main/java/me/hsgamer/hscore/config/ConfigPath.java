@@ -31,7 +31,6 @@ public class ConfigPath<T> {
     }
 
     config.getConfig().set(path, value);
-    config.saveConfig();
   }
 
   public String getPath() {
