@@ -21,6 +21,12 @@
           <execution>
             <configuration>
               <createDependencyReducedPom>false</createDependencyReducedPom>
+              <relocations>
+                <relocation>
+                  <pattern>com.udojava.evalex</pattern>
+                  <shadedPattern>me.hsgamer.hscore.lib.evalex</shadedPattern>
+                </relocation>
+              </relocations>
             </configuration>
             <goals>
               <goal>shade</goal>
