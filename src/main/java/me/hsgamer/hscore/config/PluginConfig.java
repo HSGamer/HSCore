@@ -26,6 +26,10 @@ public class PluginConfig {
   }
 
   private void setUpConfig() {
+    if (!configFile.getParentFile().exists()) {
+      configFile.getParentFile().mkdirs();
+    }
+
     if (!configFile.exists()) {
       try {
         configFile.createNewFile();
