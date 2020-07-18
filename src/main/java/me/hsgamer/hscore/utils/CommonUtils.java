@@ -3,12 +3,13 @@ package me.hsgamer.hscore.utils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Supplier;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 public final class CommonUtils {
 
-  private static String prefix = "";
+  private static Supplier<String> prefix = () -> "";
 
   private CommonUtils() {
 
@@ -46,7 +47,7 @@ public final class CommonUtils {
    */
   public static void sendMessage(CommandSender sender, String message, boolean usePrefix) {
     if (usePrefix) {
-      message = prefix + message;
+      message = prefix.get() + message;
     }
     sender.sendMessage(colorize(message));
   }
@@ -78,7 +79,7 @@ public final class CommonUtils {
    * @return the prefix
    */
   public static String getPrefix() {
-    return prefix;
+    return prefix.get();
   }
 
   /**
@@ -86,7 +87,7 @@ public final class CommonUtils {
    *
    * @param prefix the prefix
    */
-  public static void setPrefix(String prefix) {
+  public static void setPrefix(Supplier<String> prefix) {
     CommonUtils.prefix = prefix;
   }
 }
