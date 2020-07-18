@@ -1,8 +1,13 @@
 package me.hsgamer.hscore.utils;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public final class BukkitUtils {
@@ -33,5 +38,17 @@ public final class BukkitUtils {
    */
   public static boolean isSpigot() {
     return Validate.isClassLoaded("org.bukkit.entity.Player$Spigot");
+  }
+
+  /**
+   * Get all unique ids
+   *
+   * @return the unique ids
+   */
+  public static List<UUID> getAllUniqueIds() {
+    return Arrays.stream(Bukkit.getOfflinePlayers())
+        .parallel()
+        .map(OfflinePlayer::getUniqueId)
+        .collect(Collectors.toList());
   }
 }
