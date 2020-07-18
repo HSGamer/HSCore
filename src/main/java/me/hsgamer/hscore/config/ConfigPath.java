@@ -24,4 +24,17 @@ public class ConfigPath<T> {
     }
     return config.get(clazz, path, def);
   }
+
+  public void setValue(T value) {
+    if (config == null) {
+      return;
+    }
+
+    config.getConfig().set(path, value);
+    config.saveConfig();
+  }
+
+  public String getPath() {
+    return path;
+  }
 }
