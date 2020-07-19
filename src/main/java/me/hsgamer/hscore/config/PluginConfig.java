@@ -16,9 +16,6 @@ public class PluginConfig {
 
   public PluginConfig(JavaPlugin plugin, String filename) {
     this(plugin, new File(plugin.getDataFolder(), filename));
-    if (!plugin.getDataFolder().exists()) {
-      plugin.getDataFolder().mkdirs();
-    }
   }
 
   public PluginConfig(JavaPlugin plugin, File file) {
@@ -29,6 +26,10 @@ public class PluginConfig {
   }
 
   private void setUpConfig() {
+    if (!configFile.getParentFile().exists()) {
+      configFile.getParentFile().mkdirs();
+    }
+
     if (!configFile.exists()) {
       try {
         configFile.createNewFile();
