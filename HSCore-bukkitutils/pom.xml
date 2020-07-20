@@ -36,6 +36,21 @@
     </resources>
   </build>
 
+  <dependencies>
+    <dependency>
+      <artifactId>spigot-api</artifactId>
+      <groupId>org.spigotmc</groupId>
+      <scope>provided</scope>
+      <version>1.12.2-R0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <artifactId>HSCore-common</artifactId>
+      <groupId>me.HSGamer</groupId>
+      <scope>provided</scope>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+
   <modelVersion>4.0.0</modelVersion>
 
   <parent>

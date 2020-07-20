@@ -18,21 +18,13 @@
     </plugins>
   </build>
 
-  <dependencies>
-    <dependency>
-      <artifactId>spigot-api</artifactId>
-      <groupId>org.spigotmc</groupId>
-      <scope>provided</scope>
-      <version>1.12.2-R0.1-SNAPSHOT</version>
-    </dependency>
-  </dependencies>
-
   <groupId>me.HSGamer</groupId>
   <modelVersion>4.0.0</modelVersion>
   <modules>
-    <module>HSCore-utils</module>
+    <module>HSCore-common</module>
     <module>HSCore-collections</module>
     <module>HSCore-expression</module>
+    <module>HSCore-bukkitutils</module>
     <module>HSCore-command</module>
     <module>HSCore-config</module>
   </modules>

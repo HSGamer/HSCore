@@ -1,17 +1,14 @@
-package me.hsgamer.hscore.utils;
+package me.hsgamer.hscore.bukkitutils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.function.Supplier;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-public final class CommonUtils {
+public final class MessageUtils {
 
   private static Supplier<String> prefix = () -> "";
 
-  private CommonUtils() {
+  private MessageUtils() {
 
   }
 
@@ -53,27 +50,6 @@ public final class CommonUtils {
   }
 
   /**
-   * Create a list of string
-   *
-   * @param value the object
-   * @param trim  should we trim the strings
-   * @return the string list
-   */
-  public static List<String> createStringListFromObject(Object value, boolean trim) {
-    List<String> list = new ArrayList<>();
-    if (value instanceof Collection) {
-      ((Collection<?>) value).forEach(o -> list.add(String.valueOf(o)));
-    } else {
-      list.add(String.valueOf(value));
-    }
-    if (trim) {
-      list.replaceAll(String::trim);
-    }
-    return list;
-  }
-
-
-  /**
    * Get the prefix
    *
    * @return the prefix
@@ -88,6 +64,6 @@ public final class CommonUtils {
    * @param prefix the prefix
    */
   public static void setPrefix(Supplier<String> prefix) {
-    CommonUtils.prefix = prefix;
+    MessageUtils.prefix = prefix;
   }
 }

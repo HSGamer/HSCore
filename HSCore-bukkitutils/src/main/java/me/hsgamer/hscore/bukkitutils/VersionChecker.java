@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.utils;
+package me.hsgamer.hscore.bukkitutils;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

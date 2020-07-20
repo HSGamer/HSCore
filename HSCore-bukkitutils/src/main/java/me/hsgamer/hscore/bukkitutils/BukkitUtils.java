@@ -1,11 +1,13 @@
-package me.hsgamer.hscore.utils;
+package me.hsgamer.hscore.bukkitutils;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
+import me.hsgamer.hscore.common.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -50,5 +52,21 @@ public final class BukkitUtils {
         .parallel()
         .map(OfflinePlayer::getUniqueId)
         .collect(Collectors.toList());
+  }
+
+  /**
+   * Get missing plugins from a list of given plugins
+   *
+   * @param depends the list of plugins
+   * @return the missing plugins
+   */
+  public static List<String> getMissingDepends(List<String> depends) {
+    List<String> list = new ArrayList<>();
+    for (String depend : depends) {
+      if (Bukkit.getPluginManager().getPlugin(depend) == null) {
+        list.add(depend);
+      }
+    }
+    return list;
   }
 }

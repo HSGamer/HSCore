@@ -1,11 +1,8 @@
-package me.hsgamer.hscore.utils;
+package me.hsgamer.hscore.common;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
-import org.bukkit.Bukkit;
 
 public final class Validate {
 
@@ -61,22 +58,6 @@ public final class Validate {
     } catch (ClassNotFoundException e) {
       return false;
     }
-  }
-
-  /**
-   * Get missing plugins from a list of given plugins
-   *
-   * @param depends the list of plugins
-   * @return the missing plugins
-   */
-  public static List<String> getMissingDepends(List<String> depends) {
-    List<String> list = new ArrayList<>();
-    for (String depend : depends) {
-      if (Bukkit.getPluginManager().getPlugin(depend) == null) {
-        list.add(depend);
-      }
-    }
-    return list;
   }
 
   /**
