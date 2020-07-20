@@ -15,36 +15,9 @@
         <groupId>org.apache.maven.plugins</groupId>
         <version>3.8.1</version>
       </plugin>
-      <plugin>
-        <artifactId>maven-shade-plugin</artifactId>
-        <executions>
-          <execution>
-            <configuration>
-              <createDependencyReducedPom>false</createDependencyReducedPom>
-              <relocations>
-                <relocation>
-                  <pattern>com.udojava.evalex</pattern>
-                  <shadedPattern>me.hsgamer.hscore.lib.evalex</shadedPattern>
-                </relocation>
-              </relocations>
-            </configuration>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <phase>package</phase>
-          </execution>
-        </executions>
-        <groupId>org.apache.maven.plugins</groupId>
-        <version>3.2.2</version>
-      </plugin>
     </plugins>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>true</filtering>
-      </resource>
-    </resources>
   </build>
+
   <dependencies>
     <dependency>
       <artifactId>spigot-api</artifactId>
@@ -52,18 +25,21 @@
       <scope>provided</scope>
       <version>1.12.2-R0.1-SNAPSHOT</version>
     </dependency>
-    <dependency>
-      <artifactId>EvalEx</artifactId>
-      <groupId>com.udojava</groupId>
-      <version>2.5</version>
-    </dependency>
   </dependencies>
+
   <groupId>me.HSGamer</groupId>
   <modelVersion>4.0.0</modelVersion>
+  <modules>
+    <module>hscore-utils</module>
+    <module>hscore-collections</module>
+    <module>hscore-expression</module>
+    <module>hscore-command</module>
+    <module>hscore-config</module>
+  </modules>
 
   <name>HSCore</name>
 
-  <packaging>jar</packaging>
+  <packaging>pom</packaging>
 
   <properties>
     <java.version>1.8</java.version>
