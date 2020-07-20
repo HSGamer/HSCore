@@ -30,11 +30,11 @@
   <groupId>me.HSGamer</groupId>
   <modelVersion>4.0.0</modelVersion>
   <modules>
-    <module>hscore-utils</module>
-    <module>hscore-collections</module>
-    <module>hscore-expression</module>
-    <module>hscore-command</module>
-    <module>hscore-config</module>
+    <module>HSCore-utils</module>
+    <module>HSCore-collections</module>
+    <module>HSCore-expression</module>
+    <module>HSCore-command</module>
+    <module>HSCore-config</module>
   </modules>
 
   <name>HSCore</name>
