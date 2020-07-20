@@ -27,6 +27,7 @@
     <module>HSCore-bukkitutils</module>
     <module>HSCore-command</module>
     <module>HSCore-config</module>
+    <module>HSCore-web</module>
   </modules>
 
   <name>HSCore</name>

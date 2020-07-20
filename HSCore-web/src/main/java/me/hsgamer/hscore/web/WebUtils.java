@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.common;
+package me.hsgamer.hscore.web;
 
 import java.io.BufferedReader;
 import java.io.IOException;

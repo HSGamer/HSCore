@@ -2,7 +2,15 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <artifactId>HSCore-common</artifactId>
+  <artifactId>HSCore-web</artifactId>
+  <dependencies>
+    <dependency>
+      <artifactId>json-simple</artifactId>
+      <groupId>com.googlecode.json-simple</groupId>
+      <version>1.1.1</version>
+    </dependency>
+  </dependencies>
+
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -10,6 +18,4 @@
     <groupId>me.HSGamer</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-
-
 </project>
