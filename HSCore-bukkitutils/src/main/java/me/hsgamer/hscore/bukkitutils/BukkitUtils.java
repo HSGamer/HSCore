@@ -12,6 +12,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+/**
+ * Methods on Bukkit
+ */
 public final class BukkitUtils {
 
   private BukkitUtils() {

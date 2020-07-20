@@ -4,10 +4,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+/**
+ * Methods on Permissions
+ */
 public class PermissionUtils {
 
   private PermissionUtils() {
-
+    // EMPTY
   }
 
   /**

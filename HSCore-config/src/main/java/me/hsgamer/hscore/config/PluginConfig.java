@@ -7,6 +7,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * A simple config file
+ */
 public class PluginConfig {
 
   private final File configFile;
@@ -14,10 +17,22 @@ public class PluginConfig {
   private final String fileName;
   private FileConfiguration config;
 
+  /**
+   * Create a plugin config
+   *
+   * @param plugin   the plugin
+   * @param filename the file name
+   */
   public PluginConfig(JavaPlugin plugin, String filename) {
     this(plugin, new File(plugin.getDataFolder(), filename));
   }
 
+  /**
+   * Create a plugin config
+   *
+   * @param plugin the plugin
+   * @param file   the config file
+   */
   public PluginConfig(JavaPlugin plugin, File file) {
     this.plugin = plugin;
     this.configFile = file;
@@ -25,6 +40,9 @@ public class PluginConfig {
     setUpConfig();
   }
 
+  /**
+   * Set up the config
+   */
   private void setUpConfig() {
     if (!configFile.getParentFile().exists()) {
       configFile.getParentFile().mkdirs();
@@ -40,10 +58,16 @@ public class PluginConfig {
     config = YamlConfiguration.loadConfiguration(configFile);
   }
 
+  /**
+   * Reload the config
+   */
   public void reloadConfig() {
     config = YamlConfiguration.loadConfiguration(configFile);
   }
 
+  /**
+   * Save the config
+   */
   public void saveConfig() {
     try {
       config.save(configFile);
@@ -52,6 +76,11 @@ public class PluginConfig {
     }
   }
 
+  /**
+   * Get the instance of the config file
+   *
+   * @return the config
+   */
   public FileConfiguration getConfig() {
     if (config == null) {
       setUpConfig();
@@ -60,16 +89,36 @@ public class PluginConfig {
   }
 
 
+  /**
+   * Get the value from the config
+   *
+   * @param classType the type of value
+   * @param path      the path to the value
+   * @param def       the default value if it's not found
+   * @return the value
+   */
   @SuppressWarnings("unchecked")
   public <T> T get(Class<T> classType, String path, T def) {
     Object o = getConfig().get(path, def);
     return classType.isInstance(o) ? (T) o : def;
   }
 
+  /**
+   * Get the value from the config
+   *
+   * @param classType the type of value
+   * @param path      the path to the value
+   * @return the value
+   */
   public <T> T get(Class<T> classType, String path) {
     return get(classType, path, null);
   }
 
+  /**
+   * Get the file name
+   *
+   * @return the file name
+   */
   public String getFileName() {
     return fileName;
   }

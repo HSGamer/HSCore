@@ -3,6 +3,9 @@ package me.hsgamer.hscore.map;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Linked String Map but case-insensitive
+ */
 public class CaseInsensitiveStringLinkedMap<V> extends LinkedHashMap<String, V> {
 
   public CaseInsensitiveStringLinkedMap() {

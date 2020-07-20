@@ -12,6 +12,9 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * The command manager
+ */
 public final class CommandManager {
 
   private final Map<String, Command> registered = new HashMap<>();

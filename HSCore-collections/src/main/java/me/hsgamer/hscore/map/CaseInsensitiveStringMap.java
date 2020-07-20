@@ -3,6 +3,9 @@ package me.hsgamer.hscore.map;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * String Map but case-insensitive
+ */
 public class CaseInsensitiveStringMap<V> extends HashMap<String, V> {
 
   public CaseInsensitiveStringMap() {

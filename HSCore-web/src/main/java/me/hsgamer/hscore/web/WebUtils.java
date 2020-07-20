@@ -9,18 +9,36 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+/**
+ * Methods on web
+ */
 public class WebUtils {
 
   private WebUtils() {
 
   }
 
+  /**
+   * Get JSON from the URL
+   *
+   * @param address the URL
+   * @return the JSON object
+   * @throws IOException    If there is an error when opening the connection
+   * @throws ParseException If it fails to parse the JSON object
+   */
   public static JSONObject getJSONFromURL(String address) throws IOException, ParseException {
     BufferedReader rd = new BufferedReader(
         new InputStreamReader(openConnection(address).getInputStream()));
     return (JSONObject) new JSONParser().parse(rd);
   }
 
+  /**
+   * Open a connection to the URL
+   *
+   * @param address the address / URL
+   * @return the connection
+   * @throws IOException If the URL is invalid or can't be connected
+   */
   public static URLConnection openConnection(String address) throws IOException {
     URL url = new URL(address);
     URLConnection openConnection = url.openConnection();

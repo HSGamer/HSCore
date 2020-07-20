@@ -8,14 +8,27 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * A simple version checker for Spigot
+ */
 public final class VersionChecker {
 
   private final int resourceId;
 
+  /**
+   * Create a version checker
+   *
+   * @param resourceId the resource id from SpigotMC
+   */
   public VersionChecker(int resourceId) {
     this.resourceId = resourceId;
   }
 
+  /**
+   * Get the version of the resource
+   *
+   * @return the version
+   */
   public CompletableFuture<String> getVersion() {
     return CompletableFuture.supplyAsync(() -> {
       try {

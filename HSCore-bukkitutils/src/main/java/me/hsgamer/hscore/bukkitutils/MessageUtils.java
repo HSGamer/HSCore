@@ -4,6 +4,9 @@ import java.util.function.Supplier;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+/**
+ * Methods on messages on Bukkit
+ */
 public final class MessageUtils {
 
   private static Supplier<String> prefix = () -> "";

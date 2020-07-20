@@ -13,6 +13,9 @@ import me.hsgamer.hscore.expression.expression.string.EqualsIgnoreCase;
 import me.hsgamer.hscore.expression.expression.string.Length;
 import me.hsgamer.hscore.expression.expression.string.StartsWith;
 
+/**
+ * The expression manager
+ */
 public final class ExpressionUtils {
 
   private static final List<LazyFunction> lazyFunctionList = new ArrayList<>();
