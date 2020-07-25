@@ -24,10 +24,8 @@
     <module>HSCore-common</module>
     <module>HSCore-collections</module>
     <module>HSCore-expression</module>
-    <module>HSCore-bukkitutils</module>
-    <module>HSCore-command</module>
-    <module>HSCore-config</module>
     <module>HSCore-web</module>
+    <module>HSCore-bukkit</module>
   </modules>
 
   <name>HSCore</name>
@@ -38,17 +36,6 @@
     <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-
-  <repositories>
-    <repository>
-      <id>spigotmc-repo</id>
-      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-    </repository>
-    <repository>
-      <id>sonatype</id>
-      <url>https://oss.sonatype.org/content/groups/public/</url>
-    </repository>
-  </repositories>
 
   <version>1.0-SNAPSHOT</version>
 </project>
