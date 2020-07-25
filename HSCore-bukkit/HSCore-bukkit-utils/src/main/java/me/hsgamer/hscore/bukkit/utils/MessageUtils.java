@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.bukkitutils;
+package me.hsgamer.hscore.bukkit.utils;
 
 import java.util.function.Supplier;
 import org.bukkit.ChatColor;

@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.command;
+package me.hsgamer.hscore.bukkit.command;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

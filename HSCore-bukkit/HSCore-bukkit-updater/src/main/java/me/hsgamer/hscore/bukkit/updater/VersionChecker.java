@@ -1,12 +1,10 @@
-package me.hsgamer.hscore.bukkitutils;
+package me.hsgamer.hscore.bukkit.updater;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.concurrent.CompletableFuture;
+import me.hsgamer.hscore.web.WebUtils;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 
 /**
  * A simple version checker for Spigot
@@ -32,23 +30,14 @@ public final class VersionChecker {
   public CompletableFuture<String> getVersion() {
     return CompletableFuture.supplyAsync(() -> {
       try {
-        URL url = new URL(
+        JSONObject object = WebUtils.getJSONFromURL(
             "https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.addRequestProperty("User-Agent",
-            "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
-
-        InputStreamReader reader = new InputStreamReader(connection.getInputStream());
-        JsonObject object = new JsonParser().parse(reader).getAsJsonObject();
-        reader.close();
-        connection.disconnect();
-
-        String version = object.get("current_version").getAsString();
+        String version = String.valueOf(object.get("current_version"));
         if (version == null) {
           throw new IOException("Cannot get the plugin version");
         }
         return version;
-      } catch (IOException exception) {
+      } catch (IOException | ParseException exception) {
         return "Error when getting version: " + exception.getMessage();
       }
     });

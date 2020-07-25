@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.bukkitutils;
+package me.hsgamer.hscore.bukkit.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;

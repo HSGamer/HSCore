@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.config;
+package me.hsgamer.hscore.bukkit.config;
 
 /**
  * A simple config path for PluginConfig

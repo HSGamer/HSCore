@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.bukkitutils;
+package me.hsgamer.hscore.bukkit.utils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

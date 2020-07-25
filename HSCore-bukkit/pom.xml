@@ -17,6 +17,7 @@
     <module>HSCore-bukkit-utils</module>
     <module>HSCore-bukkit-command</module>
     <module>HSCore-bukkit-config</module>
+    <module>HSCore-bukkit-updater</module>
   </modules>
 
   <packaging>pom</packaging>
