@@ -32,11 +32,10 @@ public final class VersionChecker {
       try {
         JSONObject object = WebUtils.getJSONFromURL(
             "https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId);
-        String version = String.valueOf(object.get("current_version"));
-        if (version == null) {
+        if (!object.containsKey("current_version")) {
           throw new IOException("Cannot get the plugin version");
         }
-        return version;
+        return String.valueOf(object.get("current_version"));
       } catch (IOException | ParseException exception) {
         return "Error when getting version: " + exception.getMessage();
       }
