@@ -25,7 +25,7 @@
           </execution>
         </executions>
         <groupId>org.apache.maven.plugins</groupId>
-        <version>3.2.2</version>
+        <version>3.2.4</version>
       </plugin>
     </plugins>
     <resources>
