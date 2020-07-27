@@ -26,9 +26,8 @@ public final class CommandManager {
   public CommandManager(JavaPlugin plugin) {
     this.plugin = plugin;
     try {
-      Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-      commandMapField.setAccessible(true);
-      bukkitCommandMap = (CommandMap) commandMapField.get(Bukkit.getServer());
+      Method commandMapMethod = Bukkit.getServer().getClass().getMethod("getCommandMap");
+      bukkitCommandMap = (CommandMap) commandMapMethod.invoke(Bukkit.getServer());
 
       knownCommandsField = SimpleCommandMap.class.getDeclaredField("knownCommands");
       knownCommandsField.setAccessible(true);
