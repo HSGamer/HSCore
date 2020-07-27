@@ -92,7 +92,8 @@ public class PluginConfig {
   /**
    * Get the value from the config
    *
-   * @param classType the type of value
+   * @param <T>       the type of the value
+   * @param classType the class type of value
    * @param path      the path to the value
    * @param def       the default value if it's not found
    * @return the value
@@ -106,7 +107,8 @@ public class PluginConfig {
   /**
    * Get the value from the config
    *
-   * @param classType the type of value
+   * @param <T>       the type of the value
+   * @param classType the class type of value
    * @param path      the path to the value
    * @return the value
    */
