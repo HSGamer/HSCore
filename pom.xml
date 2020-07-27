@@ -18,8 +18,19 @@
     </plugins>
   </build>
 
+  <distributionManagement>
+    <repository>
+      <id>codemc-releases</id>
+      <url>https://repo.codemc.io/repository/maven-releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>codemc-snapshots</id>
+      <url>https://repo.codemc.io/repository/maven-snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
   <groupId>me.HSGamer</groupId>
   <modelVersion>4.0.0</modelVersion>
+
   <modules>
     <module>HSCore-common</module>
     <module>HSCore-collections</module>
