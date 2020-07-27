@@ -37,8 +37,7 @@ public final class CommandManager {
     }
 
     try {
-      Class<?> craftServer = Class.forName(
-          Bukkit.getServer().getClass().getPackage().getName() + ".CraftServer");
+      Class<?> craftServer = Bukkit.getServer().getClass();
       syncCommandsMethod = craftServer.getDeclaredMethod("syncCommands");
     } catch (Exception e) {
       // Ignored
