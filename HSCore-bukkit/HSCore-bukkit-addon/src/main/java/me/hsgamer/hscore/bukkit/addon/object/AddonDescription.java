@@ -63,7 +63,7 @@ public final class AddonDescription {
    * @return the value
    * @throws RequiredAddonPathException if the path is required but is not found in addon.yml
    */
-  public <T> T get(AddonPath<T> addonPath) throws RequiredAddonPathException {
+  public <T> T get(AddonPath<T> addonPath) {
     if (addonPath.isRequired() && !configuration.isSet(addonPath.getPath())) {
       throw new RequiredAddonPathException(
           addonPath.getPath() + " is not found in the addon '" + name + "'");
