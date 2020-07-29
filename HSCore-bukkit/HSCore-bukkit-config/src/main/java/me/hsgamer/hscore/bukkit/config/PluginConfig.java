@@ -92,28 +92,22 @@ public class PluginConfig {
   /**
    * Get the value from the config
    *
-   * @param <T>       the type of the value
-   * @param classType the class type of value
-   * @param path      the path to the value
-   * @param def       the default value if it's not found
+   * @param path the path to the value
+   * @param def  the default value if it's not found
    * @return the value
    */
-  @SuppressWarnings("unchecked")
-  public <T> T get(Class<T> classType, String path, T def) {
-    Object o = getConfig().get(path, def);
-    return classType.isInstance(o) ? (T) o : def;
+  public Object get(String path, Object def) {
+    return getConfig().get(path, def);
   }
 
   /**
    * Get the value from the config
    *
-   * @param <T>       the type of the value
-   * @param classType the class type of value
-   * @param path      the path to the value
+   * @param path the path to the value
    * @return the value
    */
-  public <T> T get(Class<T> classType, String path) {
-    return get(classType, path, null);
+  public Object get(String path) {
+    return get(path, null);
   }
 
   /**

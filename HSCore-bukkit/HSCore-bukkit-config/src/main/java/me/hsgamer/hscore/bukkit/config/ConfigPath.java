@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.bukkit.config;
 
+import java.util.function.Function;
+
 /**
  * A simple config path for PluginConfig
  *
@@ -7,22 +9,22 @@ package me.hsgamer.hscore.bukkit.config;
  */
 public class ConfigPath<T> {
 
-  private final Class<T> clazz;
   private final String path;
   private final T def;
+  private final Function<Object, T> typeConverter;
   private PluginConfig config;
 
   /**
    * Create a config path
    *
-   * @param clazz the type of value
-   * @param path  the path to the value
-   * @param def   the default value if it's not found
+   * @param path          the path to the value
+   * @param def           the default value if it's not found
+   * @param typeConverter how to convert the raw object to the needed type of value
    */
-  public ConfigPath(Class<T> clazz, String path, T def) {
-    this.clazz = clazz;
+  public ConfigPath(String path, T def, Function<Object, T> typeConverter) {
     this.path = path;
     this.def = def;
+    this.typeConverter = typeConverter;
   }
 
   /**
@@ -44,7 +46,8 @@ public class ConfigPath<T> {
     if (config == null) {
       return def;
     }
-    return config.get(clazz, path, def);
+
+    return typeConverter.apply(config.get(path, def));
   }
 
   /**
