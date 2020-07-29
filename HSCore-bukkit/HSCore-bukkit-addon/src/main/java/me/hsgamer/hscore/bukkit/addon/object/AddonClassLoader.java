@@ -1,10 +1,11 @@
-package me.hsgamer.hscore.bukkit.addon;
+package me.hsgamer.hscore.bukkit.addon.object;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import me.hsgamer.hscore.bukkit.addon.AddonManager;
 
 public final class AddonClassLoader extends URLClassLoader {
 
@@ -28,6 +29,7 @@ public final class AddonClassLoader extends URLClassLoader {
     }
     addon = newClass.getDeclaredConstructor().newInstance();
     addon.setDescription(addonDescription);
+    addon.setAddonManager(manager);
   }
 
   public Addon getAddon() {

@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.bukkit.addon;
+package me.hsgamer.hscore.bukkit.addon.object;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,29 +7,25 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import me.hsgamer.hscore.bukkit.addon.AddonManager;
 import me.hsgamer.hscore.bukkit.config.PluginConfig;
 import me.hsgamer.hscore.common.Validate;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * The main class of the addon
  */
-@SuppressWarnings("unused")
 public abstract class Addon {
 
   private final File jarFile;
   private final AddonClassLoader addonClassLoader;
-  private final AddonManager addonManager;
+  private AddonManager addonManager;
   private File dataFolder;
   private PluginConfig config;
   private AddonDescription description;
 
-  public Addon(AddonManager addonManager) {
-    this.addonManager = addonManager;
+  public Addon() {
     this.addonClassLoader = (AddonClassLoader) this.getClass().getClassLoader();
     this.jarFile = addonClassLoader.getFile();
   }
@@ -40,9 +36,6 @@ public abstract class Addon {
 
   /**
    * Called when loading the addon
-   * <p>
-   * WARNING: Don't use this to check if the required plugins are enabled Use "plugin-depend" option
-   * from addon.yml
    *
    * @return whether the addon loaded properly
    */
@@ -98,6 +91,19 @@ public abstract class Addon {
 
   public final void setDescription(AddonDescription description) {
     this.description = description;
+  }
+
+  /**
+   * Get the addon manager
+   *
+   * @return the addon manager
+   */
+  public final AddonManager getAddonManager() {
+    return addonManager;
+  }
+
+  public final void setAddonManager(AddonManager addonManager) {
+    this.addonManager = addonManager;
   }
 
   /**
@@ -214,23 +220,5 @@ public abstract class Addon {
       getPlugin().getLogger().warning("Could not load from jar file. " + path);
     }
     return null;
-  }
-
-  /**
-   * Register listener
-   *
-   * @param listener the listener to register
-   */
-  public final void registerListener(Listener listener) {
-    Bukkit.getPluginManager().registerEvents(listener, getPlugin());
-  }
-
-  /**
-   * Unregister listener
-   *
-   * @param listener the listener to unregister
-   */
-  public final void unregisterListener(Listener listener) {
-    HandlerList.unregisterAll(listener);
   }
 }

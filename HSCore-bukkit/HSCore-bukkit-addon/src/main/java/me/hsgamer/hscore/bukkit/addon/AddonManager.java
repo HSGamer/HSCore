@@ -15,6 +15,9 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
+import me.hsgamer.hscore.bukkit.addon.object.Addon;
+import me.hsgamer.hscore.bukkit.addon.object.AddonClassLoader;
+import me.hsgamer.hscore.bukkit.addon.object.AddonDescription;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -71,11 +74,7 @@ public abstract class AddonManager {
       throw new InvalidConfigurationException(
           "Addon '" + jar.getName() + "' doesn't have a main class on addon.yml");
     }
-    AddonDescription addonDescription = new AddonDescription(name, version, mainClass);
-
-    // TODO: Implement AddonSetting
-
-    return addonDescription;
+    return new AddonDescription(name, version, mainClass, data);
   }
 
   public void loadAddons() {
@@ -96,6 +95,7 @@ public abstract class AddonManager {
           AddonClassLoader loader = new AddonClassLoader(this, file, addonDescription,
               getClass().getClassLoader());
           Addon addon = loader.getAddon();
+          onAddonLoading(addon);
 
           addonMap.put(addonDescription.getName(), loader.getAddon());
           loaderMap.put(addon, loader);
@@ -204,12 +204,10 @@ public abstract class AddonManager {
     });
   }
 
-  @SuppressWarnings("unused")
   public Addon getAddon(String name) {
     return addons.get(name);
   }
 
-  @SuppressWarnings("unused")
   public boolean isAddonLoaded(String name) {
     return addons.containsKey(name);
   }
@@ -219,6 +217,10 @@ public abstract class AddonManager {
   }
 
   protected abstract Map<String, Addon> sortAddons(Map<String, Addon> original);
+
+  protected void onAddonLoading(Addon addon) {
+    // EMPTY
+  }
 
   public Class<?> findClass(Addon addon, String name) {
     for (AddonClassLoader loader : loaderMap.values()) {
