@@ -1,7 +1,5 @@
 package me.hsgamer.hscore.bukkit.addon.object;
 
-import me.hsgamer.hscore.bukkit.addon.exception.RequiredAddonPathException;
-import me.hsgamer.hscore.bukkit.addon.object.path.AddonPath;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public final class AddonDescription {
@@ -53,23 +51,5 @@ public final class AddonDescription {
    */
   public YamlConfiguration getConfiguration() {
     return configuration;
-  }
-
-  /**
-   * Get the value from addon.yml
-   *
-   * @param <T>       the type of value
-   * @param addonPath the path to the value
-   * @return the value
-   * @throws RequiredAddonPathException if the path is required but is not found in addon.yml
-   */
-  public <T> T get(AddonPath<T> addonPath) {
-    if (addonPath.isRequired() && !configuration.isSet(addonPath.getPath())) {
-      throw new RequiredAddonPathException(
-          addonPath.getPath() + " is not found in the addon '" + name + "'");
-    }
-
-    Object value = configuration.get(addonPath.getPath());
-    return value == null ? null : addonPath.convertType(value);
   }
 }

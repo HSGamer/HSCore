@@ -1,5 +1,9 @@
 package me.hsgamer.hscore.bukkit.addon.object.path;
 
+import me.hsgamer.hscore.bukkit.addon.exception.RequiredAddonPathException;
+import me.hsgamer.hscore.bukkit.addon.object.Addon;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 /**
  * A path to get value from addon.yml
  *
@@ -46,4 +50,22 @@ public abstract class AddonPath<T> {
    * @return the converted value
    */
   public abstract T convertType(Object object);
+
+  /**
+   * Get the value from addon.yml
+   *
+   * @param addon the addon
+   * @return the value
+   * @throws RequiredAddonPathException if the path is required but is not found in addon.yml
+   */
+  public T get(Addon addon) {
+    YamlConfiguration configuration = addon.getDescription().getConfiguration();
+    if (required && !configuration.isSet(path)) {
+      throw new RequiredAddonPathException(
+          path + " is not found in the addon '" + addon.getDescription().getName() + "'");
+    }
+
+    Object value = configuration.get(path);
+    return value == null ? null : convertType(value);
+  }
 }
