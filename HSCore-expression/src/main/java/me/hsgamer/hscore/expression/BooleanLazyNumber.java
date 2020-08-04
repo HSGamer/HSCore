@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 public class BooleanLazyNumber {
 
   /**
-   * The FALSE state for Boolean LazyFunction & LazyOperator
+   * The FALSE state for Boolean LazyFunction and LazyOperator
    */
   public static final LazyNumber FALSE = new LazyNumber() {
     public BigDecimal eval() {
@@ -18,7 +18,7 @@ public class BooleanLazyNumber {
     }
   };
   /**
-   * The TRUE state for Boolean LazyFunction & LazyOperator
+   * The TRUE state for Boolean LazyFunction and LazyOperator
    */
   public static final LazyNumber TRUE = new LazyNumber() {
     public BigDecimal eval() {
