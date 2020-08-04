@@ -22,7 +22,9 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-// TODO: JavaDocs
+/**
+ * An Addon manager
+ */
 public abstract class AddonManager {
 
   private final Map<String, Addon> addons = new LinkedHashMap<>();
@@ -30,6 +32,11 @@ public abstract class AddonManager {
   private final File addonsDir;
   private final JavaPlugin plugin;
 
+  /**
+   * Create a new addon manager
+   *
+   * @param plugin the parent plugin
+   */
   public AddonManager(JavaPlugin plugin) {
     this.plugin = plugin;
     addonsDir = new File(plugin.getDataFolder(), "addon");
@@ -38,14 +45,32 @@ public abstract class AddonManager {
     }
   }
 
+  /**
+   * Get the parent plugin
+   *
+   * @return the plugin
+   */
   public JavaPlugin getPlugin() {
     return plugin;
   }
 
+  /**
+   * Get the addon directory
+   *
+   * @return the directory
+   */
   public File getAddonsDir() {
     return addonsDir;
   }
 
+  /**
+   * Generate the addon description
+   *
+   * @param jar the addon jar
+   * @return the addon description
+   * @throws IOException                   if there is an error when loading the addon jar
+   * @throws InvalidConfigurationException if the addon.yml file has invalid value
+   */
   private AddonDescription getAddonDescription(JarFile jar)
       throws IOException, InvalidConfigurationException {
     // Load addon.yml file
@@ -77,6 +102,9 @@ public abstract class AddonManager {
     return new AddonDescription(name, version, mainClass, data);
   }
 
+  /**
+   * Load all addons from the addon directory. Also call {@link Addon#onLoad() onLoad()}
+   */
   public void loadAddons() {
     Map<String, Addon> addonMap = new HashMap<>();
 
@@ -132,6 +160,13 @@ public abstract class AddonManager {
     addons.putAll(finalAddons);
   }
 
+  /**
+   * Enable (call {@link Addon#onEnable() onEnable()}) the addon
+   *
+   * @param name                the addon name
+   * @param closeLoaderOnFailed close the class loader if failed
+   * @return whether it's enabled successfully
+   */
   public boolean enableAddon(String name, boolean closeLoaderOnFailed) {
     Addon addon = addons.get(name);
     try {
@@ -146,6 +181,13 @@ public abstract class AddonManager {
     }
   }
 
+  /**
+   * Disable (call {@link Addon#onDisable() onDisable()}) the addon
+   *
+   * @param name                the addon name
+   * @param closeLoaderOnFailed close the class loader if failed
+   * @return whether it's disabled successfully
+   */
   public boolean disableAddon(String name, boolean closeLoaderOnFailed) {
     Addon addon = addons.get(name);
     try {
@@ -160,6 +202,9 @@ public abstract class AddonManager {
     }
   }
 
+  /**
+   * Enable all addons from the addon directory
+   */
   public void enableAddons() {
     List<String> failed = new ArrayList<>();
     addons.keySet().forEach(name -> {
@@ -173,14 +218,23 @@ public abstract class AddonManager {
     failed.forEach(addons::remove);
   }
 
+  /**
+   * Call the {@link Addon#onPostEnable() onPostEnable()} method of all enabled addons
+   */
   public void callPostEnable() {
     addons.values().forEach(Addon::onPostEnable);
   }
 
+  /**
+   * Call the {@link Addon#onReload() onReload()} method of all enabled addons
+   */
   public void callReload() {
     addons.values().forEach(Addon::onReload);
   }
 
+  /**
+   * Disable all enabled addons
+   */
   public void disableAddons() {
     addons.keySet().forEach(name -> {
       if (disableAddon(name, false)) {
@@ -193,6 +247,11 @@ public abstract class AddonManager {
     addons.clear();
   }
 
+  /**
+   * Close the class loader of the addon
+   *
+   * @param addon the addon
+   */
   private void closeClassLoader(Addon addon) {
     loaderMap.computeIfPresent(addon, (a, loader) -> {
       try {
@@ -204,24 +263,59 @@ public abstract class AddonManager {
     });
   }
 
+  /**
+   * Get the enabled addon
+   *
+   * @param name the name of the addon
+   * @return the addon, or null if it's not found
+   */
   public Addon getAddon(String name) {
     return addons.get(name);
   }
 
+  /**
+   * Check if the addon is loaded
+   *
+   * @param name the name of the addon
+   * @return whether it's laoded
+   */
   public boolean isAddonLoaded(String name) {
     return addons.containsKey(name);
   }
 
+  /**
+   * Get all loaded addons
+   *
+   * @return the loaded addons
+   */
   public Map<String, Addon> getLoadedAddons() {
     return addons;
   }
 
+  /**
+   * Sort the order of the addons
+   *
+   * @param original the original map
+   * @return the sorted map
+   */
   protected abstract Map<String, Addon> sortAddons(Map<String, Addon> original);
 
+  /**
+   * Called when the addon is on loading
+   *
+   * @param addon the loading addon
+   */
   protected void onAddonLoading(Addon addon) {
     // EMPTY
   }
 
+  /**
+   * Find a class for an addon
+   *
+   * @param addon the calling addon
+   * @param name  the class name
+   * @return the class, or null if it's not found
+   */
   public Class<?> findClass(Addon addon, String name) {
     for (AddonClassLoader loader : loaderMap.values()) {
       if (loaderMap.containsKey(addon)) {
@@ -235,6 +329,11 @@ public abstract class AddonManager {
     return null;
   }
 
+  /**
+   * Get the addon count
+   *
+   * @return the addon count
+   */
   public Map<String, Integer> getAddonCount() {
     Map<String, Integer> map = new HashMap<>();
     Set<String> list = addons.keySet();
