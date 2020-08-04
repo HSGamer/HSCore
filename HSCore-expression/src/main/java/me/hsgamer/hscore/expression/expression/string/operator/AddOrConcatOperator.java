@@ -16,21 +16,24 @@ public class AddOrConcatOperator extends AbstractLazyOperator {
   public LazyNumber eval(LazyNumber v1, LazyNumber v2) {
     OperandValidator.notNull(v1, v2);
 
+    BigDecimal b1 = v1.eval();
+    BigDecimal b2 = v2.eval();
+
     return new LazyNumber() {
       @Override
       public BigDecimal eval() {
-        if (v1.eval() == null || v2.eval() == null) {
+        if (b1 == null || b2 == null) {
           return null;
         }
-        return v1.eval().add(v2.eval());
+        return b1.add(b2);
       }
 
       @Override
       public String getString() {
-        if (v1.eval() == null || v2.eval() == null) {
+        if (b1 == null || b2 == null) {
           return v1.getString() + v2.getString();
         }
-        return v1.eval().add(v2.eval()).toPlainString();
+        return b1.add(b2).toPlainString();
       }
     };
   }
