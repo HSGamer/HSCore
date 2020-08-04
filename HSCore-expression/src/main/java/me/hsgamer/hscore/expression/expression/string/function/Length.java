@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.expression.expression.string;
+package me.hsgamer.hscore.expression.expression.string.function;
 
 import com.udojava.evalex.AbstractLazyFunction;
 import com.udojava.evalex.Expression.LazyNumber;

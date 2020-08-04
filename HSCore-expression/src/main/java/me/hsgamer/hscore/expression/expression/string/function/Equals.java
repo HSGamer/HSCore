@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.expression.expression.string;
+package me.hsgamer.hscore.expression.expression.string.function;
 
 import me.hsgamer.hscore.expression.expression.StringComparator;
 

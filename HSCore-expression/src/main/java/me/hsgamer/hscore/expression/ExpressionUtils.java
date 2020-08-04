@@ -2,31 +2,42 @@ package me.hsgamer.hscore.expression;
 
 import com.udojava.evalex.Expression;
 import com.udojava.evalex.LazyFunction;
+import com.udojava.evalex.LazyOperator;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
-import me.hsgamer.hscore.expression.expression.string.Contains;
-import me.hsgamer.hscore.expression.expression.string.EndsWith;
-import me.hsgamer.hscore.expression.expression.string.Equals;
-import me.hsgamer.hscore.expression.expression.string.EqualsIgnoreCase;
-import me.hsgamer.hscore.expression.expression.string.Length;
-import me.hsgamer.hscore.expression.expression.string.StartsWith;
+import java.util.Set;
+import me.hsgamer.hscore.expression.expression.string.function.Contains;
+import me.hsgamer.hscore.expression.expression.string.function.EndsWith;
+import me.hsgamer.hscore.expression.expression.string.function.Equals;
+import me.hsgamer.hscore.expression.expression.string.function.EqualsIgnoreCase;
+import me.hsgamer.hscore.expression.expression.string.function.Length;
+import me.hsgamer.hscore.expression.expression.string.function.StartsWith;
+import me.hsgamer.hscore.expression.expression.string.operator.AddOrConcatOperator;
+import me.hsgamer.hscore.expression.expression.string.operator.EqualsOperator;
+import me.hsgamer.hscore.expression.expression.string.operator.NotEqualsOperator;
 
 /**
  * The expression manager
  */
 public final class ExpressionUtils {
 
-  private static final List<LazyFunction> lazyFunctionList = new ArrayList<>();
+  private static final Set<LazyFunction> lazyFunctionSet = new HashSet<>();
+  private static final Set<LazyOperator> lazyOperatorSet = new HashSet<>();
 
   static {
-    lazyFunctionList.add(new Equals());
-    lazyFunctionList.add(new EqualsIgnoreCase());
-    lazyFunctionList.add(new Contains());
-    lazyFunctionList.add(new StartsWith());
-    lazyFunctionList.add(new EndsWith());
-    lazyFunctionList.add(new Length());
+    lazyFunctionSet.add(new Equals());
+    lazyFunctionSet.add(new EqualsIgnoreCase());
+    lazyFunctionSet.add(new Contains());
+    lazyFunctionSet.add(new StartsWith());
+    lazyFunctionSet.add(new EndsWith());
+    lazyFunctionSet.add(new Length());
+
+    lazyOperatorSet.add(new EqualsOperator("="));
+    lazyOperatorSet.add(new EqualsOperator("=="));
+    lazyOperatorSet.add(new NotEqualsOperator("!="));
+    lazyOperatorSet.add(new NotEqualsOperator("<>"));
+    lazyOperatorSet.add(new AddOrConcatOperator());
   }
 
   private ExpressionUtils() {
@@ -42,6 +53,7 @@ public final class ExpressionUtils {
   public static boolean isBoolean(String input) {
     Expression expression = new Expression(input);
     applyLazyFunction(expression);
+    applyLazyOperator(expression);
     try {
       return expression.isBoolean();
     } catch (Exception e) {
@@ -63,6 +75,7 @@ public final class ExpressionUtils {
 
     Expression expression = new Expression(input);
     applyLazyFunction(expression);
+    applyLazyOperator(expression);
     try {
       return expression.eval();
     } catch (Exception e) {
@@ -81,16 +94,29 @@ public final class ExpressionUtils {
   }
 
   private static void applyLazyFunction(Expression expression) {
-    lazyFunctionList.forEach(expression::addLazyFunction);
+    lazyFunctionSet.forEach(expression::addLazyFunction);
   }
 
   /**
-   * Register a function the expression system
+   * Register a function to the expression system
    *
    * @param lazyFunction the function
    */
   public static void registerLazyFunction(LazyFunction lazyFunction) {
-    lazyFunctionList.add(lazyFunction);
+    lazyFunctionSet.add(lazyFunction);
+  }
+
+  private static void applyLazyOperator(Expression expression) {
+    lazyOperatorSet.forEach(expression::addOperator);
+  }
+
+  /**
+   * Register an operator to the expression system
+   *
+   * @param lazyOperator the function
+   */
+  public static void registerLazyOperator(LazyOperator lazyOperator) {
+    lazyOperatorSet.add(lazyOperator);
   }
 
   /**

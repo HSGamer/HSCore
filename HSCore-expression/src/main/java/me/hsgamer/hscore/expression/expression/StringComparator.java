@@ -2,29 +2,10 @@ package me.hsgamer.hscore.expression.expression;
 
 import com.udojava.evalex.AbstractLazyFunction;
 import com.udojava.evalex.Expression.LazyNumber;
-import java.math.BigDecimal;
 import java.util.List;
+import me.hsgamer.hscore.expression.BooleanLazyNumber;
 
 public abstract class StringComparator extends AbstractLazyFunction {
-
-  private final LazyNumber zero = new LazyNumber() {
-    public BigDecimal eval() {
-      return BigDecimal.ZERO;
-    }
-
-    public String getString() {
-      return "0";
-    }
-  };
-  private final LazyNumber one = new LazyNumber() {
-    public BigDecimal eval() {
-      return BigDecimal.ONE;
-    }
-
-    public String getString() {
-      return "1";
-    }
-  };
 
   public StringComparator(String name) {
     super(name, 2, true);
@@ -34,9 +15,7 @@ public abstract class StringComparator extends AbstractLazyFunction {
 
   @Override
   public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
-    if (compare(lazyParams.get(0).getString(), lazyParams.get(1).getString())) {
-      return one;
-    }
-    return zero;
+    return BooleanLazyNumber
+        .convert(compare(lazyParams.get(0).getString(), lazyParams.get(1).getString()));
   }
 }
