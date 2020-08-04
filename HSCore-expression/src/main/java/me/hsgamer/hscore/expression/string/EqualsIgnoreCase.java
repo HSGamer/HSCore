@@ -1,6 +1,6 @@
-package me.hsgamer.hscore.expression.expression.string.function;
+package me.hsgamer.hscore.expression.string;
 
-import me.hsgamer.hscore.expression.expression.StringComparator;
+import me.hsgamer.hscore.expression.StringComparator;
 
 public class EqualsIgnoreCase extends StringComparator {
 

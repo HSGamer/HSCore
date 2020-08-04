@@ -1,9 +1,8 @@
-package me.hsgamer.hscore.expression.expression;
+package me.hsgamer.hscore.expression;
 
 import com.udojava.evalex.AbstractLazyFunction;
 import com.udojava.evalex.Expression.LazyNumber;
 import java.util.List;
-import me.hsgamer.hscore.expression.BooleanLazyNumber;
 
 public abstract class StringComparator extends AbstractLazyFunction {
 

@@ -7,15 +7,13 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import me.hsgamer.hscore.expression.expression.string.function.Contains;
-import me.hsgamer.hscore.expression.expression.string.function.EndsWith;
-import me.hsgamer.hscore.expression.expression.string.function.Equals;
-import me.hsgamer.hscore.expression.expression.string.function.EqualsIgnoreCase;
-import me.hsgamer.hscore.expression.expression.string.function.Length;
-import me.hsgamer.hscore.expression.expression.string.function.StartsWith;
-import me.hsgamer.hscore.expression.expression.string.operator.AddOrConcatOperator;
-import me.hsgamer.hscore.expression.expression.string.operator.EqualsOperator;
-import me.hsgamer.hscore.expression.expression.string.operator.NotEqualsOperator;
+import me.hsgamer.hscore.expression.string.Contains;
+import me.hsgamer.hscore.expression.string.EndsWith;
+import me.hsgamer.hscore.expression.string.Equals;
+import me.hsgamer.hscore.expression.string.EqualsIgnoreCase;
+import me.hsgamer.hscore.expression.string.Length;
+import me.hsgamer.hscore.expression.string.MatchPattern;
+import me.hsgamer.hscore.expression.string.StartsWith;
 
 /**
  * The expression manager
@@ -32,12 +30,7 @@ public final class ExpressionUtils {
     lazyFunctionSet.add(new StartsWith());
     lazyFunctionSet.add(new EndsWith());
     lazyFunctionSet.add(new Length());
-
-    lazyOperatorSet.add(new EqualsOperator("="));
-    lazyOperatorSet.add(new EqualsOperator("=="));
-    lazyOperatorSet.add(new NotEqualsOperator("!="));
-    lazyOperatorSet.add(new NotEqualsOperator("<>"));
-    lazyOperatorSet.add(new AddOrConcatOperator());
+    lazyFunctionSet.add(new MatchPattern());
   }
 
   private ExpressionUtils() {
