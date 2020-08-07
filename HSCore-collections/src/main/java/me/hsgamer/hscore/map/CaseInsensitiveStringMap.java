@@ -24,17 +24,17 @@ public class CaseInsensitiveStringMap<V> extends HashMap<String, V> {
 
   @Override
   public V get(Object key) {
-    return super.get(key.getClass() == String.class ? key.toString().toLowerCase() : key);
+    return super.get(String.valueOf(key).toLowerCase());
   }
 
   @Override
   public boolean containsKey(Object key) {
-    return super.containsKey(key.getClass() == String.class ? key.toString().toLowerCase() : key);
+    return super.containsKey(String.valueOf(key).toLowerCase());
   }
 
   @Override
   public V remove(Object key) {
-    return super.remove(key.getClass() == String.class ? key.toString().toLowerCase() : key);
+    return super.remove(String.valueOf(key).toLowerCase());
   }
 
   @Override
