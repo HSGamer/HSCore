@@ -1,7 +1,6 @@
-package me.hsgamer.hscore.bukkit.addon.object.path;
+package me.hsgamer.hscore.bukkit.addon.object;
 
 import me.hsgamer.hscore.bukkit.addon.exception.RequiredAddonPathException;
-import me.hsgamer.hscore.bukkit.addon.object.Addon;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
@@ -66,6 +65,6 @@ public abstract class AddonPath<T> {
     }
 
     Object value = configuration.get(path);
-    return value == null ? null : convertType(value);
+    return value != null ? convertType(value) : null;
   }
 }

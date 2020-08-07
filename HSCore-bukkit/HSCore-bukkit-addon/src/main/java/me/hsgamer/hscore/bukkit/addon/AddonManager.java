@@ -123,10 +123,12 @@ public abstract class AddonManager {
           AddonClassLoader loader = new AddonClassLoader(this, file, addonDescription,
               getClass().getClassLoader());
           Addon addon = loader.getAddon();
-          onAddonLoading(addon);
-
-          addonMap.put(addonDescription.getName(), loader.getAddon());
-          loaderMap.put(addon, loader);
+          if (!onAddonLoading(addon)) {
+            loader.close();
+          } else {
+            addonMap.put(addonDescription.getName(), loader.getAddon());
+            loaderMap.put(addon, loader);
+          }
         } catch (InvalidConfigurationException e) {
           plugin.getLogger().log(Level.WARNING, e.getMessage(), e);
         } catch (Exception e) {
@@ -253,14 +255,14 @@ public abstract class AddonManager {
    * @param addon the addon
    */
   private void closeClassLoader(Addon addon) {
-    loaderMap.computeIfPresent(addon, (a, loader) -> {
+    if (loaderMap.containsKey(addon)) {
+      AddonClassLoader loader = loaderMap.remove(addon);
       try {
         loader.close();
       } catch (IOException e) {
         plugin.getLogger().log(Level.WARNING, "Error when closing ClassLoader", e);
       }
-      return null;
-    });
+    }
   }
 
   /**
@@ -277,7 +279,7 @@ public abstract class AddonManager {
    * Check if the addon is loaded
    *
    * @param name the name of the addon
-   * @return whether it's laoded
+   * @return whether it's loaded
    */
   public boolean isAddonLoaded(String name) {
     return addons.containsKey(name);
@@ -304,9 +306,10 @@ public abstract class AddonManager {
    * Called when the addon is on loading
    *
    * @param addon the loading addon
+   * @return whether the addon is properly loaded
    */
-  protected void onAddonLoading(Addon addon) {
-    // EMPTY
+  protected boolean onAddonLoading(Addon addon) {
+    return true;
   }
 
   /**
