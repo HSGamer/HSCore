@@ -20,7 +20,6 @@ public abstract class Addon {
 
   private final File jarFile;
   private final AddonClassLoader addonClassLoader;
-  private AddonManager addonManager;
   private File dataFolder;
   private PluginConfig config;
   private AddonDescription description;
@@ -30,6 +29,11 @@ public abstract class Addon {
     this.jarFile = addonClassLoader.getFile();
   }
 
+  /**
+   * Get the class loader
+   *
+   * @return the class loader
+   */
   protected final AddonClassLoader getClassLoader() {
     return addonClassLoader;
   }
@@ -77,7 +81,7 @@ public abstract class Addon {
    * @return the plugin
    */
   public JavaPlugin getPlugin() {
-    return addonManager.getPlugin();
+    return getAddonManager().getPlugin();
   }
 
   /**
@@ -99,14 +103,7 @@ public abstract class Addon {
    * @return the addon manager
    */
   public final AddonManager getAddonManager() {
-    return addonManager;
-  }
-
-  public final void setAddonManager(AddonManager addonManager) {
-    if (this.addonManager != null) {
-      throw new IllegalStateException("An addon manager is already assigned to this addon");
-    }
-    this.addonManager = addonManager;
+    return addonClassLoader.getAddonManager();
   }
 
   /**

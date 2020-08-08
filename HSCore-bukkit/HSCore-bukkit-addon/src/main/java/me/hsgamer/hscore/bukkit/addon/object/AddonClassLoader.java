@@ -14,12 +14,12 @@ public final class AddonClassLoader extends URLClassLoader {
 
   private final Addon addon;
   private final File file;
-  private final AddonManager manager;
+  private final AddonManager addonManager;
 
   /**
    * Create an Addon Class Loader
    *
-   * @param manager          the addon manager
+   * @param addonManager     the addon manager
    * @param file             the addon jar
    * @param addonDescription the description for the addon
    * @param parent           the parent class loader
@@ -31,11 +31,11 @@ public final class AddonClassLoader extends URLClassLoader {
    * @throws NoSuchMethodException     if it cannot find the constructor
    * @throws ClassNotFoundException    if the main class is not found
    */
-  public AddonClassLoader(AddonManager manager, File file, AddonDescription addonDescription,
+  public AddonClassLoader(AddonManager addonManager, File file, AddonDescription addonDescription,
       ClassLoader parent)
       throws MalformedURLException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, ClassNotFoundException {
     super(new URL[]{file.toURI().toURL()}, parent);
-    this.manager = manager;
+    this.addonManager = addonManager;
     this.file = file;
 
     Class<?> clazz = Class.forName(addonDescription.getMainClass(), true, this);
@@ -47,7 +47,6 @@ public final class AddonClassLoader extends URLClassLoader {
     }
     addon = newClass.getDeclaredConstructor().newInstance();
     addon.setDescription(addonDescription);
-    addon.setAddonManager(manager);
   }
 
   /**
@@ -74,7 +73,7 @@ public final class AddonClassLoader extends URLClassLoader {
   public Class<?> findClass(String name, boolean global) {
     Class<?> clazz = null;
     if (global) {
-      clazz = manager.findClass(addon, name);
+      clazz = addonManager.findClass(addon, name);
     }
     if (clazz == null) {
       try {
@@ -93,5 +92,14 @@ public final class AddonClassLoader extends URLClassLoader {
    */
   public File getFile() {
     return file;
+  }
+
+  /**
+   * Get the addon manager
+   *
+   * @return the addon manager
+   */
+  public AddonManager getAddonManager() {
+    return addonManager;
   }
 }

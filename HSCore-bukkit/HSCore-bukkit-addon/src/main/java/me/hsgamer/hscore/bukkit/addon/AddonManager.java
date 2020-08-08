@@ -1,10 +1,7 @@
 package me.hsgamer.hscore.bukkit.addon;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,14 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 import me.hsgamer.hscore.bukkit.addon.object.Addon;
 import me.hsgamer.hscore.bukkit.addon.object.AddonClassLoader;
 import me.hsgamer.hscore.bukkit.addon.object.AddonDescription;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -65,45 +60,6 @@ public abstract class AddonManager {
   }
 
   /**
-   * Generate the addon description
-   *
-   * @param jar the addon jar
-   * @return the addon description
-   * @throws IOException                   if there is an error when loading the addon jar
-   * @throws InvalidConfigurationException if the addon.yml file has invalid value
-   */
-  private AddonDescription getAddonDescription(JarFile jar)
-      throws IOException, InvalidConfigurationException {
-    // Load addon.yml file
-    JarEntry entry = jar.getJarEntry("addon.yml");
-    if (entry == null) {
-      throw new NoSuchFileException(
-          "Addon '" + jar.getName() + "' doesn't contain addon.yml file");
-    }
-    BufferedReader reader = new BufferedReader(new InputStreamReader(jar.getInputStream(entry)));
-    YamlConfiguration data = new YamlConfiguration();
-    data.load(reader);
-
-    // Load required descriptions
-    String name = data.getString("name");
-    String version = data.getString("version");
-    String mainClass = data.getString("main");
-    if (name == null) {
-      throw new InvalidConfigurationException(
-          "Addon '" + jar.getName() + "' doesn't have a name on addon.yml");
-    }
-    if (version == null) {
-      throw new InvalidConfigurationException(
-          "Addon '" + jar.getName() + "' doesn't have a version on addon.yml");
-    }
-    if (mainClass == null) {
-      throw new InvalidConfigurationException(
-          "Addon '" + jar.getName() + "' doesn't have a main class on addon.yml");
-    }
-    return new AddonDescription(name, version, mainClass, data);
-  }
-
-  /**
    * Load all addons from the addon directory. Also call {@link Addon#onLoad() onLoad()}
    */
   public void loadAddons() {
@@ -115,7 +71,7 @@ public abstract class AddonManager {
         .forEach(file -> {
           try (JarFile jar = new JarFile(file)) {
             // Get addon description
-            AddonDescription addonDescription = getAddonDescription(jar);
+            AddonDescription addonDescription = AddonDescription.get(jar);
             if (addonMap.containsKey(addonDescription.getName())) {
               plugin.getLogger().warning("Duplicated addon " + addonDescription.getName());
               return;
