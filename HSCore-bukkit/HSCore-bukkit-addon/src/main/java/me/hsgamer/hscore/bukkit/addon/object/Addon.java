@@ -103,6 +103,9 @@ public abstract class Addon {
   }
 
   public final void setAddonManager(AddonManager addonManager) {
+    if (this.addonManager != null) {
+      throw new IllegalStateException("An addon manager is already assigned to this addon");
+    }
     this.addonManager = addonManager;
   }
 

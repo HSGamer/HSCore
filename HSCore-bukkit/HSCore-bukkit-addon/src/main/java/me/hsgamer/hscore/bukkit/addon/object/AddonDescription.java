@@ -2,6 +2,9 @@ package me.hsgamer.hscore.bukkit.addon.object;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
+/**
+ * The description for the Addon
+ */
 public final class AddonDescription {
 
   private final String name;

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -109,38 +110,39 @@ public abstract class AddonManager {
     Map<String, Addon> addonMap = new HashMap<>();
 
     // Load the addon files
-    for (File file : Objects.requireNonNull(addonsDir.listFiles())) {
-      if (file.isFile() && file.getName().endsWith(".jar")) {
-        try (JarFile jar = new JarFile(file)) {
-          // Get addon description
-          AddonDescription addonDescription = getAddonDescription(jar);
-          if (addonMap.containsKey(addonDescription.getName())) {
-            plugin.getLogger().warning("Duplicated addon " + addonDescription.getName());
-            continue;
-          }
+    Arrays.stream(Objects.requireNonNull(addonsDir.listFiles()))
+        .filter(file -> file.isFile() && file.getName().endsWith(".jar"))
+        .forEach(file -> {
+          try (JarFile jar = new JarFile(file)) {
+            // Get addon description
+            AddonDescription addonDescription = getAddonDescription(jar);
+            if (addonMap.containsKey(addonDescription.getName())) {
+              plugin.getLogger().warning("Duplicated addon " + addonDescription.getName());
+              return;
+            }
 
-          // Try to load the addon
-          AddonClassLoader loader = new AddonClassLoader(this, file, addonDescription,
-              getClass().getClassLoader());
-          Addon addon = loader.getAddon();
-          if (!onAddonLoading(addon)) {
-            loader.close();
-          } else {
-            addonMap.put(addonDescription.getName(), loader.getAddon());
-            loaderMap.put(addon, loader);
+            // Try to load the addon
+            AddonClassLoader loader = new AddonClassLoader(this, file, addonDescription,
+                getClass().getClassLoader());
+            Addon addon = loader.getAddon();
+
+            if (onAddonLoading(addon)) {
+              addonMap.put(addonDescription.getName(), loader.getAddon());
+              loaderMap.put(addon, loader);
+            } else {
+              loader.close();
+            }
+          } catch (InvalidConfigurationException e) {
+            plugin.getLogger().log(Level.WARNING, e.getMessage(), e);
+          } catch (Exception e) {
+            plugin.getLogger().log(Level.WARNING, "Error when loading jar", e);
           }
-        } catch (InvalidConfigurationException e) {
-          plugin.getLogger().log(Level.WARNING, e.getMessage(), e);
-        } catch (Exception e) {
-          plugin.getLogger().log(Level.WARNING, "Error when loading jar", e);
-        }
-      }
-    }
+        });
 
     // Sort and load the addons
-    addonMap = sortAddons(addonMap);
+    Map<String, Addon> sortedAddonMap = sortAndFilter(addonMap);
     Map<String, Addon> finalAddons = new LinkedHashMap<>();
-    addonMap.forEach((key, addon) -> {
+    sortedAddonMap.forEach((key, addon) -> {
       try {
         if (!addon.onLoad()) {
           plugin.getLogger().warning(
@@ -295,12 +297,12 @@ public abstract class AddonManager {
   }
 
   /**
-   * Sort the order of the addons
+   * Filter and sort the order of the addons
    *
    * @param original the original map
-   * @return the sorted map
+   * @return the sorted and filtered map
    */
-  protected abstract Map<String, Addon> sortAddons(Map<String, Addon> original);
+  protected abstract Map<String, Addon> sortAndFilter(Map<String, Addon> original);
 
   /**
    * Called when the addon is on loading

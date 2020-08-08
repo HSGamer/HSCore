@@ -7,12 +7,30 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import me.hsgamer.hscore.bukkit.addon.AddonManager;
 
+/**
+ * The class loader of the addon
+ */
 public final class AddonClassLoader extends URLClassLoader {
 
   private final Addon addon;
   private final File file;
   private final AddonManager manager;
 
+  /**
+   * Create an Addon Class Loader
+   *
+   * @param manager          the addon manager
+   * @param file             the addon jar
+   * @param addonDescription the description for the addon
+   * @param parent           the parent class loader
+   * @throws MalformedURLException     if it cannot convert the file to its related URL
+   * @throws IllegalAccessException    if it cannot create an instance of the main class of the
+   *                                   addon
+   * @throws InvocationTargetException if the constructor throws an exception
+   * @throws InstantiationException    if the main class is an abstract class
+   * @throws NoSuchMethodException     if it cannot find the constructor
+   * @throws ClassNotFoundException    if the main class is not found
+   */
   public AddonClassLoader(AddonManager manager, File file, AddonDescription addonDescription,
       ClassLoader parent)
       throws MalformedURLException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, ClassNotFoundException {
@@ -32,6 +50,11 @@ public final class AddonClassLoader extends URLClassLoader {
     addon.setAddonManager(manager);
   }
 
+  /**
+   * Get the addon
+   *
+   * @return the addon
+   */
   public Addon getAddon() {
     return addon;
   }
@@ -41,6 +64,13 @@ public final class AddonClassLoader extends URLClassLoader {
     return findClass(name, true);
   }
 
+  /**
+   * Get class by the name
+   *
+   * @param name   the class name
+   * @param global whether it'll try to search globally
+   * @return the class, or null if it's not found
+   */
   public Class<?> findClass(String name, boolean global) {
     Class<?> clazz = null;
     if (global) {
@@ -56,6 +86,11 @@ public final class AddonClassLoader extends URLClassLoader {
     return clazz;
   }
 
+  /**
+   * Get the addon jar
+   *
+   * @return the addon jar
+   */
   public File getFile() {
     return file;
   }
