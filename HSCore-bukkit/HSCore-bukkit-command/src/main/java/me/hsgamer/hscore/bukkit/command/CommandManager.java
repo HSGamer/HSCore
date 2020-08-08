@@ -23,6 +23,11 @@ public final class CommandManager {
   private final CommandMap bukkitCommandMap;
   private Method syncCommandsMethod;
 
+  /**
+   * Create a new command manager
+   *
+   * @param plugin the plugin
+   */
   public CommandManager(JavaPlugin plugin) {
     this.plugin = plugin;
     try {
@@ -107,6 +112,11 @@ public final class CommandManager {
     }
   }
 
+  /**
+   * Get registered commands
+   *
+   * @return the map contains the name and the command object
+   */
   public Map<String, Command> getRegistered() {
     return registered;
   }
