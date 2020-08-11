@@ -21,7 +21,7 @@ jobs:
       - name: Unshallow
         run: git fetch --unshallow --quiet
       - name: Generate Javadocs
-        run: mvn -B javadoc:javadoc
+        run: mvn clean javadoc:javadoc
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
