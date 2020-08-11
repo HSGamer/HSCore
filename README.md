@@ -1,4 +1,4 @@
-# HSCore [![Build Status](https://ci.codemc.io/job/HSGamer/job/HSCore/badge/icon)](https://ci.codemc.io/job/HSGamer/job/HSCore/)
+# HSCore [![Build Status](https://ci.codemc.io/job/HSGamer/job/HSCore/badge/icon)](https://ci.codemc.io/job/HSGamer/job/HSCore/) [![Javadocs](https://img.shields.io/badge/javadocs-link-green)](https://hsgamer.github.io/HSCore/)
 ## Info
 * This is a collection of common code used in my personal projects.
 * I created this core because I am too lazy to change/fix/update the same code over and over again.
