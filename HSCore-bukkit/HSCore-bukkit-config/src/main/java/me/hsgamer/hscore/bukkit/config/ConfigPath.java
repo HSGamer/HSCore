@@ -28,7 +28,9 @@ public class ConfigPath<T> {
   }
 
   /**
-   * Set the config for this ConfigPath
+   * Set the config for this ConfigPath.
+   * <br>This only adds the default value to the config.
+   * <br>You will need to enable the copyDefault option and save the config manually.
    *
    * @param config the config
    */
