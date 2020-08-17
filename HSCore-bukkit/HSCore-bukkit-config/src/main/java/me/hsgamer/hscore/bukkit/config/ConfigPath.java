@@ -9,8 +9,8 @@ import java.util.function.Function;
  */
 public class ConfigPath<T> {
 
+  protected final T def;
   private final String path;
-  private final T def;
   private final Function<Object, T> typeConverter;
   private PluginConfig config;
 

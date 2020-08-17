@@ -11,6 +11,12 @@ public class FloatConfigPath extends ConfigPath<Float> {
    * @param def  the default value if it's not found
    */
   public FloatConfigPath(String path, Float def) {
-    super(path, def, o -> Float.parseFloat(String.valueOf(o)));
+    super(path, def, o -> {
+      try {
+        return Float.parseFloat(String.valueOf(o));
+      } catch (Exception e) {
+        return def;
+      }
+    });
   }
 }
