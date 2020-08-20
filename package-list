@@ -9,5 +9,6 @@ me.hsgamer.hscore.bukkit.utils
 me.hsgamer.hscore.common
 me.hsgamer.hscore.expression
 me.hsgamer.hscore.expression.string
+me.hsgamer.hscore.json
 me.hsgamer.hscore.map
 me.hsgamer.hscore.web
