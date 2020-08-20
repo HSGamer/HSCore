@@ -62,6 +62,7 @@
     <module>HSCore-collections</module>
     <module>HSCore-expression</module>
     <module>HSCore-web</module>
+    <module>HSCore-json</module>
     <module>HSCore-bukkit</module>
   </modules>
 
