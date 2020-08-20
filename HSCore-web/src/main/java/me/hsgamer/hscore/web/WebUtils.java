@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -26,10 +25,10 @@ public class WebUtils {
    * @throws IOException    If there is an error when opening the connection
    * @throws ParseException If it fails to parse the JSON object
    */
-  public static JSONObject getJSONFromURL(String address) throws IOException, ParseException {
+  public static Object getJSONFromURL(String address) throws IOException, ParseException {
     BufferedReader rd = new BufferedReader(
         new InputStreamReader(openConnection(address).getInputStream()));
-    return (JSONObject) new JSONParser().parse(rd);
+    return new JSONParser().parse(rd);
   }
 
   /**
