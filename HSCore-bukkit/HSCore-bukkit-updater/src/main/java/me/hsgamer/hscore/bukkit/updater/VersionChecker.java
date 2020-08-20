@@ -30,7 +30,7 @@ public final class VersionChecker {
   public CompletableFuture<String> getVersion() {
     return CompletableFuture.supplyAsync(() -> {
       try {
-        JSONObject object = WebUtils.getJSONFromURL(
+        JSONObject object = (JSONObject) WebUtils.getJSONFromURL(
             "https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId);
         if (!object.containsKey("current_version")) {
           throw new IOException("Cannot get the plugin version");
