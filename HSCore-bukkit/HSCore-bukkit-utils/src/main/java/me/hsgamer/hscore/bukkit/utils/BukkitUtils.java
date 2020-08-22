@@ -1,7 +1,5 @@
 package me.hsgamer.hscore.bukkit.utils;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -26,13 +24,13 @@ public final class BukkitUtils {
    * @param player the player
    * @return the ping of the player
    */
-  public static String getPing(Player player) {
+  public static int getPing(Player player) {
     try {
       Object entityPlayer = player.getClass().getMethod("getHandle").invoke(player);
-      return String.valueOf(entityPlayer.getClass().getField("ping").getInt(entityPlayer));
-    } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
+      return entityPlayer.getClass().getField("ping").getInt(entityPlayer);
+    } catch (Exception e) {
       Bukkit.getServer().getLogger().log(Level.WARNING, "Unexpected error when getting ping", e);
-      return "ERROR GETTING PING";
+      return -9;
     }
   }
 
@@ -58,18 +56,26 @@ public final class BukkitUtils {
   }
 
   /**
+   * Get all player names
+   *
+   * @return the player names
+   */
+  public static List<String> getAllPlayerNames() {
+    return Arrays.stream(Bukkit.getOfflinePlayers())
+        .parallel()
+        .map(OfflinePlayer::getName)
+        .collect(Collectors.toList());
+  }
+
+  /**
    * Get missing plugins from a list of given plugins
    *
    * @param depends the list of plugins
    * @return the missing plugins
    */
   public static List<String> getMissingDepends(List<String> depends) {
-    List<String> list = new ArrayList<>();
-    for (String depend : depends) {
-      if (Bukkit.getPluginManager().getPlugin(depend) == null) {
-        list.add(depend);
-      }
-    }
-    return list;
+    return depends.stream()
+        .filter(depend -> Bukkit.getPluginManager().getPlugin(depend) == null)
+        .collect(Collectors.toList());
   }
 }
