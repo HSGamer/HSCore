@@ -28,6 +28,11 @@ public class CaseInsensitiveStringMap<V> extends HashMap<String, V> {
   }
 
   @Override
+  public V getOrDefault(Object key, V def) {
+    return super.getOrDefault(String.valueOf(key).toLowerCase(), def);
+  }
+
+  @Override
   public boolean containsKey(Object key) {
     return super.containsKey(String.valueOf(key).toLowerCase());
   }
