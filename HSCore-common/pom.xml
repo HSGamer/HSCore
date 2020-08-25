@@ -8,7 +8,7 @@
   <parent>
     <artifactId>HSCore</artifactId>
     <groupId>me.HSGamer</groupId>
-    <version>1.2</version>
+    <version>1.3-SNAPSHOT</version>
   </parent>
 
 
