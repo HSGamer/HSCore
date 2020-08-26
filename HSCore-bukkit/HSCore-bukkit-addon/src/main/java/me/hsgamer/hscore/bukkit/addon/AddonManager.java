@@ -95,8 +95,15 @@ public abstract class AddonManager {
           }
         });
 
-    // Sort and load the addons
+    // Filter and sort the addons
     Map<String, Addon> sortedAddonMap = sortAndFilter(addonMap);
+
+    // Close AddonClassLoader of remaining addons
+    addonMap.entrySet().stream()
+        .filter(entry -> !sortedAddonMap.containsKey(entry.getKey()))
+        .forEach(entry -> closeClassLoader(entry.getValue()));
+
+    // Load the addons
     Map<String, Addon> finalAddons = new LinkedHashMap<>();
     sortedAddonMap.forEach((key, addon) -> {
       try {
