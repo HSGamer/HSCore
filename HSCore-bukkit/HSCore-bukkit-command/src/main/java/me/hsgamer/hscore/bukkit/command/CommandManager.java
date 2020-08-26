@@ -15,13 +15,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 /**
  * The command manager
  */
-public final class CommandManager {
+public class CommandManager {
 
-  private final Map<String, Command> registered = new HashMap<>();
-  private final JavaPlugin plugin;
-  private final Field knownCommandsField;
-  private final CommandMap bukkitCommandMap;
-  private Method syncCommandsMethod;
+  protected final Map<String, Command> registered = new HashMap<>();
+  protected final JavaPlugin plugin;
+  protected final Field knownCommandsField;
+  protected final CommandMap bukkitCommandMap;
+  protected Method syncCommandsMethod;
 
   /**
    * Create a new command manager
