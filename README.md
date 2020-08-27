@@ -6,6 +6,6 @@
 ## Currently using
 * [TopIn](https://github.com/TopIn-MC/TopIn)
 * [JoinWork](https://github.com/HSGamer/JoinWork/)
-* [BetterGUI](https://github.com/BetterGUI-MC/BetterGUI) (soon)
+* [BetterGUI](https://github.com/BetterGUI-MC/BetterGUI)
 ## Wiki
 `TODO`
