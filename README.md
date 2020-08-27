@@ -12,7 +12,7 @@
 * **`HSCore-collections`**
 * **`HSCore-expression`**
 * **`HSCore-json`**
-* **`HSCore-request`*
+* **`HSCore-request`**
 * **`HSCore-web`**
 * **`HSCore-bukkit-command`**
 * **`HSCore-bukkit-addon`**
