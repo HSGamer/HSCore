@@ -64,6 +64,7 @@
     <module>HSCore-web</module>
     <module>HSCore-json</module>
     <module>HSCore-bukkit</module>
+    <module>HSCore-request</module>
   </modules>
 
   <name>HSCore</name>
