@@ -119,32 +119,33 @@ public abstract class Addon {
    * @return the config
    */
   public final FileConfiguration getConfig() {
+    return getPluginConfig().getConfig();
+  }
+
+  /**
+   * Get the PluginConfig of the addon
+   *
+   * @return the PluginConfig
+   */
+  public final PluginConfig getPluginConfig() {
     if (config == null) {
       setupConfig();
     }
-    return config.getConfig();
+    return config;
   }
 
   /**
    * Reload the config
    */
   public final void reloadConfig() {
-    if (config == null) {
-      setupConfig();
-    } else {
-      config.reloadConfig();
-    }
+    getPluginConfig().reloadConfig();
   }
 
   /**
    * Save the config
    */
   public final void saveConfig() {
-    if (config == null) {
-      setupConfig();
-    } else {
-      config.saveConfig();
-    }
+    getPluginConfig().saveConfig();
   }
 
   /**
