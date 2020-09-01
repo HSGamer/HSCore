@@ -2,6 +2,10 @@ package me.hsgamer.hscore.expression.string;
 
 import me.hsgamer.hscore.expression.StringComparator;
 
+/**
+ * Check if the 1st string matches the RegEx pattern from the 2nd string <br> Ex: STRMP("String",
+ * "String-?")
+ */
 public class MatchPattern extends StringComparator {
 
   public MatchPattern() {

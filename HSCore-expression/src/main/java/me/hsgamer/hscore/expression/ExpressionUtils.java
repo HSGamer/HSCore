@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import me.hsgamer.hscore.expression.number.Average;
 import me.hsgamer.hscore.expression.string.Contains;
 import me.hsgamer.hscore.expression.string.EndsWith;
 import me.hsgamer.hscore.expression.string.Equals;
@@ -31,6 +32,8 @@ public final class ExpressionUtils {
     lazyFunctionSet.add(new EndsWith());
     lazyFunctionSet.add(new Length());
     lazyFunctionSet.add(new MatchPattern());
+
+    lazyFunctionSet.add(new Average());
   }
 
   private ExpressionUtils() {

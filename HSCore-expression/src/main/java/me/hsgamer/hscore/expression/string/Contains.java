@@ -2,6 +2,9 @@ package me.hsgamer.hscore.expression.string;
 
 import me.hsgamer.hscore.expression.StringComparator;
 
+/**
+ * Check if the 1st string contains the 2nd string <br> Ex: STRCT("this", "is")
+ */
 public class Contains extends StringComparator {
 
   public Contains() {

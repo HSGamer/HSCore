@@ -5,6 +5,9 @@ import com.udojava.evalex.Expression.LazyNumber;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Get the length of the string <br> Ex: STRLEN("Hello World")
+ */
 public class Length extends AbstractLazyFunction {
 
   public Length() {
