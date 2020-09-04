@@ -2,6 +2,9 @@ package me.hsgamer.hscore.bukkit.config;
 
 import me.hsgamer.hscore.bukkit.config.path.*;
 
+/**
+ * Utility to easily create {@link ConfigPath}
+ */
 public final class Paths {
 
   private Paths() {
