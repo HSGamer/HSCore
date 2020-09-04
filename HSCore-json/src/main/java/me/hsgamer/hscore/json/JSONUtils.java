@@ -56,6 +56,20 @@ public class JSONUtils {
   }
 
   /**
+   * Get JSON object from a string
+   *
+   * @param string the string
+   * @return the JSON object, or null if there is an error when parsing
+   */
+  public static Object getJSON(String string) {
+    try {
+      return parser.parse(string);
+    } catch (ParseException e) {
+      return null;
+    }
+  }
+
+  /**
    * Write JSON object to file
    *
    * @param file       the file
