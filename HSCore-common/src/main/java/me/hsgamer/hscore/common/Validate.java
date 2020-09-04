@@ -55,7 +55,40 @@ public final class Validate {
     try {
       Class.forName(className);
       return true;
-    } catch (ClassNotFoundException e) {
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
+  /**
+   * Check if the method is loaded
+   *
+   * @param className  the class path
+   * @param methodName the method's name
+   * @param params     the type of parameters
+   * @return whether it's loaded
+   */
+  public static boolean isMethodLoaded(String className, String methodName, Class<?>... params) {
+    try {
+      Class.forName(className).getDeclaredMethod(methodName, params);
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
+  /**
+   * Check if the constructor is loaded
+   *
+   * @param className the class path
+   * @param params    the type of parameters
+   * @return whether it's loaded
+   */
+  public static boolean isConstructorLoaded(String className, Class<?>... params) {
+    try {
+      Class.forName(className).getDeclaredConstructor(params);
+      return true;
+    } catch (Exception e) {
       return false;
     }
   }

@@ -9,7 +9,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 import me.hsgamer.hscore.bukkit.addon.object.Addon;
@@ -304,12 +303,7 @@ public abstract class AddonManager {
    */
   public Map<String, Integer> getAddonCount() {
     Map<String, Integer> map = new HashMap<>();
-    Set<String> list = addons.keySet();
-    if (list.isEmpty()) {
-      map.put("Empty", 1);
-    } else {
-      list.forEach(s -> map.put(s, 1));
-    }
+    addons.keySet().forEach(s -> map.put(s, 1));
     return map;
   }
 }
