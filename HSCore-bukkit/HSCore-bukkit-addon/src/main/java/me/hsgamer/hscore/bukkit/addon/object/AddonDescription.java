@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.nio.file.NoSuchFileException;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import me.hsgamer.hscore.bukkit.addon.exception.RequiredAddonPathException;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -33,7 +34,7 @@ public final class AddonDescription {
    * @param jar the addon jar
    * @return the addon description
    * @throws IOException                   if there is an error when loading the addon jar
-   * @throws InvalidConfigurationException if the addon.yml file has invalid value
+   * @throws InvalidConfigurationException if the addon.yml file is invalid
    */
   public static AddonDescription get(JarFile jar)
       throws IOException, InvalidConfigurationException {
@@ -52,15 +53,15 @@ public final class AddonDescription {
     String version = data.getString("version");
     String mainClass = data.getString("main");
     if (name == null) {
-      throw new InvalidConfigurationException(
+      throw new RequiredAddonPathException(
           "Addon '" + jar.getName() + "' doesn't have a name on addon.yml");
     }
     if (version == null) {
-      throw new InvalidConfigurationException(
+      throw new RequiredAddonPathException(
           "Addon '" + jar.getName() + "' doesn't have a version on addon.yml");
     }
     if (mainClass == null) {
-      throw new InvalidConfigurationException(
+      throw new RequiredAddonPathException(
           "Addon '" + jar.getName() + "' doesn't have a main class on addon.yml");
     }
     return new AddonDescription(name, version, mainClass, data);

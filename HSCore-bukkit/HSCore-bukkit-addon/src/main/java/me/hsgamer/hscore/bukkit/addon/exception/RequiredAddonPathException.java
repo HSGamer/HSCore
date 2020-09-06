@@ -1,7 +1,7 @@
 package me.hsgamer.hscore.bukkit.addon.exception;
 
 /**
- * An exception for required addon path
+ * A runtime exception for required addon path
  */
 public class RequiredAddonPathException extends RuntimeException {
 
