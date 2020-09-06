@@ -35,7 +35,7 @@ public class CommonUtils {
    * Reverse a collection
    *
    * @param original the original collection
-   * @param <T> the type of the elements
+   * @param <T>      the type of the elements
    * @return the reversed list
    */
   public static <T> List<T> reverse(Collection<T> original) {
