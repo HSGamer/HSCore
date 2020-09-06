@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import me.hsgamer.hscore.bukkit.addon.object.Addon;
 import me.hsgamer.hscore.bukkit.addon.object.AddonClassLoader;
 import me.hsgamer.hscore.bukkit.addon.object.AddonDescription;
-import org.bukkit.configuration.InvalidConfigurationException;
+import me.hsgamer.hscore.common.CommonUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -87,8 +87,6 @@ public abstract class AddonManager {
             } else {
               loader.close();
             }
-          } catch (InvalidConfigurationException e) {
-            plugin.getLogger().log(Level.WARNING, e.getMessage(), e);
           } catch (Exception e) {
             plugin.getLogger().log(Level.WARNING, "Error when loading jar", e);
           }
@@ -202,7 +200,7 @@ public abstract class AddonManager {
    * Disable all enabled addons
    */
   public void disableAddons() {
-    addons.keySet().forEach(name -> {
+    CommonUtils.reverse(addons.keySet()).forEach(name -> {
       if (disableAddon(name, false)) {
         plugin.getLogger().log(Level.INFO, "Disabled {0}",
             String.join(" ", name, addons.get(name).getDescription().getVersion()));

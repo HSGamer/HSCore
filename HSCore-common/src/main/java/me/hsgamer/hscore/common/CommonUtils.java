@@ -2,6 +2,7 @@ package me.hsgamer.hscore.common;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class CommonUtils {
@@ -27,6 +28,19 @@ public class CommonUtils {
     if (trim) {
       list.replaceAll(String::trim);
     }
+    return list;
+  }
+
+  /**
+   * Reverse a collection
+   *
+   * @param original the original collection
+   * @param <T> the type of the elements
+   * @return the reversed list
+   */
+  public static <T> List<T> reverse(Collection<T> original) {
+    List<T> list = new ArrayList<>(original);
+    Collections.reverse(list);
     return list;
   }
 }
