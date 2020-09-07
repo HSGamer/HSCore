@@ -1,6 +1,12 @@
 package me.hsgamer.hscore.bukkit.config;
 
-import me.hsgamer.hscore.bukkit.config.path.*;
+import me.hsgamer.hscore.bukkit.config.path.BooleanConfigPath;
+import me.hsgamer.hscore.bukkit.config.path.DoubleConfigPath;
+import me.hsgamer.hscore.bukkit.config.path.FloatConfigPath;
+import me.hsgamer.hscore.bukkit.config.path.IntegerConfigPath;
+import me.hsgamer.hscore.bukkit.config.path.LongConfigPath;
+import me.hsgamer.hscore.bukkit.config.path.SimpleConfigPath;
+import me.hsgamer.hscore.bukkit.config.path.StringConfigPath;
 
 /**
  * Utility to easily create {@link ConfigPath}

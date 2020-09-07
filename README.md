@@ -3,7 +3,7 @@
 * This is a collection of common code used in my personal projects.
 * I created this core because I am too lazy to change/fix/update the same code over and over again.
 * This also includes some simple/useful/complex/dumb/... features used mainly in my projects.
-## Currently using
+## Used on
 * [TopIn](https://github.com/TopIn-MC/TopIn)
 * [JoinWork](https://github.com/HSGamer/JoinWork/)
 * [BetterGUI](https://github.com/BetterGUI-MC/BetterGUI)
@@ -15,6 +15,7 @@
 * **`HSCore-request`**
 * **`HSCore-web`**
 * **`HSCore-bukkit-command`**
+* **`HSCore-bukkit-subcommand`**
 * **`HSCore-bukkit-addon`**
 * **`HSCore-bukkit-config`**
 * **`HSCore-bukkit-updater`**
@@ -23,8 +24,8 @@
 ```xml
   <repositories>
     <repository>
-      <id>codemc-releases</id>
-      <url>https://repo.codemc.io/repository/maven-releases/</url>
+      <id>codemc-repo</id>
+      <url>https://repo.codemc.io/repository/maven-public/</url>
     </repository>
   </repositories>
 
