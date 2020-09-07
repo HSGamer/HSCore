@@ -76,5 +76,5 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-  <version>1.4</version>
+  <version>1.5-SNAPSHOT</version>
 </project>
