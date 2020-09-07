@@ -76,6 +76,7 @@ public final class Paths {
    *
    * @param path the path to the value
    * @param def  the default value if it's not found
+   * @param <T>  the type of the value
    * @return the config path
    */
   public static <T> SimpleConfigPath<T> simplePath(String path, T def) {
