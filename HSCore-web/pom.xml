@@ -16,6 +16,6 @@
   <parent>
     <artifactId>HSCore</artifactId>
     <groupId>me.HSGamer</groupId>
-    <version>1.4-SNAPSHOT</version>
+    <version>1.4</version>
   </parent>
 </project>
