@@ -4,10 +4,12 @@ me.hsgamer.hscore.bukkit.addon.object
 me.hsgamer.hscore.bukkit.command
 me.hsgamer.hscore.bukkit.config
 me.hsgamer.hscore.bukkit.config.path
+me.hsgamer.hscore.bukkit.subcommand
 me.hsgamer.hscore.bukkit.updater
 me.hsgamer.hscore.bukkit.utils
 me.hsgamer.hscore.common
 me.hsgamer.hscore.expression
+me.hsgamer.hscore.expression.number
 me.hsgamer.hscore.expression.string
 me.hsgamer.hscore.json
 me.hsgamer.hscore.map
