@@ -29,6 +29,12 @@ public abstract class ConfigPath<T> extends BaseConfigPath<T> {
       return def;
     }
 
-    return typeConverter.apply(config.get(path, def));
+    Object rawValue = config.get(path, def);
+    if (rawValue == null) {
+      return def;
+    }
+
+    T value = typeConverter.apply(rawValue);
+    return value != null ? value : def;
   }
 }
