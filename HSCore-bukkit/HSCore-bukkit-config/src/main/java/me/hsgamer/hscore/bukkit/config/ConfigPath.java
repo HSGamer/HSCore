@@ -40,6 +40,6 @@ public abstract class ConfigPath<T> extends BaseConfigPath<T> {
   @Override
   public void setConfig(PluginConfig pluginConfig) {
     super.setConfig(pluginConfig);
-    pluginConfig.getConfig().set(path, def);
+    pluginConfig.getConfig().addDefault(path, def);
   }
 }
