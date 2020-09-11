@@ -10,6 +10,11 @@
       <groupId>me.HSGamer</groupId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <artifactId>HSCore-collections</artifactId>
+      <groupId>me.HSGamer</groupId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 
   <modelVersion>4.0.0</modelVersion>
