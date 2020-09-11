@@ -65,4 +65,10 @@ public abstract class AdvancedConfigPath<F, T> extends BaseConfigPath<T> {
 
     config.getConfig().set(path, convertToRaw(value));
   }
+
+  @Override
+  public void setConfig(PluginConfig pluginConfig) {
+    super.setConfig(pluginConfig);
+    pluginConfig.getConfig().set(path, convertToRaw(def));
+  }
 }

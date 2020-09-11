@@ -36,4 +36,10 @@ public abstract class ConfigPath<T> extends BaseConfigPath<T> {
 
     return typeConverter.apply(rawValue);
   }
+
+  @Override
+  public void setConfig(PluginConfig pluginConfig) {
+    super.setConfig(pluginConfig);
+    pluginConfig.getConfig().set(path, def);
+  }
 }

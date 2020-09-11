@@ -62,13 +62,10 @@ public abstract class BaseConfigPath<T> {
 
   /**
    * Set the config.
-   * <br>This only adds the default value to the config.
-   * <br>You will need to enable the copyDefault option and save the config manually.
    *
    * @param config the config
    */
   public void setConfig(PluginConfig config) {
     this.config = config;
-    config.getConfig().addDefault(path, def);
   }
 }
