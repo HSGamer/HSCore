@@ -1,4 +1,4 @@
-# HSCore [![Build Status](https://ci.codemc.io/job/HSGamer/job/HSCore/badge/icon)](https://ci.codemc.io/job/HSGamer/job/HSCore/) [![Javadocs](https://img.shields.io/badge/javadocs-link-green)](https://hsgamer.github.io/HSCore/)
+# HSCore ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/me.HSGamer/HSCore?color=green&label=version&nexusVersion=3&server=https%3A%2F%2Frepo.codemc.io) [![Build Status](https://ci.codemc.io/job/HSGamer/job/HSCore/badge/icon)](https://ci.codemc.io/job/HSGamer/job/HSCore/) [![Javadocs](https://img.shields.io/badge/javadocs-link-green)](https://hsgamer.github.io/HSCore/)
 ## Info
 * This is a collection of common code used in my personal projects.
 * I created this core because I am too lazy to change/fix/update the same code over and over again.
