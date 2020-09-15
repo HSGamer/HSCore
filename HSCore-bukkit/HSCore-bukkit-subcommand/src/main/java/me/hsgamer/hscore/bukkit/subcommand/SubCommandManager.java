@@ -5,25 +5,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
-import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import java.util.stream.Collectors;
 import me.hsgamer.hscore.map.CaseInsensitiveStringMap;
 import org.bukkit.command.CommandSender;
 
 /**
  * The sub-command manager
  */
-public class SubCommandManager {
+public abstract class SubCommandManager {
 
-  private static final String HELP = "help";
-
+  protected static final String HELP = "help";
   protected final Map<String, SubCommand> subcommands = new CaseInsensitiveStringMap<>();
-  protected Supplier<List<String>> helpHeader = Collections::emptyList;
-  protected Supplier<List<String>> helpInfo = () -> Arrays.asList(
-      "&e/<label> <subcommand>",
-      "    &b<description>"
-  );
-  protected Supplier<List<String>> helpFooter = Collections::emptyList;
 
   /**
    * Execute the command
@@ -33,25 +25,13 @@ public class SubCommandManager {
    * @param args   the arguments
    * @return whether the command runs successfully
    */
-  public boolean onCommand(CommandSender sender, String label, String[] args) {
-    if (args.length < 1 || args[0].equalsIgnoreCase(HELP) || !subcommands.containsKey(args[0])) {
-      List<String> list = new ArrayList<>(helpHeader.get());
-      for (Map.Entry<String, SubCommand> entry : subcommands.entrySet()) {
-        SubCommand subCommand = entry.getValue();
-        for (String string : helpInfo.get()) {
-          list.add(string
-              .replace("<subcommand>", entry.getKey())
-              .replace("<description>", subCommand.getDescription())
-              .replace("<label>", label)
-              .replace("<usage>", subCommand.getUsage())
-              .replace("<permission>", subCommand.getPermission())
-              .replace("<consoleAllowed>", String.valueOf(subCommand.isConsoleAllowed()))
-          );
-        }
-      }
-      list.addAll(helpFooter.get());
-      list.forEach(s -> MessageUtils.sendMessage(sender, s));
+  public boolean onCommand(CommandSender sender, String label, String... args) {
+    if (args.length < 1 || args[0].equalsIgnoreCase(HELP)) {
+      sendHelpMessage(sender, label, args);
       return true;
+    } else if (!subcommands.containsKey(args[0])) {
+      sendArgNotFoundMessage(sender, label, args);
+      return false;
     } else {
       return subcommands.get(args[0])
           .onCommand(sender, label, Arrays.copyOfRange(args, 1, args.length));
@@ -59,11 +39,32 @@ public class SubCommandManager {
   }
 
   /**
+   * Send help command
+   *
+   * @param sender the sender
+   * @param label  the label
+   * @param args   the arguments
+   */
+  public abstract void sendHelpMessage(CommandSender sender, String label, String... args);
+
+  /**
+   * Send "Argument Not Found" message
+   *
+   * @param sender the sender
+   * @param label  the label
+   * @param args   the arguments
+   */
+  public abstract void sendArgNotFoundMessage(CommandSender sender, String label, String... args);
+
+  /**
    * Register a sub-command
    *
    * @param subCommand the sub-command
    */
   public void registerSubcommand(SubCommand subCommand) {
+    if (subCommand.name.equalsIgnoreCase("help")) {
+      throw new RuntimeException("'help' is a predefined argument");
+    }
     subcommands.put(subCommand.getName(), subCommand);
   }
 
@@ -102,7 +103,7 @@ public class SubCommandManager {
    * @param args   the arguments
    * @return the suggested strings
    */
-  public List<String> onTabComplete(CommandSender sender, String label, String[] args) {
+  public List<String> onTabComplete(CommandSender sender, String label, String... args) {
     List<String> list = new ArrayList<>();
     if (args.length < 1 || args[0].equals("")) {
       list.add(HELP);
@@ -111,12 +112,11 @@ public class SubCommandManager {
       list = subcommands.get(args[0])
           .onTabComplete(sender, label, Arrays.copyOfRange(args, 1, args.length));
     } else {
-      for (String subcommand : subcommands.keySet()) {
-        if (subcommand.startsWith(args[0])) {
-          list.add(subcommand);
-        }
-      }
-
+      list.addAll(
+          subcommands.keySet().stream()
+              .filter(s -> s.startsWith(args[0]))
+              .collect(Collectors.toList())
+      );
       if (HELP.startsWith(args[0])) {
         list.add(HELP);
       }

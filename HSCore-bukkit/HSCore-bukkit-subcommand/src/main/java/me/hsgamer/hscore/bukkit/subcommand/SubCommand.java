@@ -44,7 +44,7 @@ public abstract class SubCommand {
    * @param args   the arguments
    * @return whether the command runs successfully
    */
-  public boolean onCommand(CommandSender sender, String label, String[] args) {
+  public boolean onCommand(CommandSender sender, String label, String... args) {
     if (sender instanceof ConsoleCommandSender && !consoleAllowed) {
       MessageUtils.sendMessage(sender, playerOnlyMessage);
       return false;
@@ -116,7 +116,7 @@ public abstract class SubCommand {
    * @param label  the label of the parent command
    * @param args   the arguments
    */
-  public abstract void onSubCommand(CommandSender sender, String label, String[] args);
+  public abstract void onSubCommand(CommandSender sender, String label, String... args);
 
   /**
    * Check if the sender properly calls the sub-command
@@ -126,7 +126,7 @@ public abstract class SubCommand {
    * @param args   the arguments
    * @return true if the sender is
    */
-  public abstract boolean isProperUsage(CommandSender sender, String label, String[] args);
+  public abstract boolean isProperUsage(CommandSender sender, String label, String... args);
 
   /**
    * Get the suggested strings when the sender use TAB key to complete the sub-command
@@ -136,5 +136,5 @@ public abstract class SubCommand {
    * @param args   the arguments
    * @return the suggested strings
    */
-  public abstract List<String> onTabComplete(CommandSender sender, String label, String[] args);
+  public abstract List<String> onTabComplete(CommandSender sender, String label, String... args);
 }
