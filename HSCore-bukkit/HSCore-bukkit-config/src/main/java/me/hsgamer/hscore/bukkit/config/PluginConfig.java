@@ -3,8 +3,8 @@ package me.hsgamer.hscore.bukkit.config;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
+import me.hsgamer.hscore.bukkit.config.provider.YamlConfigProvider;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -15,10 +15,12 @@ public class PluginConfig {
   private final File configFile;
   private final JavaPlugin plugin;
   private final String fileName;
+  private final FileConfigProvider provider;
+
   private FileConfiguration config;
 
   /**
-   * Create a plugin config
+   * Create a YAML plugin config
    *
    * @param plugin   the plugin
    * @param filename the file name
@@ -28,15 +30,27 @@ public class PluginConfig {
   }
 
   /**
-   * Create a plugin config
+   * Create a YAML plugin config
    *
    * @param plugin the plugin
    * @param file   the config file
    */
   public PluginConfig(JavaPlugin plugin, File file) {
+    this(plugin, file, new YamlConfigProvider());
+  }
+
+  /**
+   * Create a plugin config with a provider
+   *
+   * @param plugin   the plugin
+   * @param file     the config file
+   * @param provider the provider
+   */
+  public PluginConfig(JavaPlugin plugin, File file, FileConfigProvider provider) {
     this.plugin = plugin;
     this.configFile = file;
     this.fileName = file.getName();
+    this.provider = provider;
     setUpConfig();
   }
 
@@ -55,14 +69,14 @@ public class PluginConfig {
         plugin.getLogger().log(Level.WARNING, e, () -> "Something wrong when creating " + fileName);
       }
     }
-    config = YamlConfiguration.loadConfiguration(configFile);
+    config = provider.loadConfiguration(configFile);
   }
 
   /**
    * Reload the config
    */
   public void reloadConfig() {
-    config = YamlConfiguration.loadConfiguration(configFile);
+    config = provider.loadConfiguration(configFile);
   }
 
   /**
@@ -70,7 +84,7 @@ public class PluginConfig {
    */
   public void saveConfig() {
     try {
-      config.save(configFile);
+      provider.saveConfiguration(config, configFile);
     } catch (IOException e) {
       plugin.getLogger().log(Level.WARNING, e, () -> "Something wrong when saving " + fileName);
     }
