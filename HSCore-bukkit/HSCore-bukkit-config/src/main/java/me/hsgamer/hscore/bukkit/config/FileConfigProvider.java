@@ -24,5 +24,8 @@ public interface FileConfigProvider {
    * @param file              the file
    * @throws IOException if there is an I/O error occurred
    */
-  void saveConfiguration(FileConfiguration fileConfiguration, File file) throws IOException;
+  default void saveConfiguration(FileConfiguration fileConfiguration, File file)
+      throws IOException {
+    fileConfiguration.save(file);
+  }
 }
