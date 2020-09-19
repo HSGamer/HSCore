@@ -1,8 +1,9 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
 import java.util.Map;
-import me.hsgamer.hscore.bukkit.config.AdvancedConfigPath;
-import me.hsgamer.hscore.bukkit.config.PluginConfig;
+
+import me.hsgamer.hscore.config.AdvancedConfigPath;
+import me.hsgamer.hscore.config.Config;
 import org.bukkit.potion.PotionEffect;
 
 public class PotionEffectConfigPath extends AdvancedConfigPath<Map<String, Object>, PotionEffect> {
@@ -18,8 +19,8 @@ public class PotionEffectConfigPath extends AdvancedConfigPath<Map<String, Objec
   }
 
   @Override
-  public Map<String, Object> getFromConfig(PluginConfig pluginConfig) {
-    return pluginConfig.getConfig().getConfigurationSection(path).getValues(false);
+  public Map<String, Object> getFromConfig(Config config) {
+    return config.getConfig().getConfigurationSection(path).getValues(false);
   }
 
   @Override
