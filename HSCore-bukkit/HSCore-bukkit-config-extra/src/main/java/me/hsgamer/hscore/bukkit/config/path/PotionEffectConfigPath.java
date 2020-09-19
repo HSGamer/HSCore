@@ -15,7 +15,7 @@ public class PotionEffectConfigPath extends AdvancedConfigPath<Map<String, Objec
    * @param path the path to the value
    * @param def  the default value if it's not found
    */
-  public PotionEffectConfigPath(String path, ItemStack def) {
+  public PotionEffectConfigPath(String path, PotionEffect def) {
     super(path, def);
   }
 
