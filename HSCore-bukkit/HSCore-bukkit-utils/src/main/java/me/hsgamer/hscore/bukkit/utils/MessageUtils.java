@@ -1,8 +1,9 @@
 package me.hsgamer.hscore.bukkit.utils;
 
-import java.util.function.Supplier;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+
+import java.util.function.Supplier;
 
 /**
  * Methods on messages on Bukkit

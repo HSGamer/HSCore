@@ -1,13 +1,10 @@
 package me.hsgamer.hscore.bukkit.subcommand;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import me.hsgamer.hscore.map.CaseInsensitiveStringMap;
 import org.bukkit.command.CommandSender;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The sub-command manager
@@ -34,7 +31,7 @@ public abstract class SubCommandManager {
       return false;
     } else {
       return subcommands.get(args[0])
-          .onCommand(sender, label, Arrays.copyOfRange(args, 1, args.length));
+        .onCommand(sender, label, Arrays.copyOfRange(args, 1, args.length));
     }
   }
 
@@ -110,12 +107,12 @@ public abstract class SubCommandManager {
       list.addAll(subcommands.keySet());
     } else if (subcommands.containsKey(args[0])) {
       list = subcommands.get(args[0])
-          .onTabComplete(sender, label, Arrays.copyOfRange(args, 1, args.length));
+        .onTabComplete(sender, label, Arrays.copyOfRange(args, 1, args.length));
     } else {
       list.addAll(
-          subcommands.keySet().stream()
-              .filter(s -> s.startsWith(args[0]))
-              .collect(Collectors.toList())
+        subcommands.keySet().stream()
+          .filter(s -> s.startsWith(args[0]))
+          .collect(Collectors.toList())
       );
       if (HELP.startsWith(args[0])) {
         list.add(HELP);

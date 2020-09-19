@@ -3,18 +3,13 @@ package me.hsgamer.hscore.expression;
 import com.udojava.evalex.Expression;
 import com.udojava.evalex.LazyFunction;
 import com.udojava.evalex.LazyOperator;
+import me.hsgamer.hscore.expression.number.Average;
+import me.hsgamer.hscore.expression.string.*;
+
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import me.hsgamer.hscore.expression.number.Average;
-import me.hsgamer.hscore.expression.string.Contains;
-import me.hsgamer.hscore.expression.string.EndsWith;
-import me.hsgamer.hscore.expression.string.Equals;
-import me.hsgamer.hscore.expression.string.EqualsIgnoreCase;
-import me.hsgamer.hscore.expression.string.Length;
-import me.hsgamer.hscore.expression.string.MatchPattern;
-import me.hsgamer.hscore.expression.string.StartsWith;
 
 /**
  * The expression manager

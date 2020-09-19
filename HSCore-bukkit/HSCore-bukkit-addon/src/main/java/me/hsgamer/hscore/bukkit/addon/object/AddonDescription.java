@@ -1,14 +1,15 @@
 package me.hsgamer.hscore.bukkit.addon.object;
 
+import me.hsgamer.hscore.bukkit.addon.exception.RequiredAddonPathException;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.NoSuchFileException;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import me.hsgamer.hscore.bukkit.addon.exception.RequiredAddonPathException;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
  * The description for the Addon
@@ -21,7 +22,7 @@ public final class AddonDescription {
   private final YamlConfiguration configuration;
 
   public AddonDescription(String name, String version, String mainClass,
-      YamlConfiguration configuration) {
+                          YamlConfiguration configuration) {
     this.name = name;
     this.version = version;
     this.mainClass = mainClass;
@@ -37,12 +38,12 @@ public final class AddonDescription {
    * @throws InvalidConfigurationException if the addon.yml file is invalid
    */
   public static AddonDescription get(JarFile jar)
-      throws IOException, InvalidConfigurationException {
+    throws IOException, InvalidConfigurationException {
     // Load addon.yml file
     JarEntry entry = jar.getJarEntry("addon.yml");
     if (entry == null) {
       throw new NoSuchFileException(
-          "Addon '" + jar.getName() + "' doesn't contain addon.yml file");
+        "Addon '" + jar.getName() + "' doesn't contain addon.yml file");
     }
     BufferedReader reader = new BufferedReader(new InputStreamReader(jar.getInputStream(entry)));
     YamlConfiguration data = new YamlConfiguration();
@@ -54,15 +55,15 @@ public final class AddonDescription {
     String mainClass = data.getString("main");
     if (name == null) {
       throw new RequiredAddonPathException(
-          "Addon '" + jar.getName() + "' doesn't have a name on addon.yml");
+        "Addon '" + jar.getName() + "' doesn't have a name on addon.yml");
     }
     if (version == null) {
       throw new RequiredAddonPathException(
-          "Addon '" + jar.getName() + "' doesn't have a version on addon.yml");
+        "Addon '" + jar.getName() + "' doesn't have a version on addon.yml");
     }
     if (mainClass == null) {
       throw new RequiredAddonPathException(
-          "Addon '" + jar.getName() + "' doesn't have a main class on addon.yml");
+        "Addon '" + jar.getName() + "' doesn't have a main class on addon.yml");
     }
     return new AddonDescription(name, version, mainClass, data);
   }

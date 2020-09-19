@@ -2,6 +2,7 @@ package me.hsgamer.hscore.expression.string;
 
 import com.udojava.evalex.AbstractLazyFunction;
 import com.udojava.evalex.Expression.LazyNumber;
+
 import java.math.BigDecimal;
 import java.util.List;
 

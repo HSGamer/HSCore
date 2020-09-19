@@ -1,16 +1,17 @@
 package me.hsgamer.hscore.bukkit.command;
 
+import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
+import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandMap;
-import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * The command manager
@@ -82,7 +83,7 @@ public class CommandManager {
       registered.remove(command.getLabel());
     } catch (ReflectiveOperationException e) {
       plugin.getLogger()
-          .log(Level.WARNING, "Something wrong when unregister the command", e);
+        .log(Level.WARNING, "Something wrong when unregister the command", e);
     }
   }
 

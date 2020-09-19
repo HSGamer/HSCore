@@ -61,7 +61,7 @@ public abstract class AddonPath<T> {
     YamlConfiguration configuration = addon.getDescription().getConfiguration();
     if (required && !configuration.isSet(path)) {
       throw new RequiredAddonPathException(
-          path + " is not found in the addon '" + addon.getDescription().getName() + "'");
+        path + " is not found in the addon '" + addon.getDescription().getName() + "'");
     }
 
     Object value = configuration.get(path);

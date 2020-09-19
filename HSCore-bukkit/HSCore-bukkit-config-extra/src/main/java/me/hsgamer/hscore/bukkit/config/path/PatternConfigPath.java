@@ -2,7 +2,6 @@ package me.hsgamer.hscore.bukkit.config.path;
 
 import me.hsgamer.hscore.config.SerializableMapConfigPath;
 import org.bukkit.block.banner.Pattern;
-import org.bukkit.util.Vector;
 
 import java.util.Map;
 

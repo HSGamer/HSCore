@@ -1,21 +1,16 @@
 package me.hsgamer.hscore.bukkit.addon;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.jar.JarFile;
-import java.util.logging.Level;
 import me.hsgamer.hscore.bukkit.addon.object.Addon;
 import me.hsgamer.hscore.bukkit.addon.object.AddonClassLoader;
 import me.hsgamer.hscore.bukkit.addon.object.AddonDescription;
 import me.hsgamer.hscore.common.CommonUtils;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.jar.JarFile;
+import java.util.logging.Level;
 
 /**
  * An Addon manager
@@ -66,39 +61,39 @@ public abstract class AddonManager {
 
     // Load the addon files
     Arrays.stream(Objects.requireNonNull(addonsDir.listFiles()))
-        .filter(file -> file.isFile() && file.getName().endsWith(".jar"))
-        .forEach(file -> {
-          try (JarFile jar = new JarFile(file)) {
-            // Get addon description
-            AddonDescription addonDescription = AddonDescription.get(jar);
-            if (addonMap.containsKey(addonDescription.getName())) {
-              plugin.getLogger().warning("Duplicated addon " + addonDescription.getName());
-              return;
-            }
-
-            // Try to load the addon
-            AddonClassLoader loader = new AddonClassLoader(this, file, addonDescription,
-                getClass().getClassLoader());
-            Addon addon = loader.getAddon();
-
-            if (onAddonLoading(addon)) {
-              addonMap.put(addonDescription.getName(), loader.getAddon());
-              loaderMap.put(addon, loader);
-            } else {
-              loader.close();
-            }
-          } catch (Exception e) {
-            plugin.getLogger().log(Level.WARNING, "Error when loading jar", e);
+      .filter(file -> file.isFile() && file.getName().endsWith(".jar"))
+      .forEach(file -> {
+        try (JarFile jar = new JarFile(file)) {
+          // Get addon description
+          AddonDescription addonDescription = AddonDescription.get(jar);
+          if (addonMap.containsKey(addonDescription.getName())) {
+            plugin.getLogger().warning("Duplicated addon " + addonDescription.getName());
+            return;
           }
-        });
+
+          // Try to load the addon
+          AddonClassLoader loader = new AddonClassLoader(this, file, addonDescription,
+            getClass().getClassLoader());
+          Addon addon = loader.getAddon();
+
+          if (onAddonLoading(addon)) {
+            addonMap.put(addonDescription.getName(), loader.getAddon());
+            loaderMap.put(addon, loader);
+          } else {
+            loader.close();
+          }
+        } catch (Exception e) {
+          plugin.getLogger().log(Level.WARNING, "Error when loading jar", e);
+        }
+      });
 
     // Filter and sort the addons
     Map<String, Addon> sortedAddonMap = sortAndFilter(addonMap);
 
     // Close AddonClassLoader of remaining addons
     addonMap.entrySet().stream()
-        .filter(entry -> !sortedAddonMap.containsKey(entry.getKey()))
-        .forEach(entry -> closeClassLoader(entry.getValue()));
+      .filter(entry -> !sortedAddonMap.containsKey(entry.getKey()))
+      .forEach(entry -> closeClassLoader(entry.getValue()));
 
     // Load the addons
     Map<String, Addon> finalAddons = new LinkedHashMap<>();
@@ -106,13 +101,13 @@ public abstract class AddonManager {
       try {
         if (!addon.onLoad()) {
           plugin.getLogger().warning(
-              "Failed to load " + key + " " + addon.getDescription().getVersion());
+            "Failed to load " + key + " " + addon.getDescription().getVersion());
           closeClassLoader(addon);
           return;
         }
 
         plugin.getLogger()
-            .info("Loaded " + key + " " + addon.getDescription().getVersion());
+          .info("Loaded " + key + " " + addon.getDescription().getVersion());
         finalAddons.put(key, addon);
       } catch (Throwable t) {
         plugin.getLogger().log(Level.WARNING, t, () -> "Error when loading " + key);
@@ -176,7 +171,7 @@ public abstract class AddonManager {
         failed.add(name);
       } else {
         plugin.getLogger().log(Level.INFO, "Enabled {0}",
-            String.join(" ", name, addons.get(name).getDescription().getVersion()));
+          String.join(" ", name, addons.get(name).getDescription().getVersion()));
       }
     });
     failed.forEach(addons::remove);
@@ -203,7 +198,7 @@ public abstract class AddonManager {
     CommonUtils.reverse(addons.keySet()).forEach(name -> {
       if (disableAddon(name, false)) {
         plugin.getLogger().log(Level.INFO, "Disabled {0}",
-            String.join(" ", name, addons.get(name).getDescription().getVersion()));
+          String.join(" ", name, addons.get(name).getDescription().getVersion()));
       }
     });
 

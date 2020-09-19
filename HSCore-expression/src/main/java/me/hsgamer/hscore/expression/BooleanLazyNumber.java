@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.expression;
 
 import com.udojava.evalex.Expression.LazyNumber;
+
 import java.math.BigDecimal;
 
 public class BooleanLazyNumber {

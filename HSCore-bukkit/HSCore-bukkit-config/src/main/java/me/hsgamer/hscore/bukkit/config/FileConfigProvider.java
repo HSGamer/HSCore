@@ -1,8 +1,9 @@
 package me.hsgamer.hscore.bukkit.config;
 
+import org.bukkit.configuration.file.FileConfiguration;
+
 import java.io.File;
 import java.io.IOException;
-import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  * Config provider for {@link PluginConfig}
@@ -25,7 +26,7 @@ public interface FileConfigProvider {
    * @throws IOException if there is an I/O error occurred
    */
   default void saveConfiguration(FileConfiguration fileConfiguration, File file)
-      throws IOException {
+    throws IOException {
     fileConfiguration.save(file);
   }
 }
