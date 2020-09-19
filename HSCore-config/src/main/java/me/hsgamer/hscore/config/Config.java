@@ -38,7 +38,7 @@ public class Config {
    */
   public Config(File file, FileType fileType) {
     this.file = file;
-    provider = fileType.getProvider();
+    this.provider = fileType.getProvider();
     setUpConfig();
   }
 
