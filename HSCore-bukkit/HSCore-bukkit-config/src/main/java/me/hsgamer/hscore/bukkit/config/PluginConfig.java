@@ -3,8 +3,8 @@ package me.hsgamer.hscore.bukkit.config;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
-import me.hsgamer.hscore.bukkit.config.provider.YamlConfigProvider;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -14,7 +14,6 @@ public class PluginConfig {
 
   private final File configFile;
   private final JavaPlugin plugin;
-  private final String fileName;
   private final FileConfigProvider provider;
 
   private FileConfiguration config;
@@ -30,13 +29,24 @@ public class PluginConfig {
   }
 
   /**
+   * Create a plugin config
+   *
+   * @param plugin   the plugin
+   * @param filename the file name
+   * @param provider the provider
+   */
+  public PluginConfig(JavaPlugin plugin, String filename, FileConfigProvider provider) {
+    this(plugin, new File(plugin.getDataFolder(), filename), provider);
+  }
+
+  /**
    * Create a YAML plugin config
    *
    * @param plugin the plugin
    * @param file   the config file
    */
   public PluginConfig(JavaPlugin plugin, File file) {
-    this(plugin, file, new YamlConfigProvider());
+    this(plugin, file, YamlConfiguration::loadConfiguration);
   }
 
   /**
@@ -49,7 +59,6 @@ public class PluginConfig {
   public PluginConfig(JavaPlugin plugin, File file, FileConfigProvider provider) {
     this.plugin = plugin;
     this.configFile = file;
-    this.fileName = file.getName();
     this.provider = provider;
     setUpConfig();
   }
@@ -66,7 +75,8 @@ public class PluginConfig {
       try {
         configFile.createNewFile();
       } catch (IOException e) {
-        plugin.getLogger().log(Level.WARNING, e, () -> "Something wrong when creating " + fileName);
+        plugin.getLogger()
+            .log(Level.WARNING, e, () -> "Something wrong when creating " + getFileName());
       }
     }
     config = provider.loadConfiguration(configFile);
@@ -86,7 +96,8 @@ public class PluginConfig {
     try {
       provider.saveConfiguration(config, configFile);
     } catch (IOException e) {
-      plugin.getLogger().log(Level.WARNING, e, () -> "Something wrong when saving " + fileName);
+      plugin.getLogger()
+          .log(Level.WARNING, e, () -> "Something wrong when saving " + getFileName());
     }
   }
 
@@ -130,6 +141,6 @@ public class PluginConfig {
    * @return the file name
    */
   public String getFileName() {
-    return fileName;
+    return configFile.getName();
   }
 }
