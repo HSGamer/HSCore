@@ -2,6 +2,11 @@ package me.hsgamer.hscore.config;
 
 import java.util.Map;
 
+/**
+ * An serializable map config path
+ *
+ * @param <T> the type of the final value
+ */
 public abstract class SerializableMapConfigPath<T> extends AdvancedConfigPath<Map<String, Object>, T> {
 
   /**
