@@ -1,12 +1,11 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
-import me.hsgamer.hscore.config.AdvancedConfigPath;
-import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.SerializableMapConfigPath;
 import org.bukkit.Location;
 
 import java.util.Map;
 
-public class LocationConfigPath extends AdvancedConfigPath<Map<String, Object>, Location> {
+public class LocationConfigPath extends SerializableMapConfigPath<Location> {
 
   /**
    * Create a config path
@@ -16,11 +15,6 @@ public class LocationConfigPath extends AdvancedConfigPath<Map<String, Object>, 
    */
   public LocationConfigPath(String path, Location def) {
     super(path, def);
-  }
-
-  @Override
-  public Map<String, Object> getFromConfig(Config config) {
-    return config.getConfig().getConfigurationSection(path).getValues(false);
   }
 
   @Override

@@ -1,13 +1,11 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
-import java.util.Map;
-
-import me.hsgamer.hscore.config.AdvancedConfigPath;
-import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.SerializableMapConfigPath;
 import org.bukkit.FireworkEffect;
 
-public class FireworkEffectConfigPath extends
-  AdvancedConfigPath<Map<String, Object>, FireworkEffect> {
+import java.util.Map;
+
+public class FireworkEffectConfigPath extends SerializableMapConfigPath<FireworkEffect> {
 
   /**
    * Create a config path
@@ -20,13 +18,8 @@ public class FireworkEffectConfigPath extends
   }
 
   @Override
-  public Map<String, Object> getFromConfig(Config config) {
-    return config.getConfig().getConfigurationSection(path).getValues(false);
-  }
-
-  @Override
   public FireworkEffect convert(Map<String, Object> rawValue) {
-    return ((FireworkEffect) FireworkEffect.deserialize(rawValue));
+    return (FireworkEffect) FireworkEffect.deserialize(rawValue);
   }
 
   @Override

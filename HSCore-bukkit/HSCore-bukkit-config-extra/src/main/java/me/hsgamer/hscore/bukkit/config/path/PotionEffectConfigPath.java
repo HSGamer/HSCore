@@ -1,12 +1,11 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
-import java.util.Map;
-
-import me.hsgamer.hscore.config.AdvancedConfigPath;
-import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.SerializableMapConfigPath;
 import org.bukkit.potion.PotionEffect;
 
-public class PotionEffectConfigPath extends AdvancedConfigPath<Map<String, Object>, PotionEffect> {
+import java.util.Map;
+
+public class PotionEffectConfigPath extends SerializableMapConfigPath<PotionEffect> {
 
   /**
    * Create a config path
@@ -16,11 +15,6 @@ public class PotionEffectConfigPath extends AdvancedConfigPath<Map<String, Objec
    */
   public PotionEffectConfigPath(String path, PotionEffect def) {
     super(path, def);
-  }
-
-  @Override
-  public Map<String, Object> getFromConfig(Config config) {
-    return config.getConfig().getConfigurationSection(path).getValues(false);
   }
 
   @Override
