@@ -1,12 +1,6 @@
-package me.hsgamer.hscore.config;
+package me.hsgamer.hscore.config.path;
 
-import me.hsgamer.hscore.config.path.BooleanConfigPath;
-import me.hsgamer.hscore.config.path.DoubleConfigPath;
-import me.hsgamer.hscore.config.path.FloatConfigPath;
-import me.hsgamer.hscore.config.path.IntegerConfigPath;
-import me.hsgamer.hscore.config.path.LongConfigPath;
-import me.hsgamer.hscore.config.path.SimpleConfigPath;
-import me.hsgamer.hscore.config.path.StringConfigPath;
+import me.hsgamer.hscore.config.ConfigPath;
 
 /**
  * Utility to easily create {@link ConfigPath}
