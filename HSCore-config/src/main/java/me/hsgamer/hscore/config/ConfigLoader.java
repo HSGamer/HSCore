@@ -7,7 +7,16 @@ import java.lang.reflect.Field;
  *
  * Usage example:
  * <pre>
- *   
+ *   public final class TestPlugin extends JavaPlugin {
+ *
+ *     @Override
+ *     public void onEnable() {
+ *       final TestConfig testConfig = new TestConfig(this);
+ *       ConfigLoader.load(testConfig);
+ *       final boolean testBoolean = testConfig.testBoolean.getValue();
+ *     }
+ *
+ *   }
  * </pre>
  */
 public final class ConfigLoader {
