@@ -6,7 +6,7 @@ import me.hsgamer.hscore.config.Config;
 import java.io.File;
 
 /**
- * A YAML config file
+ * A JSON config file
  */
 public class JsonConfig extends Config {
 
@@ -20,7 +20,7 @@ public class JsonConfig extends Config {
   }
 
   /**
-   * Create a YAML config
+   * Create a JSON config
    *
    * @param dataFolder the data folder of the file
    * @param filename   the file name
