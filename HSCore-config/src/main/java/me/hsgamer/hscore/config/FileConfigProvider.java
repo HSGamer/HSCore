@@ -1,9 +1,8 @@
 package me.hsgamer.hscore.config;
 
-import org.simpleyaml.configuration.file.FileConfiguration;
-
 import java.io.File;
 import java.io.IOException;
+import org.simpleyaml.configuration.file.FileConfiguration;
 
 /**
  * Config provider for {@link Config}

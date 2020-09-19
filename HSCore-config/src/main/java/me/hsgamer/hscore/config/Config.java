@@ -1,12 +1,11 @@
 package me.hsgamer.hscore.config;
 
-import org.simpleyaml.configuration.file.FileConfiguration;
-import org.simpleyaml.configuration.file.YamlConfiguration;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.simpleyaml.configuration.file.FileConfiguration;
+import org.simpleyaml.configuration.file.YamlConfiguration;
 
 /**
  * A simple config file
@@ -14,10 +13,10 @@ import java.util.logging.Logger;
 public class Config {
 
   private static final Logger LOGGER = Logger.getLogger("PluginConfig");
-  private final File configFile;
+  private final File file;
   private final FileConfigProvider provider;
 
-  private FileConfiguration config;
+  private FileConfiguration fileConfiguration;
 
   /**
    * Create a YAML plugin config
@@ -56,7 +55,7 @@ public class Config {
    * @param provider the provider
    */
   public Config(File file, FileConfigProvider provider) {
-    this.configFile = file;
+    this.file = file;
     this.provider = provider;
     setUpConfig();
   }
@@ -65,26 +64,26 @@ public class Config {
    * Set up the config
    */
   private void setUpConfig() {
-    if (!configFile.getParentFile().exists()) {
-      configFile.getParentFile().mkdirs();
+    if (!file.getParentFile().exists()) {
+      file.getParentFile().mkdirs();
     }
 
-    if (!configFile.exists()) {
+    if (!file.exists()) {
       try {
-        configFile.createNewFile();
+        file.createNewFile();
       } catch (IOException e) {
         LOGGER
-          .log(Level.WARNING, e, () -> "Something wrong when creating " + getFileName());
+            .log(Level.WARNING, e, () -> "Something wrong when creating " + getFileName());
       }
     }
-    config = provider.loadConfiguration(configFile);
+    fileConfiguration = provider.loadConfiguration(file);
   }
 
   /**
    * Reload the config
    */
   public void reloadConfig() {
-    config = provider.loadConfiguration(configFile);
+    fileConfiguration = provider.loadConfiguration(file);
   }
 
   /**
@@ -92,10 +91,10 @@ public class Config {
    */
   public void saveConfig() {
     try {
-      provider.saveConfiguration(config, configFile);
+      provider.saveConfiguration(fileConfiguration, file);
     } catch (IOException e) {
       LOGGER
-        .log(Level.WARNING, e, () -> "Something wrong when saving " + getFileName());
+          .log(Level.WARNING, e, () -> "Something wrong when saving " + getFileName());
     }
   }
 
@@ -105,10 +104,10 @@ public class Config {
    * @return the config
    */
   public FileConfiguration getConfig() {
-    if (config == null) {
+    if (fileConfiguration == null) {
       setUpConfig();
     }
-    return config;
+    return fileConfiguration;
   }
 
 
@@ -139,6 +138,6 @@ public class Config {
    * @return the file name
    */
   public String getFileName() {
-    return configFile.getName();
+    return file.getName();
   }
 }
