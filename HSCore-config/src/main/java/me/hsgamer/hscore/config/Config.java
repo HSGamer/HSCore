@@ -19,7 +19,7 @@ public class Config {
   private FileConfiguration fileConfiguration;
 
   /**
-   * Create a YAML plugin config
+   * Create a YAML config
    *
    * @param dataFolder the data folder of the file
    * @param filename   the file name
@@ -29,7 +29,7 @@ public class Config {
   }
 
   /**
-   * Create a plugin config
+   * Create a config
    *
    * @param dataFolder the data folder of the file
    * @param filename   the file name
@@ -40,7 +40,7 @@ public class Config {
   }
 
   /**
-   * Create a YAML plugin config
+   * Create a YAML config
    *
    * @param file the config file
    */
@@ -49,7 +49,7 @@ public class Config {
   }
 
   /**
-   * Create a plugin config with a provider
+   * Create a config with a provider
    *
    * @param file     the config file
    * @param provider the provider

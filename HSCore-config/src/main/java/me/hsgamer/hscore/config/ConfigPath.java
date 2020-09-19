@@ -3,7 +3,7 @@ package me.hsgamer.hscore.config;
 import java.util.function.Function;
 
 /**
- * A simple config path for PluginConfig
+ * A simple config path
  *
  * @param <T> the type of the value
  */
