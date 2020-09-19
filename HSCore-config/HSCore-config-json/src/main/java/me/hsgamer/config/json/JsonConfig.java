@@ -1,4 +1,7 @@
-package me.hsgamer.hscore.config;
+package me.hsgamer.config.json;
+
+import io.github.portlek.jsongration.JsonConfiguration;
+import me.hsgamer.hscore.config.Config;
 
 import java.io.File;
 
@@ -13,7 +16,7 @@ public class JsonConfig extends Config {
    * @param file the config file
    */
   public JsonConfig(File file) {
-    super(file, FileType.JSON);
+    super(file, JsonConfiguration::loadConfiguration);
   }
 
   /**

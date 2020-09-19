@@ -1,4 +1,7 @@
-package me.hsgamer.hscore.config;
+package me.hsgamer.config.yaml;
+
+import me.hsgamer.hscore.config.Config;
+import org.simpleyaml.configuration.file.YamlConfiguration;
 
 import java.io.File;
 
@@ -13,7 +16,7 @@ public class YamlConfig extends Config {
    * @param file the config file
    */
   public YamlConfig(File file) {
-    super(file, FileType.YAML);
+    super(file, YamlConfiguration::loadConfiguration);
   }
 
   /**

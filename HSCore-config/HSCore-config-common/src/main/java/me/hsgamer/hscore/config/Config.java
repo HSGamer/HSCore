@@ -31,18 +31,6 @@ public class Config {
   }
 
   /**
-   * Create a config with a provider
-   *
-   * @param file     the config file
-   * @param fileType the provider's file type
-   */
-  public Config(File file, FileType fileType) {
-    this.file = file;
-    this.provider = fileType.getProvider();
-    setUpConfig();
-  }
-
-  /**
    * Set up the config
    */
   private void setUpConfig() {

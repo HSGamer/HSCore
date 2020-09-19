@@ -3,6 +3,7 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <artifactId>HSCore-config</artifactId>
+  <packaging>pom</packaging>
 
   <build>
     <plugins>
@@ -29,17 +30,17 @@
       </plugin>
     </plugins>
   </build>
+  <modules>
+    <module>HSCore-config-common</module>
+    <module>HSCore-config-yaml</module>
+    <module>HSCore-config-json</module>
+  </modules>
 
   <dependencies>
     <dependency>
-      <artifactId>Simple-Yaml</artifactId>
       <groupId>me.carleslc.Simple-YAML</groupId>
+      <artifactId>Simple-Configuration</artifactId>
       <version>1.7.1</version>
-    </dependency>
-    <dependency>
-      <groupId>io.github.portlek</groupId>
-      <artifactId>jsongration</artifactId>
-      <version>1.7</version>
     </dependency>
   </dependencies>
 
