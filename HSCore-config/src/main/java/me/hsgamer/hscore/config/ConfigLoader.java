@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 
 /**
  * A class that loads config paths on the config instance
- *
+ * <p>
  * Usage example:
  * <pre>
  *   public final class TestPlugin extends JavaPlugin {

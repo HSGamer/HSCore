@@ -36,6 +36,11 @@
       <groupId>me.carleslc.Simple-YAML</groupId>
       <version>1.7.1</version>
     </dependency>
+    <dependency>
+      <groupId>io.github.portlek</groupId>
+      <artifactId>jsongration</artifactId>
+      <version>1.7</version>
+    </dependency>
   </dependencies>
 
   <modelVersion>4.0.0</modelVersion>
