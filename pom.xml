@@ -30,6 +30,9 @@
       </plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <source>${java.version}</source>
+        </configuration>
         <executions>
           <execution>
             <goals>
@@ -65,6 +68,7 @@
     <module>HSCore-json</module>
     <module>HSCore-bukkit</module>
     <module>HSCore-request</module>
+    <module>HSCore-config</module>
   </modules>
 
   <name>HSCore</name>

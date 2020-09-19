@@ -14,6 +14,7 @@
 * **`HSCore-json`**
 * **`HSCore-request`**
 * **`HSCore-web`**
+* **`HSCore-config`**
 * **`HSCore-bukkit-command`**
 * **`HSCore-bukkit-subcommand`**
 * **`HSCore-bukkit-addon`**
