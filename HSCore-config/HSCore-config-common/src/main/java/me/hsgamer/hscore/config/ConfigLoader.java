@@ -1,6 +1,5 @@
 package me.hsgamer.hscore.config;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 
 /**
@@ -18,8 +17,7 @@ public final class ConfigLoader {
    * @param <C>    config instance's class type
    */
   public static <C extends Config> void load(C config) {
-    final Field[] fields = config.getClass().getDeclaredFields();
-    Arrays.stream(fields)
+    Arrays.stream(config.getClass().getDeclaredFields())
       .filter(field -> BaseConfigPath.class.isAssignableFrom(field.getType()))
       .forEach(field -> {
         try {
