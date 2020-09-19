@@ -1,6 +1,6 @@
-package me.hsgamer.hscore.config;
+package me.hsgamer.hscore.config.path;
 
-import me.hsgamer.hscore.config.path.*;
+import me.hsgamer.hscore.config.ConfigPath;
 
 /**
  * Utility to easily create {@link ConfigPath}
