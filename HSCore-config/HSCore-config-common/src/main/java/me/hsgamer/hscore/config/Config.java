@@ -46,6 +46,7 @@ public class Config {
       }
     }
     fileConfiguration = provider.loadConfiguration(file);
+    ConfigLoader.load(this);
   }
 
   /**
