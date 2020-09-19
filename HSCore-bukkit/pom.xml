@@ -21,7 +21,7 @@
     <module>HSCore-bukkit-config-extra</module>
     <module>HSCore-bukkit-updater</module>
     <module>HSCore-bukkit-addon</module>
-      <module>HSCore-bukkit-standalone-config-extra</module>
+    <module>HSCore-bukkit-standalone-config-extra</module>
   </modules>
 
   <packaging>pom</packaging>
