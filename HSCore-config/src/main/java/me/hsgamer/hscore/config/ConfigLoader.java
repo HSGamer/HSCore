@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
  * <pre>
  *   public final class TestPlugin extends JavaPlugin {
  *
- *     @Override
+ *     &#64;Override
  *     public void onEnable() {
  *       final TestConfig testConfig = new TestConfig(this);
  *       ConfigLoader.load(testConfig);
