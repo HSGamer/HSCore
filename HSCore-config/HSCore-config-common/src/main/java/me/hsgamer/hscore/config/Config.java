@@ -1,10 +1,10 @@
 package me.hsgamer.hscore.config;
 
 import org.simpleyaml.configuration.file.FileConfiguration;
-import org.simpleyaml.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,41 +13,11 @@ import java.util.logging.Logger;
  */
 public class Config {
 
-  private static final Logger LOGGER = Logger.getLogger("PluginConfig");
+  private static final Logger LOGGER = Logger.getLogger("Config");
   private final File file;
   private final FileConfigProvider provider;
 
   private FileConfiguration fileConfiguration;
-
-  /**
-   * Create a YAML config
-   *
-   * @param dataFolder the data folder of the file
-   * @param filename   the file name
-   */
-  public Config(File dataFolder, String filename) {
-    this(new File(dataFolder, filename));
-  }
-
-  /**
-   * Create a config
-   *
-   * @param dataFolder the data folder of the file
-   * @param filename   the file name
-   * @param provider   the provider
-   */
-  public Config(File dataFolder, String filename, FileConfigProvider provider) {
-    this(new File(dataFolder, filename), provider);
-  }
-
-  /**
-   * Create a YAML config
-   *
-   * @param file the config file
-   */
-  public Config(File file) {
-    this(file, YamlConfiguration::loadConfiguration);
-  }
 
   /**
    * Create a config with a provider
@@ -77,6 +47,15 @@ public class Config {
       }
     }
     fileConfiguration = provider.loadConfiguration(file);
+    Arrays.stream(this.getClass().getDeclaredFields())
+      .filter(field -> BaseConfigPath.class.isAssignableFrom(field.getType()))
+      .forEach(field -> {
+        try {
+          ((BaseConfigPath<?>) field.get(this)).setConfig(this);
+        } catch (IllegalAccessException e) {
+          e.printStackTrace();
+        }
+      });
   }
 
   /**
