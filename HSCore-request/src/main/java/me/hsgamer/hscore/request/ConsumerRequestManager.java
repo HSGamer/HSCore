@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * A simple request manager
@@ -22,6 +23,16 @@ public class ConsumerRequestManager<T> {
    */
   public void addRequest(UUID uuid, BiConsumer<UUID, T> consumer) {
     cache.put(uuid, consumer);
+  }
+
+  /**
+   * Add a request
+   *
+   * @param uuid     the unique id
+   * @param consumer the consumer when the request is called
+   */
+  public void addRequest(UUID uuid, Consumer<T> consumer) {
+    addRequest(uuid, (uuid1, t) -> consumer.accept(t));
   }
 
   /**
