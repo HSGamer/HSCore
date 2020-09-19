@@ -3,7 +3,7 @@ package me.hsgamer.hscore.config;
 import java.lang.reflect.Field;
 
 /**
- * A config loader class to load config paths
+ * A class that loads config paths on the config instance
  *
  * Usage example:
  * <pre>
