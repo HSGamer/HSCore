@@ -4,20 +4,6 @@ import java.lang.reflect.Field;
 
 /**
  * A class that loads config paths on the config instance
- * <p>
- * Usage example:
- * <pre>
- *   public final class TestPlugin extends JavaPlugin {
- *
- *     &#64;Override
- *     public void onEnable() {
- *       final TestConfig testConfig = new TestConfig(this);
- *       ConfigLoader.load(testConfig);
- *       final boolean testBoolean = testConfig.testBoolean.getValue();
- *     }
- *
- *   }
- * </pre>
  */
 public final class ConfigLoader {
 
