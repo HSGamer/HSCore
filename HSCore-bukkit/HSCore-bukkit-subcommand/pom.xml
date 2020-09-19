@@ -22,7 +22,7 @@
   <parent>
     <artifactId>HSCore-bukkit</artifactId>
     <groupId>me.HSGamer</groupId>
-    <version>1.5-SNAPSHOT</version>
+    <version>1.5</version>
   </parent>
 
 
