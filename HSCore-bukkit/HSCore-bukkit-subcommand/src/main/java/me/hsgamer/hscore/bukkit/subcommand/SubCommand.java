@@ -1,9 +1,10 @@
 package me.hsgamer.hscore.bukkit.subcommand;
 
-import java.util.List;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+
+import java.util.List;
 
 /**
  * A sub-command
@@ -28,7 +29,7 @@ public abstract class SubCommand {
    * @param consoleAllowed is console allowed to use?
    */
   public SubCommand(String name, String description, String usage, String permission,
-      boolean consoleAllowed) {
+                    boolean consoleAllowed) {
     this.name = name;
     this.permission = permission;
     this.description = description;

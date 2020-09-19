@@ -1,7 +1,6 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
 import me.hsgamer.hscore.config.SerializableMapConfigPath;
-import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import java.util.Map;

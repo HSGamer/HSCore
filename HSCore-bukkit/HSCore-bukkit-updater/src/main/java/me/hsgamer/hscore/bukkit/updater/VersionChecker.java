@@ -1,10 +1,11 @@
 package me.hsgamer.hscore.bukkit.updater;
 
-import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
 import me.hsgamer.hscore.web.WebUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
+
+import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * A simple version checker for Spigot
@@ -31,7 +32,7 @@ public final class VersionChecker {
     return CompletableFuture.supplyAsync(() -> {
       try {
         JSONObject object = (JSONObject) WebUtils.getJSONFromURL(
-            "https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId);
+          "https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId);
         if (!object.containsKey("current_version")) {
           throw new IOException("Cannot get the plugin version");
         }

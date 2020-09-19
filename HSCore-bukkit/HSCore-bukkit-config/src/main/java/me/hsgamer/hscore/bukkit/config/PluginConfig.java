@@ -1,11 +1,12 @@
 package me.hsgamer.hscore.bukkit.config;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
 
 /**
  * A simple config file
@@ -76,7 +77,7 @@ public class PluginConfig {
         configFile.createNewFile();
       } catch (IOException e) {
         plugin.getLogger()
-            .log(Level.WARNING, e, () -> "Something wrong when creating " + getFileName());
+          .log(Level.WARNING, e, () -> "Something wrong when creating " + getFileName());
       }
     }
     config = provider.loadConfiguration(configFile);
@@ -97,7 +98,7 @@ public class PluginConfig {
       provider.saveConfiguration(config, configFile);
     } catch (IOException e) {
       plugin.getLogger()
-          .log(Level.WARNING, e, () -> "Something wrong when saving " + getFileName());
+        .log(Level.WARNING, e, () -> "Something wrong when saving " + getFileName());
     }
   }
 

@@ -1,5 +1,11 @@
 package me.hsgamer.hscore.bukkit.addon.object;
 
+import me.hsgamer.hscore.bukkit.addon.AddonManager;
+import me.hsgamer.hscore.bukkit.config.PluginConfig;
+import me.hsgamer.hscore.common.Validate;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,11 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import me.hsgamer.hscore.bukkit.addon.AddonManager;
-import me.hsgamer.hscore.bukkit.config.PluginConfig;
-import me.hsgamer.hscore.common.Validate;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * The main class of the addon
@@ -156,7 +157,7 @@ public abstract class Addon {
   public final File getDataFolder() {
     if (dataFolder == null) {
       dataFolder = new File(getPlugin().getDataFolder(),
-          "addon" + File.separator + description.getName());
+        "addon" + File.separator + description.getName());
     }
     if (!dataFolder.exists()) {
       dataFolder.mkdirs();
@@ -182,7 +183,7 @@ public abstract class Addon {
         try (InputStream in = jar.getInputStream(jarConfig)) {
           if (in == null) {
             throw new IllegalArgumentException(
-                "The embedded resource '" + path + "' cannot be found");
+              "The embedded resource '" + path + "' cannot be found");
           }
           File out = new File(getDataFolder(), path);
           out.getParentFile().mkdirs();

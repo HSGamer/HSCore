@@ -1,12 +1,13 @@
 package me.hsgamer.hscore.bukkit.command;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple Command builder with command executor, tab completer and more
@@ -62,8 +63,8 @@ public class CommandBuilder {
       @Override
       public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
         return tabCompleter != null
-            ? tabCompleter.onTabComplete(sender, this, alias, args)
-            : super.tabComplete(sender, alias, args);
+          ? tabCompleter.onTabComplete(sender, this, alias, args)
+          : super.tabComplete(sender, alias, args);
       }
     };
 

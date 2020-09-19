@@ -1,11 +1,12 @@
 package me.hsgamer.hscore.bukkit.addon.object;
 
+import me.hsgamer.hscore.bukkit.addon.AddonManager;
+
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import me.hsgamer.hscore.bukkit.addon.AddonManager;
 
 /**
  * The class loader of the addon
@@ -32,8 +33,8 @@ public final class AddonClassLoader extends URLClassLoader {
    * @throws ClassNotFoundException    if the main class is not found
    */
   public AddonClassLoader(AddonManager addonManager, File file, AddonDescription addonDescription,
-      ClassLoader parent)
-      throws MalformedURLException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, ClassNotFoundException {
+                          ClassLoader parent)
+    throws MalformedURLException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, ClassNotFoundException {
     super(new URL[]{file.toURI().toURL()}, parent);
     this.addonManager = addonManager;
     this.file = file;

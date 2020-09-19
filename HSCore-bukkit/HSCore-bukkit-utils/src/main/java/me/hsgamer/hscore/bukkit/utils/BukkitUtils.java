@@ -1,14 +1,15 @@
 package me.hsgamer.hscore.bukkit.utils;
 
+import me.hsgamer.hscore.common.Validate;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
-import me.hsgamer.hscore.common.Validate;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 /**
  * Methods on Bukkit
@@ -50,9 +51,9 @@ public final class BukkitUtils {
    */
   public static List<UUID> getAllUniqueIds() {
     return Arrays.stream(Bukkit.getOfflinePlayers())
-        .parallel()
-        .map(OfflinePlayer::getUniqueId)
-        .collect(Collectors.toList());
+      .parallel()
+      .map(OfflinePlayer::getUniqueId)
+      .collect(Collectors.toList());
   }
 
   /**
@@ -62,9 +63,9 @@ public final class BukkitUtils {
    */
   public static List<String> getAllPlayerNames() {
     return Arrays.stream(Bukkit.getOfflinePlayers())
-        .parallel()
-        .map(OfflinePlayer::getName)
-        .collect(Collectors.toList());
+      .parallel()
+      .map(OfflinePlayer::getName)
+      .collect(Collectors.toList());
   }
 
   /**
@@ -75,7 +76,7 @@ public final class BukkitUtils {
    */
   public static List<String> getMissingDepends(List<String> depends) {
     return depends.stream()
-        .filter(depend -> Bukkit.getPluginManager().getPlugin(depend) == null)
-        .collect(Collectors.toList());
+      .filter(depend -> Bukkit.getPluginManager().getPlugin(depend) == null)
+      .collect(Collectors.toList());
   }
 }

@@ -22,7 +22,7 @@ public class PermissionUtils {
    * @return the permission
    */
   public static Permission createPermission(String name, String description,
-      PermissionDefault permissionDefault) {
+                                            PermissionDefault permissionDefault) {
     Permission permission = new Permission(name);
     if (description != null) {
       permission.setDescription(description);
