@@ -64,16 +64,15 @@ public class Config {
    * Set up the config
    */
   private void setUpConfig() {
-    if (!file.getParentFile().exists()) {
-      file.getParentFile().mkdirs();
-    }
-
     if (!file.exists()) {
+      if (!file.getParentFile().exists()) {
+        file.getParentFile().mkdirs();
+      }
+
       try {
         file.createNewFile();
       } catch (IOException e) {
-        LOGGER
-            .log(Level.WARNING, e, () -> "Something wrong when creating " + getFileName());
+        LOGGER.log(Level.WARNING, e, () -> "Something wrong when creating " + getFileName());
       }
     }
     fileConfiguration = provider.loadConfiguration(file);
@@ -93,8 +92,7 @@ public class Config {
     try {
       provider.saveConfiguration(fileConfiguration, file);
     } catch (IOException e) {
-      LOGGER
-          .log(Level.WARNING, e, () -> "Something wrong when saving " + getFileName());
+      LOGGER.log(Level.WARNING, e, () -> "Something wrong when saving " + getFileName());
     }
   }
 
