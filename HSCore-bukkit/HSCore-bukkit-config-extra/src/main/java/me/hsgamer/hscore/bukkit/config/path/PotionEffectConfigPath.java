@@ -1,11 +1,9 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
+import java.util.Map;
 import me.hsgamer.hscore.bukkit.config.AdvancedConfigPath;
 import me.hsgamer.hscore.bukkit.config.PluginConfig;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-
-import java.util.Map;
 
 public class PotionEffectConfigPath extends AdvancedConfigPath<Map<String, Object>, PotionEffect> {
 

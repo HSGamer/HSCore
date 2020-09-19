@@ -1,11 +1,9 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
+import java.util.Map;
 import me.hsgamer.hscore.bukkit.config.AdvancedConfigPath;
 import me.hsgamer.hscore.bukkit.config.PluginConfig;
-import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Map;
 
 public class ItemStackConfigPath extends AdvancedConfigPath<Map<String, Object>, ItemStack> {
 

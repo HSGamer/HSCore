@@ -1,13 +1,12 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
+import java.util.Map;
 import me.hsgamer.hscore.bukkit.config.AdvancedConfigPath;
 import me.hsgamer.hscore.bukkit.config.PluginConfig;
 import org.bukkit.FireworkEffect;
-import org.bukkit.potion.PotionEffect;
 
-import java.util.Map;
-
-public class FireworkEffectConfigPath extends AdvancedConfigPath<Map<String, Object>, FireworkEffect> {
+public class FireworkEffectConfigPath extends
+    AdvancedConfigPath<Map<String, Object>, FireworkEffect> {
 
   /**
    * Create a config path
