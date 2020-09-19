@@ -18,6 +18,7 @@
     <module>HSCore-bukkit-command</module>
     <module>HSCore-bukkit-subcommand</module>
     <module>HSCore-bukkit-config</module>
+    <module>HSCore-bukkit-config-extra</module>
     <module>HSCore-bukkit-updater</module>
     <module>HSCore-bukkit-addon</module>
   </modules>
