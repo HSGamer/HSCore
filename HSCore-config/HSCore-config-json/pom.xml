@@ -15,7 +15,7 @@
     <dependency>
       <groupId>me.HSGamer</groupId>
       <artifactId>HSCore-config-common</artifactId>
-      <version>1.6-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>io.github.portlek</groupId>
