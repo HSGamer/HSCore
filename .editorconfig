@@ -8,6 +8,3 @@ indent_size = 2
 tab_width = 2
 ij_continuation_indent_size = 2
 ij_xml_keep_blank_lines = 1
-
-[{*.yaml, *.yml, .analysis_options}]
-indent_size = 2
