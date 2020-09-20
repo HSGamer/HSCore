@@ -1,4 +1,4 @@
-package me.hsgamer.config.json;
+package me.hsgamer.hscore.config.json;
 
 import io.github.portlek.jsongration.JsonConfiguration;
 import me.hsgamer.hscore.config.Config;

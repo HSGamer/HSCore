@@ -1,9 +1,9 @@
 package me.hsgamer.hscore.addon.object;
 
-import me.hsgamer.config.yaml.YamlConfig;
 import me.hsgamer.hscore.addon.AddonManager;
 import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.yaml.YamlConfig;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.io.File;

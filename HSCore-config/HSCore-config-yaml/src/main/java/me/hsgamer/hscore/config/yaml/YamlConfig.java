@@ -1,4 +1,4 @@
-package me.hsgamer.config.yaml;
+package me.hsgamer.hscore.config.yaml;
 
 import me.hsgamer.hscore.config.Config;
 import org.simpleyaml.configuration.file.YamlConfiguration;
