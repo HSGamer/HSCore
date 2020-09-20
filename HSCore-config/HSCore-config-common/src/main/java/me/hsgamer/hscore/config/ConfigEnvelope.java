@@ -89,7 +89,7 @@ public abstract class ConfigEnvelope implements Config {
     }
     this.fileConfiguration = this.provider.loadConfiguration(this.file);
     Arrays.stream(this.getClass().getDeclaredFields())
-      .filter(field -> BaseConfigPath.class.isAssignableFrom(field.getType()))
+      .filter(field -> ConfigPath.class.isAssignableFrom(field.getType()))
       .forEach(field -> {
         try {
           ((ConfigPath<?>) field.get(this)).setConfig(this);
