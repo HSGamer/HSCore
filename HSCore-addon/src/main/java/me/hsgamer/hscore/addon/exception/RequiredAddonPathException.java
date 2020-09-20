@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.bukkit.addon.exception;
+package me.hsgamer.hscore.addon.exception;
 
 /**
  * A runtime exception for required addon path

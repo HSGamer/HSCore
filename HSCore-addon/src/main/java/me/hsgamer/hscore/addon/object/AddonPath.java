@@ -1,7 +1,7 @@
-package me.hsgamer.hscore.bukkit.addon.object;
+package me.hsgamer.hscore.addon.object;
 
-import me.hsgamer.hscore.bukkit.addon.exception.RequiredAddonPathException;
-import org.bukkit.configuration.file.YamlConfiguration;
+import me.hsgamer.hscore.addon.exception.RequiredAddonPathException;
+import org.simpleyaml.configuration.file.YamlConfiguration;
 
 /**
  * A path to get value from addon.yml

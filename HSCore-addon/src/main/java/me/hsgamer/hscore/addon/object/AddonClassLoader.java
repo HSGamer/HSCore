@@ -1,6 +1,6 @@
-package me.hsgamer.hscore.bukkit.addon.object;
+package me.hsgamer.hscore.addon.object;
 
-import me.hsgamer.hscore.bukkit.addon.AddonManager;
+import me.hsgamer.hscore.addon.AddonManager;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;

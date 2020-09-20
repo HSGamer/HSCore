@@ -85,6 +85,7 @@
     <module>HSCore-bukkit</module>
     <module>HSCore-request</module>
     <module>HSCore-config</module>
+    <module>HSCore-addon</module>
   </modules>
 
   <name>HSCore</name>

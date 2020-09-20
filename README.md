@@ -8,6 +8,7 @@
 * [JoinWork](https://github.com/HSGamer/JoinWork/)
 * [BetterGUI](https://github.com/BetterGUI-MC/BetterGUI)
 ## Modules
+* **`HSCore-addon`**
 * **`HSCore-common`**
 * **`HSCore-collections`**
 * **`HSCore-expression`**
@@ -19,7 +20,6 @@
 * **`HSCore-config-json`**
 * **`HSCore-bukkit-command`**
 * **`HSCore-bukkit-subcommand`**
-* **`HSCore-bukkit-addon`**
 * **`HSCore-bukkit-config-extra`**
 * **`HSCore-bukkit-updater`**
 * **`HSCore-bukkit-utils`**

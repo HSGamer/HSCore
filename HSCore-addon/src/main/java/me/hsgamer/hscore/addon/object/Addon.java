@@ -1,10 +1,10 @@
-package me.hsgamer.hscore.bukkit.addon.object;
+package me.hsgamer.hscore.addon.object;
 
-import me.hsgamer.hscore.bukkit.addon.AddonManager;
-import me.hsgamer.hscore.bukkit.config.PluginConfig;
+import me.hsgamer.config.yaml.YamlConfig;
+import me.hsgamer.hscore.addon.AddonManager;
 import me.hsgamer.hscore.common.Validate;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
+import me.hsgamer.hscore.config.Config;
+import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,15 +19,13 @@ import java.util.jar.JarFile;
  */
 public abstract class Addon {
 
-  private final File jarFile;
   private final AddonClassLoader addonClassLoader;
   private File dataFolder;
-  private PluginConfig config;
+  private Config addonConfig;
   private AddonDescription description;
 
   public Addon() {
     this.addonClassLoader = (AddonClassLoader) this.getClass().getClassLoader();
-    this.jarFile = addonClassLoader.getFile();
   }
 
   /**
@@ -77,15 +75,6 @@ public abstract class Addon {
   }
 
   /**
-   * Get the parent plugin
-   *
-   * @return the plugin
-   */
-  public JavaPlugin getPlugin() {
-    return getAddonManager().getPlugin();
-  }
-
-  /**
    * Get the addon's description
    *
    * @return the description
@@ -99,6 +88,48 @@ public abstract class Addon {
   }
 
   /**
+   * Create the config
+   */
+  public final void setupConfig() {
+    addonConfig = new YamlConfig(getDataFolder(), "config.yml");
+  }
+
+  /**
+   * Get the config
+   *
+   * @return the config
+   */
+  public final FileConfiguration getConfig() {
+    return getAddonConfig().getConfig();
+  }
+
+  /**
+   * Get the {@link Config} of the addon
+   *
+   * @return the {@link Config}
+   */
+  public final Config getAddonConfig() {
+    if (addonConfig == null) {
+      setupConfig();
+    }
+    return addonConfig;
+  }
+
+  /**
+   * Reload the config
+   */
+  public final void reloadConfig() {
+    getAddonConfig().reloadConfig();
+  }
+
+  /**
+   * Save the config
+   */
+  public final void saveConfig() {
+    getAddonConfig().saveConfig();
+  }
+
+  /**
    * Get the addon manager
    *
    * @return the addon manager
@@ -108,56 +139,13 @@ public abstract class Addon {
   }
 
   /**
-   * Create the config
-   */
-  public final void setupConfig() {
-    config = new PluginConfig(getPlugin(), new File(getDataFolder(), "config.yml"));
-  }
-
-  /**
-   * Get the config
-   *
-   * @return the config
-   */
-  public final FileConfiguration getConfig() {
-    return getPluginConfig().getConfig();
-  }
-
-  /**
-   * Get the PluginConfig of the addon
-   *
-   * @return the PluginConfig
-   */
-  public final PluginConfig getPluginConfig() {
-    if (config == null) {
-      setupConfig();
-    }
-    return config;
-  }
-
-  /**
-   * Reload the config
-   */
-  public final void reloadConfig() {
-    getPluginConfig().reloadConfig();
-  }
-
-  /**
-   * Save the config
-   */
-  public final void saveConfig() {
-    getPluginConfig().saveConfig();
-  }
-
-  /**
    * Get the addon's folder
    *
    * @return the directory for the addon
    */
   public final File getDataFolder() {
     if (dataFolder == null) {
-      dataFolder = new File(getPlugin().getDataFolder(),
-        "addon" + File.separator + description.getName());
+      dataFolder = new File(getAddonManager().getAddonsDir(), description.getName());
     }
     if (!dataFolder.exists()) {
       dataFolder.mkdirs();
@@ -177,7 +165,7 @@ public abstract class Addon {
     }
 
     path = path.replace('\\', '/');
-    try (JarFile jar = new JarFile(jarFile)) {
+    try (JarFile jar = new JarFile(getClassLoader().getFile())) {
       JarEntry jarConfig = jar.getJarEntry(path);
       if (jarConfig != null) {
         try (InputStream in = jar.getInputStream(jarConfig)) {
@@ -195,7 +183,7 @@ public abstract class Addon {
         throw new IllegalArgumentException("The embedded resource '" + path + "' cannot be found");
       }
     } catch (IOException e) {
-      getPlugin().getLogger().warning("Could not load from jar file. " + path);
+      getAddonManager().getLogger().warning("Could not load from jar file. " + path);
     }
   }
 
@@ -211,7 +199,7 @@ public abstract class Addon {
     }
 
     path = path.replace('\\', '/');
-    try (JarFile jar = new JarFile(jarFile)) {
+    try (JarFile jar = new JarFile(getClassLoader().getFile())) {
       JarEntry jarConfig = jar.getJarEntry(path);
       if (jarConfig != null) {
         try (InputStream in = jar.getInputStream(jarConfig)) {
@@ -219,7 +207,7 @@ public abstract class Addon {
         }
       }
     } catch (IOException e) {
-      getPlugin().getLogger().warning("Could not load from jar file. " + path);
+      getAddonManager().getLogger().warning("Could not load from jar file. " + path);
     }
     return null;
   }

@@ -1,16 +1,16 @@
-package me.hsgamer.hscore.bukkit.addon;
+package me.hsgamer.hscore.addon;
 
-import me.hsgamer.hscore.bukkit.addon.object.Addon;
-import me.hsgamer.hscore.bukkit.addon.object.AddonClassLoader;
-import me.hsgamer.hscore.bukkit.addon.object.AddonDescription;
+import me.hsgamer.hscore.addon.object.Addon;
+import me.hsgamer.hscore.addon.object.AddonClassLoader;
+import me.hsgamer.hscore.addon.object.AddonDescription;
 import me.hsgamer.hscore.common.CommonUtils;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * An Addon manager
@@ -20,28 +20,20 @@ public abstract class AddonManager {
   private final Map<String, Addon> addons = new LinkedHashMap<>();
   private final Map<Addon, AddonClassLoader> loaderMap = new HashMap<>();
   private final File addonsDir;
-  private final JavaPlugin plugin;
+  private final Logger logger;
 
   /**
    * Create a new addon manager
    *
-   * @param plugin the parent plugin
+   * @param addonsDir the directory to store addon files
+   * @param logger    the logger
    */
-  public AddonManager(JavaPlugin plugin) {
-    this.plugin = plugin;
-    addonsDir = new File(plugin.getDataFolder(), "addon");
+  public AddonManager(File addonsDir, Logger logger) {
+    this.logger = logger;
+    this.addonsDir = addonsDir;
     if (!addonsDir.exists()) {
       addonsDir.mkdirs();
     }
-  }
-
-  /**
-   * Get the parent plugin
-   *
-   * @return the plugin
-   */
-  public JavaPlugin getPlugin() {
-    return plugin;
   }
 
   /**
@@ -54,7 +46,7 @@ public abstract class AddonManager {
   }
 
   /**
-   * Load all addons from the addon directory. Also call {@link Addon#onLoad() onLoad()}
+   * Load all addons from the addon directory. Also call {@link Addon#onLoad()}
    */
   public void loadAddons() {
     Map<String, Addon> addonMap = new HashMap<>();
@@ -67,7 +59,7 @@ public abstract class AddonManager {
           // Get addon description
           AddonDescription addonDescription = AddonDescription.get(jar);
           if (addonMap.containsKey(addonDescription.getName())) {
-            plugin.getLogger().warning("Duplicated addon " + addonDescription.getName());
+            logger.warning("Duplicated addon " + addonDescription.getName());
             return;
           }
 
@@ -83,7 +75,7 @@ public abstract class AddonManager {
             loader.close();
           }
         } catch (Exception e) {
-          plugin.getLogger().log(Level.WARNING, "Error when loading jar", e);
+          logger.log(Level.WARNING, "Error when loading jar", e);
         }
       });
 
@@ -100,17 +92,15 @@ public abstract class AddonManager {
     sortedAddonMap.forEach((key, addon) -> {
       try {
         if (!addon.onLoad()) {
-          plugin.getLogger().warning(
-            "Failed to load " + key + " " + addon.getDescription().getVersion());
+          logger.warning("Failed to load " + key + " " + addon.getDescription().getVersion());
           closeClassLoader(addon);
           return;
         }
 
-        plugin.getLogger()
-          .info("Loaded " + key + " " + addon.getDescription().getVersion());
+        logger.info("Loaded " + key + " " + addon.getDescription().getVersion());
         finalAddons.put(key, addon);
       } catch (Throwable t) {
-        plugin.getLogger().log(Level.WARNING, t, () -> "Error when loading " + key);
+        logger.log(Level.WARNING, t, () -> "Error when loading " + key);
         closeClassLoader(addon);
       }
     });
@@ -120,7 +110,7 @@ public abstract class AddonManager {
   }
 
   /**
-   * Enable (call {@link Addon#onEnable() onEnable()}) the addon
+   * Enable (call {@link Addon#onEnable()}) the addon
    *
    * @param name                the addon name
    * @param closeLoaderOnFailed close the class loader if failed
@@ -132,7 +122,7 @@ public abstract class AddonManager {
       addon.onEnable();
       return true;
     } catch (Throwable t) {
-      plugin.getLogger().log(Level.WARNING, t, () -> "Error when enabling " + name);
+      logger.log(Level.WARNING, t, () -> "Error when enabling " + name);
       if (closeLoaderOnFailed) {
         closeClassLoader(addon);
       }
@@ -141,7 +131,7 @@ public abstract class AddonManager {
   }
 
   /**
-   * Disable (call {@link Addon#onDisable() onDisable()}) the addon
+   * Disable (call {@link Addon#onDisable()}) the addon
    *
    * @param name                the addon name
    * @param closeLoaderOnFailed close the class loader if failed
@@ -153,7 +143,7 @@ public abstract class AddonManager {
       addon.onDisable();
       return true;
     } catch (Throwable t) {
-      plugin.getLogger().log(Level.WARNING, t, () -> "Error when disabling " + name);
+      logger.log(Level.WARNING, t, () -> "Error when disabling " + name);
       if (closeLoaderOnFailed) {
         closeClassLoader(addon);
       }
@@ -170,22 +160,21 @@ public abstract class AddonManager {
       if (!enableAddon(name, true)) {
         failed.add(name);
       } else {
-        plugin.getLogger().log(Level.INFO, "Enabled {0}",
-          String.join(" ", name, addons.get(name).getDescription().getVersion()));
+        logger.log(Level.INFO, "Enabled {0}", String.join(" ", name, addons.get(name).getDescription().getVersion()));
       }
     });
     failed.forEach(addons::remove);
   }
 
   /**
-   * Call the {@link Addon#onPostEnable() onPostEnable()} method of all enabled addons
+   * Call the {@link Addon#onPostEnable()} method of all enabled addons
    */
   public void callPostEnable() {
     addons.values().forEach(Addon::onPostEnable);
   }
 
   /**
-   * Call the {@link Addon#onReload() onReload()} method of all enabled addons
+   * Call the {@link Addon#onReload()} method of all enabled addons
    */
   public void callReload() {
     addons.values().forEach(Addon::onReload);
@@ -197,8 +186,7 @@ public abstract class AddonManager {
   public void disableAddons() {
     CommonUtils.reverse(addons.keySet()).forEach(name -> {
       if (disableAddon(name, false)) {
-        plugin.getLogger().log(Level.INFO, "Disabled {0}",
-          String.join(" ", name, addons.get(name).getDescription().getVersion()));
+        logger.log(Level.INFO, "Disabled {0}", String.join(" ", name, addons.get(name).getDescription().getVersion()));
       }
     });
 
@@ -217,7 +205,7 @@ public abstract class AddonManager {
       try {
         loader.close();
       } catch (IOException e) {
-        plugin.getLogger().log(Level.WARNING, "Error when closing ClassLoader", e);
+        logger.log(Level.WARNING, "Error when closing ClassLoader", e);
       }
     }
   }
@@ -290,13 +278,11 @@ public abstract class AddonManager {
   }
 
   /**
-   * Get the addon count
+   * Get the logger
    *
-   * @return the addon count
+   * @return the logger
    */
-  public Map<String, Integer> getAddonCount() {
-    Map<String, Integer> map = new HashMap<>();
-    addons.keySet().forEach(s -> map.put(s, 1));
-    return map;
+  public Logger getLogger() {
+    return logger;
   }
 }
