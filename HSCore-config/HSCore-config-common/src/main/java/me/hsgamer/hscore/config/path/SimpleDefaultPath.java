@@ -1,0 +1,18 @@
+package me.hsgamer.hscore.config.path;
+
+import me.hsgamer.hscore.config.DefaultPath;
+
+public final class SimpleDefaultPath<T> extends DefaultPath<T> {
+
+  /**
+   * Create a config path
+   *
+   * @param path the path to the value
+   * @param def the default value if it's not found
+   */
+  @SuppressWarnings("unchecked")
+  public SimpleDefaultPath(final String path, final T def) {
+    super(path, def, o -> (T) o);
+  }
+
+}

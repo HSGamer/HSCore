@@ -13,15 +13,15 @@ public abstract class SerializableMapConfigPath<T> extends AdvancedConfigPath<Ma
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
+   * @param def the default value if it's not found
    */
-  public SerializableMapConfigPath(String path, T def) {
+  protected SerializableMapConfigPath(final String path, final T def) {
     super(path, def);
   }
 
   @Override
-  public Map<String, Object> getFromConfig(Config config) {
-    return config.getConfig().getConfigurationSection(path).getValues(false);
+  public final Map<String, Object> getFromConfig(final Config config) {
+    return config.getConfig().getConfigurationSection(this.path).getValues(false);
   }
 
 }

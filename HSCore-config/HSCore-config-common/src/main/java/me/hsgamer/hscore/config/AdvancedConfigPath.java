@@ -12,9 +12,9 @@ public abstract class AdvancedConfigPath<F, T> extends BaseConfigPath<T> {
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
+   * @param def the default value if it's not found
    */
-  public AdvancedConfigPath(String path, T def) {
+  protected AdvancedConfigPath(final String path, final T def) {
     super(path, def);
   }
 
@@ -43,32 +43,35 @@ public abstract class AdvancedConfigPath<F, T> extends BaseConfigPath<T> {
   public abstract F convertToRaw(T value);
 
   @Override
-  public T getValue() {
-    if (config == null) {
-      return def;
+  public final T getValue() {
+    if (this.config == null) {
+      return this.def;
     }
 
-    F rawValue = getFromConfig(config);
+    final F rawValue = this.getFromConfig(this.config);
     if (rawValue == null) {
-      return def;
+      return this.def;
     }
 
-    T value = convert(rawValue);
-    return value != null ? value : def;
+    final T value = this.convert(rawValue);
+    if (value != null) {
+      return value;
+    }
+    return this.def;
   }
 
   @Override
-  public void setValue(T value) {
-    if (config == null) {
+  public final void setValue(final T value) {
+    if (this.config == null) {
       return;
     }
-
-    config.getConfig().set(path, convertToRaw(value));
+    this.config.getConfig().set(this.path, this.convertToRaw(value));
   }
 
   @Override
-  public void setConfig(Config config) {
+  public final void setConfig(final Config config) {
     super.setConfig(config);
-    config.getConfig().addDefault(path, convertToRaw(def));
+    config.getConfig().addDefault(this.path, this.convertToRaw(this.def));
   }
+
 }

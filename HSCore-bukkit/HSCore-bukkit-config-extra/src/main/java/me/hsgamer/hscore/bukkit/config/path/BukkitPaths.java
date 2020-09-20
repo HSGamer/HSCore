@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
-import me.hsgamer.hscore.config.ConfigPath;
+import me.hsgamer.hscore.config.DefaultPath;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
@@ -11,7 +11,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 
 /**
- * Utility to easily create {@link ConfigPath}
+ * Utility to easily create {@link DefaultPath}
  */
 public final class BukkitPaths {
 
@@ -22,10 +22,10 @@ public final class BukkitPaths {
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
+   * @param def the default value if it's not found
    * @return the config path
    */
-  public static AttributeModifierConfigPath attributeModifierPath(String path, AttributeModifier def) {
+  public static AttributeModifierConfigPath attributeModifierPath(final String path, final AttributeModifier def) {
     return new AttributeModifierConfigPath(path, def);
   }
 
@@ -33,10 +33,10 @@ public final class BukkitPaths {
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
+   * @param def the default value if it's not found
    * @return the config path
    */
-  public static ColorConfigPath colorPath(String path, Color def) {
+  public static ColorConfigPath colorPath(final String path, final Color def) {
     return new ColorConfigPath(path, def);
   }
 
@@ -44,10 +44,10 @@ public final class BukkitPaths {
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
+   * @param def the default value if it's not found
    * @return the config path
    */
-  public static FireworkEffectConfigPath fireworkEffectPath(String path, FireworkEffect def) {
+  public static FireworkEffectConfigPath fireworkEffectPath(final String path, final FireworkEffect def) {
     return new FireworkEffectConfigPath(path, def);
   }
 
@@ -55,10 +55,10 @@ public final class BukkitPaths {
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
+   * @param def the default value if it's not found
    * @return the config path
    */
-  public static ItemStackConfigPath itemStackPath(String path, ItemStack def) {
+  public static ItemStackConfigPath itemStackPath(final String path, final ItemStack def) {
     return new ItemStackConfigPath(path, def);
   }
 
@@ -66,10 +66,10 @@ public final class BukkitPaths {
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
+   * @param def the default value if it's not found
    * @return the config path
    */
-  public static LocationConfigPath locationPath(String path, Location def) {
+  public static LocationConfigPath locationPath(final String path, final Location def) {
     return new LocationConfigPath(path, def);
   }
 
@@ -77,10 +77,10 @@ public final class BukkitPaths {
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
+   * @param def the default value if it's not found
    * @return the config path
    */
-  public static PatternConfigPath patternPath(String path, Pattern def) {
+  public static PatternConfigPath patternPath(final String path, final Pattern def) {
     return new PatternConfigPath(path, def);
   }
 
@@ -88,10 +88,10 @@ public final class BukkitPaths {
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
+   * @param def the default value if it's not found
    * @return the config path
    */
-  public static PotionEffectConfigPath potionEffectPath(String path, PotionEffect def) {
+  public static PotionEffectConfigPath potionEffectPath(final String path, final PotionEffect def) {
     return new PotionEffectConfigPath(path, def);
   }
 
@@ -99,10 +99,11 @@ public final class BukkitPaths {
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
+   * @param def the default value if it's not found
    * @return the config path
    */
-  public static VectorConfigPath vectorPath(String path, Vector def) {
+  public static VectorConfigPath vectorPath(final String path, final Vector def) {
     return new VectorConfigPath(path, def);
   }
+
 }

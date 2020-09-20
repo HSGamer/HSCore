@@ -1,29 +1,29 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
+import java.util.Map;
 import me.hsgamer.hscore.config.SerializableMapConfigPath;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Map;
-
-public class ItemStackConfigPath extends SerializableMapConfigPath<ItemStack> {
+public final class ItemStackConfigPath extends SerializableMapConfigPath<ItemStack> {
 
   /**
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
+   * @param def the default value if it's not found
    */
-  public ItemStackConfigPath(String path, ItemStack def) {
+  public ItemStackConfigPath(final String path, final ItemStack def) {
     super(path, def);
   }
 
   @Override
-  public ItemStack convert(Map<String, Object> rawValue) {
+  public ItemStack convert(final Map<String, Object> rawValue) {
     return ItemStack.deserialize(rawValue);
   }
 
   @Override
-  public Map<String, Object> convertToRaw(ItemStack value) {
+  public Map<String, Object> convertToRaw(final ItemStack value) {
     return value.serialize();
   }
+
 }

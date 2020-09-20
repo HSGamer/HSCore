@@ -1,45 +1,33 @@
 package me.hsgamer.hscore.config;
 
-import java.util.function.Function;
-
-/**
- * A simple config path
- *
- * @param <T> the type of the value
- */
-public abstract class ConfigPath<T> extends BaseConfigPath<T> {
-
-  private final Function<Object, T> typeConverter;
+public interface ConfigPath<T> {
 
   /**
-   * Create a config path
+   * Set the value
    *
-   * @param path          the path to the value
-   * @param def           the default value if it's not found
-   * @param typeConverter how to convert the raw object to the needed type of value
+   * @param value the value
    */
-  public ConfigPath(String path, T def, Function<Object, T> typeConverter) {
-    super(path, def);
-    this.typeConverter = typeConverter;
-  }
+  void setValue(T value);
 
-  @Override
-  public T getValue() {
-    if (config == null) {
-      return def;
-    }
+  /**
+   * Get the path to the value
+   *
+   * @return the path
+   */
+  String getPath();
 
-    Object rawValue = config.get(path, def);
-    if (rawValue == null) {
-      return def;
-    }
+  /**
+   * Get the config
+   *
+   * @return the config
+   */
+  Config getConfig();
 
-    return typeConverter.apply(rawValue);
-  }
+  /**
+   * Set the config.
+   *
+   * @param config the config
+   */
+  void setConfig(Config config);
 
-  @Override
-  public void setConfig(Config config) {
-    super.setConfig(config);
-    config.getConfig().addDefault(path, def);
-  }
 }

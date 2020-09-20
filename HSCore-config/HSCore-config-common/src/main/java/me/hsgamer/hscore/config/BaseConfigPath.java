@@ -5,19 +5,21 @@ package me.hsgamer.hscore.config;
  *
  * @param <T> the type of the value
  */
-public abstract class BaseConfigPath<T> {
+public abstract class BaseConfigPath<T> implements ConfigPath<T> {
 
   protected final T def;
+
   protected final String path;
+
   protected Config config;
 
   /**
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
+   * @param def the default value if it's not found
    */
-  public BaseConfigPath(String path, T def) {
+  protected BaseConfigPath(final String path, final T def) {
     this.path = path;
     this.def = def;
   }
@@ -34,12 +36,12 @@ public abstract class BaseConfigPath<T> {
    *
    * @param value the value
    */
-  public void setValue(T value) {
-    if (config == null) {
+  @Override
+  public void setValue(final T value) {
+    if (this.config == null) {
       return;
     }
-
-    config.getConfig().set(path, value);
+    this.config.getConfig().set(this.path, value);
   }
 
   /**
@@ -47,8 +49,9 @@ public abstract class BaseConfigPath<T> {
    *
    * @return the path
    */
-  public String getPath() {
-    return path;
+  @Override
+  public final String getPath() {
+    return this.path;
   }
 
   /**
@@ -56,8 +59,9 @@ public abstract class BaseConfigPath<T> {
    *
    * @return the config
    */
-  public Config getConfig() {
-    return config;
+  @Override
+  public final Config getConfig() {
+    return this.config;
   }
 
   /**
@@ -65,7 +69,9 @@ public abstract class BaseConfigPath<T> {
    *
    * @param config the config
    */
-  public void setConfig(Config config) {
+  @Override
+  public void setConfig(final Config config) {
     this.config = config;
   }
+
 }

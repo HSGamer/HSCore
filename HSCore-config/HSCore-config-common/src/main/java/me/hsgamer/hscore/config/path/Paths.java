@@ -1,9 +1,9 @@
 package me.hsgamer.hscore.config.path;
 
-import me.hsgamer.hscore.config.ConfigPath;
+import me.hsgamer.hscore.config.DefaultPath;
 
 /**
- * Utility to easily create {@link ConfigPath}
+ * Utility to easily create {@link DefaultPath}
  */
 public final class Paths {
 
@@ -14,77 +14,78 @@ public final class Paths {
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
+   * @param def the default value if it's not found
    * @return the config path
    */
-  public static BooleanConfigPath booleanPath(String path, boolean def) {
-    return new BooleanConfigPath(path, def);
+  public static BooleanDefaultPath booleanPath(final String path, final boolean def) {
+    return new BooleanDefaultPath(path, def);
   }
 
   /**
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
+   * @param def the default value if it's not found
    * @return the config path
    */
-  public static DoubleConfigPath doublePath(String path, Double def) {
-    return new DoubleConfigPath(path, def);
+  public static DoubleDefaultPath doublePath(final String path, final Double def) {
+    return new DoubleDefaultPath(path, def);
   }
 
   /**
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
+   * @param def the default value if it's not found
    * @return the config path
    */
-  public static FloatConfigPath floatPath(String path, Float def) {
-    return new FloatConfigPath(path, def);
+  public static FloatDefaultPath floatPath(final String path, final Float def) {
+    return new FloatDefaultPath(path, def);
   }
 
   /**
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
+   * @param def the default value if it's not found
    * @return the config path
    */
-  public static IntegerConfigPath integerPath(String path, Integer def) {
-    return new IntegerConfigPath(path, def);
+  public static IntegerDefaultPath integerPath(final String path, final Integer def) {
+    return new IntegerDefaultPath(path, def);
   }
 
   /**
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
+   * @param def the default value if it's not found
    * @return the config path
    */
-  public static LongConfigPath longPath(String path, Long def) {
-    return new LongConfigPath(path, def);
+  public static LongDefaultPath longPath(final String path, final Long def) {
+    return new LongDefaultPath(path, def);
   }
 
   /**
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
-   * @param <T>  the type of the value
+   * @param def the default value if it's not found
+   * @param <T> the type of the value
    * @return the config path
    */
-  public static <T> SimpleConfigPath<T> simplePath(String path, T def) {
-    return new SimpleConfigPath<>(path, def);
+  public static <T> SimpleDefaultPath<T> simplePath(final String path, final T def) {
+    return new SimpleDefaultPath<>(path, def);
   }
 
   /**
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
+   * @param def the default value if it's not found
    * @return the config path
    */
-  public static StringConfigPath stringPath(String path, String def) {
-    return new StringConfigPath(path, def);
+  public static StringDefaultPath stringPath(final String path, final String def) {
+    return new StringDefaultPath(path, def);
   }
+
 }

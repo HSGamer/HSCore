@@ -1,29 +1,29 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
+import java.util.Map;
 import me.hsgamer.hscore.config.SerializableMapConfigPath;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.Map;
-
-public class PotionEffectConfigPath extends SerializableMapConfigPath<PotionEffect> {
+public final class PotionEffectConfigPath extends SerializableMapConfigPath<PotionEffect> {
 
   /**
    * Create a config path
    *
    * @param path the path to the value
-   * @param def  the default value if it's not found
+   * @param def the default value if it's not found
    */
-  public PotionEffectConfigPath(String path, PotionEffect def) {
+  public PotionEffectConfigPath(final String path, final PotionEffect def) {
     super(path, def);
   }
 
   @Override
-  public PotionEffect convert(Map<String, Object> rawValue) {
+  public PotionEffect convert(final Map<String, Object> rawValue) {
     return new PotionEffect(rawValue);
   }
 
   @Override
-  public Map<String, Object> convertToRaw(PotionEffect value) {
+  public Map<String, Object> convertToRaw(final PotionEffect value) {
     return value.serialize();
   }
+
 }
