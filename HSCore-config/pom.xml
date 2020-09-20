@@ -2,14 +2,27 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <artifactId>HSCore-config</artifactId>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>HSCore</artifactId>
+    <groupId>me.HSGamer</groupId>
+    <version>2.0-SNAPSHOT</version>
+  </parent>
   <packaging>pom</packaging>
+  <artifactId>HSCore-config</artifactId>
 
   <modules>
     <module>HSCore-config-common</module>
     <module>HSCore-config-yaml</module>
     <module>HSCore-config-json</module>
   </modules>
+
+  <repositories>
+    <repository>
+      <id>jitpack</id>
+      <url>https://jitpack.io</url>
+    </repository>
+  </repositories>
 
   <dependencies>
     <dependency>
@@ -19,18 +32,4 @@
     </dependency>
   </dependencies>
 
-  <modelVersion>4.0.0</modelVersion>
-
-  <parent>
-    <artifactId>HSCore</artifactId>
-    <groupId>me.HSGamer</groupId>
-    <version>2.0-SNAPSHOT</version>
-  </parent>
-
-  <repositories>
-    <repository>
-      <id>jitpack</id>
-      <url>https://jitpack.io</url>
-    </repository>
-  </repositories>
 </project>

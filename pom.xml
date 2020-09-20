@@ -2,7 +2,29 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>me.HSGamer</groupId>
   <artifactId>HSCore</artifactId>
+  <version>2.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>HSCore</name>
+
+  <modules>
+    <module>HSCore-common</module>
+    <module>HSCore-collections</module>
+    <module>HSCore-expression</module>
+    <module>HSCore-web</module>
+    <module>HSCore-json</module>
+    <module>HSCore-bukkit</module>
+    <module>HSCore-request</module>
+    <module>HSCore-config</module>
+    <module>HSCore-addon</module>
+  </modules>
+
+  <properties>
+    <java.version>1.8</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 
   <build>
     <plugins>
@@ -81,29 +103,5 @@
       <url>https://repo.codemc.io/repository/maven-snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
-  <groupId>me.HSGamer</groupId>
-  <modelVersion>4.0.0</modelVersion>
 
-  <modules>
-    <module>HSCore-common</module>
-    <module>HSCore-collections</module>
-    <module>HSCore-expression</module>
-    <module>HSCore-web</module>
-    <module>HSCore-json</module>
-    <module>HSCore-bukkit</module>
-    <module>HSCore-request</module>
-    <module>HSCore-config</module>
-    <module>HSCore-addon</module>
-  </modules>
-
-  <name>HSCore</name>
-
-  <packaging>pom</packaging>
-
-  <properties>
-    <java.version>1.8</java.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-
-  <version>2.0-SNAPSHOT</version>
 </project>
