@@ -44,7 +44,7 @@ public final class ClickTypeUtils {
     if (!useSlot || !clickType.equals(ClickType.NUMBER_KEY)) {
       return clickTypeMap.get(clickType.name());
     }
-    return clickTypeMap.get("NUMBER_KEY_" + (event.getHotbarButton() + 1));
+    return clickTypeMap.get(ClickType.NUMBER_KEY.name() + "_" + (event.getHotbarButton() + 1));
   }
 
   /**
