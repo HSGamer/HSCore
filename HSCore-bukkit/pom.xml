@@ -2,16 +2,14 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <artifactId>HSCore-bukkit</artifactId>
-  <dependencies>
-    <dependency>
-      <artifactId>spigot-api</artifactId>
-      <groupId>org.spigotmc</groupId>
-      <scope>provided</scope>
-      <version>1.12.2-R0.1-SNAPSHOT</version>
-    </dependency>
-  </dependencies>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>HSCore</artifactId>
+    <groupId>me.HSGamer</groupId>
+    <version>2.0-SNAPSHOT</version>
+  </parent>
+  <packaging>pom</packaging>
+  <artifactId>HSCore-bukkit</artifactId>
 
   <modules>
     <module>HSCore-bukkit-utils</module>
@@ -21,14 +19,6 @@
     <module>HSCore-bukkit-updater</module>
     <module>HSCore-bukkit-clicktype</module>
   </modules>
-
-  <packaging>pom</packaging>
-
-  <parent>
-    <artifactId>HSCore</artifactId>
-    <groupId>me.HSGamer</groupId>
-    <version>2.0-SNAPSHOT</version>
-  </parent>
 
   <repositories>
     <repository>
@@ -40,4 +30,14 @@
       <url>https://oss.sonatype.org/content/groups/public/</url>
     </repository>
   </repositories>
+
+  <dependencies>
+    <dependency>
+      <artifactId>spigot-api</artifactId>
+      <groupId>org.spigotmc</groupId>
+      <scope>provided</scope>
+      <version>1.12.2-R0.1-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+
 </project>
