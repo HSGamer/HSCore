@@ -9,6 +9,32 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <configuration>
+          <relocations>
+            <relocation>
+              <pattern>org.yaml</pattern>
+              <shadedPattern>me.hsgamer.hscore.config.snakeyaml</shadedPattern>
+            </relocation>
+          </relocations>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <phase>package</phase>
+          </execution>
+        </executions>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>3.2.4</version>
+      </plugin>
+    </plugins>
+  </build>
+
   <artifactId>HSCore-config-yaml</artifactId>
 
   <dependencies>
