@@ -19,6 +19,7 @@
     <module>HSCore-bukkit-subcommand</module>
     <module>HSCore-bukkit-config-extra</module>
     <module>HSCore-bukkit-updater</module>
+    <module>HSCore-bukkit-clicktype</module>
   </modules>
 
   <packaging>pom</packaging>
