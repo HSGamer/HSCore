@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
-import me.hsgamer.hscore.config.DefaultPath;
+import me.hsgamer.hscore.config.ConfigPath;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
@@ -11,7 +11,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 
 /**
- * Utility to easily create {@link DefaultPath}
+ * Utility to easily create {@link ConfigPath}
  */
 public final class BukkitPaths {
 
