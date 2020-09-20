@@ -20,8 +20,8 @@ import java.util.jar.JarFile;
 public abstract class Addon {
 
   private final AddonClassLoader addonClassLoader;
+  protected Config addonConfig;
   private File dataFolder;
-  private Config addonConfig;
   private AddonDescription description;
 
   public Addon() {
@@ -90,7 +90,7 @@ public abstract class Addon {
   /**
    * Create the config
    */
-  public final void setupConfig() {
+  public void setupConfig() {
     addonConfig = new YamlConfig(getDataFolder(), "config.yml");
   }
 
