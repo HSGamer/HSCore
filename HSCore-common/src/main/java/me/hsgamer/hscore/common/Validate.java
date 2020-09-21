@@ -1,5 +1,8 @@
 package me.hsgamer.hscore.common;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Optional;
@@ -16,7 +19,8 @@ public final class Validate {
    * @param input the string
    * @return the number
    */
-  public static Optional<BigDecimal> getNumber(String input) {
+  @NotNull
+  public static Optional<BigDecimal> getNumber(@NotNull String input) {
     try {
       return Optional.of(new BigDecimal(input));
     } catch (NumberFormatException ex) {
@@ -30,7 +34,7 @@ public final class Validate {
    * @param input the string
    * @return whether it's positive
    */
-  public static boolean isValidPositiveNumber(String input) {
+  public static boolean isValidPositiveNumber(@NotNull String input) {
     Optional<BigDecimal> number = getNumber(input);
     return number.filter(bigDecimal -> bigDecimal.compareTo(BigDecimal.ZERO) > 0).isPresent();
   }
@@ -41,7 +45,7 @@ public final class Validate {
    * @param input the string
    * @return whether it's valid
    */
-  public static boolean isValidInteger(String input) {
+  public static boolean isValidInteger(@NotNull String input) {
     return getNumber(input).isPresent();
   }
 
@@ -51,7 +55,7 @@ public final class Validate {
    * @param className the class path
    * @return whether it's loaded
    */
-  public static boolean isClassLoaded(String className) {
+  public static boolean isClassLoaded(@NotNull String className) {
     try {
       Class.forName(className);
       return true;
@@ -68,7 +72,7 @@ public final class Validate {
    * @param params     the type of parameters
    * @return whether it's loaded
    */
-  public static boolean isMethodLoaded(String className, String methodName, Class<?>... params) {
+  public static boolean isMethodLoaded(@NotNull String className, @NotNull String methodName, @NotNull Class<?>... params) {
     try {
       Class.forName(className).getDeclaredMethod(methodName, params);
       return true;
@@ -84,7 +88,7 @@ public final class Validate {
    * @param params    the type of parameters
    * @return whether it's loaded
    */
-  public static boolean isConstructorLoaded(String className, Class<?>... params) {
+  public static boolean isConstructorLoaded(@NotNull String className, @NotNull Class<?>... params) {
     try {
       Class.forName(className).getDeclaredConstructor(params);
       return true;
@@ -99,7 +103,7 @@ public final class Validate {
    * @param list the list
    * @return whether it's null or empty
    */
-  public static boolean isNullOrEmpty(Collection<?> list) {
+  public static boolean isNullOrEmpty(@Nullable Collection<?> list) {
     return list == null || list.isEmpty();
   }
 
@@ -109,7 +113,7 @@ public final class Validate {
    * @param string the string
    * @return whether it's null or empty
    */
-  public static boolean isNullOrEmpty(String string) {
+  public static boolean isNullOrEmpty(@Nullable String string) {
     return string == null || string.isEmpty();
   }
 }

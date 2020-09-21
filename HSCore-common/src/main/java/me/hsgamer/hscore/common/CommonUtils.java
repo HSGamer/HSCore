@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.common;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -18,7 +20,8 @@ public class CommonUtils {
    * @param trim  should we trim the strings
    * @return the string list
    */
-  public static List<String> createStringListFromObject(Object value, boolean trim) {
+  @NotNull
+  public static List<String> createStringListFromObject(@NotNull Object value, boolean trim) {
     List<String> list = new ArrayList<>();
     if (value instanceof Collection) {
       ((Collection<?>) value).forEach(o -> list.add(String.valueOf(o)));
@@ -38,7 +41,8 @@ public class CommonUtils {
    * @param <T>      the type of the elements
    * @return the reversed list
    */
-  public static <T> List<T> reverse(Collection<T> original) {
+  @NotNull
+  public static <T> List<T> reverse(@NotNull Collection<T> original) {
     List<T> list = new ArrayList<>(original);
     Collections.reverse(list);
     return list;

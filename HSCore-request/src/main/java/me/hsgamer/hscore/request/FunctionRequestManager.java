@@ -1,5 +1,8 @@
 package me.hsgamer.hscore.request;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,7 +25,7 @@ public class FunctionRequestManager<T, V> {
    * @param uuid     the unique id
    * @param function the function when the request is called
    */
-  public void addRequest(UUID uuid, BiFunction<UUID, T, V> function) {
+  public void addRequest(@NotNull UUID uuid, @NotNull BiFunction<UUID, T, V> function) {
     cache.put(uuid, function);
   }
 
@@ -32,7 +35,7 @@ public class FunctionRequestManager<T, V> {
    * @param uuid     the unique id
    * @param function the function when the request is called
    */
-  public void addRequest(UUID uuid, Function<T, V> function) {
+  public void addRequest(@NotNull UUID uuid, @NotNull Function<T, V> function) {
     addRequest(uuid, (uuid1, t) -> function.apply(t));
   }
 
@@ -43,7 +46,8 @@ public class FunctionRequestManager<T, V> {
    * @param arg  the argument
    * @return the return value from the function
    */
-  public V apply(UUID uuid, T arg) {
+  @Nullable
+  public V apply(@NotNull UUID uuid, @NotNull T arg) {
     if (cache.containsKey(uuid)) {
       return cache.remove(uuid).apply(uuid, arg);
     }
@@ -55,7 +59,7 @@ public class FunctionRequestManager<T, V> {
    *
    * @param uuid the unique id
    */
-  public void remove(UUID uuid) {
+  public void remove(@NotNull UUID uuid) {
     cache.remove(uuid);
   }
 
@@ -65,7 +69,7 @@ public class FunctionRequestManager<T, V> {
    * @param uuid the unique id
    * @return whether it's in the request cache
    */
-  public boolean contains(UUID uuid) {
+  public boolean contains(@NotNull UUID uuid) {
     return cache.containsKey(uuid);
   }
 }

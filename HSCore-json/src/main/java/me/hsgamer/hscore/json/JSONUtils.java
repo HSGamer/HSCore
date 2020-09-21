@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.json;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -29,7 +31,8 @@ public class JSONUtils {
    * @return the JSON file
    * @throws IOException If an I/O error occurred
    */
-  public static File createFile(String filename, File path) throws IOException {
+  @NotNull
+  public static File createFile(@NotNull String filename, @NotNull File path) throws IOException {
     if (!filename.endsWith(".json")) {
       filename += ".json";
     }
@@ -48,7 +51,8 @@ public class JSONUtils {
    * @param file the file
    * @return the JSON object, or null if there is an error when parsing
    */
-  public static Object getJSON(File file) {
+  @Nullable
+  public static Object getJSON(@NotNull File file) {
     try (FileReader reader = new FileReader(file)) {
       return parser.parse(reader);
     } catch (IOException | ParseException e) {
@@ -62,7 +66,8 @@ public class JSONUtils {
    * @param string the string
    * @return the JSON object, or null if there is an error when parsing
    */
-  public static Object getJSON(String string) {
+  @Nullable
+  public static Object getJSON(@NotNull String string) {
     try {
       return parser.parse(string);
     } catch (ParseException e) {
@@ -77,7 +82,7 @@ public class JSONUtils {
    * @param jsonObject the object
    * @throws IOException if the file is not found or it's a directory or an I/O error occurred
    */
-  public static void writeToFile(File file, JSONObject jsonObject) throws IOException {
+  public static void writeToFile(@NotNull File file, @NotNull JSONObject jsonObject) throws IOException {
     FileWriter writer = new FileWriter(file);
     jsonObject.writeJSONString(writer);
     writer.flush();

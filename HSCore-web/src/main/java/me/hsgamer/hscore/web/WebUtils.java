@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.web;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -26,7 +27,8 @@ public class WebUtils {
    * @throws IOException    If there is an error when opening the connection
    * @throws ParseException If it fails to parse the JSON object
    */
-  public static Object getJSONFromURL(String address) throws IOException, ParseException {
+  @NotNull
+  public static Object getJSONFromURL(@NotNull String address) throws IOException, ParseException {
     BufferedReader rd = new BufferedReader(
       new InputStreamReader(openConnection(address).getInputStream()));
     return new JSONParser().parse(rd);
@@ -39,7 +41,8 @@ public class WebUtils {
    * @return the connection
    * @throws IOException If the URL is invalid or can't be connected
    */
-  public static URLConnection openConnection(String address) throws IOException {
+  @NotNull
+  public static URLConnection openConnection(@NotNull String address) throws IOException {
     URLConnection openConnection = createConnection(address);
     openConnection.addRequestProperty("User-Agent",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
@@ -54,7 +57,8 @@ public class WebUtils {
    * @return the connection
    * @throws IOException If the URL is invalid or can't be connected
    */
-  public static URLConnection createConnection(String address) throws IOException {
+  @NotNull
+  public static URLConnection createConnection(@NotNull String address) throws IOException {
     return new URL(address).openConnection();
   }
 }
