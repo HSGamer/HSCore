@@ -20,12 +20,6 @@
       <groupId>me.HSGamer</groupId>
       <artifactId>HSCore-config-yaml</artifactId>
       <version>${project.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>me.carleslc.Simple-YAML</groupId>
-          <artifactId>Simple-Yaml</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
   </dependencies>
 

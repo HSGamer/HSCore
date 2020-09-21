@@ -18,6 +18,7 @@
 * **`HSCore-config-common`**
 * **`HSCore-config-yaml`**
 * **`HSCore-config-json`**
+* **`HSCore-config-path`**
 * **`HSCore-bukkit-command`**
 * **`HSCore-bukkit-subcommand`**
 * **`HSCore-bukkit-config-extra`**

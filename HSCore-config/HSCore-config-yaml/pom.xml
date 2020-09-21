@@ -14,14 +14,6 @@
     <plugins>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
-        <configuration>
-          <relocations>
-            <relocation>
-              <pattern>org.yaml</pattern>
-              <shadedPattern>me.hsgamer.hscore.config.snakeyaml</shadedPattern>
-            </relocation>
-          </relocations>
-        </configuration>
         <executions>
           <execution>
             <goals>

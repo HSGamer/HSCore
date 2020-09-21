@@ -15,6 +15,7 @@
     <module>HSCore-config-common</module>
     <module>HSCore-config-yaml</module>
     <module>HSCore-config-json</module>
+    <module>HSCore-config-path</module>
   </modules>
 
   <repositories>

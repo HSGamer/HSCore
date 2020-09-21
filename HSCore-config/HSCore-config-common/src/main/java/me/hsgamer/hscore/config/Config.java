@@ -4,7 +4,6 @@ import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,15 +46,6 @@ public class Config {
       }
     }
     fileConfiguration = provider.loadConfiguration(file);
-    Arrays.stream(this.getClass().getDeclaredFields())
-      .filter(field -> BaseConfigPath.class.isAssignableFrom(field.getType()))
-      .forEach(field -> {
-        try {
-          ((BaseConfigPath<?>) field.get(this)).setConfig(this);
-        } catch (IllegalAccessException e) {
-          e.printStackTrace();
-        }
-      });
   }
 
   /**
