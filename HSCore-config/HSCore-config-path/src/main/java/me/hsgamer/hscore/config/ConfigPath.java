@@ -7,7 +7,7 @@ import java.util.function.Function;
  *
  * @param <T> the type of the value
  */
-public abstract class ConfigPath<T> extends BaseConfigPath<T> {
+public class ConfigPath<T> extends BaseConfigPath<T> {
 
   private final Function<Object, T> typeConverter;
 
