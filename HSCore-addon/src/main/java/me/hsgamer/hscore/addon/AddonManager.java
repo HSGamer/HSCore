@@ -4,6 +4,8 @@ import me.hsgamer.hscore.addon.object.Addon;
 import me.hsgamer.hscore.addon.object.AddonClassLoader;
 import me.hsgamer.hscore.addon.object.AddonDescription;
 import me.hsgamer.hscore.common.CommonUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +30,7 @@ public abstract class AddonManager {
    * @param addonsDir the directory to store addon files
    * @param logger    the logger
    */
-  public AddonManager(File addonsDir, Logger logger) {
+  public AddonManager(@NotNull File addonsDir, @NotNull Logger logger) {
     this.logger = logger;
     this.addonsDir = addonsDir;
     if (!addonsDir.exists()) {
@@ -41,14 +43,15 @@ public abstract class AddonManager {
    *
    * @return the directory
    */
-  public File getAddonsDir() {
+  @NotNull
+  public final File getAddonsDir() {
     return addonsDir;
   }
 
   /**
    * Load all addons from the addon directory. Also call {@link Addon#onLoad()}
    */
-  public void loadAddons() {
+  public final void loadAddons() {
     Map<String, Addon> addonMap = new HashMap<>();
 
     // Load the addon files
@@ -116,7 +119,7 @@ public abstract class AddonManager {
    * @param closeLoaderOnFailed close the class loader if failed
    * @return whether it's enabled successfully
    */
-  public boolean enableAddon(String name, boolean closeLoaderOnFailed) {
+  public final boolean enableAddon(@NotNull String name, boolean closeLoaderOnFailed) {
     Addon addon = addons.get(name);
     try {
       addon.onEnable();
@@ -137,7 +140,7 @@ public abstract class AddonManager {
    * @param closeLoaderOnFailed close the class loader if failed
    * @return whether it's disabled successfully
    */
-  public boolean disableAddon(String name, boolean closeLoaderOnFailed) {
+  public final boolean disableAddon(@NotNull String name, boolean closeLoaderOnFailed) {
     Addon addon = addons.get(name);
     try {
       addon.onDisable();
@@ -154,7 +157,7 @@ public abstract class AddonManager {
   /**
    * Enable all addons from the addon directory
    */
-  public void enableAddons() {
+  public final void enableAddons() {
     List<String> failed = new ArrayList<>();
     addons.keySet().forEach(name -> {
       if (!enableAddon(name, true)) {
@@ -169,21 +172,21 @@ public abstract class AddonManager {
   /**
    * Call the {@link Addon#onPostEnable()} method of all enabled addons
    */
-  public void callPostEnable() {
+  public final void callPostEnable() {
     addons.values().forEach(Addon::onPostEnable);
   }
 
   /**
    * Call the {@link Addon#onReload()} method of all enabled addons
    */
-  public void callReload() {
+  public final void callReload() {
     addons.values().forEach(Addon::onReload);
   }
 
   /**
    * Disable all enabled addons
    */
-  public void disableAddons() {
+  public final void disableAddons() {
     CommonUtils.reverse(addons.keySet()).forEach(name -> {
       if (disableAddon(name, false)) {
         logger.log(Level.INFO, "Disabled {0}", String.join(" ", name, addons.get(name).getDescription().getVersion()));
@@ -199,7 +202,7 @@ public abstract class AddonManager {
    *
    * @param addon the addon
    */
-  private void closeClassLoader(Addon addon) {
+  private void closeClassLoader(@NotNull Addon addon) {
     if (loaderMap.containsKey(addon)) {
       AddonClassLoader loader = loaderMap.remove(addon);
       try {
@@ -216,7 +219,8 @@ public abstract class AddonManager {
    * @param name the name of the addon
    * @return the addon, or null if it's not found
    */
-  public Addon getAddon(String name) {
+  @Nullable
+  public final Addon getAddon(@NotNull String name) {
     return addons.get(name);
   }
 
@@ -226,7 +230,7 @@ public abstract class AddonManager {
    * @param name the name of the addon
    * @return whether it's loaded
    */
-  public boolean isAddonLoaded(String name) {
+  public final boolean isAddonLoaded(@NotNull String name) {
     return addons.containsKey(name);
   }
 
@@ -235,7 +239,8 @@ public abstract class AddonManager {
    *
    * @return the loaded addons
    */
-  public Map<String, Addon> getLoadedAddons() {
+  @NotNull
+  public final Map<String, Addon> getLoadedAddons() {
     return addons;
   }
 
@@ -245,6 +250,7 @@ public abstract class AddonManager {
    * @param original the original map
    * @return the sorted and filtered map
    */
+  @NotNull
   protected abstract Map<String, Addon> sortAndFilter(Map<String, Addon> original);
 
   /**
@@ -253,7 +259,7 @@ public abstract class AddonManager {
    * @param addon the loading addon
    * @return whether the addon is properly loaded
    */
-  protected boolean onAddonLoading(Addon addon) {
+  protected boolean onAddonLoading(@NotNull Addon addon) {
     return true;
   }
 
@@ -264,7 +270,8 @@ public abstract class AddonManager {
    * @param name  the class name
    * @return the class, or null if it's not found
    */
-  public Class<?> findClass(Addon addon, String name) {
+  @Nullable
+  public Class<?> findClass(@NotNull Addon addon, @NotNull String name) {
     for (AddonClassLoader loader : loaderMap.values()) {
       if (loaderMap.containsKey(addon)) {
         continue;
@@ -282,7 +289,8 @@ public abstract class AddonManager {
    *
    * @return the logger
    */
-  public Logger getLogger() {
+  @NotNull
+  public final Logger getLogger() {
     return logger;
   }
 }

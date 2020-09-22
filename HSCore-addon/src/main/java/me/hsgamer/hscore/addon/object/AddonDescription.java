@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.addon.object;
 
 import me.hsgamer.hscore.addon.exception.RequiredAddonPathException;
+import org.jetbrains.annotations.NotNull;
 import org.simpleyaml.configuration.file.YamlConfiguration;
 import org.simpleyaml.exceptions.InvalidConfigurationException;
 
@@ -21,8 +22,8 @@ public final class AddonDescription {
   private final String mainClass;
   private final YamlConfiguration configuration;
 
-  public AddonDescription(String name, String version, String mainClass,
-                          YamlConfiguration configuration) {
+  public AddonDescription(@NotNull String name, @NotNull String version, @NotNull String mainClass,
+                          @NotNull YamlConfiguration configuration) {
     this.name = name;
     this.version = version;
     this.mainClass = mainClass;
@@ -37,7 +38,8 @@ public final class AddonDescription {
    * @throws IOException                   if there is an error when loading the addon jar
    * @throws InvalidConfigurationException if the addon.yml file is invalid
    */
-  public static AddonDescription get(JarFile jar) throws IOException, InvalidConfigurationException {
+  @NotNull
+  public static AddonDescription get(@NotNull JarFile jar) throws IOException, InvalidConfigurationException {
     // Load addon.yml file
     JarEntry entry = jar.getJarEntry("addon.yml");
     if (entry == null) {
@@ -69,7 +71,8 @@ public final class AddonDescription {
    *
    * @return the name
    */
-  public String getName() {
+  @NotNull
+  public final String getName() {
     return name;
   }
 
@@ -78,7 +81,8 @@ public final class AddonDescription {
    *
    * @return the version
    */
-  public String getVersion() {
+  @NotNull
+  public final String getVersion() {
     return version;
   }
 
@@ -87,7 +91,8 @@ public final class AddonDescription {
    *
    * @return the path to the main class
    */
-  public String getMainClass() {
+  @NotNull
+  public final String getMainClass() {
     return mainClass;
   }
 
@@ -96,7 +101,8 @@ public final class AddonDescription {
    *
    * @return the file
    */
-  public YamlConfiguration getConfiguration() {
+  @NotNull
+  public final YamlConfiguration getConfiguration() {
     return configuration;
   }
 }

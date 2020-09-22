@@ -1,6 +1,8 @@
 package me.hsgamer.hscore.addon.object;
 
 import me.hsgamer.hscore.addon.AddonManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -16,6 +18,7 @@ public final class AddonClassLoader extends URLClassLoader {
   private final Addon addon;
   private final File file;
   private final AddonManager addonManager;
+  private final AddonDescription addonDescription;
 
   /**
    * Create an Addon Class Loader
@@ -32,8 +35,8 @@ public final class AddonClassLoader extends URLClassLoader {
    * @throws NoSuchMethodException     if it cannot find the constructor
    * @throws ClassNotFoundException    if the main class is not found
    */
-  public AddonClassLoader(AddonManager addonManager, File file, AddonDescription addonDescription,
-                          ClassLoader parent)
+  public AddonClassLoader(@NotNull AddonManager addonManager, @NotNull File file, @NotNull AddonDescription addonDescription,
+                          @NotNull ClassLoader parent)
     throws MalformedURLException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, ClassNotFoundException {
     super(new URL[]{file.toURI().toURL()}, parent);
     this.addonManager = addonManager;
@@ -47,7 +50,8 @@ public final class AddonClassLoader extends URLClassLoader {
       throw new ClassCastException("The main class does not extend Addon");
     }
     addon = newClass.getDeclaredConstructor().newInstance();
-    addon.setDescription(addonDescription);
+
+    this.addonDescription = addonDescription;
   }
 
   /**
@@ -55,12 +59,14 @@ public final class AddonClassLoader extends URLClassLoader {
    *
    * @return the addon
    */
-  public Addon getAddon() {
+  @NotNull
+  public final Addon getAddon() {
     return addon;
   }
 
   @Override
-  protected Class<?> findClass(String name) {
+  @Nullable
+  protected Class<?> findClass(@NotNull String name) {
     return findClass(name, true);
   }
 
@@ -71,7 +77,8 @@ public final class AddonClassLoader extends URLClassLoader {
    * @param global whether it'll try to search globally
    * @return the class, or null if it's not found
    */
-  public Class<?> findClass(String name, boolean global) {
+  @Nullable
+  public Class<?> findClass(@NotNull String name, boolean global) {
     Class<?> clazz = null;
     if (global) {
       clazz = addonManager.findClass(addon, name);
@@ -91,7 +98,8 @@ public final class AddonClassLoader extends URLClassLoader {
    *
    * @return the addon jar
    */
-  public File getFile() {
+  @NotNull
+  public final File getFile() {
     return file;
   }
 
@@ -100,7 +108,18 @@ public final class AddonClassLoader extends URLClassLoader {
    *
    * @return the addon manager
    */
-  public AddonManager getAddonManager() {
+  @NotNull
+  public final AddonManager getAddonManager() {
     return addonManager;
+  }
+
+  /**
+   * Get the addon's description
+   *
+   * @return the description
+   */
+  @NotNull
+  public final AddonDescription getAddonDescription() {
+    return addonDescription;
   }
 }

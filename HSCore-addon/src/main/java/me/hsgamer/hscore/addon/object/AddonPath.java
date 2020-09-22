@@ -1,6 +1,8 @@
 package me.hsgamer.hscore.addon.object;
 
 import me.hsgamer.hscore.addon.exception.RequiredAddonPathException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.simpleyaml.configuration.file.YamlConfiguration;
 
 /**
@@ -19,7 +21,7 @@ public abstract class AddonPath<T> {
    * @param path     the path to the value
    * @param required is it required to be in addon.yml
    */
-  public AddonPath(String path, boolean required) {
+  public AddonPath(@NotNull String path, boolean required) {
     this.path = path;
     this.required = required;
   }
@@ -29,7 +31,7 @@ public abstract class AddonPath<T> {
    *
    * @return is it required to be in addon.yml
    */
-  public boolean isRequired() {
+  public final boolean isRequired() {
     return required;
   }
 
@@ -38,7 +40,8 @@ public abstract class AddonPath<T> {
    *
    * @return the path
    */
-  public String getPath() {
+  @NotNull
+  public final String getPath() {
     return path;
   }
 
@@ -48,7 +51,8 @@ public abstract class AddonPath<T> {
    * @param object the raw value from addon.yml
    * @return the converted value
    */
-  public abstract T convertType(Object object);
+  @Nullable
+  public abstract T convertType(@NotNull Object object);
 
   /**
    * Get the value from addon.yml
@@ -57,7 +61,8 @@ public abstract class AddonPath<T> {
    * @return the value
    * @throws RequiredAddonPathException if the path is required but is not found in addon.yml
    */
-  public T get(Addon addon) {
+  @Nullable
+  public T get(@NotNull Addon addon) {
     YamlConfiguration configuration = addon.getDescription().getConfiguration();
     if (required && !configuration.isSet(path)) {
       throw new RequiredAddonPathException(
