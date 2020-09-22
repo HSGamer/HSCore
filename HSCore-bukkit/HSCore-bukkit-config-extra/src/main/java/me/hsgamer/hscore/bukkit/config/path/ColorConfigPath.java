@@ -5,7 +5,7 @@ import org.bukkit.Color;
 
 import java.util.Map;
 
-public class ColorConfigPath extends SerializableMapConfigPath<Color> {
+public final class ColorConfigPath extends SerializableMapConfigPath<Color> {
 
   /**
    * Create a config path

@@ -5,7 +5,7 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.Map;
 
-public class PotionEffectConfigPath extends SerializableMapConfigPath<PotionEffect> {
+public final class PotionEffectConfigPath extends SerializableMapConfigPath<PotionEffect> {
 
   /**
    * Create a config path

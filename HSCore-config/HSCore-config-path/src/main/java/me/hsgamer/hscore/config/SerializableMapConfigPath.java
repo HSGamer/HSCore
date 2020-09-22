@@ -20,7 +20,7 @@ public abstract class SerializableMapConfigPath<T> extends AdvancedConfigPath<Ma
   }
 
   @Override
-  public Map<String, Object> getFromConfig(Config config) {
+  public final Map<String, Object> getFromConfig(Config config) {
     return config.getConfig().getConfigurationSection(path).getValues(false);
   }
 

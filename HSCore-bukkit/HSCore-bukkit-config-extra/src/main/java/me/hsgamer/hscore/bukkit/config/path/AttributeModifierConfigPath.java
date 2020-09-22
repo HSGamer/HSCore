@@ -5,7 +5,7 @@ import org.bukkit.attribute.AttributeModifier;
 
 import java.util.Map;
 
-public class AttributeModifierConfigPath extends SerializableMapConfigPath<AttributeModifier> {
+public final class AttributeModifierConfigPath extends SerializableMapConfigPath<AttributeModifier> {
 
   /**
    * Create a config path

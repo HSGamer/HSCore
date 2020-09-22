@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bukkit.clicktype;
 
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,7 +13,7 @@ import java.util.stream.IntStream;
  * The utility to work with AdvancedClickType
  */
 public final class ClickTypeUtils {
-  public static final Map<String, AdvancedClickType> clickTypeMap = new HashMap<>();
+  private static final Map<String, AdvancedClickType> clickTypeMap = new HashMap<>();
 
   static {
     // The original click types
@@ -39,7 +40,8 @@ public final class ClickTypeUtils {
    * @param useSlot will we also the slot
    * @return the click type
    */
-  public static AdvancedClickType getClickTypeFromEvent(InventoryClickEvent event, boolean useSlot) {
+  @NotNull
+  public static AdvancedClickType getClickTypeFromEvent(@NotNull final InventoryClickEvent event, final boolean useSlot) {
     ClickType clickType = event.getClick();
     if (!useSlot || !clickType.equals(ClickType.NUMBER_KEY)) {
       return clickTypeMap.get(clickType.name());
@@ -52,6 +54,7 @@ public final class ClickTypeUtils {
    *
    * @return the unmodifiable map
    */
+  @NotNull
   public static Map<String, AdvancedClickType> getClickTypeMap() {
     return Collections.unmodifiableMap(clickTypeMap);
   }

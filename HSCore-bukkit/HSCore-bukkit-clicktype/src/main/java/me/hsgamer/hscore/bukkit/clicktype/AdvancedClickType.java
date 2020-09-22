@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.bukkit.clicktype;
 
 import org.bukkit.event.inventory.ClickType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * {@link ClickType} with hotbar support
@@ -16,7 +17,7 @@ public class AdvancedClickType {
    * @param clickType  the original click type
    * @param hotbarSlot the slot
    */
-  public AdvancedClickType(ClickType clickType, int hotbarSlot) {
+  public AdvancedClickType(@NotNull final ClickType clickType, final int hotbarSlot) {
     this.clickType = clickType;
     this.hotbarSlot = hotbarSlot;
   }
@@ -26,7 +27,7 @@ public class AdvancedClickType {
    *
    * @param clickType the original click type
    */
-  public AdvancedClickType(ClickType clickType) {
+  public AdvancedClickType(@NotNull final ClickType clickType) {
     this(clickType, -1);
   }
 
@@ -35,8 +36,9 @@ public class AdvancedClickType {
    *
    * @return the Bukkit's click type
    */
-  public ClickType getBukkitClickType() {
-    return clickType;
+  @NotNull
+  public final ClickType getBukkitClickType() {
+    return this.clickType;
   }
 
   /**
@@ -44,7 +46,7 @@ public class AdvancedClickType {
    *
    * @return the slot
    */
-  public int getHotbarSlot() {
-    return hotbarSlot;
+  public final int getHotbarSlot() {
+    return this.hotbarSlot;
   }
 }

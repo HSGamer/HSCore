@@ -3,6 +3,8 @@ package me.hsgamer.hscore.bukkit.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Methods on Permissions
@@ -21,8 +23,9 @@ public class PermissionUtils {
    * @param permissionDefault who have this by default
    * @return the permission
    */
-  public static Permission createPermission(String name, String description,
-                                            PermissionDefault permissionDefault) {
+  @NotNull
+  public static Permission createPermission(@NotNull final String name, @Nullable final String description,
+                                            @Nullable final PermissionDefault permissionDefault) {
     Permission permission = new Permission(name);
     if (description != null) {
       permission.setDescription(description);

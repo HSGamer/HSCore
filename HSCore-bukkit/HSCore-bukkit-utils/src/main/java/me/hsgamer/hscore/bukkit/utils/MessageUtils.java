@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bukkit.utils;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
@@ -22,8 +23,9 @@ public final class MessageUtils {
    * @param input the string
    * @return the colored string
    */
-  public static String colorize(String input) {
-    if (input == null || input.trim().isEmpty()) {
+  @NotNull
+  public static String colorize(@NotNull final String input) {
+    if (input.trim().isEmpty()) {
       return input;
     }
     return ChatColor.translateAlternateColorCodes('&', input);
@@ -35,7 +37,7 @@ public final class MessageUtils {
    * @param sender  the receiver
    * @param message the message
    */
-  public static void sendMessage(CommandSender sender, String message) {
+  public static void sendMessage(@NotNull final CommandSender sender, @NotNull final String message) {
     sendMessage(sender, message, true);
   }
 
@@ -46,7 +48,7 @@ public final class MessageUtils {
    * @param message   the message
    * @param usePrefix whether the prefix should be included
    */
-  public static void sendMessage(CommandSender sender, String message, boolean usePrefix) {
+  public static void sendMessage(@NotNull final CommandSender sender, @NotNull String message, final boolean usePrefix) {
     if (usePrefix) {
       message = prefix.get() + message;
     }
@@ -58,6 +60,7 @@ public final class MessageUtils {
    *
    * @return the prefix
    */
+  @NotNull
   public static String getPrefix() {
     return prefix.get();
   }
@@ -67,7 +70,7 @@ public final class MessageUtils {
    *
    * @param prefix the prefix
    */
-  public static void setPrefix(Supplier<String> prefix) {
+  public static void setPrefix(@NotNull final Supplier<String> prefix) {
     MessageUtils.prefix = prefix;
   }
 }

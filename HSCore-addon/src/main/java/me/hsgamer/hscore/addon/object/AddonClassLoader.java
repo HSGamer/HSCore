@@ -35,8 +35,8 @@ public final class AddonClassLoader extends URLClassLoader {
    * @throws NoSuchMethodException     if it cannot find the constructor
    * @throws ClassNotFoundException    if the main class is not found
    */
-  public AddonClassLoader(@NotNull AddonManager addonManager, @NotNull File file, @NotNull AddonDescription addonDescription,
-                          @NotNull ClassLoader parent)
+  public AddonClassLoader(@NotNull final AddonManager addonManager, @NotNull final File file, @NotNull final AddonDescription addonDescription,
+                          @NotNull final ClassLoader parent)
     throws MalformedURLException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, ClassNotFoundException {
     super(new URL[]{file.toURI().toURL()}, parent);
     this.addonManager = addonManager;
@@ -49,7 +49,7 @@ public final class AddonClassLoader extends URLClassLoader {
     } else {
       throw new ClassCastException("The main class does not extend Addon");
     }
-    addon = newClass.getDeclaredConstructor().newInstance();
+    this.addon = newClass.getDeclaredConstructor().newInstance();
 
     this.addonDescription = addonDescription;
   }
@@ -66,7 +66,7 @@ public final class AddonClassLoader extends URLClassLoader {
 
   @Override
   @Nullable
-  protected Class<?> findClass(@NotNull String name) {
+  protected Class<?> findClass(@NotNull final String name) {
     return findClass(name, true);
   }
 
@@ -78,7 +78,7 @@ public final class AddonClassLoader extends URLClassLoader {
    * @return the class, or null if it's not found
    */
   @Nullable
-  public Class<?> findClass(@NotNull String name, boolean global) {
+  public Class<?> findClass(@NotNull final String name, final boolean global) {
     Class<?> clazz = null;
     if (global) {
       clazz = addonManager.findClass(addon, name);

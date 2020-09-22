@@ -4,6 +4,7 @@ import me.hsgamer.hscore.common.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +26,7 @@ public final class BukkitUtils {
    * @param player the player
    * @return the ping of the player
    */
-  public static int getPing(Player player) {
+  public static int getPing(@NotNull final Player player) {
     try {
       Object entityPlayer = player.getClass().getMethod("getHandle").invoke(player);
       return entityPlayer.getClass().getField("ping").getInt(entityPlayer);
@@ -49,6 +50,7 @@ public final class BukkitUtils {
    *
    * @return the unique ids
    */
+  @NotNull
   public static List<UUID> getAllUniqueIds() {
     return Arrays.stream(Bukkit.getOfflinePlayers())
       .parallel()
@@ -61,6 +63,7 @@ public final class BukkitUtils {
    *
    * @return the player names
    */
+  @NotNull
   public static List<String> getAllPlayerNames() {
     return Arrays.stream(Bukkit.getOfflinePlayers())
       .parallel()
@@ -74,7 +77,8 @@ public final class BukkitUtils {
    * @param depends the list of plugins
    * @return the missing plugins
    */
-  public static List<String> getMissingDepends(List<String> depends) {
+  @NotNull
+  public static List<String> getMissingDepends(@NotNull final List<String> depends) {
     return depends.stream()
       .filter(depend -> Bukkit.getPluginManager().getPlugin(depend) == null)
       .collect(Collectors.toList());

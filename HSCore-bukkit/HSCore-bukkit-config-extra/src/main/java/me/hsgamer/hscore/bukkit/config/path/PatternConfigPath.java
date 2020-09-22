@@ -5,7 +5,7 @@ import org.bukkit.block.banner.Pattern;
 
 import java.util.Map;
 
-public class PatternConfigPath extends SerializableMapConfigPath<Pattern> {
+public final class PatternConfigPath extends SerializableMapConfigPath<Pattern> {
 
   /**
    * Create a config path

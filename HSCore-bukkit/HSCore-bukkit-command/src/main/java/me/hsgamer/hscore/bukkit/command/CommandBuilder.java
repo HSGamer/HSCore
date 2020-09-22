@@ -5,6 +5,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,7 @@ public class CommandBuilder {
   private boolean playerOnly = false;
   private String playerMessage;
 
-  private CommandBuilder(String name) {
+  private CommandBuilder(@NotNull final String name) {
     this.name = name;
   }
 
@@ -35,7 +37,8 @@ public class CommandBuilder {
    * @param name the command name
    * @return the command builder
    */
-  public static CommandBuilder newCommand(String name) {
+  @NotNull
+  public static CommandBuilder newCommand(@NotNull final String name) {
     return new CommandBuilder(name);
   }
 
@@ -44,6 +47,7 @@ public class CommandBuilder {
    *
    * @return the final Command
    */
+  @NotNull
   public Command build() {
     Command command = new Command(name) {
       @Override
@@ -82,7 +86,8 @@ public class CommandBuilder {
    * @param description the description
    * @return the command builder
    */
-  public CommandBuilder setDescription(String description) {
+  @NotNull
+  public CommandBuilder setDescription(@Nullable final String description) {
     this.description = description;
     return this;
   }
@@ -93,7 +98,8 @@ public class CommandBuilder {
    * @param usage the usage
    * @return the command builder
    */
-  public CommandBuilder setUsage(String usage) {
+  @NotNull
+  public CommandBuilder setUsage(@Nullable final String usage) {
     this.usage = usage;
     return this;
   }
@@ -104,7 +110,8 @@ public class CommandBuilder {
    * @param executor the executor
    * @return the command builder
    */
-  public CommandBuilder setExecutor(CommandExecutor executor) {
+  @NotNull
+  public CommandBuilder setExecutor(@NotNull final CommandExecutor executor) {
     this.executor = executor;
     return this;
   }
@@ -115,7 +122,8 @@ public class CommandBuilder {
    * @param tabCompleter the tab completer
    * @return the command builder
    */
-  public CommandBuilder setTabCompleter(TabCompleter tabCompleter) {
+  @NotNull
+  public CommandBuilder setTabCompleter(@Nullable final TabCompleter tabCompleter) {
     this.tabCompleter = tabCompleter;
     return this;
   }
@@ -126,7 +134,8 @@ public class CommandBuilder {
    * @param permission the permission
    * @return the command builder
    */
-  public CommandBuilder setPermission(String permission) {
+  @NotNull
+  public CommandBuilder setPermission(@Nullable final String permission) {
     this.permission = permission;
     return this;
   }
@@ -137,7 +146,8 @@ public class CommandBuilder {
    * @param permissionMessage the message
    * @return the command builder
    */
-  public CommandBuilder setPermissionMessage(String permissionMessage) {
+  @NotNull
+  public CommandBuilder setPermissionMessage(@Nullable final String permissionMessage) {
     this.permissionMessage = permissionMessage;
     return this;
   }
@@ -148,7 +158,8 @@ public class CommandBuilder {
    * @param playerMessage the message
    * @return the command builder
    */
-  public CommandBuilder setPlayerMessage(String playerMessage) {
+  @NotNull
+  public CommandBuilder setPlayerMessage(@Nullable final String playerMessage) {
     this.playerMessage = playerMessage;
     return this;
   }
@@ -158,6 +169,7 @@ public class CommandBuilder {
    *
    * @return the command builder
    */
+  @NotNull
   public CommandBuilder setPlayerOnly() {
     this.playerOnly = true;
     return this;

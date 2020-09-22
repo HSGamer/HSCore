@@ -2,7 +2,7 @@ package me.hsgamer.hscore.config.path;
 
 import me.hsgamer.hscore.config.ConfigPath;
 
-public class SimpleConfigPath<T> extends ConfigPath<T> {
+public final class SimpleConfigPath<T> extends ConfigPath<T> {
 
   /**
    * Create a config path

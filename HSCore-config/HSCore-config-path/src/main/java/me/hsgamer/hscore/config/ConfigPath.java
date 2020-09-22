@@ -24,7 +24,7 @@ public class ConfigPath<T> extends BaseConfigPath<T> {
   }
 
   @Override
-  public T getValue() {
+  public final T getValue() {
     if (config == null) {
       return def;
     }

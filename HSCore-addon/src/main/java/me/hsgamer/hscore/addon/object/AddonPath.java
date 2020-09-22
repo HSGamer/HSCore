@@ -21,7 +21,7 @@ public abstract class AddonPath<T> {
    * @param path     the path to the value
    * @param required is it required to be in addon.yml
    */
-  public AddonPath(@NotNull String path, boolean required) {
+  public AddonPath(@NotNull final String path, final boolean required) {
     this.path = path;
     this.required = required;
   }
@@ -32,7 +32,7 @@ public abstract class AddonPath<T> {
    * @return is it required to be in addon.yml
    */
   public final boolean isRequired() {
-    return required;
+    return this.required;
   }
 
   /**
@@ -62,14 +62,14 @@ public abstract class AddonPath<T> {
    * @throws RequiredAddonPathException if the path is required but is not found in addon.yml
    */
   @Nullable
-  public T get(@NotNull Addon addon) {
+  public final T get(@NotNull final Addon addon) {
     YamlConfiguration configuration = addon.getDescription().getConfiguration();
-    if (required && !configuration.isSet(path)) {
+    if (this.required && !configuration.isSet(this.path)) {
       throw new RequiredAddonPathException(
-        path + " is not found in the addon '" + addon.getDescription().getName() + "'");
+        this.path + " is not found in the addon '" + addon.getDescription().getName() + "'");
     }
 
-    Object value = configuration.get(path);
+    Object value = configuration.get(this.path);
     return value != null ? convertType(value) : null;
   }
 }

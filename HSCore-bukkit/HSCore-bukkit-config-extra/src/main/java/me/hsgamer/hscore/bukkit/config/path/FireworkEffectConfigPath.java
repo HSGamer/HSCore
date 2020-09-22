@@ -5,7 +5,7 @@ import org.bukkit.FireworkEffect;
 
 import java.util.Map;
 
-public class FireworkEffectConfigPath extends SerializableMapConfigPath<FireworkEffect> {
+public final class FireworkEffectConfigPath extends SerializableMapConfigPath<FireworkEffect> {
 
   /**
    * Create a config path

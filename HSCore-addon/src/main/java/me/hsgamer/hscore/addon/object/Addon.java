@@ -83,7 +83,7 @@ public abstract class Addon {
    */
   @NotNull
   public final AddonDescription getDescription() {
-    return addonClassLoader.getAddonDescription();
+    return this.addonClassLoader.getAddonDescription();
   }
 
   /**
@@ -170,13 +170,13 @@ public abstract class Addon {
    * @param path    path to resource
    * @param replace whether it replaces the existed one
    */
-  public final void saveResource(@NotNull String path, boolean replace) {
+  public final void saveResource(@NotNull String path, final boolean replace) {
     if (Validate.isNullOrEmpty(path)) {
       throw new IllegalArgumentException("Path cannot be null or empty");
     }
 
     path = path.replace('\\', '/');
-    try (JarFile jar = new JarFile(addonClassLoader.getFile())) {
+    try (JarFile jar = new JarFile(this.addonClassLoader.getFile())) {
       JarEntry jarConfig = jar.getJarEntry(path);
       if (jarConfig != null) {
         try (InputStream in = jar.getInputStream(jarConfig)) {
@@ -211,7 +211,7 @@ public abstract class Addon {
     }
 
     path = path.replace('\\', '/');
-    try (JarFile jar = new JarFile(addonClassLoader.getFile())) {
+    try (JarFile jar = new JarFile(this.addonClassLoader.getFile())) {
       JarEntry jarConfig = jar.getJarEntry(path);
       if (jarConfig != null) {
         try (InputStream in = jar.getInputStream(jarConfig)) {

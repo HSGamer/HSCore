@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.bukkit.updater;
 
 import me.hsgamer.hscore.web.WebUtils;
+import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
@@ -19,7 +20,7 @@ public final class VersionChecker {
    *
    * @param resourceId the resource id from SpigotMC
    */
-  public VersionChecker(int resourceId) {
+  public VersionChecker(final int resourceId) {
     this.resourceId = resourceId;
   }
 
@@ -28,7 +29,8 @@ public final class VersionChecker {
    *
    * @return the version
    */
-  public CompletableFuture<String> getVersion() {
+  @NotNull
+  public final CompletableFuture<String> getVersion() {
     return CompletableFuture.supplyAsync(() -> {
       try {
         JSONObject object = (JSONObject) WebUtils.getJSONFromURL(

@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 
-public class ItemStackConfigPath extends SerializableMapConfigPath<ItemStack> {
+public final class ItemStackConfigPath extends SerializableMapConfigPath<ItemStack> {
 
   /**
    * Create a config path

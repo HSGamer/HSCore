@@ -5,7 +5,7 @@ import org.bukkit.Location;
 
 import java.util.Map;
 
-public class LocationConfigPath extends SerializableMapConfigPath<Location> {
+public final class LocationConfigPath extends SerializableMapConfigPath<Location> {
 
   /**
    * Create a config path

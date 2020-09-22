@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -29,26 +30,26 @@ public class CommandManager {
    *
    * @param plugin the plugin
    */
-  public CommandManager(JavaPlugin plugin) {
+  public CommandManager(@NotNull final JavaPlugin plugin) {
     this.plugin = plugin;
     try {
       Method commandMapMethod = Bukkit.getServer().getClass().getMethod("getCommandMap");
-      bukkitCommandMap = (CommandMap) commandMapMethod.invoke(Bukkit.getServer());
+      this.bukkitCommandMap = (CommandMap) commandMapMethod.invoke(Bukkit.getServer());
 
-      knownCommandsField = SimpleCommandMap.class.getDeclaredField("knownCommands");
-      knownCommandsField.setAccessible(true);
+      this.knownCommandsField = SimpleCommandMap.class.getDeclaredField("knownCommands");
+      this.knownCommandsField.setAccessible(true);
     } catch (ReflectiveOperationException e) {
       throw new ExceptionInInitializerError(e);
     }
 
     try {
       Class<?> craftServer = Bukkit.getServer().getClass();
-      syncCommandsMethod = craftServer.getDeclaredMethod("syncCommands");
+      this.syncCommandsMethod = craftServer.getDeclaredMethod("syncCommands");
     } catch (Exception e) {
       // Ignored
     }
-    if (syncCommandsMethod != null) {
-      syncCommandsMethod.setAccessible(true);
+    if (this.syncCommandsMethod != null) {
+      this.syncCommandsMethod.setAccessible(true);
     }
   }
 
@@ -57,15 +58,15 @@ public class CommandManager {
    *
    * @param command the command object
    */
-  public void register(Command command) {
+  public final void register(@NotNull final Command command) {
     String name = command.getLabel();
-    if (registered.containsKey(name)) {
-      plugin.getLogger().log(Level.WARNING, "Duplicated \"{0}\" command ! Ignored", name);
+    if (this.registered.containsKey(name)) {
+      this.plugin.getLogger().log(Level.WARNING, "Duplicated \"{0}\" command ! Ignored", name);
       return;
     }
 
-    bukkitCommandMap.register(plugin.getName(), command);
-    registered.put(name, command);
+    this.bukkitCommandMap.register(this.plugin.getName(), command);
+    this.registered.put(name, command);
   }
 
   /**
@@ -73,16 +74,16 @@ public class CommandManager {
    *
    * @param command the command object
    */
-  public void unregister(Command command) {
+  public final void unregister(@NotNull final Command command) {
     try {
-      Map<?, ?> knownCommands = (Map<?, ?>) knownCommandsField.get(bukkitCommandMap);
+      Map<?, ?> knownCommands = (Map<?, ?>) this.knownCommandsField.get(this.bukkitCommandMap);
 
       knownCommands.values().removeIf(command::equals);
 
-      command.unregister(bukkitCommandMap);
-      registered.remove(command.getLabel());
+      command.unregister(this.bukkitCommandMap);
+      this.registered.remove(command.getLabel());
     } catch (ReflectiveOperationException e) {
-      plugin.getLogger()
+      this.plugin.getLogger()
         .log(Level.WARNING, "Something wrong when unregister the command", e);
     }
   }
@@ -92,24 +93,24 @@ public class CommandManager {
    *
    * @param command the command label
    */
-  public void unregister(String command) {
-    if (registered.containsKey(command)) {
-      unregister(registered.remove(command));
+  public final void unregister(@NotNull final String command) {
+    if (this.registered.containsKey(command)) {
+      unregister(this.registered.remove(command));
     }
   }
 
   /**
    * Sync the commands to the server. Mainly used to make tab completer work in 1.13+
    */
-  public void syncCommand() {
-    if (syncCommandsMethod == null) {
+  public final void syncCommand() {
+    if (this.syncCommandsMethod == null) {
       return;
     }
 
     try {
-      syncCommandsMethod.invoke(plugin.getServer());
+      this.syncCommandsMethod.invoke(this.plugin.getServer());
     } catch (IllegalAccessException | InvocationTargetException e) {
-      plugin.getLogger().log(Level.WARNING, "Error when syncing commands", e);
+      this.plugin.getLogger().log(Level.WARNING, "Error when syncing commands", e);
     }
   }
 
@@ -118,7 +119,8 @@ public class CommandManager {
    *
    * @return the map contains the name and the command object
    */
-  public Map<String, Command> getRegistered() {
-    return registered;
+  @NotNull
+  public final Map<String, Command> getRegistered() {
+    return this.registered;
   }
 }

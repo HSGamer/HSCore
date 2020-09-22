@@ -5,7 +5,7 @@ import org.bukkit.util.Vector;
 
 import java.util.Map;
 
-public class VectorConfigPath extends SerializableMapConfigPath<Vector> {
+public final class VectorConfigPath extends SerializableMapConfigPath<Vector> {
 
   /**
    * Create a config path

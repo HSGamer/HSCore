@@ -39,7 +39,7 @@ public final class AddonDescription {
    * @throws InvalidConfigurationException if the addon.yml file is invalid
    */
   @NotNull
-  public static AddonDescription get(@NotNull JarFile jar) throws IOException, InvalidConfigurationException {
+  public static AddonDescription get(@NotNull final JarFile jar) throws IOException, InvalidConfigurationException {
     // Load addon.yml file
     JarEntry entry = jar.getJarEntry("addon.yml");
     if (entry == null) {
