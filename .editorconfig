@@ -1,10 +1,7 @@
-[*.java]
+[*]
 indent_size = 2
 tab_width = 2
 ij_continuation_indent_size = 2
 
-[{*.ant, *.fxml, *.jhm, *.jnlp, *.jrxml, *.pom, *.rng, *.tld, *.wadl, *.wsdd, *.wsdl, *.xjb, *.xml, *.xsd, *.xsl, *.xslt, *.xul}]
-indent_size = 2
-tab_width = 2
-ij_continuation_indent_size = 2
+[{*.pom, *.xml}]
 ij_xml_keep_blank_lines = 1
