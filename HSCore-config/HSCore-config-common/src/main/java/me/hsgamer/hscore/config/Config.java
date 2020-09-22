@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.config;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.io.File;
@@ -10,11 +12,12 @@ import java.util.logging.Logger;
 /**
  * A simple config file
  */
-public class Config {
+public class Config implements BaseConfig {
 
   private static final Logger LOGGER = Logger.getLogger("Config");
+
   private final File file;
-  private final FileConfigProvider provider;
+  private final ConfigProvider provider;
 
   private FileConfiguration fileConfiguration;
 
@@ -24,16 +27,14 @@ public class Config {
    * @param file     the config file
    * @param provider the provider
    */
-  public Config(File file, FileConfigProvider provider) {
+  public Config(@NotNull final File file, @NotNull final ConfigProvider provider) {
     this.file = file;
     this.provider = provider;
-    setUpConfig();
+    setupConfig();
   }
 
-  /**
-   * Set up the config
-   */
-  private void setUpConfig() {
+  @Override
+  public final void setupConfig() {
     if (!file.exists()) {
       if (!file.getParentFile().exists()) {
         file.getParentFile().mkdirs();
@@ -48,17 +49,13 @@ public class Config {
     fileConfiguration = provider.loadConfiguration(file);
   }
 
-  /**
-   * Reload the config
-   */
-  public void reloadConfig() {
+  @Override
+  public final void reloadConfig() {
     fileConfiguration = provider.loadConfiguration(file);
   }
 
-  /**
-   * Save the config
-   */
-  public void saveConfig() {
+  @Override
+  public final void saveConfig() {
     try {
       provider.saveConfiguration(fileConfiguration, file);
     } catch (IOException e) {
@@ -66,38 +63,19 @@ public class Config {
     }
   }
 
-  /**
-   * Get the instance of the config file
-   *
-   * @return the config
-   */
-  public FileConfiguration getConfig() {
+  @Override
+  @NotNull
+  public final FileConfiguration getConfig() {
     if (fileConfiguration == null) {
-      setUpConfig();
+      setupConfig();
     }
     return fileConfiguration;
   }
 
-
-  /**
-   * Get the value from the config
-   *
-   * @param path the path to the value
-   * @param def  the default value if it's not found
-   * @return the value
-   */
-  public Object get(String path, Object def) {
+  @Override
+  @Nullable
+  public final Object get(@NotNull final String path, @Nullable final Object def) {
     return getConfig().get(path, def);
-  }
-
-  /**
-   * Get the value from the config
-   *
-   * @param path the path to the value
-   * @return the value
-   */
-  public Object get(String path) {
-    return get(path, null);
   }
 
   /**
@@ -105,7 +83,8 @@ public class Config {
    *
    * @return the file name
    */
-  public String getFileName() {
+  @NotNull
+  public final String getFileName() {
     return file.getName();
   }
 }

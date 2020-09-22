@@ -8,7 +8,7 @@ import java.io.IOException;
 /**
  * Config provider for {@link Config}
  */
-public interface FileConfigProvider {
+public interface ConfigProvider {
 
   /**
    * Load configuration from a file

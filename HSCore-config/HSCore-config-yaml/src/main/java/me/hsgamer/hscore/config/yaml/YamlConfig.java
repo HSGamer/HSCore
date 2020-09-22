@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.config.yaml;
 
 import me.hsgamer.hscore.config.Config;
+import org.jetbrains.annotations.NotNull;
 import org.simpleyaml.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -15,7 +16,7 @@ public class YamlConfig extends Config {
    *
    * @param file the config file
    */
-  public YamlConfig(File file) {
+  public YamlConfig(@NotNull final File file) {
     super(file, YamlConfiguration::loadConfiguration);
   }
 
@@ -25,7 +26,7 @@ public class YamlConfig extends Config {
    * @param dataFolder the data folder of the file
    * @param filename   the file name
    */
-  public YamlConfig(File dataFolder, String filename) {
+  public YamlConfig(@NotNull final File dataFolder, @NotNull final String filename) {
     this(new File(dataFolder, filename));
   }
 }

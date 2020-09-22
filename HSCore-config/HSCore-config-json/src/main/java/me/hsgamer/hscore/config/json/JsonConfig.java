@@ -2,6 +2,7 @@ package me.hsgamer.hscore.config.json;
 
 import io.github.portlek.jsongration.JsonConfiguration;
 import me.hsgamer.hscore.config.Config;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
@@ -15,7 +16,7 @@ public class JsonConfig extends Config {
    *
    * @param file the config file
    */
-  public JsonConfig(File file) {
+  public JsonConfig(@NotNull final File file) {
     super(file, JsonConfiguration::loadConfiguration);
   }
 
@@ -25,7 +26,7 @@ public class JsonConfig extends Config {
    * @param dataFolder the data folder of the file
    * @param filename   the file name
    */
-  public JsonConfig(File dataFolder, String filename) {
+  public JsonConfig(@NotNull final File dataFolder, @NotNull final String filename) {
     this(new File(dataFolder, filename));
   }
 }
