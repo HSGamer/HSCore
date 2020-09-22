@@ -1,7 +1,7 @@
 package me.hsgamer.hscore.config.json;
 
 import io.github.portlek.jsongration.JsonConfiguration;
-import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.BaseConfig;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -9,7 +9,7 @@ import java.io.File;
 /**
  * A JSON config file
  */
-public class JsonConfig extends Config {
+public class JsonConfig extends BaseConfig {
 
   /**
    * Create a JSON config

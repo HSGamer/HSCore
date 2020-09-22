@@ -1,8 +1,8 @@
 package me.hsgamer.hscore.config.path;
 
-import me.hsgamer.hscore.config.ConfigPath;
+import me.hsgamer.hscore.config.BaseConfigPath;
 
-public final class DoubleConfigPath extends ConfigPath<Double> {
+public final class DoubleConfigPath extends BaseConfigPath<Double> {
 
   /**
    * Create a config path

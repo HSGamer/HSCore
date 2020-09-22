@@ -16,12 +16,12 @@ public final class PathLoader {
    * @param config config instance to load
    * @param <C>    config instance's class type
    */
-  public static <C extends Config> void loadPath(C config) {
+  public static <C extends BaseConfig> void loadPath(C config) {
     Arrays.stream(config.getClass().getDeclaredFields())
-      .filter(field -> BaseConfigPath.class.isAssignableFrom(field.getType()))
+      .filter(field -> ConfigPath.class.isAssignableFrom(field.getType()))
       .forEach(field -> {
         try {
-          ((BaseConfigPath<?>) field.get(config)).setConfig(config);
+          ((ConfigPath<?>) field.get(config)).setConfig(config);
         } catch (IllegalAccessException e) {
           e.printStackTrace();
         }

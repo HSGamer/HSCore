@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.config.yaml;
 
-import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.BaseConfig;
 import org.jetbrains.annotations.NotNull;
 import org.simpleyaml.configuration.file.YamlConfiguration;
 
@@ -9,7 +9,7 @@ import java.io.File;
 /**
  * A JSON config file
  */
-public class YamlConfig extends Config {
+public class YamlConfig extends BaseConfig {
 
   /**
    * Create a YAML config

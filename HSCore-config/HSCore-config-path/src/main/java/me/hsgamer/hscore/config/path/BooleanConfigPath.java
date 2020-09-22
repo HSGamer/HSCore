@@ -1,8 +1,8 @@
 package me.hsgamer.hscore.config.path;
 
-import me.hsgamer.hscore.config.ConfigPath;
+import me.hsgamer.hscore.config.BaseConfigPath;
 
-public final class BooleanConfigPath extends ConfigPath<Boolean> {
+public final class BooleanConfigPath extends BaseConfigPath<Boolean> {
 
   /**
    * Create a config path

@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
  * @param <F> the type of the raw value from the config
  * @param <T> the type of the final value
  */
-public abstract class AdvancedConfigPath<F, T> implements BaseConfigPath<T> {
+public abstract class AdvancedConfigPath<F, T> implements ConfigPath<T> {
 
   private final String path;
   private final T def;

@@ -3,48 +3,72 @@ package me.hsgamer.hscore.config;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Function;
+
 /**
- * The base of ConfigPath classes
+ * A simple config path
  *
  * @param <T> the type of the value
  */
-public interface BaseConfigPath<T> {
+public class BaseConfigPath<T> implements ConfigPath<T> {
+
+  private final Function<Object, T> typeConverter;
+  private final String path;
+  private final T def;
+  private Config config;
 
   /**
-   * Get the value
+   * Create a config path
    *
-   * @return the value
+   * @param path          the path to the value
+   * @param def           the default value if it's not found
+   * @param typeConverter how to convert the raw object to the needed type of value
    */
+  public BaseConfigPath(@NotNull final String path, @Nullable final T def, @NotNull final Function<Object, T> typeConverter) {
+    this.path = path;
+    this.def = def;
+    this.typeConverter = typeConverter;
+  }
+
+  @Override
   @Nullable
-  T getValue();
+  public final T getValue() {
+    if (config == null) {
+      return def;
+    }
 
-  /**
-   * Set the value
-   *
-   * @param value the value
-   */
-  void setValue(@Nullable final T value);
+    Object rawValue = config.get(path, def);
+    if (rawValue == null) {
+      return def;
+    }
 
-  /**
-   * Get the path to the value
-   *
-   * @return the path
-   */
+    return typeConverter.apply(rawValue);
+  }
+
+  @Override
+  public void setValue(@Nullable final T value) {
+    if (config == null) {
+      return;
+    }
+
+    config.getConfig().set(path, value);
+  }
+
+  @Override
   @NotNull
-  String getPath();
+  public String getPath() {
+    return path;
+  }
 
-  /**
-   * Get the config
-   *
-   * @return the config
-   */
+  @Override
   @Nullable
-  Config getConfig();
+  public Config getConfig() {
+    return config;
+  }
 
-  /**
-   * Set the config.
-   *
-   * @param config the config
-   */
-  void setConfig(@NotNull final Config config);
+  @Override
+  public void setConfig(@NotNull final Config config) {
+    this.config = config;
+    config.getConfig().addDefault(path, def);
+  }
 }

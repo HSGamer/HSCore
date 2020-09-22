@@ -1,9 +1,9 @@
 package me.hsgamer.hscore.config.path;
 
-import me.hsgamer.hscore.config.ConfigPath;
+import me.hsgamer.hscore.config.BaseConfigPath;
 
 /**
- * Utility to easily create {@link ConfigPath}
+ * Utility to easily create {@link BaseConfigPath}
  */
 public final class Paths {
 
