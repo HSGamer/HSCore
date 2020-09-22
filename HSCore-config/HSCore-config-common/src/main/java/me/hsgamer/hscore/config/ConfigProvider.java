@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Config provider for {@link BaseConfig}
+ * Config provider for {@link Config}
  */
 public interface ConfigProvider {
 
