@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bukkit.config.path;
 
 import me.hsgamer.hscore.config.SerializableMapConfigPath;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -18,12 +19,12 @@ public final class VectorConfigPath extends SerializableMapConfigPath<Vector> {
   }
 
   @Override
-  public Vector convert(Map<String, Object> rawValue) {
+  public Vector convert(@NotNull final Map<String, Object> rawValue) {
     return Vector.deserialize(rawValue);
   }
 
   @Override
-  public Map<String, Object> convertToRaw(Vector value) {
+  public Map<String, Object> convertToRaw(@NotNull final Vector value) {
     return value.serialize();
   }
 }

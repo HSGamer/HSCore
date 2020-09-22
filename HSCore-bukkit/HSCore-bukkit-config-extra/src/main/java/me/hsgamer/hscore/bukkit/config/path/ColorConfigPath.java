@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bukkit.config.path;
 
 import me.hsgamer.hscore.config.SerializableMapConfigPath;
 import org.bukkit.Color;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -18,12 +19,12 @@ public final class ColorConfigPath extends SerializableMapConfigPath<Color> {
   }
 
   @Override
-  public Color convert(Map<String, Object> rawValue) {
+  public Color convert(@NotNull final Map<String, Object> rawValue) {
     return Color.deserialize(rawValue);
   }
 
   @Override
-  public Map<String, Object> convertToRaw(Color value) {
+  public Map<String, Object> convertToRaw(@NotNull final Color value) {
     return value.serialize();
   }
 }

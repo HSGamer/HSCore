@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bukkit.config.path;
 
 import me.hsgamer.hscore.config.SerializableMapConfigPath;
 import org.bukkit.attribute.AttributeModifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -18,12 +19,12 @@ public final class AttributeModifierConfigPath extends SerializableMapConfigPath
   }
 
   @Override
-  public AttributeModifier convert(Map<String, Object> rawValue) {
+  public AttributeModifier convert(@NotNull final Map<String, Object> rawValue) {
     return AttributeModifier.deserialize(rawValue);
   }
 
   @Override
-  public Map<String, Object> convertToRaw(AttributeModifier value) {
+  public Map<String, Object> convertToRaw(@NotNull final AttributeModifier value) {
     return value.serialize();
   }
 }

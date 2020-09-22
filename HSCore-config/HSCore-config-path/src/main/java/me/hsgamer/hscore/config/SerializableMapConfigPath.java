@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.config;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Map;
 
 /**
@@ -20,8 +22,7 @@ public abstract class SerializableMapConfigPath<T> extends AdvancedConfigPath<Ma
   }
 
   @Override
-  public final Map<String, Object> getFromConfig(Config config) {
-    return config.getConfig().getConfigurationSection(path).getValues(false);
+  public final Map<String, Object> getFromConfig(@NotNull final Config config) {
+    return config.getConfig().getConfigurationSection(getPath()).getValues(false);
   }
-
 }

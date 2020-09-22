@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bukkit.config.path;
 
 import me.hsgamer.hscore.config.SerializableMapConfigPath;
 import org.bukkit.FireworkEffect;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -18,12 +19,12 @@ public final class FireworkEffectConfigPath extends SerializableMapConfigPath<Fi
   }
 
   @Override
-  public FireworkEffect convert(Map<String, Object> rawValue) {
+  public FireworkEffect convert(@NotNull final Map<String, Object> rawValue) {
     return (FireworkEffect) FireworkEffect.deserialize(rawValue);
   }
 
   @Override
-  public Map<String, Object> convertToRaw(FireworkEffect value) {
+  public Map<String, Object> convertToRaw(@NotNull final FireworkEffect value) {
     return value.serialize();
   }
 }

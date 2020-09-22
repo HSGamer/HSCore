@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bukkit.config.path;
 
 import me.hsgamer.hscore.config.SerializableMapConfigPath;
 import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -18,12 +19,12 @@ public final class PotionEffectConfigPath extends SerializableMapConfigPath<Poti
   }
 
   @Override
-  public PotionEffect convert(Map<String, Object> rawValue) {
+  public PotionEffect convert(@NotNull final Map<String, Object> rawValue) {
     return new PotionEffect(rawValue);
   }
 
   @Override
-  public Map<String, Object> convertToRaw(PotionEffect value) {
+  public Map<String, Object> convertToRaw(@NotNull final PotionEffect value) {
     return value.serialize();
   }
 }

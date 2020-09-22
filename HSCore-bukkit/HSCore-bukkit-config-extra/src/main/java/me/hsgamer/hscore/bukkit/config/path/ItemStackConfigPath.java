@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bukkit.config.path;
 
 import me.hsgamer.hscore.config.SerializableMapConfigPath;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -18,12 +19,12 @@ public final class ItemStackConfigPath extends SerializableMapConfigPath<ItemSta
   }
 
   @Override
-  public ItemStack convert(Map<String, Object> rawValue) {
+  public ItemStack convert(@NotNull final Map<String, Object> rawValue) {
     return ItemStack.deserialize(rawValue);
   }
 
   @Override
-  public Map<String, Object> convertToRaw(ItemStack value) {
+  public Map<String, Object> convertToRaw(@NotNull final ItemStack value) {
     return value.serialize();
   }
 }

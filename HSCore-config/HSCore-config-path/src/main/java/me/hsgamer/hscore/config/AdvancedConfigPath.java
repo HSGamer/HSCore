@@ -1,12 +1,19 @@
 package me.hsgamer.hscore.config;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * An advanced config path
  *
  * @param <F> the type of the raw value from the config
  * @param <T> the type of the final value
  */
-public abstract class AdvancedConfigPath<F, T> extends BaseConfigPath<T> {
+public abstract class AdvancedConfigPath<F, T> implements BaseConfigPath<T> {
+
+  private final String path;
+  private final T def;
+  private Config config;
 
   /**
    * Create a config path
@@ -14,8 +21,9 @@ public abstract class AdvancedConfigPath<F, T> extends BaseConfigPath<T> {
    * @param path the path to the value
    * @param def  the default value if it's not found
    */
-  public AdvancedConfigPath(String path, T def) {
-    super(path, def);
+  public AdvancedConfigPath(@NotNull final String path, @Nullable final T def) {
+    this.path = path;
+    this.def = def;
   }
 
   /**
@@ -24,7 +32,8 @@ public abstract class AdvancedConfigPath<F, T> extends BaseConfigPath<T> {
    * @param config the config
    * @return the raw value
    */
-  public abstract F getFromConfig(Config config);
+  @Nullable
+  public abstract F getFromConfig(@NotNull final Config config);
 
   /**
    * Convert to the final value
@@ -32,7 +41,8 @@ public abstract class AdvancedConfigPath<F, T> extends BaseConfigPath<T> {
    * @param rawValue the raw value
    * @return the final value
    */
-  public abstract T convert(F rawValue);
+  @Nullable
+  public abstract T convert(@NotNull final F rawValue);
 
   /**
    * Convert to the raw value
@@ -40,9 +50,11 @@ public abstract class AdvancedConfigPath<F, T> extends BaseConfigPath<T> {
    * @param value the value
    * @return the raw value
    */
-  public abstract F convertToRaw(T value);
+  @Nullable
+  public abstract F convertToRaw(@NotNull final T value);
 
   @Override
+  @Nullable
   public T getValue() {
     if (config == null) {
       return def;
@@ -58,17 +70,29 @@ public abstract class AdvancedConfigPath<F, T> extends BaseConfigPath<T> {
   }
 
   @Override
-  public void setValue(T value) {
+  public void setValue(@Nullable final T value) {
     if (config == null) {
       return;
     }
 
-    config.getConfig().set(path, convertToRaw(value));
+    config.getConfig().set(path, value != null ? convertToRaw(value) : null);
   }
 
   @Override
-  public void setConfig(Config config) {
-    super.setConfig(config);
-    config.getConfig().addDefault(path, convertToRaw(def));
+  @NotNull
+  public String getPath() {
+    return path;
+  }
+
+  @Override
+  @Nullable
+  public Config getConfig() {
+    return config;
+  }
+
+  @Override
+  public void setConfig(@NotNull final Config config) {
+    this.config = config;
+    config.getConfig().addDefault(path, def != null ? convertToRaw(def) : null);
   }
 }
