@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The base of ConfigPath classes
+ * The interface of ConfigPath classes
  *
  * @param <T> the type of the value
  */
