@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bukkit.subcommand;
 
 import me.hsgamer.hscore.map.CaseInsensitiveStringMap;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,7 +23,7 @@ public abstract class SubCommandManager {
    * @param args   the arguments
    * @return whether the command runs successfully
    */
-  public boolean onCommand(CommandSender sender, String label, String... args) {
+  public final boolean onCommand(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args) {
     if (args.length < 1 || args[0].equalsIgnoreCase(HELP)) {
       sendHelpMessage(sender, label, args);
       return true;
@@ -42,7 +43,7 @@ public abstract class SubCommandManager {
    * @param label  the label
    * @param args   the arguments
    */
-  public abstract void sendHelpMessage(CommandSender sender, String label, String... args);
+  public abstract void sendHelpMessage(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args);
 
   /**
    * Send "Argument Not Found" message
@@ -51,14 +52,14 @@ public abstract class SubCommandManager {
    * @param label  the label
    * @param args   the arguments
    */
-  public abstract void sendArgNotFoundMessage(CommandSender sender, String label, String... args);
+  public abstract void sendArgNotFoundMessage(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args);
 
   /**
    * Register a sub-command
    *
    * @param subCommand the sub-command
    */
-  public void registerSubcommand(SubCommand subCommand) {
+  public final void registerSubcommand(@NotNull final SubCommand subCommand) {
     if (subCommand.name.equalsIgnoreCase("help")) {
       throw new RuntimeException("'help' is a predefined argument");
     }
@@ -70,7 +71,7 @@ public abstract class SubCommandManager {
    *
    * @param name the name of the sub-command
    */
-  public void unregisterSubcommand(String name) {
+  public final void unregisterSubcommand(@NotNull final String name) {
     subcommands.remove(name);
   }
 
@@ -79,7 +80,7 @@ public abstract class SubCommandManager {
    *
    * @param subCommand the sub-command
    */
-  public void unregisterSubcommand(SubCommand subCommand) {
+  public final void unregisterSubcommand(@NotNull final SubCommand subCommand) {
     subcommands.remove(subCommand.getName());
   }
 
@@ -88,7 +89,8 @@ public abstract class SubCommandManager {
    *
    * @return the unmodifiable map of sub-commands
    */
-  public Map<String, SubCommand> getSubcommands() {
+  @NotNull
+  public final Map<String, SubCommand> getSubcommands() {
     return Collections.unmodifiableMap(subcommands);
   }
 
@@ -100,14 +102,14 @@ public abstract class SubCommandManager {
    * @param args   the arguments
    * @return the suggested strings
    */
-  public List<String> onTabComplete(CommandSender sender, String label, String... args) {
+  public final List<String> onTabComplete(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args) {
     List<String> list = new ArrayList<>();
     if (args.length < 1 || args[0].equals("")) {
       list.add(HELP);
       list.addAll(subcommands.keySet());
     } else if (subcommands.containsKey(args[0])) {
-      list = subcommands.get(args[0])
-        .onTabComplete(sender, label, Arrays.copyOfRange(args, 1, args.length));
+      list.addAll(subcommands.get(args[0])
+        .onTabComplete(sender, label, Arrays.copyOfRange(args, 1, args.length)));
     } else {
       list.addAll(
         subcommands.keySet().stream()

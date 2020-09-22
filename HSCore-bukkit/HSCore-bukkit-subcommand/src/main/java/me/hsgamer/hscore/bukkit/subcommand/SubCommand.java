@@ -3,6 +3,8 @@ package me.hsgamer.hscore.bukkit.subcommand;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -28,8 +30,8 @@ public abstract class SubCommand {
    * @param permission     the permission
    * @param consoleAllowed is console allowed to use?
    */
-  public SubCommand(String name, String description, String usage, String permission,
-                    boolean consoleAllowed) {
+  public SubCommand(@NotNull final String name, @NotNull final String description, @NotNull final String usage, @Nullable final String permission,
+                    final boolean consoleAllowed) {
     this.name = name;
     this.permission = permission;
     this.description = description;
@@ -45,13 +47,13 @@ public abstract class SubCommand {
    * @param args   the arguments
    * @return whether the command runs successfully
    */
-  public boolean onCommand(CommandSender sender, String label, String... args) {
+  public final boolean onCommand(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args) {
     if (sender instanceof ConsoleCommandSender && !consoleAllowed) {
       MessageUtils.sendMessage(sender, playerOnlyMessage);
       return false;
     }
 
-    if (!sender.hasPermission(permission)) {
+    if (permission != null && !sender.hasPermission(permission)) {
       MessageUtils.sendMessage(sender, noPermissionMessage);
       return false;
     }
@@ -70,7 +72,8 @@ public abstract class SubCommand {
    *
    * @return the description
    */
-  public String getDescription() {
+  @NotNull
+  public final String getDescription() {
     return description;
   }
 
@@ -79,7 +82,8 @@ public abstract class SubCommand {
    *
    * @return the usage
    */
-  public String getUsage() {
+  @NotNull
+  public final String getUsage() {
     return usage;
   }
 
@@ -88,7 +92,8 @@ public abstract class SubCommand {
    *
    * @return the permission
    */
-  public String getPermission() {
+  @Nullable
+  public final String getPermission() {
     return permission;
   }
 
@@ -97,7 +102,7 @@ public abstract class SubCommand {
    *
    * @return true if it is
    */
-  public boolean isConsoleAllowed() {
+  public final boolean isConsoleAllowed() {
     return consoleAllowed;
   }
 
@@ -106,7 +111,8 @@ public abstract class SubCommand {
    *
    * @return the name
    */
-  public String getName() {
+  @NotNull
+  public final String getName() {
     return name;
   }
 
@@ -117,7 +123,7 @@ public abstract class SubCommand {
    * @param label  the label of the parent command
    * @param args   the arguments
    */
-  public abstract void onSubCommand(CommandSender sender, String label, String... args);
+  public abstract void onSubCommand(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args);
 
   /**
    * Check if the sender properly calls the sub-command
@@ -127,7 +133,7 @@ public abstract class SubCommand {
    * @param args   the arguments
    * @return true if the sender is
    */
-  public abstract boolean isProperUsage(CommandSender sender, String label, String... args);
+  public abstract boolean isProperUsage(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args);
 
   /**
    * Get the suggested strings when the sender use TAB key to complete the sub-command
@@ -137,5 +143,6 @@ public abstract class SubCommand {
    * @param args   the arguments
    * @return the suggested strings
    */
-  public abstract List<String> onTabComplete(CommandSender sender, String label, String... args);
+  @NotNull
+  public abstract List<String> onTabComplete(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args);
 }
