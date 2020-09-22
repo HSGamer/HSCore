@@ -2,6 +2,7 @@ package me.hsgamer.hscore.expression.number;
 
 import com.udojava.evalex.AbstractFunction;
 import com.udojava.evalex.Expression.ExpressionException;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,7 +17,8 @@ public class Average extends AbstractFunction {
   }
 
   @Override
-  public BigDecimal eval(List<BigDecimal> parameters) {
+  @NotNull
+  public BigDecimal eval(@NotNull List<BigDecimal> parameters) {
     if (parameters.isEmpty()) {
       throw new ExpressionException("average requires at least one parameter");
     }

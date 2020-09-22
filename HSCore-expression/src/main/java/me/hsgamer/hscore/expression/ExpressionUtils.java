@@ -5,6 +5,8 @@ import com.udojava.evalex.LazyFunction;
 import com.udojava.evalex.LazyOperator;
 import me.hsgamer.hscore.expression.number.Average;
 import me.hsgamer.hscore.expression.string.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -41,7 +43,7 @@ public final class ExpressionUtils {
    * @param input the expression
    * @return whether it's an Boolean expression
    */
-  public static boolean isBoolean(String input) {
+  public static boolean isBoolean(@NotNull String input) {
     Expression expression = new Expression(input);
     applyLazyFunction(expression);
     applyLazyOperator(expression);
@@ -58,7 +60,8 @@ public final class ExpressionUtils {
    * @param input the expression
    * @return the result
    */
-  public static BigDecimal getResult(String input) {
+  @Nullable
+  public static BigDecimal getResult(@NotNull String input) {
     Optional<BigDecimal> number = getNumber(input);
     if (number.isPresent()) {
       return number.get();
@@ -80,11 +83,16 @@ public final class ExpressionUtils {
    * @param input the expression
    * @return whether it's valid
    */
-  public static boolean isValidExpression(String input) {
+  public static boolean isValidExpression(@NotNull String input) {
     return getResult(input) != null;
   }
 
-  private static void applyLazyFunction(Expression expression) {
+  /**
+   * Apply functions to the expression
+   *
+   * @param expression the expression
+   */
+  public static void applyLazyFunction(@NotNull Expression expression) {
     lazyFunctionSet.forEach(expression::addLazyFunction);
   }
 
@@ -93,11 +101,16 @@ public final class ExpressionUtils {
    *
    * @param lazyFunction the function
    */
-  public static void registerLazyFunction(LazyFunction lazyFunction) {
+  public static void registerLazyFunction(@NotNull LazyFunction lazyFunction) {
     lazyFunctionSet.add(lazyFunction);
   }
 
-  private static void applyLazyOperator(Expression expression) {
+  /**
+   * Apply operators to the expression
+   *
+   * @param expression the expression
+   */
+  public static void applyLazyOperator(@NotNull Expression expression) {
     lazyOperatorSet.forEach(expression::addOperator);
   }
 
@@ -106,7 +119,7 @@ public final class ExpressionUtils {
    *
    * @param lazyOperator the function
    */
-  public static void registerLazyOperator(LazyOperator lazyOperator) {
+  public static void registerLazyOperator(@NotNull LazyOperator lazyOperator) {
     lazyOperatorSet.add(lazyOperator);
   }
 
@@ -116,7 +129,8 @@ public final class ExpressionUtils {
    * @param input the string
    * @return the number
    */
-  private static Optional<BigDecimal> getNumber(String input) {
+  @NotNull
+  private static Optional<BigDecimal> getNumber(@NotNull String input) {
     try {
       return Optional.of(new BigDecimal(input));
     } catch (NumberFormatException ex) {

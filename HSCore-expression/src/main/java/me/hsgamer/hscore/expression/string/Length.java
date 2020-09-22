@@ -2,6 +2,7 @@ package me.hsgamer.hscore.expression.string;
 
 import com.udojava.evalex.AbstractLazyFunction;
 import com.udojava.evalex.Expression.LazyNumber;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,7 +17,8 @@ public class Length extends AbstractLazyFunction {
   }
 
   @Override
-  public LazyNumber lazyEval(List<LazyNumber> list) {
+  @NotNull
+  public LazyNumber lazyEval(@NotNull List<LazyNumber> list) {
     int len = list.get(0).getString().length();
     return new LazyNumber() {
       @Override

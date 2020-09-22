@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.expression;
 
 import com.udojava.evalex.Expression.LazyNumber;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 
@@ -41,6 +42,7 @@ public class BooleanLazyNumber {
    * @param bool the primary boolean
    * @return BooleanLazyNumber's boolean
    */
+  @NotNull
   public static LazyNumber convert(boolean bool) {
     return bool ? TRUE : FALSE;
   }
@@ -51,7 +53,8 @@ public class BooleanLazyNumber {
    * @param input the original state
    * @return the inverted state
    */
-  public static LazyNumber invert(LazyNumber input) {
+  @NotNull
+  public static LazyNumber invert(@NotNull LazyNumber input) {
     return input == TRUE ? FALSE : TRUE;
   }
 }

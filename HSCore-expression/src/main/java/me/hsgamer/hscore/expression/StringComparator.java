@@ -2,6 +2,7 @@ package me.hsgamer.hscore.expression;
 
 import com.udojava.evalex.AbstractLazyFunction;
 import com.udojava.evalex.Expression.LazyNumber;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public abstract class StringComparator extends AbstractLazyFunction {
    *
    * @param name the prefix of the comparator
    */
-  public StringComparator(String name) {
+  public StringComparator(@NotNull String name) {
     super(name, 2, true);
   }
 
@@ -26,10 +27,11 @@ public abstract class StringComparator extends AbstractLazyFunction {
    * @param s2 the 2nd string
    * @return the result
    */
-  public abstract boolean compare(String s1, String s2);
+  public abstract boolean compare(@NotNull String s1, @NotNull String s2);
 
   @Override
-  public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
+  @NotNull
+  public LazyNumber lazyEval(@NotNull List<LazyNumber> lazyParams) {
     return BooleanLazyNumber
       .convert(compare(lazyParams.get(0).getString(), lazyParams.get(1).getString()));
   }
