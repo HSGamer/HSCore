@@ -7,7 +7,31 @@
   <artifactId>HSCore</artifactId>
   <version>2.0-SNAPSHOT</version>
   <packaging>pom</packaging>
+
   <name>HSCore</name>
+  <description>The lazy core for my personal projects</description>
+  <url>https://github.com/HSGamer/HSCore</url>
+
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://github.com/HSGamer/HSCore/blob/master/LICENSE</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>HSGamer</name>
+      <email>huynhqtienvtag@gmail.com</email>
+      <url>https://github.com/HSGamer</url>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:https://github.com/HSGamer/HSCore.git</connection>
+    <developerConnection>scm:git:git@github.com:HSGamer/HSCore.git</developerConnection>
+    <url>https://github.com/HSGamer/HSCore</url>
+  </scm>
 
   <modules>
     <module>HSCore-common</module>
