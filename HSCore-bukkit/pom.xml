@@ -12,6 +12,7 @@
   <artifactId>HSCore-bukkit</artifactId>
 
   <modules>
+    <module>HSCore-bukkit-addon</module>
     <module>HSCore-bukkit-utils</module>
     <module>HSCore-bukkit-command</module>
     <module>HSCore-bukkit-subcommand</module>
