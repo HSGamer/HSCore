@@ -7,6 +7,7 @@ import org.simpleyaml.exceptions.InvalidConfigurationException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 
 /**
  * A JSON config file
@@ -24,7 +25,7 @@ public class YamlConfig extends BaseConfig<YamlFile> {
       try {
         yamlFile.loadWithComments();
       } catch (InvalidConfigurationException | IOException e) {
-        e.printStackTrace();
+        LOGGER.log(Level.WARNING, "Error when loading yaml file", e);
       }
       return yamlFile;
     });

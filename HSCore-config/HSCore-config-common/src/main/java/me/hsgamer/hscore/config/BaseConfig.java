@@ -16,7 +16,10 @@ import java.util.logging.Logger;
  */
 public class BaseConfig<F extends FileConfiguration> implements Config {
 
-  private static final Logger LOGGER = Logger.getLogger("Config");
+  /**
+   * The logger for ease
+   */
+  protected static final Logger LOGGER = Logger.getLogger("Config");
 
   private final File file;
   private final ConfigProvider<F> provider;
