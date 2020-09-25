@@ -12,16 +12,16 @@ import java.util.logging.Logger;
 /**
  * A simple config file
  *
- * @param <FC> File configuration class type
+ * @param <F> File configuration class type
  */
-public class BaseConfig<FC extends FileConfiguration> implements Config {
+public class BaseConfig<F extends FileConfiguration> implements Config {
 
   private static final Logger LOGGER = Logger.getLogger("Config");
 
   private final File file;
-  private final ConfigProvider<FC> provider;
+  private final ConfigProvider<F> provider;
 
-  private FC fileConfiguration;
+  private F fileConfiguration;
 
   /**
    * Create a config with a provider
@@ -29,7 +29,7 @@ public class BaseConfig<FC extends FileConfiguration> implements Config {
    * @param file     the config file
    * @param provider the provider
    */
-  public BaseConfig(@NotNull final File file, @NotNull final ConfigProvider<FC> provider) {
+  public BaseConfig(@NotNull final File file, @NotNull final ConfigProvider<F> provider) {
     this.file = file;
     this.provider = provider;
     setupConfig();
@@ -67,7 +67,7 @@ public class BaseConfig<FC extends FileConfiguration> implements Config {
 
   @NotNull
   @Override
-  public final FC getConfig() {
+  public final F getConfig() {
     if (fileConfiguration == null) {
       setupConfig();
     }

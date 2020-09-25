@@ -7,8 +7,10 @@ import java.io.IOException;
 
 /**
  * Config provider for {@link Config}
+ *
+ * @param <F> File configuration class type
  */
-public interface ConfigProvider<FC extends FileConfiguration> {
+public interface ConfigProvider<F extends FileConfiguration> {
 
   /**
    * Load configuration from a file
@@ -16,7 +18,7 @@ public interface ConfigProvider<FC extends FileConfiguration> {
    * @param file the file
    * @return the configuration
    */
-  FC loadConfiguration(File file);
+  F loadConfiguration(File file);
 
   /**
    * Save the configuration to the file
@@ -25,8 +27,7 @@ public interface ConfigProvider<FC extends FileConfiguration> {
    * @param file              the file
    * @throws IOException if there is an I/O error occurred
    */
-  default void saveConfiguration(FC fileConfiguration, File file)
-    throws IOException {
+  default void saveConfiguration(F fileConfiguration, File file) throws IOException {
     fileConfiguration.save(file);
   }
 }
