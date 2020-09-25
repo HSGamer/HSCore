@@ -1,7 +1,6 @@
 package me.hsgamer.hscore.config.yaml;
 
 import me.hsgamer.hscore.config.BaseConfig;
-import me.hsgamer.hscore.config.ConfigProvider;
 import org.jetbrains.annotations.NotNull;
 import org.simpleyaml.configuration.file.YamlFile;
 import org.simpleyaml.exceptions.InvalidConfigurationException;
@@ -20,7 +19,7 @@ public class YamlConfig extends BaseConfig<YamlFile> {
    * @param file the config file
    */
   public YamlConfig(@NotNull final File file) {
-    super(file, (ConfigProvider<YamlFile>) file1 -> {
+    super(file, file1 -> {
       final YamlFile yamlFile = new YamlFile(file1);
       try {
         yamlFile.loadWithComments();
