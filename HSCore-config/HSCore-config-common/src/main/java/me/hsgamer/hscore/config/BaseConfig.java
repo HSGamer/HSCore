@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 /**
  * A simple config file
- * 
+ *
  * @param <FC> File configuration class type
  */
 public class BaseConfig<FC extends FileConfiguration> implements Config<FC> {
@@ -65,8 +65,8 @@ public class BaseConfig<FC extends FileConfiguration> implements Config<FC> {
     }
   }
 
-  @Override
   @NotNull
+  @Override
   public final FC getConfig() {
     if (fileConfiguration == null) {
       setupConfig();
