@@ -1,15 +1,18 @@
 package me.hsgamer.hscore.config.yaml;
 
 import me.hsgamer.hscore.config.BaseConfig;
+import me.hsgamer.hscore.config.ConfigProvider;
 import org.jetbrains.annotations.NotNull;
-import org.simpleyaml.configuration.file.YamlConfiguration;
+import org.simpleyaml.configuration.file.YamlFile;
+import org.simpleyaml.exceptions.InvalidConfigurationException;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * A JSON config file
  */
-public class YamlConfig extends BaseConfig {
+public class YamlConfig extends BaseConfig<YamlFile> {
 
   /**
    * Create a YAML config
@@ -17,7 +20,15 @@ public class YamlConfig extends BaseConfig {
    * @param file the config file
    */
   public YamlConfig(@NotNull final File file) {
-    super(file, YamlConfiguration::loadConfiguration);
+    super(file, (ConfigProvider<YamlFile>) file1 -> {
+      final YamlFile yamlFile = new YamlFile(file1);
+      try {
+        yamlFile.loadWithComments();
+      } catch (InvalidConfigurationException | IOException e) {
+        e.printStackTrace();
+      }
+      return yamlFile;
+    });
   }
 
   /**

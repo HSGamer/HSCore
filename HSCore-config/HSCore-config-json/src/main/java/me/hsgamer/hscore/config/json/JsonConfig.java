@@ -9,7 +9,7 @@ import java.io.File;
 /**
  * A JSON config file
  */
-public class JsonConfig extends BaseConfig {
+public class JsonConfig extends BaseConfig<JsonConfiguration> {
 
   /**
    * Create a JSON config

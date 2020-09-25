@@ -12,14 +12,14 @@ import java.util.logging.Logger;
 /**
  * A simple config file
  */
-public class BaseConfig implements Config {
+public class BaseConfig<FC extends FileConfiguration> implements Config {
 
   private static final Logger LOGGER = Logger.getLogger("Config");
 
   private final File file;
-  private final ConfigProvider provider;
+  private final ConfigProvider<FC> provider;
 
-  private FileConfiguration fileConfiguration;
+  private FC fileConfiguration;
 
   /**
    * Create a config with a provider
@@ -27,7 +27,7 @@ public class BaseConfig implements Config {
    * @param file     the config file
    * @param provider the provider
    */
-  public BaseConfig(@NotNull final File file, @NotNull final ConfigProvider provider) {
+  public BaseConfig(@NotNull final File file, @NotNull final ConfigProvider<FC> provider) {
     this.file = file;
     this.provider = provider;
     setupConfig();
