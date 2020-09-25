@@ -6,8 +6,10 @@ import org.simpleyaml.configuration.file.FileConfiguration;
 
 /**
  * The interface of Config classes
+ *
+ * @param <FC> File configuration class type
  */
-public interface Config {
+public interface Config<FC> {
 
   /**
    * Set up the config
@@ -30,7 +32,7 @@ public interface Config {
    * @return the config
    */
   @NotNull
-  FileConfiguration getConfig();
+  FC getConfig();
 
   /**
    * Get the value from the config

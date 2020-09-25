@@ -11,8 +11,10 @@ import java.util.logging.Logger;
 
 /**
  * A simple config file
+ * 
+ * @param <FC> File configuration class type
  */
-public class BaseConfig<FC extends FileConfiguration> implements Config {
+public class BaseConfig<FC extends FileConfiguration> implements Config<FC> {
 
   private static final Logger LOGGER = Logger.getLogger("Config");
 
@@ -65,7 +67,7 @@ public class BaseConfig<FC extends FileConfiguration> implements Config {
 
   @Override
   @NotNull
-  public final FileConfiguration getConfig() {
+  public final FC getConfig() {
     if (fileConfiguration == null) {
       setupConfig();
     }
