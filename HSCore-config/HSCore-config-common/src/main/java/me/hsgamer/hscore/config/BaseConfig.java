@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  *
  * @param <FC> File configuration class type
  */
-public class BaseConfig<FC extends FileConfiguration> implements Config<FC> {
+public class BaseConfig<FC extends FileConfiguration> implements Config {
 
   private static final Logger LOGGER = Logger.getLogger("Config");
 
