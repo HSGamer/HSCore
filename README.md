@@ -22,6 +22,7 @@
 * **`HSCore-bukkit-addon`**
 * **`HSCore-bukkit-command`**
 * **`HSCore-bukkit-subcommand`**
+* **`HSCore-bukkit-config`**
 * **`HSCore-bukkit-config-extra`**
 * **`HSCore-bukkit-updater`**
 * **`HSCore-bukkit-utils`**
