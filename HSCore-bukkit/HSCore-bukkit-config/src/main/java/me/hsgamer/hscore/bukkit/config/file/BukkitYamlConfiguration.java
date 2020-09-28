@@ -33,6 +33,7 @@ public class BukkitYamlConfiguration extends FileConfiguration {
   static {
     try {
       buildHeaderMethod = FileConfiguration.class.getDeclaredMethod("buildHeader");
+      buildHeaderMethod.setAccessible(true);
     } catch (NoSuchMethodException e) {
       e.printStackTrace();
     }
@@ -121,12 +122,11 @@ public class BukkitYamlConfiguration extends FileConfiguration {
 
       if (def instanceof FileConfiguration) {
         final FileConfiguration fileDefaults = (FileConfiguration) def;
-        String defaultsHeader;
+        String defaultsHeader = null;
         try {
           defaultsHeader = buildHeaderMethod.invoke(fileDefaults).toString();
         } catch (IllegalAccessException | InvocationTargetException e) {
           e.printStackTrace();
-          defaultsHeader = null;
         }
 
         if (defaultsHeader != null && defaultsHeader.length() > 0) {
