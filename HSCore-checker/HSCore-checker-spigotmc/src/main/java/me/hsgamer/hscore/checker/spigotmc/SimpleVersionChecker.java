@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.bukkit.updater;
+package me.hsgamer.hscore.checker.spigotmc;
 
 import me.hsgamer.hscore.web.WebUtils;
 import org.jetbrains.annotations.NotNull;
@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * A simple version checker for Spigot
+ * A simple version checker for SpigotMC
  */
-public final class VersionChecker {
+public final class SimpleVersionChecker {
 
   private final int resourceId;
 
@@ -20,7 +20,7 @@ public final class VersionChecker {
    *
    * @param resourceId the resource id from SpigotMC
    */
-  public VersionChecker(final int resourceId) {
+  public SimpleVersionChecker(final int resourceId) {
     this.resourceId = resourceId;
   }
 
