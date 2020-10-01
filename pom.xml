@@ -43,6 +43,7 @@
     <module>HSCore-config</module>
     <module>HSCore-addon</module>
     <module>HSCore-bukkit</module>
+    <module>HSCore-checker</module>
   </modules>
 
   <properties>

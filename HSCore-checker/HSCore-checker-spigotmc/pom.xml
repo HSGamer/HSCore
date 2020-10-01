@@ -11,4 +11,11 @@
 
   <artifactId>HSCore-checker-spigotmc</artifactId>
 
+  <dependencies>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-web</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 </project>
