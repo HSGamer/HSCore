@@ -1,6 +1,5 @@
 package me.hsgamer.hscore.bukkit.utils;
 
-import me.hsgamer.hscore.common.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -34,15 +33,6 @@ public final class BukkitUtils {
       Bukkit.getServer().getLogger().log(Level.WARNING, "Unexpected error when getting ping", e);
       return -9;
     }
-  }
-
-  /**
-   * Check if the server is Spigot
-   *
-   * @return whether the server is Spigot
-   */
-  public static boolean isSpigot() {
-    return Validate.isClassLoaded("org.bukkit.entity.Player$Spigot");
   }
 
   /**
