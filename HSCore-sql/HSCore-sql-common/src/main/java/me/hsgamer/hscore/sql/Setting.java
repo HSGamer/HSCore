@@ -11,6 +11,7 @@ public class Setting {
   private String password = "";
   private String driver = "";
   private boolean useSSL = false;
+  private boolean certVerify = false;
 
   /**
    * Get the host
@@ -142,6 +143,25 @@ public class Setting {
    */
   public Setting setDriver(String driver) {
     this.driver = driver;
+    return this;
+  }
+
+  /**
+   * Should it verify the certificate ?
+   *
+   * @return the boolean
+   */
+  public boolean isCertVerify() {
+    return certVerify;
+  }
+
+  /**
+   * Should it verify the certificate ?
+   *
+   * @param certVerify the boolean
+   */
+  public Setting setCertVerify(boolean certVerify) {
+    this.certVerify = certVerify;
     return this;
   }
 }

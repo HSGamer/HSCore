@@ -26,6 +26,8 @@ public class HikariMySql implements Sql<HikariDataSource> {
     config.setUsername(setting.getUsername());
     config.setPassword(setting.getPassword());
     config.setDriverClassName(setting.getDriver().isEmpty() ? "com.mysql.cj.jdbc.Driver" : setting.getDriver());
+    config.addDataSourceProperty("useSSL", String.valueOf(setting.isUseSSL()));
+    config.addDataSourceProperty("verifyServerCertificate", String.valueOf(setting.isCertVerify()));
     config.addDataSourceProperty("cachePrepStmts", true);
     config.addDataSourceProperty("prepStmtCacheSize", 250);
     config.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
