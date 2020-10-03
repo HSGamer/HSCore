@@ -3,18 +3,27 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <artifactId>HSCore-checker</artifactId>
+    <artifactId>HSCore-sql</artifactId>
     <groupId>me.HSGamer</groupId>
     <version>2.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>HSCore-checker-spigotmc</artifactId>
-
+  <artifactId>HSCore-sql-all</artifactId>
   <dependencies>
     <dependency>
       <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-web</artifactId>
+      <artifactId>HSCore-sql-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-sql-hikari-mysql</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-sql-hikari-sqlite</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

@@ -19,6 +19,7 @@
     <module>HSCore-bukkit-config-extra</module>
     <module>HSCore-bukkit-clicktype</module>
     <module>HSCore-bukkit-config</module>
+    <module>HSCore-bukkit-all</module>
   </modules>
 
   <repositories>

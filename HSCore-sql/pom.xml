@@ -15,6 +15,7 @@
     <module>HSCore-sql-common</module>
     <module>HSCore-sql-hikari-mysql</module>
     <module>HSCore-sql-hikari-sqlite</module>
+    <module>HSCore-sql-all</module>
   </modules>
 
 </project>

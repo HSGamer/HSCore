@@ -8,6 +8,7 @@
 * [JoinWork](https://github.com/HSGamer/JoinWork/)
 * [BetterGUI](https://github.com/BetterGUI-MC/BetterGUI)
 ## Modules
+* **`HSCore-all`**
 * **`HSCore-addon`**
 * **`HSCore-common`**
 * **`HSCore-collections`**
@@ -15,14 +16,18 @@
 * **`HSCore-json`**
 * **`HSCore-request`**
 * **`HSCore-web`**
+* **`HSCore-checker-all`**
 * **`HSCore-checker-spigotmc`**
+* **`HSCore-sql-all`**
 * **`HSCore-sql-common`**
 * **`HSCore-sql-hikari-mysql`**
 * **`HSCore-sql-hikari-sqlite`**
+* **`HSCore-config-all`**
 * **`HSCore-config-common`**
 * **`HSCore-config-yaml`**
 * **`HSCore-config-json`**
 * **`HSCore-config-path`**
+* **`HSCore-bukkit-all`**
 * **`HSCore-bukkit-addon`**
 * **`HSCore-bukkit-command`**
 * **`HSCore-bukkit-subcommand`**
