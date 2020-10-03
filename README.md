@@ -15,6 +15,7 @@
 * **`HSCore-json`**
 * **`HSCore-request`**
 * **`HSCore-web`**
+* **`HSCore-checker-spigotmc`**
 * **`HSCore-config-common`**
 * **`HSCore-config-yaml`**
 * **`HSCore-config-json`**
@@ -24,7 +25,6 @@
 * **`HSCore-bukkit-subcommand`**
 * **`HSCore-bukkit-config`**
 * **`HSCore-bukkit-config-extra`**
-* **`HSCore-bukkit-updater`**
 * **`HSCore-bukkit-utils`**
 ## Add as a dependency (Maven)
 ```xml
