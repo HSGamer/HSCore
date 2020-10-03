@@ -9,13 +9,27 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * The SQLite connection via HikariCP
+ */
 public class HikariSqlite implements Sql<HikariDataSource> {
   private final HikariDataSource hikariDataSource;
 
+  /**
+   * Create new SQL connection object
+   *
+   * @param setting the setting
+   */
   public HikariSqlite(Setting setting) {
     this(".", setting);
   }
 
+  /**
+   * Create new SQL connection object
+   *
+   * @param folder  the folder to store the database file
+   * @param setting the setting
+   */
   public HikariSqlite(String folder, Setting setting) {
     final HikariConfig config = new HikariConfig();
     config.setPoolName("SQLITE-" + setting.getDatabaseName());

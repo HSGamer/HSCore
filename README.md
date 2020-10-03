@@ -16,6 +16,9 @@
 * **`HSCore-request`**
 * **`HSCore-web`**
 * **`HSCore-checker-spigotmc`**
+* **`HSCore-sql-common`**
+* **`HSCore-sql-hikari-mysql`**
+* **`HSCore-sql-hikari-sqlite`**
 * **`HSCore-config-common`**
 * **`HSCore-config-yaml`**
 * **`HSCore-config-json`**

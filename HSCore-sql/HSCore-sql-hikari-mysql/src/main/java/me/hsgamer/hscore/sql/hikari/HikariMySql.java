@@ -8,10 +8,18 @@ import me.hsgamer.hscore.sql.Sql;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * The MySQL connection via HikariCP
+ */
 public class HikariMySql implements Sql<HikariDataSource> {
 
   private final HikariDataSource hikariDataSource;
 
+  /**
+   * Create new SQL connection object
+   *
+   * @param setting the setting
+   */
   public HikariMySql(Setting setting) {
     final HikariConfig config = new HikariConfig();
     config.setJdbcUrl("jdbc:mysql://" + setting.getHost() + ':' + setting.getPort() + '/' + setting.getDatabaseName());
