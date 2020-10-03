@@ -1,21 +1,20 @@
 package me.hsgamer.hscore.sql;
 
 public class Setting {
-  private String hostName = "";
+  private String host = "";
   private String databaseName = "";
   private String port = "";
   private String username = "";
   private String password = "";
+  private String driver = "";
   private boolean useSSL = false;
-  private int minConnect = 0;
-  private int maxConnect = 100;
 
-  public String getHostName() {
-    return hostName;
+  public String getHost() {
+    return host;
   }
 
-  public Setting setHostName(String hostName) {
-    this.hostName = hostName;
+  public Setting setHost(String host) {
+    this.host = host;
     return this;
   }
 
@@ -64,21 +63,12 @@ public class Setting {
     return this;
   }
 
-  public int getMinConnect() {
-    return minConnect;
+  public String getDriver() {
+    return driver;
   }
 
-  public Setting setMinConnect(int minConnect) {
-    this.minConnect = minConnect;
-    return this;
-  }
-
-  public int getMaxConnect() {
-    return maxConnect;
-  }
-
-  public Setting setMaxConnect(int maxConnect) {
-    this.maxConnect = maxConnect;
+  public Setting setDriver(String driver) {
+    this.driver = driver;
     return this;
   }
 }

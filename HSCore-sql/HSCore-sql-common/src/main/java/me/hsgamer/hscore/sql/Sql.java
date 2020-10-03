@@ -9,7 +9,7 @@ public interface Sql<T> {
 
   T getOriginal();
 
-  Connection getConnection();
+  Connection getConnection() throws SQLException;
 
   default ResultSet query(String command) throws SQLException {
     Connection connection = getConnection();
