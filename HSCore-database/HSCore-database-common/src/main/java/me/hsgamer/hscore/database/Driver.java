@@ -6,11 +6,11 @@ package me.hsgamer.hscore.database;
 public interface Driver {
 
   /**
-   * Get the name of the driver
+   * Get the class name of the driver
    *
-   * @return the name
+   * @return the class name
    */
-  String getName();
+  String getClassName();
 
   /**
    * Get the JDBC url from the config

@@ -15,7 +15,7 @@ public class SqliteDriver extends LocalDriver {
   }
 
   @Override
-  public String getName() {
+  public String getClassName() {
     return "org.sqlite.JDBC";
   }
 
