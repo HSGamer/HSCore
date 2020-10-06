@@ -1,7 +1,7 @@
-package me.hsgamer.hscore.sql.driver;
+package me.hsgamer.hscore.database.driver;
 
-import me.hsgamer.hscore.sql.LocalDriver;
-import me.hsgamer.hscore.sql.Setting;
+import me.hsgamer.hscore.database.LocalDriver;
+import me.hsgamer.hscore.database.Setting;
 
 import java.io.File;
 import java.nio.file.Paths;

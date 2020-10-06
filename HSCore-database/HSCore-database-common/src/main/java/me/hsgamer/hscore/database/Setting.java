@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.sql;
+package me.hsgamer.hscore.database;
 
 /**
  * The setting for connection

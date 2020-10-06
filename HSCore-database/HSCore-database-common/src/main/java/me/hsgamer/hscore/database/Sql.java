@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.sql;
+package me.hsgamer.hscore.database;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
