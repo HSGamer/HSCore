@@ -18,10 +18,11 @@
 * **`HSCore-web`**
 * **`HSCore-checker-all`**
 * **`HSCore-checker-spigotmc`**
-* **`HSCore-sql-all`**
-* **`HSCore-sql-common`**
-* **`HSCore-sql-hikari-mysql`**
-* **`HSCore-sql-hikari-sqlite`**
+* **`HSCore-database-all`**
+* **`HSCore-database-common`**
+* **`HSCore-database-driver-mysql`**
+* **`HSCore-database-driver-sqlite`**
+* **`HSCore-database-hikari`**
 * **`HSCore-config-all`**
 * **`HSCore-config-common`**
 * **`HSCore-config-yaml`**
@@ -48,6 +49,9 @@
       <groupId>me.HSGamer</groupId>
       <artifactId>HSCore-MODULE</artifactId>
       <version>VERSION</version>
+      
+      <!-- Add this line if you want to get the shaded artifact -->
+      <classifier>jar-with-dependencies</classifier>
     </dependency>
   </dependencies>
 ```

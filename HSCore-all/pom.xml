@@ -58,7 +58,7 @@
     </dependency>
     <dependency>
       <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-sql-all</artifactId>
+      <artifactId>HSCore-database-all</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
