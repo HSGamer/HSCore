@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import me.hsgamer.hscore.sql.Driver;
 import me.hsgamer.hscore.sql.Setting;
 import me.hsgamer.hscore.sql.Sql;
+import me.hsgamer.hscore.sql.driver.MySqlDriver;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -15,6 +16,15 @@ import java.sql.SQLException;
 public class HikariMySql implements Sql<HikariDataSource> {
 
   private final HikariDataSource hikariDataSource;
+
+  /**
+   * Create new SQL connection object
+   *
+   * @param setting the setting
+   */
+  public HikariMySql(Setting setting) {
+    this(setting, new MySqlDriver());
+  }
 
   /**
    * Create new SQL connection object

@@ -5,7 +5,9 @@ import com.zaxxer.hikari.HikariDataSource;
 import me.hsgamer.hscore.sql.LocalDriver;
 import me.hsgamer.hscore.sql.Setting;
 import me.hsgamer.hscore.sql.Sql;
+import me.hsgamer.hscore.sql.driver.SqliteDriver;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -14,6 +16,15 @@ import java.sql.SQLException;
  */
 public class HikariSqlite implements Sql<HikariDataSource> {
   private final HikariDataSource hikariDataSource;
+
+  /**
+   * Create new SQL connection object
+   *
+   * @param setting the setting
+   */
+  public HikariSqlite(Setting setting) {
+    this(setting, new SqliteDriver(new File(".")));
+  }
 
   /**
    * Create new SQL connection object
