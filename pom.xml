@@ -44,7 +44,7 @@
     <module>HSCore-addon</module>
     <module>HSCore-bukkit</module>
     <module>HSCore-checker</module>
-    <module>HSCore-sql</module>
+    <module>HSCore-database</module>
     <module>HSCore-all</module>
   </modules>
 

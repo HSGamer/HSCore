@@ -3,12 +3,19 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <artifactId>HSCore-sql</artifactId>
+    <artifactId>HSCore</artifactId>
     <groupId>me.HSGamer</groupId>
     <version>2.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>HSCore-sql-common</artifactId>
+  <artifactId>HSCore-database</artifactId>
+  <packaging>pom</packaging>
+  <modules>
+    <module>HSCore-database-common</module>
+    <module>HSCore-database-hikari-mysql</module>
+    <module>HSCore-database-hikari-sqlite</module>
+    <module>HSCore-database-all</module>
+  </modules>
 
 </project>
