@@ -10,6 +10,10 @@ import java.nio.file.Paths;
  * A driver for SQLite
  */
 public class SqliteDriver extends LocalDriver {
+  public SqliteDriver() {
+    super();
+  }
+
   public SqliteDriver(File folder) {
     super(folder);
   }
