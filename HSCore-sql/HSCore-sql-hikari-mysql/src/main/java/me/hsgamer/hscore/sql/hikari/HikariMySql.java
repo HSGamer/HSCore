@@ -2,6 +2,7 @@ package me.hsgamer.hscore.sql.hikari;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import me.hsgamer.hscore.sql.Driver;
 import me.hsgamer.hscore.sql.Setting;
 import me.hsgamer.hscore.sql.Sql;
 
@@ -19,13 +20,14 @@ public class HikariMySql implements Sql<HikariDataSource> {
    * Create new SQL connection object
    *
    * @param setting the setting
+   * @param driver  the driver
    */
-  public HikariMySql(Setting setting) {
+  public HikariMySql(Setting setting, Driver driver) {
     final HikariConfig config = new HikariConfig();
-    config.setJdbcUrl("jdbc:mysql://" + setting.getHost() + ':' + setting.getPort() + '/' + setting.getDatabaseName());
+    config.setJdbcUrl(driver.convertURL(setting));
     config.setUsername(setting.getUsername());
     config.setPassword(setting.getPassword());
-    config.setDriverClassName(setting.getDriver().isEmpty() ? "com.mysql.cj.jdbc.Driver" : setting.getDriver());
+    config.setDriverClassName(driver.getName());
     config.addDataSourceProperty("useSSL", String.valueOf(setting.isUseSSL()));
     config.addDataSourceProperty("verifyServerCertificate", String.valueOf(setting.isCertVerify()));
     config.addDataSourceProperty("cachePrepStmts", true);

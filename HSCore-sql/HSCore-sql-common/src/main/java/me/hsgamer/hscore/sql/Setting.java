@@ -9,7 +9,6 @@ public class Setting {
   private String port = "";
   private String username = "";
   private String password = "";
-  private String driver = "";
   private boolean useSSL = false;
   private boolean certVerify = false;
 
@@ -124,25 +123,6 @@ public class Setting {
    */
   public Setting setUseSSL(boolean useSSL) {
     this.useSSL = useSSL;
-    return this;
-  }
-
-  /**
-   * Get the driver class
-   *
-   * @return the driver class
-   */
-  public String getDriver() {
-    return driver;
-  }
-
-  /**
-   * Set the driver class
-   *
-   * @return the driver class
-   */
-  public Setting setDriver(String driver) {
-    this.driver = driver;
     return this;
   }
 
