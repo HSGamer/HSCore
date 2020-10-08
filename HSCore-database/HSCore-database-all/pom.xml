@@ -18,6 +18,11 @@
     </dependency>
     <dependency>
       <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-database-sql</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
       <artifactId>HSCore-database-hikari</artifactId>
       <version>${project.version}</version>
     </dependency>

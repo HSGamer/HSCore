@@ -5,7 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import me.hsgamer.hscore.database.Driver;
 import me.hsgamer.hscore.database.LocalDriver;
 import me.hsgamer.hscore.database.Setting;
-import me.hsgamer.hscore.database.Sql;
+import me.hsgamer.hscore.database.sql.Sql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
