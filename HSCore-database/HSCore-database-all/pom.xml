@@ -36,5 +36,15 @@
       <artifactId>HSCore-database-driver-sqlite</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-database-driver-mariadb</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-database-driver-postgresql</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>

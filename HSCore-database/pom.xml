@@ -15,6 +15,8 @@
     <module>HSCore-database-common</module>
     <module>HSCore-database-driver-mysql</module>
     <module>HSCore-database-driver-sqlite</module>
+    <module>HSCore-database-driver-mariadb</module>
+    <module>HSCore-database-driver-postgresql</module>
     <module>HSCore-database-sql</module>
     <module>HSCore-database-hikari</module>
     <module>HSCore-database-all</module>

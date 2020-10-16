@@ -4,9 +4,9 @@ package me.hsgamer.hscore.database;
  * The setting for connection
  */
 public class Setting {
-  private String host = "";
-  private String databaseName = "";
-  private String port = "";
+  private String host = "localhost";
+  private String databaseName = "db";
+  private String port = "3306";
   private String username = "";
   private String password = "";
   private boolean useSSL = false;
