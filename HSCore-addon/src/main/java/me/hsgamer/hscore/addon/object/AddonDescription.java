@@ -33,17 +33,18 @@ public final class AddonDescription {
   /**
    * Generate the addon description
    *
-   * @param jar the addon jar
+   * @param jar                 the addon jar
+   * @param addonConfigFileName the name of the addon config file
+   * @param provider            the config provider
    * @return the addon description
    * @throws IOException if there is an error when loading the addon jar
    */
   @NotNull
-  public static <T extends FileConfiguration> AddonDescription get(@NotNull final JarFile jar, @NotNull final ConfigProvider<T> provider) throws IOException {
+  public static <T extends FileConfiguration> AddonDescription get(@NotNull final JarFile jar, @NotNull final String addonConfigFileName, @NotNull final ConfigProvider<T> provider) throws IOException {
     // Load addon.yml file
-    JarEntry entry = jar.getJarEntry("addon.yml");
+    JarEntry entry = jar.getJarEntry(addonConfigFileName);
     if (entry == null) {
-      throw new NoSuchFileException(
-        "Addon '" + jar.getName() + "' doesn't contain addon.yml file");
+      throw new NoSuchFileException("Addon '" + jar.getName() + "' doesn't contain " + addonConfigFileName + " file");
     }
     Reader reader = new InputStreamReader(jar.getInputStream(entry));
     FileConfiguration data = provider.loadConfiguration(reader);
@@ -53,13 +54,13 @@ public final class AddonDescription {
     String version = data.getString("version");
     String mainClass = data.getString("main");
     if (name == null) {
-      throw new RequiredAddonPathException("Addon '" + jar.getName() + "' doesn't have a name on addon.yml");
+      throw new RequiredAddonPathException("Addon '" + jar.getName() + "' doesn't have a name on " + addonConfigFileName);
     }
     if (version == null) {
-      throw new RequiredAddonPathException("Addon '" + jar.getName() + "' doesn't have a version on addon.yml");
+      throw new RequiredAddonPathException("Addon '" + jar.getName() + "' doesn't have a version on " + addonConfigFileName);
     }
     if (mainClass == null) {
-      throw new RequiredAddonPathException("Addon '" + jar.getName() + "' doesn't have a main class on addon.yml");
+      throw new RequiredAddonPathException("Addon '" + jar.getName() + "' doesn't have a main class on " + addonConfigFileName);
     }
     return new AddonDescription(name, version, mainClass, data);
   }

@@ -62,7 +62,7 @@ public abstract class AddonManager {
       .forEach(file -> {
         try (JarFile jar = new JarFile(file)) {
           // Get addon description
-          AddonDescription addonDescription = AddonDescription.get(jar, getConfigProvider());
+          AddonDescription addonDescription = AddonDescription.get(jar, getAddonConfigFileName(), getConfigProvider());
           if (addonMap.containsKey(addonDescription.getName())) {
             logger.warning("Duplicated addon " + addonDescription.getName());
             return;
@@ -265,6 +265,14 @@ public abstract class AddonManager {
   protected abstract <T extends FileConfiguration> ConfigProvider<T> getConfigProvider();
 
   /**
+   * Get the name of the addon config file
+   *
+   * @return the file name
+   */
+  @NotNull
+  public abstract String getAddonConfigFileName();
+
+  /**
    * Called when the addon is on loading
    *
    * @param addon the loading addon
@@ -302,6 +310,6 @@ public abstract class AddonManager {
    */
   @NotNull
   public final Logger getLogger() {
-    return logger;
+    return this.logger;
   }
 }

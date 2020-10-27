@@ -24,29 +24,26 @@ public interface ConfigProvider<F extends FileConfiguration> {
    *
    * @param reader the reader
    * @return the configuration
+   * @throws IOException if there is an I/O error
    */
-  default F loadConfiguration(Reader reader) {
-    try {
-      File tempFile = File.createTempFile("tempAddonConfigFile", null);
-      BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(tempFile));
-      BufferedReader bufferedReader = new BufferedReader(reader);
+  default F loadConfiguration(Reader reader) throws IOException {
+    File tempFile = File.createTempFile("tempAddonConfigFile", null);
+    BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(tempFile));
+    BufferedReader bufferedReader = new BufferedReader(reader);
 
-      String line = bufferedReader.readLine();
-      while (line != null) {
-        bufferedWriter.write(line);
-        line = bufferedReader.readLine();
-      }
-
-      F config = loadConfiguration(tempFile);
-
-      bufferedReader.close();
-      bufferedWriter.close();
-      tempFile.deleteOnExit();
-      return config;
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
+    String line = bufferedReader.readLine();
+    while (line != null) {
+      bufferedWriter.write(line);
+      line = bufferedReader.readLine();
     }
+
+    F config = loadConfiguration(tempFile);
+
+    bufferedReader.close();
+    bufferedWriter.close();
+    tempFile.deleteOnExit();
+
+    return config;
   }
 
   /**
