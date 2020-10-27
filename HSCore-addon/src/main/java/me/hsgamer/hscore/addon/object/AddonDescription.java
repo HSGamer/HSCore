@@ -40,7 +40,7 @@ public final class AddonDescription {
    * @throws IOException if there is an error when loading the addon jar
    */
   @NotNull
-  public static <T extends FileConfiguration> AddonDescription get(@NotNull final JarFile jar, @NotNull final String addonConfigFileName, @NotNull final ConfigProvider<T> provider) throws IOException {
+  public static AddonDescription get(@NotNull final JarFile jar, @NotNull final String addonConfigFileName, @NotNull final ConfigProvider<? extends FileConfiguration> provider) throws IOException {
     // Load addon.yml file
     JarEntry entry = jar.getJarEntry(addonConfigFileName);
     if (entry == null) {
