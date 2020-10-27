@@ -2,8 +2,7 @@ package me.hsgamer.hscore.config;
 
 import org.simpleyaml.configuration.file.FileConfiguration;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Config provider for {@link Config}
@@ -19,6 +18,36 @@ public interface ConfigProvider<F extends FileConfiguration> {
    * @return the configuration
    */
   F loadConfiguration(File file);
+
+  /**
+   * Load configuration from a reader
+   *
+   * @param reader the reader
+   * @return the configuration
+   */
+  default F loadConfiguration(Reader reader) {
+    try {
+      File tempFile = File.createTempFile("tempAddonConfigFile", null);
+      BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(tempFile));
+      BufferedReader bufferedReader = new BufferedReader(reader);
+
+      String line = bufferedReader.readLine();
+      while (line != null) {
+        bufferedWriter.write(line);
+        line = bufferedReader.readLine();
+      }
+
+      F config = loadConfiguration(tempFile);
+
+      bufferedReader.close();
+      bufferedWriter.close();
+      tempFile.deleteOnExit();
+      return config;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
 
   /**
    * Save the configuration to the file

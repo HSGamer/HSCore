@@ -4,8 +4,10 @@ import me.hsgamer.hscore.addon.object.Addon;
 import me.hsgamer.hscore.addon.object.AddonClassLoader;
 import me.hsgamer.hscore.addon.object.AddonDescription;
 import me.hsgamer.hscore.common.CommonUtils;
+import me.hsgamer.hscore.config.ConfigProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,7 +62,7 @@ public abstract class AddonManager {
       .forEach(file -> {
         try (JarFile jar = new JarFile(file)) {
           // Get addon description
-          AddonDescription addonDescription = AddonDescription.get(jar);
+          AddonDescription addonDescription = AddonDescription.get(jar, getConfigProvider());
           if (addonMap.containsKey(addonDescription.getName())) {
             logger.warning("Duplicated addon " + addonDescription.getName());
             return;
@@ -252,6 +254,15 @@ public abstract class AddonManager {
    */
   @NotNull
   protected abstract Map<String, Addon> sortAndFilter(@NotNull final Map<String, Addon> original);
+
+  /**
+   * Get the addon config provider
+   *
+   * @param <T> the {@link FileConfiguration} type
+   * @return the provider
+   */
+  @NotNull
+  protected abstract <T extends FileConfiguration> ConfigProvider<T> getConfigProvider();
 
   /**
    * Called when the addon is on loading

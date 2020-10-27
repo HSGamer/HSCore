@@ -18,7 +18,7 @@
     </dependency>
     <dependency>
       <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-config-yaml</artifactId>
+      <artifactId>HSCore-config-common</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

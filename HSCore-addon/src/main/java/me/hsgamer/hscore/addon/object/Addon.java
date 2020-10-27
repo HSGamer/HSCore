@@ -3,7 +3,6 @@ package me.hsgamer.hscore.addon.object;
 import me.hsgamer.hscore.addon.AddonManager;
 import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.hscore.config.Config;
-import me.hsgamer.hscore.config.yaml.YamlConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.simpleyaml.configuration.file.FileConfiguration;
@@ -90,9 +89,7 @@ public abstract class Addon {
    * Create the config
    */
   @NotNull
-  protected Config createConfig() {
-    return new YamlConfig(getDataFolder(), "config.yml");
-  }
+  protected abstract Config createConfig();
 
   /**
    * Setup the config

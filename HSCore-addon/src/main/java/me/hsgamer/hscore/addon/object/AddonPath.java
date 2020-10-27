@@ -3,7 +3,7 @@ package me.hsgamer.hscore.addon.object;
 import me.hsgamer.hscore.addon.exception.RequiredAddonPathException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.simpleyaml.configuration.file.YamlConfiguration;
+import org.simpleyaml.configuration.file.FileConfiguration;
 
 /**
  * A path to get value from addon.yml
@@ -63,7 +63,7 @@ public abstract class AddonPath<T> {
    */
   @Nullable
   public final T get(@NotNull final Addon addon) {
-    YamlConfiguration configuration = addon.getDescription().getConfiguration();
+    FileConfiguration configuration = addon.getDescription().getConfiguration();
     if (this.required && !configuration.isSet(this.path)) {
       throw new RequiredAddonPathException(
         this.path + " is not found in the addon '" + addon.getDescription().getName() + "'");
