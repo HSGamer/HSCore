@@ -16,7 +16,7 @@ public abstract class PluginAddon extends Addon {
    * @return the plugin
    */
   public final JavaPlugin getPlugin() {
-    AddonManager addonManager = getAddonManager();
+    final AddonManager addonManager = this.getAddonManager();
     if (!(addonManager instanceof PluginAddonManager)) {
       throw new IllegalStateException("You are calling the method on a non-Bukkit project");
     }
@@ -29,6 +29,6 @@ public abstract class PluginAddon extends Addon {
    * @return the server
    */
   public final Server getServer() {
-    return getPlugin().getServer();
+    return this.getPlugin().getServer();
   }
 }

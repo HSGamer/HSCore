@@ -1,5 +1,11 @@
 package me.hsgamer.hscore.addon;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.jar.JarFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import me.hsgamer.hscore.addon.object.Addon;
 import me.hsgamer.hscore.addon.object.AddonClassLoader;
 import me.hsgamer.hscore.addon.object.AddonDescription;
@@ -9,30 +15,40 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.jar.JarFile;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
- * An Addon manager
+ * A class that manages all addons in it
  */
 public abstract class AddonManager {
 
+  /**
+   * The addon map keyed addon's id, valued addon itself
+   */
   private final Map<String, Addon> addons = new LinkedHashMap<>();
+
+  /**
+   * The addon map keyed addon itself, valued addon's class loader
+   */
   private final Map<Addon, AddonClassLoader> loaderMap = new HashMap<>();
+
+  /**
+   * The file that contains all addons
+   */
+  @NotNull
   private final File addonsDir;
+
+  /**
+   * The logger to use in all addons
+   */
+  @NotNull
   private final Logger logger;
 
   /**
    * Create a new addon manager
    *
    * @param addonsDir the directory to store addon files
-   * @param logger    the logger
+   * @param logger    the logger to use in every addon
    */
-  public AddonManager(@NotNull final File addonsDir, @NotNull final Logger logger) {
+  protected AddonManager(@NotNull final File addonsDir, @NotNull final Logger logger) {
     this.logger = logger;
     this.addonsDir = addonsDir;
     if (!addonsDir.exists()) {
@@ -47,69 +63,62 @@ public abstract class AddonManager {
    */
   @NotNull
   public final File getAddonsDir() {
-    return addonsDir;
+    return this.addonsDir;
   }
 
   /**
    * Load all addons from the addon directory. Also call {@link Addon#onLoad()}
    */
   public final void loadAddons() {
-    Map<String, Addon> addonMap = new HashMap<>();
-
+    final Map<String, Addon> addonMap = new HashMap<>();
     // Load the addon files
-    Arrays.stream(Objects.requireNonNull(addonsDir.listFiles()))
+    Arrays.stream(Objects.requireNonNull(this.addonsDir.listFiles()))
       .filter(file -> file.isFile() && file.getName().endsWith(".jar"))
       .forEach(file -> {
-        try (JarFile jar = new JarFile(file)) {
+        try (final JarFile jar = new JarFile(file)) {
           // Get addon description
-          AddonDescription addonDescription = AddonDescription.get(jar, getAddonConfigFileName(), getConfigProvider());
+          final AddonDescription addonDescription = AddonDescription.get(jar, this.getAddonConfigFileName(),
+            this.getConfigProvider());
           if (addonMap.containsKey(addonDescription.getName())) {
-            logger.warning("Duplicated addon " + addonDescription.getName());
+            this.logger.warning("Duplicated addon " + addonDescription.getName());
             return;
           }
-
           // Try to load the addon
-          AddonClassLoader loader = new AddonClassLoader(this, file, addonDescription,
-            getClass().getClassLoader());
-          Addon addon = loader.getAddon();
-
-          if (onAddonLoading(addon)) {
+          final AddonClassLoader loader = new AddonClassLoader(this, file, addonDescription,
+            this.getClass().getClassLoader());
+          final Addon addon = loader.getAddon();
+          if (this.onAddonLoading(addon)) {
             addonMap.put(addonDescription.getName(), loader.getAddon());
-            loaderMap.put(addon, loader);
+            this.loaderMap.put(addon, loader);
           } else {
             loader.close();
           }
-        } catch (Exception e) {
-          logger.log(Level.WARNING, "Error when loading jar", e);
+        } catch (final Exception e) {
+          this.logger.log(Level.WARNING, "Error when loading jar", e);
         }
       });
-
     // Filter and sort the addons
-    Map<String, Addon> sortedAddonMap = sortAndFilter(addonMap);
-
+    final Map<String, Addon> sortedAddonMap = this.sortAndFilter(addonMap);
     // Close AddonClassLoader of remaining addons
     addonMap.entrySet().stream()
       .filter(entry -> !sortedAddonMap.containsKey(entry.getKey()))
-      .forEach(entry -> closeClassLoader(entry.getValue()));
-
+      .forEach(entry -> this.closeClassLoader(entry.getValue()));
     // Load the addons
-    Map<String, Addon> finalAddons = new LinkedHashMap<>();
+    final Map<String, Addon> finalAddons = new LinkedHashMap<>();
     sortedAddonMap.forEach((key, addon) -> {
       try {
         if (!addon.onLoad()) {
-          logger.warning("Failed to load " + key + " " + addon.getDescription().getVersion());
-          closeClassLoader(addon);
+          this.logger.warning("Failed to load " + key + " " + addon.getDescription().getVersion());
+          this.closeClassLoader(addon);
           return;
         }
-
-        logger.info("Loaded " + key + " " + addon.getDescription().getVersion());
+        this.logger.info("Loaded " + key + " " + addon.getDescription().getVersion());
         finalAddons.put(key, addon);
-      } catch (Throwable t) {
-        logger.log(Level.WARNING, t, () -> "Error when loading " + key);
-        closeClassLoader(addon);
+      } catch (final Throwable t) {
+        this.logger.log(Level.WARNING, t, () -> "Error when loading " + key);
+        this.closeClassLoader(addon);
       }
     });
-
     // Store the final addons map
     this.addons.putAll(finalAddons);
   }
@@ -119,17 +128,18 @@ public abstract class AddonManager {
    *
    * @param name                the addon name
    * @param closeLoaderOnFailed close the class loader if failed
+   *
    * @return whether it's enabled successfully
    */
   public final boolean enableAddon(@NotNull final String name, final boolean closeLoaderOnFailed) {
-    Addon addon = this.addons.get(name);
+    final Addon addon = this.addons.get(name);
     try {
       addon.onEnable();
       return true;
-    } catch (Throwable t) {
-      logger.log(Level.WARNING, t, () -> "Error when enabling " + name);
+    } catch (final Throwable t) {
+      this.logger.log(Level.WARNING, t, () -> "Error when enabling " + name);
       if (closeLoaderOnFailed) {
-        closeClassLoader(addon);
+        this.closeClassLoader(addon);
       }
       return false;
     }
@@ -140,17 +150,18 @@ public abstract class AddonManager {
    *
    * @param name                the addon name
    * @param closeLoaderOnFailed close the class loader if failed
+   *
    * @return whether it's disabled successfully
    */
   public final boolean disableAddon(@NotNull final String name, final boolean closeLoaderOnFailed) {
-    Addon addon = this.addons.get(name);
+    final Addon addon = this.addons.get(name);
     try {
       addon.onDisable();
       return true;
-    } catch (Throwable t) {
-      logger.log(Level.WARNING, t, () -> "Error when disabling " + name);
+    } catch (final Throwable t) {
+      this.logger.log(Level.WARNING, t, () -> "Error when disabling " + name);
       if (closeLoaderOnFailed) {
-        closeClassLoader(addon);
+        this.closeClassLoader(addon);
       }
       return false;
     }
@@ -160,12 +171,13 @@ public abstract class AddonManager {
    * Enable all addons from the addon directory
    */
   public final void enableAddons() {
-    List<String> failed = new ArrayList<>();
+    final List<String> failed = new ArrayList<>();
     this.addons.keySet().forEach(name -> {
-      if (!enableAddon(name, true)) {
+      if (!this.enableAddon(name, true)) {
         failed.add(name);
       } else {
-        logger.log(Level.INFO, "Enabled {0}", String.join(" ", name, this.addons.get(name).getDescription().getVersion()));
+        this.logger.log(Level.INFO, "Enabled {0}",
+          String.join(" ", name, this.addons.get(name).getDescription().getVersion()));
       }
     });
     failed.forEach(this.addons::remove);
@@ -190,35 +202,20 @@ public abstract class AddonManager {
    */
   public final void disableAddons() {
     CommonUtils.reverse(this.addons.keySet()).forEach(name -> {
-      if (disableAddon(name, false)) {
-        logger.log(Level.INFO, "Disabled {0}", String.join(" ", name, this.addons.get(name).getDescription().getVersion()));
+      if (this.disableAddon(name, false)) {
+        this.logger.log(Level.INFO, "Disabled {0}",
+          String.join(" ", name, this.addons.get(name).getDescription().getVersion()));
       }
     });
-
     this.addons.values().forEach(this::closeClassLoader);
     this.addons.clear();
-  }
-
-  /**
-   * Close the class loader of the addon
-   *
-   * @param addon the addon
-   */
-  private void closeClassLoader(@NotNull final Addon addon) {
-    if (loaderMap.containsKey(addon)) {
-      AddonClassLoader loader = loaderMap.remove(addon);
-      try {
-        loader.close();
-      } catch (IOException e) {
-        logger.log(Level.WARNING, "Error when closing ClassLoader", e);
-      }
-    }
   }
 
   /**
    * Get the enabled addon
    *
    * @param name the name of the addon
+   *
    * @return the addon, or null if it's not found
    */
   @Nullable
@@ -230,6 +227,7 @@ public abstract class AddonManager {
    * Check if the addon is loaded
    *
    * @param name the name of the addon
+   *
    * @return whether it's loaded
    */
   public final boolean isAddonLoaded(@NotNull final String name) {
@@ -247,24 +245,6 @@ public abstract class AddonManager {
   }
 
   /**
-   * Filter and sort the order of the addons
-   *
-   * @param original the original map
-   * @return the sorted and filtered map
-   */
-  @NotNull
-  protected abstract Map<String, Addon> sortAndFilter(@NotNull final Map<String, Addon> original);
-
-  /**
-   * Get the addon config provider
-   *
-   * @param <T> the {@link FileConfiguration} type
-   * @return the provider
-   */
-  @NotNull
-  protected abstract <T extends FileConfiguration> ConfigProvider<T> getConfigProvider();
-
-  /**
    * Get the name of the addon config file
    *
    * @return the file name
@@ -273,29 +253,20 @@ public abstract class AddonManager {
   public abstract String getAddonConfigFileName();
 
   /**
-   * Called when the addon is on loading
-   *
-   * @param addon the loading addon
-   * @return whether the addon is properly loaded
-   */
-  protected boolean onAddonLoading(@NotNull final Addon addon) {
-    return true;
-  }
-
-  /**
    * Find a class for an addon
    *
    * @param addon the calling addon
    * @param name  the class name
+   *
    * @return the class, or null if it's not found
    */
   @Nullable
-  public Class<?> findClass(@NotNull final Addon addon, @NotNull final String name) {
-    for (AddonClassLoader loader : loaderMap.values()) {
-      if (loaderMap.containsKey(addon)) {
+  public final Class<?> findClass(@NotNull final Addon addon, @NotNull final String name) {
+    for (final AddonClassLoader loader : this.loaderMap.values()) {
+      if (this.loaderMap.containsKey(addon)) {
         continue;
       }
-      Class<?> clazz = loader.findClass(name, false);
+      final Class<?> clazz = loader.findClass(name, false);
       if (clazz != null) {
         return clazz;
       }
@@ -311,5 +282,52 @@ public abstract class AddonManager {
   @NotNull
   public final Logger getLogger() {
     return this.logger;
+  }
+
+  /**
+   * Filter and sort the order of the addons
+   *
+   * @param original the original map
+   *
+   * @return the sorted and filtered map
+   */
+  @NotNull
+  protected abstract Map<String, Addon> sortAndFilter(@NotNull final Map<String, Addon> original);
+
+  /**
+   * Get the addon config provider
+   *
+   * @param <T> the {@link FileConfiguration} type
+   *
+   * @return the provider
+   */
+  @NotNull
+  protected abstract <T extends FileConfiguration> ConfigProvider<T> getConfigProvider();
+
+  /**
+   * Called when the addon is on loading
+   *
+   * @param addon the loading addon
+   *
+   * @return whether the addon is properly loaded
+   */
+  protected boolean onAddonLoading(@NotNull final Addon addon) {
+    return true;
+  }
+
+  /**
+   * Close the class loader of the addon
+   *
+   * @param addon the addon
+   */
+  private void closeClassLoader(@NotNull final Addon addon) {
+    if (this.loaderMap.containsKey(addon)) {
+      final AddonClassLoader loader = this.loaderMap.remove(addon);
+      try {
+        loader.close();
+      } catch (final IOException e) {
+        this.logger.log(Level.WARNING, "Error when closing ClassLoader", e);
+      }
+    }
   }
 }

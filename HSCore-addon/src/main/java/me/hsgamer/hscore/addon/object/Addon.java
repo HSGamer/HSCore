@@ -1,12 +1,5 @@
 package me.hsgamer.hscore.addon.object;
 
-import me.hsgamer.hscore.addon.AddonManager;
-import me.hsgamer.hscore.common.Validate;
-import me.hsgamer.hscore.config.Config;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.simpleyaml.configuration.file.FileConfiguration;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,28 +7,38 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import me.hsgamer.hscore.addon.AddonManager;
+import me.hsgamer.hscore.common.Validate;
+import me.hsgamer.hscore.config.Config;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.simpleyaml.configuration.file.FileConfiguration;
 
 /**
  * The main class of the addon
  */
 public abstract class Addon {
 
+  /**
+   * The addon's class loader
+   */
   private final AddonClassLoader addonClassLoader;
-  private Config addonConfig;
-  private File dataFolder;
-
-  public Addon() {
-    this.addonClassLoader = (AddonClassLoader) this.getClass().getClassLoader();
-  }
 
   /**
-   * Get the class loader
-   *
-   * @return the class loader
+   * The addon's config
    */
-  @NotNull
-  protected final AddonClassLoader getClassLoader() {
-    return this.addonClassLoader;
+  private Config addonConfig;
+
+  /**
+   * The addon's data folder
+   */
+  private File dataFolder;
+
+  /**
+   * Create an addon
+   */
+  public Addon() {
+    this.addonClassLoader = (AddonClassLoader) this.getClass().getClassLoader();
   }
 
   /**
@@ -86,16 +89,10 @@ public abstract class Addon {
   }
 
   /**
-   * Create the config
-   */
-  @NotNull
-  protected abstract Config createConfig();
-
-  /**
    * Setup the config
    */
   public final void setupConfig() {
-    this.addonConfig = createConfig();
+    this.addonConfig = this.createConfig();
   }
 
   /**
@@ -105,7 +102,7 @@ public abstract class Addon {
    */
   @NotNull
   public final FileConfiguration getConfig() {
-    return getAddonConfig().getConfig();
+    return this.getAddonConfig().getConfig();
   }
 
   /**
@@ -116,7 +113,7 @@ public abstract class Addon {
   @NotNull
   public final Config getAddonConfig() {
     if (this.addonConfig == null) {
-      setupConfig();
+      this.setupConfig();
     }
     return this.addonConfig;
   }
@@ -125,14 +122,14 @@ public abstract class Addon {
    * Reload the config
    */
   public final void reloadConfig() {
-    getAddonConfig().reloadConfig();
+    this.getAddonConfig().reloadConfig();
   }
 
   /**
    * Save the config
    */
   public final void saveConfig() {
-    getAddonConfig().saveConfig();
+    this.getAddonConfig().saveConfig();
   }
 
   /**
@@ -153,7 +150,7 @@ public abstract class Addon {
   @NotNull
   public final File getDataFolder() {
     if (this.dataFolder == null) {
-      this.dataFolder = new File(getAddonManager().getAddonsDir(), getDescription().getName());
+      this.dataFolder = new File(this.getAddonManager().getAddonsDir(), this.getDescription().getName());
     }
     if (!this.dataFolder.exists()) {
       this.dataFolder.mkdirs();
@@ -167,31 +164,30 @@ public abstract class Addon {
    * @param path    path to resource
    * @param replace whether it replaces the existed one
    */
-  public final void saveResource(@NotNull String path, final boolean replace) {
+  public final void saveResource(@NotNull final String path, final boolean replace) {
     if (Validate.isNullOrEmpty(path)) {
       throw new IllegalArgumentException("Path cannot be null or empty");
     }
-
-    path = path.replace('\\', '/');
-    try (JarFile jar = new JarFile(this.addonClassLoader.getFile())) {
-      JarEntry jarConfig = jar.getJarEntry(path);
+    final String newPath = path.replace('\\', '/');
+    try (final JarFile jar = new JarFile(this.addonClassLoader.getFile())) {
+      final JarEntry jarConfig = jar.getJarEntry(newPath);
       if (jarConfig != null) {
-        try (InputStream in = jar.getInputStream(jarConfig)) {
+        try (final InputStream in = jar.getInputStream(jarConfig)) {
           if (in == null) {
             throw new IllegalArgumentException(
-              "The embedded resource '" + path + "' cannot be found");
+              "The embedded resource '" + newPath + "' cannot be found");
           }
-          File out = new File(getDataFolder(), path);
+          final File out = new File(this.getDataFolder(), newPath);
           out.getParentFile().mkdirs();
           if (!out.exists() || replace) {
             Files.copy(in, out.toPath(), StandardCopyOption.REPLACE_EXISTING);
           }
         }
       } else {
-        throw new IllegalArgumentException("The embedded resource '" + path + "' cannot be found");
+        throw new IllegalArgumentException("The embedded resource '" + newPath + "' cannot be found");
       }
-    } catch (IOException e) {
-      getAddonManager().getLogger().warning("Could not load from jar file. " + path);
+    } catch (final IOException e) {
+      this.getAddonManager().getLogger().warning("Could not load from jar file. " + newPath);
     }
   }
 
@@ -199,25 +195,41 @@ public abstract class Addon {
    * Get the resource from the addon's jar
    *
    * @param path path to resource
+   *
    * @return the InputStream of the resource, or null if it's not found
    */
   @Nullable
-  public final InputStream getResource(@NotNull String path) {
+  public final InputStream getResource(@NotNull final String path) {
     if (Validate.isNullOrEmpty(path)) {
       throw new IllegalArgumentException("Path cannot be null or empty");
     }
-
-    path = path.replace('\\', '/');
-    try (JarFile jar = new JarFile(this.addonClassLoader.getFile())) {
-      JarEntry jarConfig = jar.getJarEntry(path);
+    final String newPath = path.replace('\\', '/');
+    try (final JarFile jar = new JarFile(this.addonClassLoader.getFile())) {
+      final JarEntry jarConfig = jar.getJarEntry(newPath);
       if (jarConfig != null) {
-        try (InputStream in = jar.getInputStream(jarConfig)) {
+        try (final InputStream in = jar.getInputStream(jarConfig)) {
           return in;
         }
       }
-    } catch (IOException e) {
-      getAddonManager().getLogger().warning("Could not load from jar file. " + path);
+    } catch (final IOException e) {
+      this.getAddonManager().getLogger().warning("Could not load from jar file. " + newPath);
     }
     return null;
   }
+
+  /**
+   * Get the class loader
+   *
+   * @return the class loader
+   */
+  @NotNull
+  protected final AddonClassLoader getClassLoader() {
+    return this.addonClassLoader;
+  }
+
+  /**
+   * Create the config
+   */
+  @NotNull
+  protected abstract Config createConfig();
 }
