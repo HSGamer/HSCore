@@ -21,7 +21,7 @@ public final class Paths {
    * @param <T>      path's value type
    * @return the commentable path
    */
-  public static <T> ConfigPath<T> commented(@NotNull ConfigPath<T> path, @NotNull String... comments) {
+  public static <T> CommentablePath<T> commented(@NotNull ConfigPath<T> path, @NotNull String... comments) {
     return new CommentablePath<>(path, comments);
   }
 
