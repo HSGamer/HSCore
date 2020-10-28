@@ -61,14 +61,11 @@ public class CommentablePath<T> implements ConfigPath<T> {
       return;
     }
 
-    for (CommentType commentType : CommentType.values()) {
-      defaultCommentMap.compute(commentType, (type, s) -> {
-        String comment = ((Commentable) config).getComment(getPath(), type);
-        comment = comment != null ? comment : s;
-        ((Commentable) config).setComment(getPath(), comment, type);
-        return comment;
-      });
-    }
+    defaultCommentMap.forEach((type, s) -> {
+      if (((Commentable) config).getComment(getPath(), type) == null) {
+        ((Commentable) config).setComment(getPath(), s, type);
+      }
+    });
   }
 
   /**
