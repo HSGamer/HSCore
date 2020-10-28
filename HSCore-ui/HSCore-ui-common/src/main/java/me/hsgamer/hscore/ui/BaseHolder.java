@@ -4,13 +4,17 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public abstract class BaseHolder implements Holder {
-  private final Map<Class<?>, List<Consumer>> classListMap = new HashMap<>();
+  private final Map<Class<?>, List<Consumer<Object>>> classListMap = new HashMap<>();
 
   @Override
   public <T> void addEventConsumer(Class<T> eventClass, Consumer<T> eventConsumer) {
     classListMap
       .computeIfAbsent(eventClass, clazz -> new ArrayList<>())
-      .add(eventConsumer);
+      .add(o -> {
+        if (eventClass.isInstance(o)) {
+          eventConsumer.accept((T) o);
+        }
+      });
   }
 
   @Override
