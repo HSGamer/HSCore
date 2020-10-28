@@ -16,6 +16,7 @@ public interface Driver {
    * Get the JDBC url from the config
    *
    * @param setting the setting
+   *
    * @return the JDBC url
    */
   String convertURL(Setting setting);

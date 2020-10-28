@@ -1,9 +1,10 @@
 package me.hsgamer.hscore.bukkit.addon;
 
-import java.io.File;
 import me.hsgamer.hscore.addon.AddonManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
 
 /**
  * Addon manager for Bukkit

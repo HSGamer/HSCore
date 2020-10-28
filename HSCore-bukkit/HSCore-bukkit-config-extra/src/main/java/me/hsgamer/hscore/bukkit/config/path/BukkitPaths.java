@@ -22,6 +22,7 @@ public final class BukkitPaths {
    *
    * @param path the path to the value
    * @param def  the default value if it's not found
+   *
    * @return the config path
    */
   public static AttributeModifierConfigPath attributeModifierPath(String path, AttributeModifier def) {
@@ -33,6 +34,7 @@ public final class BukkitPaths {
    *
    * @param path the path to the value
    * @param def  the default value if it's not found
+   *
    * @return the config path
    */
   public static ColorConfigPath colorPath(String path, Color def) {
@@ -44,6 +46,7 @@ public final class BukkitPaths {
    *
    * @param path the path to the value
    * @param def  the default value if it's not found
+   *
    * @return the config path
    */
   public static FireworkEffectConfigPath fireworkEffectPath(String path, FireworkEffect def) {
@@ -55,6 +58,7 @@ public final class BukkitPaths {
    *
    * @param path the path to the value
    * @param def  the default value if it's not found
+   *
    * @return the config path
    */
   public static ItemStackConfigPath itemStackPath(String path, ItemStack def) {
@@ -66,6 +70,7 @@ public final class BukkitPaths {
    *
    * @param path the path to the value
    * @param def  the default value if it's not found
+   *
    * @return the config path
    */
   public static LocationConfigPath locationPath(String path, Location def) {
@@ -77,6 +82,7 @@ public final class BukkitPaths {
    *
    * @param path the path to the value
    * @param def  the default value if it's not found
+   *
    * @return the config path
    */
   public static PatternConfigPath patternPath(String path, Pattern def) {
@@ -88,6 +94,7 @@ public final class BukkitPaths {
    *
    * @param path the path to the value
    * @param def  the default value if it's not found
+   *
    * @return the config path
    */
   public static PotionEffectConfigPath potionEffectPath(String path, PotionEffect def) {
@@ -99,6 +106,7 @@ public final class BukkitPaths {
    *
    * @param path the path to the value
    * @param def  the default value if it's not found
+   *
    * @return the config path
    */
   public static VectorConfigPath vectorPath(String path, Vector def) {

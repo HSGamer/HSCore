@@ -18,6 +18,7 @@ public class CommonUtils {
    *
    * @param value the object
    * @param trim  should we trim the strings
+   *
    * @return the string list
    */
   @NotNull
@@ -39,6 +40,7 @@ public class CommonUtils {
    *
    * @param original the original collection
    * @param <T>      the type of the elements
+   *
    * @return the reversed list
    */
   @NotNull

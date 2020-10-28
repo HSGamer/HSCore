@@ -44,6 +44,7 @@ public class FunctionRequestManager<T, V> {
    *
    * @param uuid the unique id
    * @param arg  the argument
+   *
    * @return the return value from the function
    */
   @Nullable
@@ -67,6 +68,7 @@ public class FunctionRequestManager<T, V> {
    * Check if a unique id is in the request cache
    *
    * @param uuid the unique id
+   *
    * @return whether it's in the request cache
    */
   public boolean contains(@NotNull UUID uuid) {

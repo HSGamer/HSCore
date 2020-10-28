@@ -38,6 +38,7 @@ public final class ClickTypeUtils {
    *
    * @param event   the event
    * @param useSlot will we also the slot
+   *
    * @return the click type
    */
   @NotNull

@@ -21,6 +21,7 @@ public abstract class SubCommandManager {
    * @param sender the sender
    * @param label  the label
    * @param args   the arguments
+   *
    * @return whether the command runs successfully
    */
   public final boolean onCommand(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args) {
@@ -100,6 +101,7 @@ public abstract class SubCommandManager {
    * @param sender the sender
    * @param label  the label
    * @param args   the arguments
+   *
    * @return the suggested strings
    */
   public final List<String> onTabComplete(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args) {

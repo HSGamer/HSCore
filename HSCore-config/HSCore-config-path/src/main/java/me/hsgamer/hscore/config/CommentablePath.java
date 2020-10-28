@@ -93,6 +93,7 @@ public class CommentablePath<T> implements ConfigPath<T> {
    * Get the comment
    *
    * @param commentType the comment type
+   *
    * @return the comment
    */
   @Nullable

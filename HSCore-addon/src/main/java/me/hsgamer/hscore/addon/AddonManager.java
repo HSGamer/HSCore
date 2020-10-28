@@ -1,11 +1,5 @@
 package me.hsgamer.hscore.addon;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.jar.JarFile;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import me.hsgamer.hscore.addon.object.Addon;
 import me.hsgamer.hscore.addon.object.AddonClassLoader;
 import me.hsgamer.hscore.addon.object.AddonDescription;
@@ -14,6 +8,13 @@ import me.hsgamer.hscore.config.ConfigProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.simpleyaml.configuration.file.FileConfiguration;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.jar.JarFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A class that manages all addons in it

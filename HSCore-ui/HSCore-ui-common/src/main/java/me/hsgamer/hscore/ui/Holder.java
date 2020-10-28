@@ -12,6 +12,7 @@ public interface Holder {
    * Create a display with the unique id
    *
    * @param uuid the unique id
+   *
    * @return the display
    */
   Display createDisplay(UUID uuid);
@@ -20,6 +21,7 @@ public interface Holder {
    * Get the display for the unique id
    *
    * @param uuid the unique id
+   *
    * @return the display
    */
   Display getDisplay(UUID uuid);

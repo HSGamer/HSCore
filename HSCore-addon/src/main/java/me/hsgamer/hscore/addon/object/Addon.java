@@ -1,5 +1,12 @@
 package me.hsgamer.hscore.addon.object;
 
+import me.hsgamer.hscore.addon.AddonManager;
+import me.hsgamer.hscore.common.Validate;
+import me.hsgamer.hscore.config.Config;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.simpleyaml.configuration.file.FileConfiguration;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,12 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import me.hsgamer.hscore.addon.AddonManager;
-import me.hsgamer.hscore.common.Validate;
-import me.hsgamer.hscore.config.Config;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.simpleyaml.configuration.file.FileConfiguration;
 
 /**
  * The main class of the addon

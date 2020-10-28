@@ -25,6 +25,7 @@ public abstract class StringComparator extends AbstractLazyFunction {
    *
    * @param s1 the 1st string
    * @param s2 the 2nd string
+   *
    * @return the result
    */
   public abstract boolean compare(@NotNull String s1, @NotNull String s2);

@@ -23,6 +23,7 @@ public final class BukkitUtils {
    * Get ping
    *
    * @param player the player
+   *
    * @return the ping of the player
    */
   public static int getPing(@NotNull final Player player) {
@@ -65,6 +66,7 @@ public final class BukkitUtils {
    * Get missing plugins from a list of given plugins
    *
    * @param depends the list of plugins
+   *
    * @return the missing plugins
    */
   @NotNull

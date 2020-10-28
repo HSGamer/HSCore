@@ -17,6 +17,7 @@ public final class Validate {
    * Convert to number
    *
    * @param input the string
+   *
    * @return the number
    */
   @NotNull
@@ -32,6 +33,7 @@ public final class Validate {
    * Check if it's a positive number
    *
    * @param input the string
+   *
    * @return whether it's positive
    */
   public static boolean isValidPositiveNumber(@NotNull String input) {
@@ -43,6 +45,7 @@ public final class Validate {
    * Check if the string is a valid number
    *
    * @param input the string
+   *
    * @return whether it's valid
    */
   public static boolean isValidInteger(@NotNull String input) {
@@ -53,6 +56,7 @@ public final class Validate {
    * Check if the class is loaded
    *
    * @param className the class path
+   *
    * @return whether it's loaded
    */
   public static boolean isClassLoaded(@NotNull String className) {
@@ -70,6 +74,7 @@ public final class Validate {
    * @param className  the class path
    * @param methodName the method's name
    * @param params     the type of parameters
+   *
    * @return whether it's loaded
    */
   public static boolean isMethodLoaded(@NotNull String className, @NotNull String methodName, @NotNull Class<?>... params) {
@@ -86,6 +91,7 @@ public final class Validate {
    *
    * @param className the class path
    * @param params    the type of parameters
+   *
    * @return whether it's loaded
    */
   public static boolean isConstructorLoaded(@NotNull String className, @NotNull Class<?>... params) {
@@ -101,6 +107,7 @@ public final class Validate {
    * Check if it's null or empty
    *
    * @param list the list
+   *
    * @return whether it's null or empty
    */
   public static boolean isNullOrEmpty(@Nullable Collection<?> list) {
@@ -111,6 +118,7 @@ public final class Validate {
    * Check if it's null or empty
    *
    * @param string the string
+   *
    * @return whether it's null or empty
    */
   public static boolean isNullOrEmpty(@Nullable String string) {

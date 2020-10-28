@@ -35,6 +35,7 @@ public class CommandBuilder {
    * Create a new command builder
    *
    * @param name the command name
+   *
    * @return the command builder
    */
   @NotNull
@@ -84,6 +85,7 @@ public class CommandBuilder {
    * Set the description
    *
    * @param description the description
+   *
    * @return the command builder
    */
   @NotNull
@@ -96,6 +98,7 @@ public class CommandBuilder {
    * Set the usage
    *
    * @param usage the usage
+   *
    * @return the command builder
    */
   @NotNull
@@ -108,6 +111,7 @@ public class CommandBuilder {
    * Set the command executor
    *
    * @param executor the executor
+   *
    * @return the command builder
    */
   @NotNull
@@ -120,6 +124,7 @@ public class CommandBuilder {
    * Set the tab completer
    *
    * @param tabCompleter the tab completer
+   *
    * @return the command builder
    */
   @NotNull
@@ -132,6 +137,7 @@ public class CommandBuilder {
    * Set the permission of the command
    *
    * @param permission the permission
+   *
    * @return the command builder
    */
   @NotNull
@@ -144,6 +150,7 @@ public class CommandBuilder {
    * Set the message when the sender doesn't have the permission
    *
    * @param permissionMessage the message
+   *
    * @return the command builder
    */
   @NotNull
@@ -156,6 +163,7 @@ public class CommandBuilder {
    * Set the message when the sender is not a player
    *
    * @param playerMessage the message
+   *
    * @return the command builder
    */
   @NotNull

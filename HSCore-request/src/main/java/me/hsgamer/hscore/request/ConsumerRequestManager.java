@@ -62,6 +62,7 @@ public class ConsumerRequestManager<T> {
    * Check if a unique id is in the request cache
    *
    * @param uuid the unique id
+   *
    * @return whether it's in the request cache
    */
   public boolean contains(@NotNull UUID uuid) {
