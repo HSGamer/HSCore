@@ -14,7 +14,7 @@ import java.util.EnumMap;
  */
 public class CommentablePath<T> implements ConfigPath<T> {
   private final ConfigPath<T> originalPath;
-  private final EnumMap<CommentType, String> commentMap = new EnumMap<>(CommentType.class);
+  private final EnumMap<CommentType, String> defaultCommentMap = new EnumMap<>(CommentType.class);
 
   /**
    * Create a config path
@@ -26,11 +26,11 @@ public class CommentablePath<T> implements ConfigPath<T> {
     this.originalPath = originalPath;
 
     if (defaultComments.length > 1) {
-      commentMap.put(CommentType.BLOCK, defaultComments[0]);
+      defaultCommentMap.put(CommentType.BLOCK, defaultComments[0]);
     }
 
     if (defaultComments.length > 2) {
-      commentMap.put(CommentType.SIDE, defaultComments[1]);
+      defaultCommentMap.put(CommentType.SIDE, defaultComments[1]);
     }
   }
 
@@ -62,9 +62,9 @@ public class CommentablePath<T> implements ConfigPath<T> {
     }
 
     for (CommentType commentType : CommentType.values()) {
-      commentMap.compute(commentType, (type, s) -> {
+      defaultCommentMap.compute(commentType, (type, s) -> {
         String comment = ((Commentable) config).getComment(getPath(), type);
-        comment = comment == null ? s : comment;
+        comment = comment != null ? comment : s;
         ((Commentable) config).setComment(getPath(), comment, type);
         return comment;
       });
@@ -97,7 +97,13 @@ public class CommentablePath<T> implements ConfigPath<T> {
    * @return the comment
    */
   public String getComment(@NotNull final CommentType commentType) {
-    return commentMap.get(commentType);
+    Config config = getConfig();
+    if (!(config instanceof Commentable)) {
+      return null;
+    }
+
+    String comment = ((Commentable) config).getComment(getPath(), commentType);
+    return comment != null ? comment : defaultCommentMap.get(commentType);
   }
 
   /**
@@ -107,8 +113,6 @@ public class CommentablePath<T> implements ConfigPath<T> {
    * @param comment     the comment
    */
   public void setComment(@NotNull final CommentType commentType, @Nullable final String comment) {
-    commentMap.put(commentType, comment);
-
     Config config = getConfig();
     if (!(config instanceof Commentable)) {
       return;
