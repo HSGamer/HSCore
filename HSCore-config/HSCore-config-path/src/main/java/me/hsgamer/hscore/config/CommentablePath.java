@@ -97,14 +97,11 @@ public class CommentablePath<T> implements ConfigPath<T> {
    */
   @Nullable
   public String getComment(@NotNull final CommentType commentType) {
-    return Optional.ofNullable(getConfig()).map(config -> {
-      FileConfiguration configuration = config.getConfig();
-      if (!(configuration instanceof Commentable)) {
-        return defaultCommentMap.get(commentType);
-      }
-      String comment = ((Commentable) configuration).getComment(getPath(), commentType);
-      return comment != null ? comment : defaultCommentMap.get(commentType);
-    }).orElse("");
+    return Optional.ofNullable(getConfig())
+      .map(Config::getConfig)
+      .filter(config -> config instanceof Commentable)
+      .map(config -> ((Commentable) config).getComment(getPath(), commentType))
+      .orElse(defaultCommentMap.get(commentType));
   }
 
   /**
@@ -114,12 +111,9 @@ public class CommentablePath<T> implements ConfigPath<T> {
    * @param comment     the comment
    */
   public void setComment(@NotNull final CommentType commentType, @Nullable final String comment) {
-    Optional.ofNullable(getConfig()).ifPresent(config -> {
-      FileConfiguration configuration = config.getConfig();
-      if (!(configuration instanceof Commentable)) {
-        return;
-      }
-      ((Commentable) configuration).setComment(getPath(), comment, commentType);
-    });
+    Optional.ofNullable(getConfig())
+      .map(Config::getConfig)
+      .filter(config -> config instanceof Commentable)
+      .ifPresent(config -> ((Commentable) config).setComment(getPath(), comment, commentType));
   }
 }
