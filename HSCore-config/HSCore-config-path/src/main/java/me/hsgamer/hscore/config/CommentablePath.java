@@ -7,6 +7,7 @@ import org.simpleyaml.configuration.comments.Commentable;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.EnumMap;
+import java.util.Optional;
 
 /**
  * A commentable config path
@@ -96,16 +97,14 @@ public class CommentablePath<T> implements ConfigPath<T> {
    */
   @Nullable
   public String getComment(@NotNull final CommentType commentType) {
-    Config config = getConfig();
-    if (config == null) {
-      throw new IllegalStateException("The config path has not been loaded!");
-    }
-    FileConfiguration configuration = config.getConfig();
-    if (!(configuration instanceof Commentable)) {
-      return defaultCommentMap.get(commentType);
-    }
-    String comment = ((Commentable) configuration).getComment(getPath(), commentType);
-    return comment != null ? comment : defaultCommentMap.get(commentType);
+    return Optional.ofNullable(getConfig()).map(config -> {
+      FileConfiguration configuration = config.getConfig();
+      if (!(configuration instanceof Commentable)) {
+        return defaultCommentMap.get(commentType);
+      }
+      String comment = ((Commentable) configuration).getComment(getPath(), commentType);
+      return comment != null ? comment : defaultCommentMap.get(commentType);
+    }).orElse("");
   }
 
   /**
@@ -115,14 +114,12 @@ public class CommentablePath<T> implements ConfigPath<T> {
    * @param comment     the comment
    */
   public void setComment(@NotNull final CommentType commentType, @Nullable final String comment) {
-    Config config = getConfig();
-    if (config == null) {
-      return;
-    }
-    FileConfiguration configuration = config.getConfig();
-    if (!(configuration instanceof Commentable)) {
-      return;
-    }
-    ((Commentable) configuration).setComment(getPath(), comment, commentType);
+    Optional.ofNullable(getConfig()).ifPresent(config -> {
+      FileConfiguration configuration = config.getConfig();
+      if (!(configuration instanceof Commentable)) {
+        return;
+      }
+      ((Commentable) configuration).setComment(getPath(), comment, commentType);
+    });
   }
 }
