@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.simpleyaml.configuration.comments.CommentType;
 import org.simpleyaml.configuration.comments.Commentable;
+import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.EnumMap;
 
@@ -57,13 +58,13 @@ public class CommentablePath<T> implements ConfigPath<T> {
   @Override
   public void setConfig(@NotNull final Config config) {
     originalPath.setConfig(config);
-    if (!(config instanceof Commentable)) {
+    FileConfiguration configuration = config.getConfig();
+    if (!(configuration instanceof Commentable)) {
       return;
     }
-
     defaultCommentMap.forEach((type, s) -> {
-      if (((Commentable) config).getComment(getPath(), type) == null) {
-        ((Commentable) config).setComment(getPath(), s, type);
+      if (((Commentable) configuration).getComment(getPath(), type) == null) {
+        ((Commentable) configuration).setComment(getPath(), s, type);
       }
     });
   }
@@ -96,11 +97,14 @@ public class CommentablePath<T> implements ConfigPath<T> {
   @Nullable
   public String getComment(@NotNull final CommentType commentType) {
     Config config = getConfig();
-    if (!(config instanceof Commentable)) {
+    if (config == null) {
+      throw new IllegalStateException("The config path has not been loaded!");
+    }
+    FileConfiguration configuration = config.getConfig();
+    if (!(configuration instanceof Commentable)) {
       return defaultCommentMap.get(commentType);
     }
-
-    String comment = ((Commentable) config).getComment(getPath(), commentType);
+    String comment = ((Commentable) configuration).getComment(getPath(), commentType);
     return comment != null ? comment : defaultCommentMap.get(commentType);
   }
 
@@ -112,10 +116,13 @@ public class CommentablePath<T> implements ConfigPath<T> {
    */
   public void setComment(@NotNull final CommentType commentType, @Nullable final String comment) {
     Config config = getConfig();
-    if (!(config instanceof Commentable)) {
+    if (config == null) {
+      throw new IllegalStateException("The config path has not been loaded!");
+    }
+    FileConfiguration configuration = config.getConfig();
+    if (!(configuration instanceof Commentable)) {
       return;
     }
-
-    ((Commentable) config).setComment(getPath(), comment, commentType);
+    ((Commentable) configuration).setComment(getPath(), comment, commentType);
   }
 }
