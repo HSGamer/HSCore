@@ -1,6 +1,9 @@
 package me.hsgamer.hscore.config.path;
 
 import me.hsgamer.hscore.config.BaseConfigPath;
+import me.hsgamer.hscore.config.CommentablePath;
+import me.hsgamer.hscore.config.ConfigPath;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Utility to easily create {@link BaseConfigPath}
@@ -8,6 +11,18 @@ import me.hsgamer.hscore.config.BaseConfigPath;
 public final class Paths {
 
   private Paths() {
+  }
+
+  /**
+   * Create a commentable path
+   *
+   * @param path     the path to the value
+   * @param comments the comment to create
+   * @param <T>      path's value type
+   * @return the commentable path
+   */
+  public static <T> CommentablePath<T> commented(@NotNull ConfigPath<T> path, @NotNull String... comments) {
+    return new CommentablePath<>(path, comments);
   }
 
   /**
