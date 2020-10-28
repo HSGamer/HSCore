@@ -243,7 +243,7 @@ public abstract class AddonManager {
    */
   @NotNull
   public final Map<String, Addon> getLoadedAddons() {
-    return this.addons;
+    return Collections.unmodifiableMap(this.addons);
   }
 
   /**
