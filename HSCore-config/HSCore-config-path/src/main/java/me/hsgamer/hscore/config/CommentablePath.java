@@ -117,7 +117,7 @@ public class CommentablePath<T> implements ConfigPath<T> {
   public void setComment(@NotNull final CommentType commentType, @Nullable final String comment) {
     Config config = getConfig();
     if (config == null) {
-      throw new IllegalStateException("The config path has not been loaded!");
+      return;
     }
     FileConfiguration configuration = config.getConfig();
     if (!(configuration instanceof Commentable)) {
