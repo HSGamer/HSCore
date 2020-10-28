@@ -9,32 +9,34 @@
 * [BetterGUI](https://github.com/BetterGUI-MC/BetterGUI)
 ## Modules
 * **`HSCore-all`**
-* **`HSCore-addon`**
-* **`HSCore-common`**
-* **`HSCore-collections`**
-* **`HSCore-expression`**
-* **`HSCore-json`**
-* **`HSCore-request`**
-* **`HSCore-web`**
-* **`HSCore-checker-all`**
-* **`HSCore-checker-spigotmc`**
-* **`HSCore-database-all`**
-* **`HSCore-database-common`**
-* **`HSCore-database-driver-mysql`**
-* **`HSCore-database-driver-sqlite`**
-* **`HSCore-database-hikari`**
-* **`HSCore-config-all`**
-* **`HSCore-config-common`**
-* **`HSCore-config-yaml`**
-* **`HSCore-config-json`**
-* **`HSCore-config-path`**
-* **`HSCore-bukkit-all`**
-* **`HSCore-bukkit-addon`**
-* **`HSCore-bukkit-command`**
-* **`HSCore-bukkit-subcommand`**
-* **`HSCore-bukkit-config`**
-* **`HSCore-bukkit-config-extra`**
-* **`HSCore-bukkit-utils`**
+  * **`HSCore-addon`**
+  * **`HSCore-common`**
+  * **`HSCore-collections`**
+  * **`HSCore-expression`**
+  * **`HSCore-json`**
+  * **`HSCore-request`**
+  * **`HSCore-web`**
+  * **`HSCore-checker-all`**
+    * **`HSCore-checker-spigotmc`**
+  * **`HSCore-database-all`**
+    * **`HSCore-database-common`**
+    * **`HSCore-database-driver-mysql`**
+    * **`HSCore-database-driver-sqlite`**
+    * **`HSCore-database-driver-mariadb`**
+    * **`HSCore-database-driver-postgresql`**
+    * **`HSCore-database-hikari`**
+  * **`HSCore-config-all`**
+    * **`HSCore-config-common`**
+    * **`HSCore-config-yaml`**
+    * **`HSCore-config-json`**
+    * **`HSCore-config-path`**
+  * **`HSCore-bukkit-all`**
+    * **`HSCore-bukkit-addon`**
+    * **`HSCore-bukkit-command`**
+    * **`HSCore-bukkit-subcommand`**
+    * **`HSCore-bukkit-config`**
+    * **`HSCore-bukkit-config-extra`**
+    * **`HSCore-bukkit-utils`**
 ## Add as a dependency (Maven)
 ```xml
   <repositories>
