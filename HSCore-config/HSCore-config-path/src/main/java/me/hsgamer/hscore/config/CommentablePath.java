@@ -76,6 +76,7 @@ public class CommentablePath<T> implements ConfigPath<T> {
    *
    * @return the comment
    */
+  @Nullable
   public String getComment() {
     return getComment(CommentType.BLOCK);
   }
@@ -85,7 +86,7 @@ public class CommentablePath<T> implements ConfigPath<T> {
    *
    * @param comment the comment
    */
-  public void setComment(String comment) {
+  public void setComment(@Nullable final String comment) {
     setComment(CommentType.BLOCK, comment);
   }
 
@@ -95,7 +96,7 @@ public class CommentablePath<T> implements ConfigPath<T> {
    * @param commentType the comment type
    * @return the comment
    */
-  public String getComment(CommentType commentType) {
+  public String getComment(@NotNull final CommentType commentType) {
     return commentMap.get(commentType);
   }
 
@@ -105,7 +106,7 @@ public class CommentablePath<T> implements ConfigPath<T> {
    * @param commentType the comment type
    * @param comment     the comment
    */
-  public void setComment(CommentType commentType, String comment) {
+  public void setComment(@NotNull final CommentType commentType, @Nullable final String comment) {
     commentMap.put(commentType, comment);
 
     Config config = getConfig();
