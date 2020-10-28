@@ -30,7 +30,7 @@
     <dependency>
       <groupId>me.carleslc.Simple-YAML</groupId>
       <artifactId>Simple-Configuration</artifactId>
-      <version>1.7.1</version>
+      <version>1.7.2</version>
     </dependency>
   </dependencies>
 
