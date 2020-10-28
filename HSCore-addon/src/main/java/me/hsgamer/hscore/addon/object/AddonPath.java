@@ -12,7 +12,15 @@ import org.simpleyaml.configuration.file.FileConfiguration;
  */
 public abstract class AddonPath<T> {
 
+  /**
+   * The path to get the value
+   */
+  @NotNull
   private final String path;
+
+  /**
+   * Is the path required or not
+   */
   private final boolean required;
 
   /**
@@ -42,13 +50,14 @@ public abstract class AddonPath<T> {
    */
   @NotNull
   public final String getPath() {
-    return path;
+    return this.path;
   }
 
   /**
    * Convert the type of the value from the addon config file
    *
    * @param object the raw value from the addon config file
+   *
    * @return the converted value
    */
   @Nullable
@@ -58,18 +67,19 @@ public abstract class AddonPath<T> {
    * Get the value from the addon config file
    *
    * @param addon the addon
+   *
    * @return the value
+   *
    * @throws RequiredAddonPathException if the path is required but is not found in the addon config file
    */
   @Nullable
   public final T get(@NotNull final Addon addon) {
-    FileConfiguration configuration = addon.getDescription().getConfiguration();
+    final FileConfiguration configuration = addon.getDescription().getConfiguration();
     if (this.required && !configuration.isSet(this.path)) {
       throw new RequiredAddonPathException(
         this.path + " is not found in the addon '" + addon.getDescription().getName() + "'");
     }
-
-    Object value = configuration.get(this.path);
-    return value != null ? convertType(value) : null;
+    final Object value = configuration.get(this.path);
+    return value != null ? this.convertType(value) : null;
   }
 }
