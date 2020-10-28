@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
 /**
- * A path to get value from addon.yml
+ * A path to get value from the addon config file
  *
  * @param <T> the type of the final value
  */
@@ -19,7 +19,7 @@ public abstract class AddonPath<T> {
    * Create an addon path
    *
    * @param path     the path to the value
-   * @param required is it required to be in addon.yml
+   * @param required is it required to be in the addon config file
    */
   public AddonPath(@NotNull final String path, final boolean required) {
     this.path = path;
@@ -27,9 +27,9 @@ public abstract class AddonPath<T> {
   }
 
   /**
-   * Check if the path is required to be in addon.yml
+   * Check if the path is required to be in the addon config file
    *
-   * @return is it required to be in addon.yml
+   * @return is it required to be in the addon config file
    */
   public final boolean isRequired() {
     return this.required;
@@ -46,20 +46,20 @@ public abstract class AddonPath<T> {
   }
 
   /**
-   * Convert the type of the value from addon.yml
+   * Convert the type of the value from the addon config file
    *
-   * @param object the raw value from addon.yml
+   * @param object the raw value from the addon config file
    * @return the converted value
    */
   @Nullable
   public abstract T convertType(@NotNull Object object);
 
   /**
-   * Get the value from addon.yml
+   * Get the value from the addon config file
    *
    * @param addon the addon
    * @return the value
-   * @throws RequiredAddonPathException if the path is required but is not found in addon.yml
+   * @throws RequiredAddonPathException if the path is required but is not found in the addon config file
    */
   @Nullable
   public final T get(@NotNull final Addon addon) {

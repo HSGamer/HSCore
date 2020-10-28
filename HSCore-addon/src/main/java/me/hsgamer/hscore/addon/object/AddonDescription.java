@@ -41,7 +41,7 @@ public final class AddonDescription {
    */
   @NotNull
   public static AddonDescription get(@NotNull final JarFile jar, @NotNull final String addonConfigFileName, @NotNull final ConfigProvider<? extends FileConfiguration> provider) throws IOException {
-    // Load addon.yml file
+    // Load the addon config file
     JarEntry entry = jar.getJarEntry(addonConfigFileName);
     if (entry == null) {
       throw new NoSuchFileException("Addon '" + jar.getName() + "' doesn't contain " + addonConfigFileName + " file");
