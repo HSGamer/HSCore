@@ -297,12 +297,10 @@ public abstract class AddonManager {
   /**
    * Get the addon config provider
    *
-   * @param <T> the {@link FileConfiguration} type
-   *
    * @return the provider
    */
   @NotNull
-  protected abstract <T extends FileConfiguration> ConfigProvider<T> getConfigProvider();
+  protected abstract ConfigProvider<?> getConfigProvider();
 
   /**
    * Called when the addon is on loading
