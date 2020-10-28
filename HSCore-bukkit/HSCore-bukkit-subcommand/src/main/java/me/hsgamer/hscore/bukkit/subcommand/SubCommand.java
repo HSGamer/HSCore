@@ -45,6 +45,7 @@ public abstract class SubCommand {
    * @param sender the sender
    * @param label  the label of the parent command
    * @param args   the arguments
+   *
    * @return whether the command runs successfully
    */
   public final boolean onCommand(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args) {
@@ -131,6 +132,7 @@ public abstract class SubCommand {
    * @param sender the sender
    * @param label  the label of the parent command
    * @param args   the arguments
+   *
    * @return true if the sender is
    */
   public abstract boolean isProperUsage(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args);
@@ -141,6 +143,7 @@ public abstract class SubCommand {
    * @param sender the sender
    * @param label  the label of the parent command
    * @param args   the arguments
+   *
    * @return the suggested strings
    */
   @NotNull

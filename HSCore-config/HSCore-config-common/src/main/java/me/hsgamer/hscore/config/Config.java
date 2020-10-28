@@ -37,6 +37,7 @@ public interface Config {
    *
    * @param path the path to the value
    * @param def  the default value if it's not found
+   *
    * @return the value
    */
   @Nullable
@@ -46,6 +47,7 @@ public interface Config {
    * Get the value from the config
    *
    * @param path the path to the value
+   *
    * @return the value
    */
   @Nullable

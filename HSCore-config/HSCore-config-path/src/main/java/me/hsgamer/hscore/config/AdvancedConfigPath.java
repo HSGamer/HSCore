@@ -30,6 +30,7 @@ public abstract class AdvancedConfigPath<F, T> implements ConfigPath<T> {
    * Get the raw value from the config
    *
    * @param config the config
+   *
    * @return the raw value
    */
   @Nullable
@@ -39,6 +40,7 @@ public abstract class AdvancedConfigPath<F, T> implements ConfigPath<T> {
    * Convert to the final value
    *
    * @param rawValue the raw value
+   *
    * @return the final value
    */
   @Nullable
@@ -48,6 +50,7 @@ public abstract class AdvancedConfigPath<F, T> implements ConfigPath<T> {
    * Convert to the raw value
    *
    * @param value the value
+   *
    * @return the raw value
    */
   @Nullable

@@ -1,13 +1,14 @@
 package me.hsgamer.hscore.addon.object;
 
+import me.hsgamer.hscore.addon.AddonManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import me.hsgamer.hscore.addon.AddonManager;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * The class loader of the addon
@@ -46,13 +47,13 @@ public final class AddonClassLoader extends URLClassLoader {
    * @param addonDescription the description for the addon
    * @param parent           the parent class loader
    *
-   * @throws MalformedURLException if it cannot convert the file to its related URL
-   * @throws IllegalAccessException if it cannot create an instance of the main class of the
-   *   addon
+   * @throws MalformedURLException     if it cannot convert the file to its related URL
+   * @throws IllegalAccessException    if it cannot create an instance of the main class of the
+   *                                   addon
    * @throws InvocationTargetException if the constructor throws an exception
-   * @throws InstantiationException if the main class is an abstract class
-   * @throws NoSuchMethodException if it cannot find the constructor
-   * @throws ClassNotFoundException if the main class is not found
+   * @throws InstantiationException    if the main class is an abstract class
+   * @throws NoSuchMethodException     if it cannot find the constructor
+   * @throws ClassNotFoundException    if the main class is not found
    */
   public AddonClassLoader(@NotNull final AddonManager addonManager, @NotNull final File file,
                           @NotNull final AddonDescription addonDescription,

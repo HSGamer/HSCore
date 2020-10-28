@@ -41,6 +41,7 @@ public final class ExpressionUtils {
    * Check if the expression is an Boolean expression
    *
    * @param input the expression
+   *
    * @return whether it's an Boolean expression
    */
   public static boolean isBoolean(@NotNull String input) {
@@ -58,6 +59,7 @@ public final class ExpressionUtils {
    * Get the result of the expression
    *
    * @param input the expression
+   *
    * @return the result
    */
   @Nullable
@@ -81,6 +83,7 @@ public final class ExpressionUtils {
    * Check if it's a valid expression
    *
    * @param input the expression
+   *
    * @return whether it's valid
    */
   public static boolean isValidExpression(@NotNull String input) {
@@ -127,6 +130,7 @@ public final class ExpressionUtils {
    * Convert to number
    *
    * @param input the string
+   *
    * @return the number
    */
   @NotNull

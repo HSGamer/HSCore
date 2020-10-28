@@ -21,6 +21,7 @@ public class PermissionUtils {
    * @param name              the name
    * @param description       the description
    * @param permissionDefault who have this by default
+   *
    * @return the permission
    */
   @NotNull

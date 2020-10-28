@@ -40,6 +40,7 @@ public class BooleanLazyNumber {
    * Convert primary boolean to BooleanLazyNumber
    *
    * @param bool the primary boolean
+   *
    * @return BooleanLazyNumber's boolean
    */
   @NotNull
@@ -51,6 +52,7 @@ public class BooleanLazyNumber {
    * Invert the boolean state of BooleanLazyNumber
    *
    * @param input the original state
+   *
    * @return the inverted state
    */
   @NotNull

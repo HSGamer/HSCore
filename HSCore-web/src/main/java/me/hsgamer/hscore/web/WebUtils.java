@@ -23,7 +23,9 @@ public class WebUtils {
    * Get JSON from the URL
    *
    * @param address the URL
+   *
    * @return the JSON object
+   *
    * @throws IOException    If there is an error when opening the connection
    * @throws ParseException If it fails to parse the JSON object
    */
@@ -38,7 +40,9 @@ public class WebUtils {
    * Open a connection to the URL
    *
    * @param address the address / URL
+   *
    * @return the connection
+   *
    * @throws IOException If the URL is invalid or can't be connected
    */
   @NotNull
@@ -54,7 +58,9 @@ public class WebUtils {
    * Create a new connection
    *
    * @param address the address / URL
+   *
    * @return the connection
+   *
    * @throws IOException If the URL is invalid or can't be connected
    */
   @NotNull

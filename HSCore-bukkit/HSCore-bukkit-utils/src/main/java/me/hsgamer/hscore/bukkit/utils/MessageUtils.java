@@ -21,6 +21,7 @@ public final class MessageUtils {
    * Convert to colored string
    *
    * @param input the string
+   *
    * @return the colored string
    */
   @NotNull

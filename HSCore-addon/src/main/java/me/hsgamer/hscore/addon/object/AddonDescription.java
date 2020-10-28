@@ -1,15 +1,16 @@
 package me.hsgamer.hscore.addon.object;
 
+import me.hsgamer.hscore.addon.exception.RequiredAddonPathException;
+import me.hsgamer.hscore.config.ConfigProvider;
+import org.jetbrains.annotations.NotNull;
+import org.simpleyaml.configuration.file.FileConfiguration;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.NoSuchFileException;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import me.hsgamer.hscore.addon.exception.RequiredAddonPathException;
-import me.hsgamer.hscore.config.ConfigProvider;
-import org.jetbrains.annotations.NotNull;
-import org.simpleyaml.configuration.file.FileConfiguration;
 
 /**
  * The description for the Addon

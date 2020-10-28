@@ -28,7 +28,9 @@ public class JSONUtils {
    *
    * @param filename the name of the file
    * @param path     the path to the file
+   *
    * @return the JSON file
+   *
    * @throws IOException If an I/O error occurred
    */
   @NotNull
@@ -49,6 +51,7 @@ public class JSONUtils {
    * Get JSON object from a file
    *
    * @param file the file
+   *
    * @return the JSON object, or null if there is an error when parsing
    */
   @Nullable
@@ -64,6 +67,7 @@ public class JSONUtils {
    * Get JSON object from a string
    *
    * @param string the string
+   *
    * @return the JSON object, or null if there is an error when parsing
    */
   @Nullable
@@ -80,6 +84,7 @@ public class JSONUtils {
    *
    * @param file       the file
    * @param jsonObject the object
+   *
    * @throws IOException if the file is not found or it's a directory or an I/O error occurred
    */
   public static void writeToFile(@NotNull File file, @NotNull JSONObject jsonObject) throws IOException {
