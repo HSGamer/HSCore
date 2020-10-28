@@ -45,6 +45,7 @@
     <module>HSCore-bukkit</module>
     <module>HSCore-checker</module>
     <module>HSCore-database</module>
+    <module>HSCore-ui</module>
     <module>HSCore-all</module>
   </modules>
 
