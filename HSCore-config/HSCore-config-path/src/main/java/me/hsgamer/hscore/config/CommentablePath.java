@@ -96,10 +96,11 @@ public class CommentablePath<T> implements ConfigPath<T> {
    * @param commentType the comment type
    * @return the comment
    */
+  @Nullable
   public String getComment(@NotNull final CommentType commentType) {
     Config config = getConfig();
     if (!(config instanceof Commentable)) {
-      return null;
+      return defaultCommentMap.get(commentType);
     }
 
     String comment = ((Commentable) config).getComment(getPath(), commentType);
