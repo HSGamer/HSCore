@@ -11,11 +11,23 @@
 
   <artifactId>HSCore-bukkit-config</artifactId>
 
+  <repositories>
+    <repository>
+      <id>codemc-repo</id>
+      <url>https://repo.codemc.io/repository/maven-public/</url>
+    </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>me.HSGamer</groupId>
       <artifactId>HSCore-config-common</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
+      <artifactId>Simple-Bukkit-Yaml</artifactId>
+      <version>1.0</version>
     </dependency>
   </dependencies>
 </project>
