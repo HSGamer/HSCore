@@ -45,6 +45,25 @@ public final class PlayableSound {
   }
 
   /**
+   * ctor.
+   *
+   * @param sound  the sound to play.
+   * @param volume the volume to play.
+   */
+  public PlayableSound(@NotNull final Sound sound, @NotNull final Double volume) {
+    this(sound, volume, 1.0d)
+  }
+
+  /**
+   * ctor.
+   *
+   * @param sound the sound to play.
+   */
+  public PlayableSound(@NotNull final Sound sound) {
+    this(sound, 1.0d);
+  }
+
+  /**
    * serializes the values of the sound.
    *
    * @return a serialized map.
