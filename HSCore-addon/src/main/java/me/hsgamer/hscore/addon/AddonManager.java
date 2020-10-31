@@ -7,7 +7,6 @@ import me.hsgamer.hscore.common.CommonUtils;
 import me.hsgamer.hscore.config.ConfigProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.io.File;
 import java.io.IOException;
