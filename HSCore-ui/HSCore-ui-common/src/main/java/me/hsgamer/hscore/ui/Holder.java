@@ -51,6 +51,13 @@ public interface Holder<D extends Display> {
   <T> void addEventConsumer(Class<T> eventClass, Consumer<T> eventConsumer);
 
   /**
+   * Clear all event consumers
+   *
+   * @param eventClass the event class
+   */
+  void clearEventConsumer(Class<?> eventClass);
+
+  /**
    * Handle the event
    *
    * @param event the event

@@ -50,6 +50,11 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
   }
 
   @Override
+  public void clearEventConsumer(Class<?> eventClass) {
+    classListMap.remove(eventClass);
+  }
+
+  @Override
   public void handleEvent(Object event) {
     Optional
       .ofNullable(classListMap.get(event.getClass()))
