@@ -1,11 +1,13 @@
 package me.hsgamer.hscore.bukkit.gui;
 
 import me.hsgamer.hscore.ui.Display;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 
 import java.util.UUID;
 
 // TODO: finish the methods, init the inventory
-public class GUIDisplay implements Display {
+public class GUIDisplay implements Display, InventoryHolder {
 
   private final UUID uuid;
   private final GUIHolder holder;
@@ -38,5 +40,10 @@ public class GUIDisplay implements Display {
   @Override
   public UUID getUniqueId() {
     return this.uuid;
+  }
+
+  @Override
+  public Inventory getInventory() {
+    return null;
   }
 }

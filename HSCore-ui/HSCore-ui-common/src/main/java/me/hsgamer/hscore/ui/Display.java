@@ -23,6 +23,15 @@ public interface Display {
   void close();
 
   /**
+   * Handle the event
+   *
+   * @param event the event
+   */
+  default void handleEvent(Object event) {
+    getHolder().handleEvent(event);
+  }
+
+  /**
    * Get the holder for the display
    *
    * @return the holder
