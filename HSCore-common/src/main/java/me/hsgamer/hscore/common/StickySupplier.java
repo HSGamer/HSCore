@@ -34,6 +34,15 @@ public final class StickySupplier<T> implements Supplier<T> {
     this.origin = origin;
   }
 
+  /**
+   * ctor.
+   *
+   * @param origin the original {@link T}.
+   */
+  public StickySupplier(@NotNull final T origin) {
+    this(() -> origin);
+  }
+
   @Override
   public T get() {
     return Optional.ofNullable(this.cache).orElseGet(() -> {
