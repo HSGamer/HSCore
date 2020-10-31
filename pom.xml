@@ -42,10 +42,10 @@
     <module>HSCore-request</module>
     <module>HSCore-config</module>
     <module>HSCore-addon</module>
-    <module>HSCore-bukkit</module>
     <module>HSCore-checker</module>
     <module>HSCore-database</module>
     <module>HSCore-ui</module>
+    <module>HSCore-bukkit</module>
     <module>HSCore-all</module>
   </modules>
 

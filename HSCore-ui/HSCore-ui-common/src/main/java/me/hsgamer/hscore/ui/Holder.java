@@ -1,12 +1,15 @@
 package me.hsgamer.hscore.ui;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
  * The holder for all displays
+ *
+ * @param <D> the type of the display
  */
-public interface Holder {
+public interface Holder<D extends Display> {
 
   /**
    * Create a display with the unique id
@@ -15,7 +18,14 @@ public interface Holder {
    *
    * @return the display
    */
-  Display createDisplay(UUID uuid);
+  D createDisplay(UUID uuid);
+
+  /**
+   * Remove a display with the unique id
+   *
+   * @param uuid the unique id
+   */
+  void removeDisplay(UUID uuid);
 
   /**
    * Get the display for the unique id
@@ -24,7 +34,7 @@ public interface Holder {
    *
    * @return the display
    */
-  Display getDisplay(UUID uuid);
+  Optional<D> getDisplay(UUID uuid);
 
   /**
    * Update all displays

@@ -3,7 +3,7 @@ package me.hsgamer.hscore.ui;
 import java.util.*;
 import java.util.function.Consumer;
 
-public abstract class BaseHolder implements Holder {
+public abstract class BaseHolder<D extends Display> implements Holder<D> {
   private final Map<Class<?>, List<Consumer<Object>>> classListMap = new HashMap<>();
 
   @Override
