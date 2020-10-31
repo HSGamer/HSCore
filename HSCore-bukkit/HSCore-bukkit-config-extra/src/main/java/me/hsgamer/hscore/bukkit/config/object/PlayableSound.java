@@ -51,7 +51,7 @@ public final class PlayableSound {
    * @param volume the volume to play.
    */
   public PlayableSound(@NotNull final Sound sound, @NotNull final Double volume) {
-    this(sound, volume, 1.0d)
+    this(sound, volume, 1.0d);
   }
 
   /**
