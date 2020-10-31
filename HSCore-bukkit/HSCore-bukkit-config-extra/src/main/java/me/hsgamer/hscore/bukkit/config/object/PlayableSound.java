@@ -130,6 +130,7 @@ public final class PlayableSound {
    *
    * @return a serialized map.
    */
+  @NotNull
   public Map<String, Object> serialize() {
     final Map<String, Object> map = new HashMap<>();
     map.put("sound", this.sound.name());
