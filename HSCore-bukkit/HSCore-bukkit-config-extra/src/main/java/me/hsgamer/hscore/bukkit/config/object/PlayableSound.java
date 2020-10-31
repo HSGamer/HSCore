@@ -72,7 +72,16 @@ public final class PlayableSound {
    * @param players the players to play.
    */
   public void play(@NotNull final Player... players) {
-    Arrays.stream(players).forEach(player ->
+    this.play(Arrays.asList(players));
+  }
+
+  /**
+   * plays the sound for the given player.
+   *
+   * @param players the players to play.
+   */
+  public void play(@NotNull final Iterable<Player> players) {
+    players.forEach(player ->
       this.play(player.getLocation(), player));
   }
 
@@ -83,7 +92,17 @@ public final class PlayableSound {
    * @param location the location to play.
    */
   public void play(@NotNull final Location location, @NotNull final Player... players) {
-    Arrays.stream(players).forEach(player ->
+    play(location, Arrays.asList(players));
+  }
+
+  /**
+   * plays the sound for the given players on the given location.
+   *
+   * @param players  the players to play.
+   * @param location the location to play.
+   */
+  public void play(@NotNull final Location location, @NotNull final Iterable<Player> players) {
+    players.forEach(player ->
       player.playSound(location, this.sound, this.volume.floatValue(), this.pitch.floatValue()));
   }
 
