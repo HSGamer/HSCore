@@ -92,7 +92,7 @@ public final class PlayableSound {
    * @param location the location to play.
    */
   public void play(@NotNull final Location location, @NotNull final Player... players) {
-    play(location, Arrays.asList(players));
+    this.play(location, Arrays.asList(players));
   }
 
   /**
