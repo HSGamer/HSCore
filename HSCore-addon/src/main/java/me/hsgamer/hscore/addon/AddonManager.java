@@ -292,7 +292,9 @@ public abstract class AddonManager {
    * @return the sorted and filtered map
    */
   @NotNull
-  protected abstract Map<String, Addon> sortAndFilter(@NotNull final Map<String, Addon> original);
+  protected Map<String, Addon> sortAndFilter(@NotNull final Map<String, Addon> original) {
+    return original;
+  }
 
   /**
    * Get the addon config provider
