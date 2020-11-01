@@ -47,5 +47,10 @@
       <artifactId>HSCore-bukkit-utils</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-bukkit-gui</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>
