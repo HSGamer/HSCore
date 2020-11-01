@@ -92,6 +92,22 @@ public final class SimpleAddonManager extends AddonManager {
    * @param addonsDir      the addon directory
    * @param logger         the logger
    * @param fileName       the file name
+   * @param configProvider the config provider
+   * @param onAddonLoading the on addon loading
+   */
+  public SimpleAddonManager(@NotNull final File addonsDir, @NotNull final Logger logger,
+                            @NotNull final Supplier<String> fileName,
+                            @NotNull final Supplier<ConfigProvider<?>> configProvider,
+                            @NotNull final Predicate<Addon> onAddonLoading) {
+    this(addonsDir, logger, fileName, map -> map, configProvider, onAddonLoading);
+  }
+
+  /**
+   * Create a simple addon manager
+   *
+   * @param addonsDir      the addon directory
+   * @param logger         the logger
+   * @param fileName       the file name
    * @param sortAndFilter  the sort and filter
    * @param configProvider the config provider
    */
