@@ -17,7 +17,7 @@ public class JsonConfig extends BaseConfig<JsonConfiguration> {
    * @param file the config file
    */
   public JsonConfig(@NotNull final File file) {
-    super(file, JsonConfiguration::loadConfiguration);
+    super(file, new JsonProvider());
   }
 
   /**

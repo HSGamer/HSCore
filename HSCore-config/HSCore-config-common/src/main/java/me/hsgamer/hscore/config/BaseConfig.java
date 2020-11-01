@@ -19,7 +19,7 @@ public class BaseConfig<F extends FileConfiguration> implements Config {
   /**
    * The logger for ease
    */
-  protected static final Logger LOGGER = Logger.getLogger("Config");
+  public static final Logger LOGGER = Logger.getLogger("Config");
 
   private final File file;
   private final ConfigProvider<F> provider;
