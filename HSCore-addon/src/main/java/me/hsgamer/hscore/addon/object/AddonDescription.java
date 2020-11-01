@@ -6,8 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.InputStream;
 import java.nio.file.NoSuchFileException;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -77,8 +76,9 @@ public final class AddonDescription {
     if (entry == null) {
       throw new NoSuchFileException("Addon '" + jar.getName() + "' doesn't contain " + addonConfigFileName + " file");
     }
-    final Reader reader = new InputStreamReader(jar.getInputStream(entry));
-    final FileConfiguration data = provider.loadConfiguration(reader);
+    final InputStream inputStream = jar.getInputStream(entry);
+    final FileConfiguration data = provider.loadConfiguration(inputStream);
+    inputStream.close();
     // Load required descriptions
     final String name = data.getString("name");
     final String version = data.getString("version");

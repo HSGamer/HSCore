@@ -2,9 +2,11 @@ package me.hsgamer.hscore.config;
 
 import org.simpleyaml.configuration.file.FileConfiguration;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.StandardCopyOption;
 
 /**
  * Config provider for {@link Config}
@@ -23,32 +25,19 @@ public interface ConfigProvider<F extends FileConfiguration> {
   F loadConfiguration(File file);
 
   /**
-   * Load configuration from a reader
+   * Load configuration from an input stream
    *
-   * @param reader the reader
+   * @param inputStream the input stream
    *
    * @return the configuration
    *
    * @throws IOException if there is an I/O error
    */
-  default F loadConfiguration(Reader reader) throws IOException {
-    File tempFile = File.createTempFile("tempAddonConfigFile", null);
-    BufferedWriter bufferedWriter = Files.newBufferedWriter(tempFile.toPath(), StandardOpenOption.TRUNCATE_EXISTING);
-    BufferedReader bufferedReader = new BufferedReader(reader);
-
-    String line = bufferedReader.readLine();
-    while (line != null) {
-      bufferedWriter.write(line);
-      line = bufferedReader.readLine();
-    }
-
-    F config = loadConfiguration(tempFile);
-
-    bufferedReader.close();
-    bufferedWriter.close();
-    tempFile.deleteOnExit();
-
-    return config;
+  default F loadConfiguration(InputStream inputStream) throws IOException {
+    File file = File.createTempFile("tempAddonConfig", null);
+    file.deleteOnExit();
+    Files.copy(inputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    return loadConfiguration(file);
   }
 
   /**
