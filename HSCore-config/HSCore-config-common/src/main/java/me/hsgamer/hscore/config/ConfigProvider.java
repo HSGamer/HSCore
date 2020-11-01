@@ -3,6 +3,8 @@ package me.hsgamer.hscore.config;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 /**
  * Config provider for {@link Config}
@@ -31,7 +33,7 @@ public interface ConfigProvider<F extends FileConfiguration> {
    */
   default F loadConfiguration(Reader reader) throws IOException {
     File tempFile = File.createTempFile("tempAddonConfigFile", null);
-    BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(tempFile));
+    BufferedWriter bufferedWriter = Files.newBufferedWriter(tempFile.toPath(), StandardOpenOption.TRUNCATE_EXISTING);
     BufferedReader bufferedReader = new BufferedReader(reader);
 
     String line = bufferedReader.readLine();
