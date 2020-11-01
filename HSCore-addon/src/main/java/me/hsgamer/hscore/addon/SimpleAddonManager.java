@@ -113,7 +113,7 @@ public final class SimpleAddonManager extends AddonManager {
   public SimpleAddonManager(@NotNull final File addonsDir, @NotNull final Logger logger,
                             @NotNull final Supplier<String> fileName,
                             @NotNull final Supplier<ConfigProvider<?>> configProvider) {
-    this(addonsDir, logger, fileName, map -> map, configProvider, addon -> true);
+    this(addonsDir, logger, fileName, map -> map, configProvider);
   }
 
   @NotNull
