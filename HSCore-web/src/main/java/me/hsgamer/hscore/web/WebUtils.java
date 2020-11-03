@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -31,9 +30,7 @@ public class WebUtils {
    */
   @NotNull
   public static Object getJSONFromURL(@NotNull String address) throws IOException, ParseException {
-    BufferedReader rd = new BufferedReader(
-      new InputStreamReader(openConnection(address).getInputStream()));
-    return new JSONParser().parse(rd);
+    return new JSONParser().parse(new InputStreamReader(openConnection(address).getInputStream()));
   }
 
   /**
