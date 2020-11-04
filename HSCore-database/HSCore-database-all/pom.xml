@@ -46,5 +46,10 @@
       <artifactId>HSCore-database-driver-postgresql</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-database-mongodb</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>

@@ -1,23 +1,18 @@
 package me.hsgamer.hscore.database.sql;
 
+import me.hsgamer.hscore.database.Client;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * The interface for SQL connections
+ * The interface for SQL client
  *
  * @param <T> the original
  */
-public interface Sql<T> {
-
-  /**
-   * Get the original
-   *
-   * @return the original
-   */
-  T getOriginal();
+public interface SqlClient<T> extends Client<T> {
 
   /**
    * Get the connection
