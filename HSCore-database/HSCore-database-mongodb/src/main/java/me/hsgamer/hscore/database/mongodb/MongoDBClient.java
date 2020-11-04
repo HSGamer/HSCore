@@ -4,6 +4,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoDatabase;
 import me.hsgamer.hscore.database.Client;
 import me.hsgamer.hscore.database.Setting;
 
@@ -34,6 +35,15 @@ public class MongoDBClient implements Client<MongoClient> {
   @Override
   public MongoClient getOriginal() {
     return new MongoClient(address, Collections.singletonList(credential), options);
+  }
+
+  /**
+   * Get the database
+   *
+   * @return the database
+   */
+  public MongoDatabase getDatabase() {
+    return getOriginal().getDatabase(setting.getDatabaseName());
   }
 
   @Override
