@@ -31,14 +31,8 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
     addEventConsumer(InventoryCloseEvent.class, this::onClose);
 
     addEventConsumer(InventoryClickEvent.class,
-      event -> {
-        if (event.isCancelled()) {
-          return;
-        }
-
-        Optional.ofNullable(buttonSlotMap.get(event.getRawSlot()))
-          .ifPresent(button -> button.handleAction(event.getWhoClicked().getUniqueId(), event));
-      }
+      event -> Optional.ofNullable(buttonSlotMap.get(event.getRawSlot()))
+        .ifPresent(button -> button.handleAction(event.getWhoClicked().getUniqueId(), event))
     );
   }
 
