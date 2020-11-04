@@ -25,6 +25,8 @@
     * **`HSCore-database-driver-mariadb`**
     * **`HSCore-database-driver-postgresql`**
     * **`HSCore-database-hikari`**
+    * **`HSCore-database-mongodb`**
+    * **`HSCore-database-redis`**
   * **`HSCore-config-all`**
     * **`HSCore-config-common`**
     * **`HSCore-config-yaml`**
