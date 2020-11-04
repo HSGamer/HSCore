@@ -23,7 +23,6 @@ public class GUIDisplay implements Display, InventoryHolder {
   protected GUIDisplay(UUID uuid, GUIHolder holder) {
     this.uuid = uuid;
     this.holder = holder;
-    init();
   }
 
   @Override
