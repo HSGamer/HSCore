@@ -9,7 +9,8 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>HSCore-config-all</artifactId>
+  <artifactId>HSCore-config-toml</artifactId>
+
   <dependencies>
     <dependency>
       <groupId>me.HSGamer</groupId>
@@ -17,24 +18,10 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-config-json</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-config-yaml</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-config-toml</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-config-path</artifactId>
-      <version>${project.version}</version>
+      <groupId>io.github.portlek</groupId>
+      <artifactId>tomlgration</artifactId>
+      <version>1.0.0</version>
     </dependency>
   </dependencies>
+
 </project>
