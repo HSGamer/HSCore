@@ -20,6 +20,7 @@
     <module>HSCore-database-sql</module>
     <module>HSCore-database-hikari</module>
     <module>HSCore-database-mongodb</module>
+    <module>HSCore-database-redis</module>
     <module>HSCore-database-all</module>
   </modules>
 

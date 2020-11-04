@@ -51,5 +51,10 @@
       <artifactId>HSCore-database-mongodb</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-database-redis</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>
