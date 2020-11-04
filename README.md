@@ -42,6 +42,7 @@
     * **`HSCore-bukkit-config`**
     * **`HSCore-bukkit-config-extra`**
     * **`HSCore-bukkit-utils`**
+    * **`HSCore-bukkit-gui`**
 ## Add as a dependency (Maven)
 ```xml
   <repositories>
