@@ -10,6 +10,7 @@ import org.bukkit.inventory.InventoryHolder;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 /**
  * The display for {@link GUIHolder}
@@ -37,20 +38,20 @@ public class GUIDisplay implements Display, InventoryHolder {
     update();
 
     Player player = Bukkit.getPlayer(this.uuid);
-    if (player != null && player.isOnline()) {
+    if (player != null) {
       player.openInventory(this.inventory);
     }
   }
 
   @Override
   public void update() {
-    for (int i = 0; i < inventory.getSize(); i++) {
+    IntStream.range(0, inventory.getSize()).forEach(i ->
       inventory.setItem(i,
         Optional.ofNullable(holder.buttonSlotMap.get(i))
           .map(button -> button.getItemStack(uuid))
           .orElse(null)
-      );
-    }
+      )
+    );
   }
 
   @Override
