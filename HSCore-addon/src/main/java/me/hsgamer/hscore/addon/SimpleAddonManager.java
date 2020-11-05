@@ -25,15 +25,16 @@
 
 package me.hsgamer.hscore.addon;
 
+import me.hsgamer.hscore.addon.object.Addon;
+import me.hsgamer.hscore.config.ConfigProvider;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.logging.Logger;
-import me.hsgamer.hscore.addon.object.Addon;
-import me.hsgamer.hscore.config.ConfigProvider;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * A simple implementation for the addon manager

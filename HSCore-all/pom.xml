@@ -71,5 +71,10 @@
       <artifactId>HSCore-ui-all</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-downloader</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>

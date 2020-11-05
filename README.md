@@ -12,6 +12,7 @@
   * **`HSCore-addon`**
   * **`HSCore-common`**
   * **`HSCore-collections`**
+  * **`HSCore-downloader`**
   * **`HSCore-expression`**
   * **`HSCore-json`**
   * **`HSCore-request`**
