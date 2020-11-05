@@ -23,8 +23,14 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
 
   /**
    * Create a new holder
+   *
+   * @param removeDisplayOnClose whether the display should be removed on close event
    */
-  public GUIHolder() {
+  public GUIHolder(boolean removeDisplayOnClose) {
+    if (removeDisplayOnClose) {
+      addEventConsumer(InventoryCloseEvent.class, event -> removeDisplay(event.getPlayer().getUniqueId()));
+    }
+
     addEventConsumer(InventoryOpenEvent.class, this::onOpen);
     addEventConsumer(InventoryClickEvent.class, this::onClick);
     addEventConsumer(InventoryCloseEvent.class, this::onClose);
@@ -33,6 +39,13 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
       event -> Optional.ofNullable(buttonSlotMap.get(event.getRawSlot()))
         .ifPresent(button -> button.handleAction(event.getWhoClicked().getUniqueId(), event))
     );
+  }
+
+  /**
+   * Create a new holder
+   */
+  public GUIHolder() {
+    this(true);
   }
 
   /**
