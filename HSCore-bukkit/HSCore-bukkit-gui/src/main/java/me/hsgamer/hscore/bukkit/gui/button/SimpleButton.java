@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.gui.button;
 
+import me.hsgamer.hscore.bukkit.gui.Button;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -23,16 +24,6 @@ public class SimpleButton implements Button {
   public SimpleButton(ItemStack itemStack, BiConsumer<UUID, InventoryClickEvent> consumer) {
     this.itemStack = itemStack;
     this.consumer = consumer;
-  }
-
-  /**
-   * Create a new button without action
-   *
-   * @param itemStack the item stack
-   */
-  public SimpleButton(ItemStack itemStack) {
-    this(itemStack, (uuid, event) -> {
-    });
   }
 
   @Override

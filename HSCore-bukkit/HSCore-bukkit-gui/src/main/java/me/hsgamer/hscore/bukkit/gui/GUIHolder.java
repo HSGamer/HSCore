@@ -1,6 +1,5 @@
 package me.hsgamer.hscore.bukkit.gui;
 
-import me.hsgamer.hscore.bukkit.gui.button.Button;
 import me.hsgamer.hscore.ui.BaseHolder;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;

@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.bukkit.gui.button;
+package me.hsgamer.hscore.bukkit.gui;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
