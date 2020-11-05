@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class CommonUtils {
 
@@ -47,6 +49,53 @@ public class CommonUtils {
   public static <T> List<T> reverse(@NotNull Collection<T> original) {
     List<T> list = new ArrayList<>(original);
     Collections.reverse(list);
+    return list;
+  }
+
+  /**
+   * Rotate a collection
+   *
+   * @param original the original collection
+   * @param distance the distance to rotate
+   * @param <T>      the type of the elements
+   *
+   * @return the rotated list
+   */
+  public static <T> List<T> rotate(Collection<T> original, int distance) {
+    List<T> list = new ArrayList<>(original);
+    Collections.rotate(list, distance);
+    return list;
+  }
+
+  /**
+   * Repeat the element of the collection
+   *
+   * @param original the original collection
+   * @param repeat   the times the element repeats
+   * @param <T>      the type of the elements
+   *
+   * @return the repeated list
+   */
+  public static <T> List<T> repeatElement(Collection<T> original, int repeat) {
+    List<T> list = new ArrayList<>();
+    for (T element : original) {
+      list.addAll(IntStream.range(0, repeat).mapToObj(i -> element).collect(Collectors.toList()));
+    }
+    return list;
+  }
+
+  /**
+   * Repeat the collection
+   *
+   * @param original the original collection
+   * @param repeat   the times the list repeats
+   * @param <T>      the type of the elements
+   *
+   * @return the repeated list
+   */
+  public static <T> List<T> repeatCollection(Collection<T> original, int repeat) {
+    List<T> list = new ArrayList<>();
+    IntStream.range(0, repeat).mapToObj(i -> original).forEach(list::addAll);
     return list;
   }
 }
