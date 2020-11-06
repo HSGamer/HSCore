@@ -2,7 +2,6 @@ package me.hsgamer.hscore.bukkit.gui;
 
 import me.hsgamer.hscore.ui.Display;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -56,7 +55,6 @@ public class GUIDisplay implements Display, InventoryHolder {
 
   @Override
   public void close() {
-    inventory.getViewers().forEach(HumanEntity::closeInventory);
     inventory.clear();
   }
 
