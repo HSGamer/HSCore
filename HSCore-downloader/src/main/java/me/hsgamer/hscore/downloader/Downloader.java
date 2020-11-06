@@ -15,7 +15,27 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * The downloader
+ * The downloader <br>
+ * The format of the database:
+ * <pre>
+ *   {@code
+ *   {
+ *     "name1": {
+ *       "file-name": "name1.jar",
+ *       "version": "1.0",
+ *       "direct-link": "example.com/name1.jar",
+ *       ...
+ *     },
+ *     "name2": {
+ *       "file-name": "name2.jar",
+ *       "version": "1.0-SN",
+ *       "direct-link": "example.com/name2.jar",
+ *       ...
+ *     },
+ *     ...
+ *   }
+ *   }
+ * </pre>
  */
 public class Downloader {
   /**
@@ -23,7 +43,7 @@ public class Downloader {
    */
   protected static final Logger LOGGER = Logger.getLogger("Downloader");
 
-  private final Map<String, DownloadInfo> downloadInfoMap = new HashMap<>();
+  protected final Map<String, DownloadInfo> downloadInfoMap = new HashMap<>();
   private final String dbUrl;
   private final File folder;
 
