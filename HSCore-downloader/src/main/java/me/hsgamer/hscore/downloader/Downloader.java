@@ -7,10 +7,10 @@ import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,7 +43,7 @@ public class Downloader {
    */
   protected static final Logger LOGGER = Logger.getLogger("Downloader");
 
-  protected final Map<String, DownloadInfo> downloadInfoMap = new HashMap<>();
+  protected final Map<String, DownloadInfo> downloadInfoMap = new ConcurrentHashMap<>();
   private final String dbUrl;
   private final File folder;
 
@@ -59,7 +59,6 @@ public class Downloader {
     if (!folder.exists()) {
       folder.mkdirs();
     }
-    loadDownloadsInfo();
   }
 
   /**
@@ -74,7 +73,8 @@ public class Downloader {
   /**
    * Load download infos
    */
-  private void loadDownloadsInfo() {
+  public void loadDownloadsInfo() {
+    downloadInfoMap.clear();
     CompletableFuture.supplyAsync(() -> {
       try {
         return WebUtils.getJSONFromURL(dbUrl);
