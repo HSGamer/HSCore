@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.checker.spigotmc;
 
+import me.hsgamer.hscore.web.UserAgent;
 import me.hsgamer.hscore.web.WebUtils;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
@@ -34,7 +35,7 @@ public final class SimpleVersionChecker {
     return CompletableFuture.supplyAsync(() -> {
       try {
         JSONObject object = (JSONObject) WebUtils.getJSONFromURL(
-          "https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId);
+          "https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId, UserAgent.FIREFOX);
         if (!object.containsKey("current_version")) {
           throw new IOException("Cannot get the plugin version");
         }

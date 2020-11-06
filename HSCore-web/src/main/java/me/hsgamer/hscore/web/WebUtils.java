@@ -21,7 +21,8 @@ public class WebUtils {
   /**
    * Get JSON from the URL
    *
-   * @param address the URL
+   * @param address   the URL
+   * @param userAgent the user agent
    *
    * @return the JSON object
    *
@@ -29,24 +30,24 @@ public class WebUtils {
    * @throws ParseException If it fails to parse the JSON object
    */
   @NotNull
-  public static Object getJSONFromURL(@NotNull String address) throws IOException, ParseException {
-    return new JSONParser().parse(new InputStreamReader(openConnection(address).getInputStream()));
+  public static Object getJSONFromURL(@NotNull String address, @NotNull UserAgent userAgent) throws IOException, ParseException {
+    return new JSONParser().parse(new InputStreamReader(openConnection(address, userAgent).getInputStream()));
   }
 
   /**
    * Open a connection to the URL
    *
-   * @param address the address / URL
+   * @param address   the address / URL
+   * @param userAgent the user agent
    *
    * @return the connection
    *
    * @throws IOException If the URL is invalid or can't be connected
    */
   @NotNull
-  public static URLConnection openConnection(@NotNull String address) throws IOException {
+  public static URLConnection openConnection(@NotNull String address, @NotNull UserAgent userAgent) throws IOException {
     URLConnection openConnection = createConnection(address);
-    openConnection.addRequestProperty("User-Agent",
-      "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
+    openConnection.addRequestProperty("User-Agent", userAgent.getAgent());
     openConnection.connect();
     return openConnection;
   }

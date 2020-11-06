@@ -3,6 +3,7 @@ package me.hsgamer.hscore.downloader.object;
 import me.hsgamer.hscore.downloader.Downloader;
 import me.hsgamer.hscore.downloader.exception.DownloadingException;
 import me.hsgamer.hscore.downloader.exception.RequiredInfoKeyException;
+import me.hsgamer.hscore.web.UserAgent;
 import me.hsgamer.hscore.web.WebUtils;
 import org.json.simple.JSONObject;
 
@@ -102,7 +103,7 @@ public final class DownloadInfo {
 
     isDownloading = true;
     try (ReadableByteChannel readableByteChannel = Channels
-      .newChannel(WebUtils.openConnection(directLink).getInputStream());
+      .newChannel(WebUtils.openConnection(directLink, UserAgent.FIREFOX).getInputStream());
          FileOutputStream fileOutputStream = new FileOutputStream(
            new File(downloader.getFolder(), fileName))) {
       fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
