@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.downloader;
 
+import me.hsgamer.hscore.downloader.object.DownloadInfo;
 import me.hsgamer.hscore.web.WebUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;

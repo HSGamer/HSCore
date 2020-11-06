@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.downloader;
+package me.hsgamer.hscore.downloader.exception;
 
 /**
  * An exception indicates that the addon is being downloaded
