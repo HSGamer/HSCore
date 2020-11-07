@@ -37,7 +37,7 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
       if (!closeFilter.test(uuid)) {
         getDisplay(uuid).ifPresent(guiDisplay -> player.openInventory(guiDisplay.getInventory()));
       } else if (removeDisplayOnClose) {
-        removeDisplay(event.getPlayer().getUniqueId());
+        removeDisplay(uuid);
       }
     });
 
