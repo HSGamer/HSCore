@@ -3,6 +3,7 @@ package me.hsgamer.hscore.bukkit.utils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -11,7 +12,7 @@ import java.util.function.Supplier;
  */
 public final class MessageUtils {
 
-  private static Supplier<String> defaultPrefix = () -> "";
+  private static Supplier<String> defaultPrefix = () -> "&7[&cHSCore&7] &f";
 
   private MessageUtils() {
 
@@ -38,7 +39,7 @@ public final class MessageUtils {
    * @param sender  the receiver
    * @param message the message
    */
-  public static void sendMessage(@NotNull final CommandSender sender, @NotNull final String message) {
+  public static void sendMessage(@NotNull final CommandSender sender, @Nullable final String message) {
     sendMessage(sender, message, defaultPrefix);
   }
 
@@ -49,7 +50,10 @@ public final class MessageUtils {
    * @param message the message
    * @param prefix  the prefix
    */
-  public static void sendMessage(@NotNull final CommandSender sender, @NotNull String message, Supplier<String> prefix) {
+  public static void sendMessage(@NotNull final CommandSender sender, @Nullable final String message, @NotNull final Supplier<String> prefix) {
+    if (message == null) {
+      return;
+    }
     sender.sendMessage(colorize(prefix.get() + message));
   }
 
