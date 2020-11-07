@@ -1,6 +1,8 @@
 package me.hsgamer.hscore.bukkit.gui;
 
 import me.hsgamer.hscore.ui.BaseHolder;
+import me.hsgamer.hscore.ui.Updatable;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -10,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 /**
  * The UI Holder for Bukkit
@@ -20,6 +23,7 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
   protected String title;
   protected InventoryType inventoryType = InventoryType.CHEST;
   protected int size = InventoryType.CHEST.getDefaultSize();
+  protected Predicate<UUID> closeFilter = uuid -> true;
 
   /**
    * Create a new holder
@@ -27,9 +31,15 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    * @param removeDisplayOnClose whether the display should be removed on close event
    */
   public GUIHolder(boolean removeDisplayOnClose) {
-    if (removeDisplayOnClose) {
-      addEventConsumer(InventoryCloseEvent.class, event -> removeDisplay(event.getPlayer().getUniqueId()));
-    }
+    addEventConsumer(InventoryCloseEvent.class, event -> {
+      HumanEntity player = event.getPlayer();
+      UUID uuid = player.getUniqueId();
+      if (!closeFilter.test(uuid)) {
+        getDisplay(uuid).ifPresent(guiDisplay -> player.openInventory(guiDisplay.getInventory()));
+      } else if (removeDisplayOnClose) {
+        removeDisplay(event.getPlayer().getUniqueId());
+      }
+    });
 
     addEventConsumer(InventoryOpenEvent.class, this::onOpen);
     addEventConsumer(InventoryClickEvent.class, this::onClick);
@@ -67,6 +77,15 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
   }
 
   /**
+   * Set the close filter
+   *
+   * @param closeFilter the close filter
+   */
+  public void setCloseFilter(Predicate<UUID> closeFilter) {
+    this.closeFilter = closeFilter;
+  }
+
+  /**
    * Set the size
    *
    * @param size the size
@@ -83,6 +102,11 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    */
   public void setButton(int slot, Button button) {
     buttonSlotMap.put(slot, button);
+
+    // Updatable Buttons
+    if (button instanceof Updatable) {
+      ((Updatable) button).initUpdate();
+    }
   }
 
   /**
@@ -91,7 +115,9 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    * @param slot the slot
    */
   public void removeButton(int slot) {
-    buttonSlotMap.remove(slot);
+    Optional.ofNullable(buttonSlotMap.remove(slot))
+      .filter(button -> button instanceof Updatable)
+      .ifPresent(button -> ((Updatable) button).stopUpdate());
   }
 
   /**
