@@ -11,7 +11,7 @@ import java.util.function.Supplier;
  */
 public final class MessageUtils {
 
-  private static Supplier<String> prefix = () -> "";
+  private static Supplier<String> defaultPrefix = () -> "";
 
   private MessageUtils() {
 
@@ -39,39 +39,36 @@ public final class MessageUtils {
    * @param message the message
    */
   public static void sendMessage(@NotNull final CommandSender sender, @NotNull final String message) {
-    sendMessage(sender, message, true);
+    sendMessage(sender, message, defaultPrefix);
   }
 
   /**
    * Send message with prefix
    *
-   * @param sender    the receiver
-   * @param message   the message
-   * @param usePrefix whether the prefix should be included
+   * @param sender  the receiver
+   * @param message the message
+   * @param prefix  the prefix
    */
-  public static void sendMessage(@NotNull final CommandSender sender, @NotNull String message, final boolean usePrefix) {
-    if (usePrefix) {
-      message = prefix.get() + message;
-    }
-    sender.sendMessage(colorize(message));
+  public static void sendMessage(@NotNull final CommandSender sender, @NotNull String message, Supplier<String> prefix) {
+    sender.sendMessage(colorize(prefix.get() + message));
   }
 
   /**
-   * Get the prefix
+   * Get the default prefix
    *
    * @return the prefix
    */
   @NotNull
   public static String getPrefix() {
-    return prefix.get();
+    return defaultPrefix.get();
   }
 
   /**
-   * Set the prefix
+   * Set the default prefix
    *
    * @param prefix the prefix
    */
   public static void setPrefix(@NotNull final Supplier<String> prefix) {
-    MessageUtils.prefix = prefix;
+    MessageUtils.defaultPrefix = prefix;
   }
 }
