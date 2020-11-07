@@ -2,11 +2,13 @@ package me.hsgamer.hscore.bukkit.gui;
 
 import me.hsgamer.hscore.ui.BaseHolder;
 import me.hsgamer.hscore.ui.Updatable;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.plugin.Plugin;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,14 +30,15 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
   /**
    * Create a new holder
    *
+   * @param plugin               the plugin
    * @param removeDisplayOnClose whether the display should be removed on close event
    */
-  public GUIHolder(boolean removeDisplayOnClose) {
+  public GUIHolder(Plugin plugin, boolean removeDisplayOnClose) {
     addEventConsumer(InventoryCloseEvent.class, event -> {
       HumanEntity player = event.getPlayer();
       UUID uuid = player.getUniqueId();
       if (!closeFilter.test(uuid)) {
-        getDisplay(uuid).ifPresent(guiDisplay -> player.openInventory(guiDisplay.getInventory()));
+        getDisplay(uuid).ifPresent(guiDisplay -> Bukkit.getScheduler().runTask(plugin, () -> player.openInventory(guiDisplay.getInventory())));
       } else if (removeDisplayOnClose) {
         removeDisplay(uuid);
       }
@@ -53,9 +56,11 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
 
   /**
    * Create a new holder
+   *
+   * @param plugin the plugin
    */
-  public GUIHolder() {
-    this(true);
+  public GUIHolder(Plugin plugin) {
+    this(plugin, true);
   }
 
   /**
