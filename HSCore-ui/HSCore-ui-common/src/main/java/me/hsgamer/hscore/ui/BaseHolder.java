@@ -25,7 +25,7 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
 
   @Override
   public void removeDisplay(UUID uuid) {
-    Optional.ofNullable(displayMap.remove(uuid)).ifPresent(D::close);
+    Optional.ofNullable(displayMap.remove(uuid)).ifPresent(D::stop);
   }
 
   @Override

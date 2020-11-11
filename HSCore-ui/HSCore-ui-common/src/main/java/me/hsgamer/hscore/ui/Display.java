@@ -1,26 +1,14 @@
 package me.hsgamer.hscore.ui;
 
+import me.hsgamer.hscore.ui.property.Initializable;
+import me.hsgamer.hscore.ui.property.Updatable;
+
 import java.util.UUID;
 
 /**
  * The display
  */
-public interface Display {
-
-  /**
-   * Initialize the display
-   */
-  void init();
-
-  /**
-   * Update the display
-   */
-  void update();
-
-  /**
-   * Close the display
-   */
-  void close();
+public interface Display extends Initializable, Updatable {
 
   /**
    * Handle the event

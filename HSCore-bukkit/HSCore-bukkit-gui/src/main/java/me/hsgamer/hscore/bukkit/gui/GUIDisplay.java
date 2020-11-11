@@ -54,7 +54,7 @@ public class GUIDisplay implements Display, InventoryHolder {
   }
 
   @Override
-  public void close() {
+  public void stop() {
     inventory.clear();
   }
 
