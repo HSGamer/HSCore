@@ -82,4 +82,13 @@ public final class MessageUtils {
   public static void setPrefix(@NotNull final Supplier<String> prefix) {
     MessageUtils.defaultPrefix = prefix;
   }
+
+  /**
+   * Set the default prefix
+   *
+   * @param prefix the prefix
+   */
+  public static void setPrefix(@NotNull final String prefix) {
+    setPrefix(() -> prefix);
+  }
 }

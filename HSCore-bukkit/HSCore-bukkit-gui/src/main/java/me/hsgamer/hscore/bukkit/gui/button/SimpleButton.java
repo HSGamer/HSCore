@@ -35,4 +35,14 @@ public class SimpleButton implements Button {
   public void handleAction(UUID uuid, InventoryClickEvent event) {
     consumer.accept(uuid, event);
   }
+
+  @Override
+  public void init() {
+    // EMPTY
+  }
+
+  @Override
+  public void stop() {
+    // EMPTY
+  }
 }

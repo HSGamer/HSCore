@@ -1,7 +1,6 @@
 package me.hsgamer.hscore.bukkit.gui;
 
 import me.hsgamer.hscore.ui.BaseHolder;
-import me.hsgamer.hscore.ui.Updatable;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -107,11 +106,7 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    */
   public void setButton(int slot, Button button) {
     buttonSlotMap.put(slot, button);
-
-    // Updatable Buttons
-    if (button instanceof Updatable) {
-      ((Updatable) button).initUpdate();
-    }
+    button.init();
   }
 
   /**
@@ -120,9 +115,7 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    * @param slot the slot
    */
   public void removeButton(int slot) {
-    Optional.ofNullable(buttonSlotMap.remove(slot))
-      .filter(button -> button instanceof Updatable)
-      .ifPresent(button -> ((Updatable) button).stopUpdate());
+    Optional.ofNullable(buttonSlotMap.remove(slot)).ifPresent(Button::stop);
   }
 
   /**

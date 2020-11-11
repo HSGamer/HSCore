@@ -37,4 +37,14 @@ public class PredicateButton implements Button {
       button.handleAction(uuid, event);
     }
   }
+
+  @Override
+  public void init() {
+    button.init();
+  }
+
+  @Override
+  public void stop() {
+    button.stop();
+  }
 }
