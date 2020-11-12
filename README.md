@@ -39,6 +39,7 @@
   * **`HSCore-bukkit-all`**
     * **`HSCore-bukkit-addon`**
     * **`HSCore-bukkit-command`**
+    * **`HSCore-bukkit-command-extra`**
     * **`HSCore-bukkit-subcommand`**
     * **`HSCore-bukkit-config`**
     * **`HSCore-bukkit-config-extra`**
