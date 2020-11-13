@@ -32,7 +32,6 @@ public interface CommandNode {
     return Collections.emptyList();
   }
 
-
   /**
    * Get the permissions of command
    *
