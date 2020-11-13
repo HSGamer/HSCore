@@ -44,6 +44,10 @@ public class GUIDisplay implements Display, InventoryHolder {
 
   @Override
   public void update() {
+    if (inventory == null) {
+      return;
+    }
+
     IntStream.range(0, inventory.getSize()).forEach(i ->
       inventory.setItem(i,
         Optional.ofNullable(holder.buttonSlotMap.get(i))
@@ -55,7 +59,9 @@ public class GUIDisplay implements Display, InventoryHolder {
 
   @Override
   public void stop() {
-    inventory.clear();
+    if (inventory != null) {
+      inventory.clear();
+    }
   }
 
   @Override
