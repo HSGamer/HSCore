@@ -165,7 +165,7 @@ public interface CommandNode {
       return false;
     }
 
-    if (currentArgs.length > 0 && !consume()) {
+    if (currentArgs.length > 0 && !current.consume()) {
       sender.sendMessage(CommandFeedback.TOO_MANY_ARGUMENTS.getFeedback());
       return false;
     }
