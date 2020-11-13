@@ -141,6 +141,7 @@ public interface CommandNode {
     CommandNode current = this;
     String[] currentArgs = args;
     while (!current.subCommands().isEmpty() && currentArgs.length > 0) {
+      if (current.consume()) break;
       String label = currentArgs[0];
       currentArgs = Arrays.copyOfRange(currentArgs, 1, currentArgs.length);
       Optional<CommandNode> found = current.subCommands().stream()
@@ -149,7 +150,6 @@ public interface CommandNode {
         ).findFirst();
       if (found.isPresent()) {
         current = found.get();
-        if (current.consume()) break;
       } else {
         sender.sendMessage(CommandFeedback.UNKNOWN_COMMAND.getFeedback());
         return false;
@@ -166,7 +166,7 @@ public interface CommandNode {
       return false;
     }
 
-    if (currentArgs.length > 0) {
+    if (currentArgs.length > 0 && !consume()) {
       sender.sendMessage(CommandFeedback.TOO_MANY_ARGUMENTS.getFeedback());
       return false;
     }
