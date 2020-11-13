@@ -7,87 +7,169 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
 public interface CommandNode {
+
+  BiPredicate<CommandNode, String> MATCH_LABEL = (node, text) -> node.label().equalsIgnoreCase(text);
+  BiPredicate<CommandNode, String> MATCH_ALIASES = (node, text) -> node.aliases().stream().anyMatch(text::equalsIgnoreCase);
+
+  /**
+   * Get the label of command
+   *
+   * @return the label
+   */
   String label();
 
+
+  /**
+   * Get the aliases of command
+   *
+   * @return the aliases, default is empty
+   */
   default List<String> aliases() {
     return Collections.emptyList();
   }
 
+  /**
+   * Get the permissions of command
+   *
+   * @return the permissions, default is empty
+   */
   default List<String> permissions() {
     return Collections.emptyList();
   }
 
+  /**
+   * Check if only the players can use this command
+   *
+   * @return true if they can
+   */
   default boolean onlyPlayer() {
     return false;
   }
 
-  boolean execute(CommandSender sender, String label);
+  /**
+   * Executes the command when there is no subcommand or no args or consumes args, returning its success
+   *
+   * @param sender Source object which is executing this command
+   * @param label  The alias of the command used
+   * @param args   All arguments passed to the command, split via ' '
+   *
+   * @return true if the command was successful, otherwise false
+   */
+  boolean execute(final CommandSender sender, final String label, final String[] args);
 
-  default boolean match(String label) {
-    return label().equalsIgnoreCase(label) || aliases().stream().anyMatch(label::equalsIgnoreCase);
+  /**
+   * Check if this command consumes arguments
+   *
+   * @return true if it does
+   */
+  default boolean consume() {
+    return false;
   }
 
-  default boolean startsWithMatch(String incompleteWord) {
-    return label().toLowerCase().startsWith(incompleteWord.toLowerCase()) || aliases().stream().anyMatch(alias -> alias.toLowerCase().startsWith(incompleteWord.toLowerCase()));
+  /**
+   * Check if the label match the condition
+   *
+   * @param text the label
+   *
+   * @return true if it is
+   */
+  default boolean match(final String text) {
+    return MATCH_LABEL.test(this, text) || MATCH_ALIASES.test(this, text);
   }
 
+  /**
+   * Get a list of subcommand
+   *
+   * @return subcommands, default is empty
+   */
   default List<CommandNode> subCommands() {
     return Collections.emptyList();
   }
 
-  default List<String> tabComplete(CommandSender sender, String[] args) {
-    CommandNode child = this;
-    while (!child.subCommands().isEmpty() && args.length > 1) {
-      String incompleteWord = args[0];
-      Optional<CommandNode> found = child.subCommands().stream()
-        .filter(sub ->
-          (!sub.onlyPlayer() || sender instanceof Player) &&
-            (
-              sub.permissions().isEmpty() ||
-                sub.permissions().stream().anyMatch(sender::hasPermission)
-            ) &&
-            sub.startsWithMatch(incompleteWord)).findFirst();
+  /**
+   * Executed on tab completion for this command, returning a list of
+   * options the player can tab through.
+   *
+   * @param sender Source object which is executing this command
+   * @param args   All arguments passed to the command, split via ' '
+   *
+   * @return a list of tab-completions for the specified arguments. This
+   * will never be null. List may be immutable.
+   */
+  default List<String> tabComplete(final CommandSender sender, final String[] args) {
+    CommandNode current = this;
+    String[] currentArgs = args;
+    while (!current.subCommands().isEmpty() && currentArgs.length > 1) {
+      String incompleteWord = currentArgs[0].toLowerCase();
+      Optional<CommandNode> found = current.subCommands().stream()
+        .filter(subCommand ->
+          (
+            !subCommand.onlyPlayer() ||
+              sender instanceof Player
+          ) && (
+            subCommand.permissions().isEmpty() ||
+              subCommand.permissions().stream().anyMatch(sender::hasPermission)
+          ) && (
+            subCommand.label().toLowerCase().startsWith(incompleteWord) ||
+              subCommand.aliases().stream().anyMatch(
+                alias -> alias.toLowerCase().startsWith(incompleteWord)
+              )
+          )
+        ).findFirst();
       if (found.isPresent()) {
-        child = found.get();
-        args = Arrays.copyOfRange(args, 1, args.length);
+        current = found.get();
+        currentArgs = Arrays.copyOfRange(currentArgs, 1, currentArgs.length);
       } else return Collections.emptyList();
     }
-    return child.subCommands().stream().map(CommandNode::label).collect(Collectors.toList());
+    return current.subCommands().stream().map(CommandNode::label).collect(Collectors.toList());
   }
 
-  default boolean run(CommandSender sender, String[] args) {
-    CommandNode currentCommandNode = this;
-    while (!currentCommandNode.subCommands().isEmpty() && args.length > 0) {
-      String label = args[0];
-      args = Arrays.copyOfRange(args, 1, args.length);
-      Optional<CommandNode> found = currentCommandNode.subCommands().stream()
-        .filter(subCommand -> subCommand.match(label)).findFirst();
+  /**
+   * Handle the arguments
+   *
+   * @param sender Source object which is executing this command
+   * @param args   All arguments passed to the command, split via ' '
+   *
+   * @return true if the command was successful, otherwise false
+   */
+  default boolean handle(final CommandSender sender, final String[] args) {
+    CommandNode current = this;
+    String[] currentArgs = args;
+    while (!current.subCommands().isEmpty() && currentArgs.length > 0) {
+      if (current.consume()) break;
+      String label = currentArgs[0];
+      currentArgs = Arrays.copyOfRange(currentArgs, 1, currentArgs.length);
+      Optional<CommandNode> found = current.subCommands().stream()
+        .filter(subCommand ->
+          subCommand.match(label)
+        ).findFirst();
       if (found.isPresent()) {
-        currentCommandNode = found.get();
+        current = found.get();
       } else {
         sender.sendMessage(CommandFeedback.UNKNOWN_COMMAND.getFeedback());
         return false;
       }
     }
 
-    if (currentCommandNode.onlyPlayer() && !(sender instanceof Player)) {
+    if (current.onlyPlayer() && !(sender instanceof Player)) {
       sender.sendMessage(CommandFeedback.ONLY_PLAYER.getFeedback());
       return false;
     }
 
-    if (!currentCommandNode.permissions().isEmpty() && currentCommandNode.permissions().stream().noneMatch(sender::hasPermission)) {
+    if (!current.permissions().isEmpty() && current.permissions().stream().noneMatch(sender::hasPermission)) {
       sender.sendMessage(CommandFeedback.NO_PERMISSION.getFeedback());
       return false;
     }
 
-    if (args.length > 0) {
+    if (currentArgs.length > 0 && !consume()) {
       sender.sendMessage(CommandFeedback.TOO_MANY_ARGUMENTS.getFeedback());
       return false;
     }
 
-    return currentCommandNode.execute(sender, currentCommandNode.label());
+    return current.execute(sender, current.label(), currentArgs);
   }
 }

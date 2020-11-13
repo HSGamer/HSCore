@@ -7,6 +7,7 @@ public class CommandFeedback {
   public static final CommandFeedback ONLY_PLAYER = new CommandFeedback("§cOnly player can use this command");
   public static final CommandFeedback NO_PERMISSION = new CommandFeedback("§cYou don't have permission to do this");
   public static final CommandFeedback TOO_MANY_ARGUMENTS = new CommandFeedback("§cToo many arguments");
+  public static final CommandFeedback TOO_FEW_ARGUMENTS = new CommandFeedback("§cToo few arguments");
 
   private Supplier<String> feedback;
 
