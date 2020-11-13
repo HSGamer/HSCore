@@ -25,7 +25,6 @@ public class CommandFeedback {
    * Too many arguments for the command
    */
   public static final CommandFeedback TOO_MANY_ARGUMENTS = new CommandFeedback("§cToo many arguments");
-  public static final CommandFeedback TOO_FEW_ARGUMENTS = new CommandFeedback("§cToo few arguments");
 
   /**
    * Too few arguments for the command (Optional)
