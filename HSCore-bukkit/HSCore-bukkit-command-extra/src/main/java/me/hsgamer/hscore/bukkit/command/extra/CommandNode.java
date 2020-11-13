@@ -10,6 +10,9 @@ import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
+/**
+ * The interface for all command nodes
+ */
 public interface CommandNode {
 
   BiPredicate<CommandNode, String> MATCH_LABEL = (node, text) -> node.label().equalsIgnoreCase(text);
