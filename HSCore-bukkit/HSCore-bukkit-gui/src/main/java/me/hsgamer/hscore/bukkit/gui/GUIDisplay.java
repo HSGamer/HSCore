@@ -27,12 +27,10 @@ public class GUIDisplay implements Display, InventoryHolder {
 
   @Override
   public void init() {
-    String title = this.holder.title != null ? this.holder.title : this.holder.inventoryType.getDefaultTitle();
-
     if (this.holder.inventoryType == InventoryType.CHEST && this.holder.size > 0) {
-      this.inventory = Bukkit.createInventory(this, this.holder.size, title);
+      this.inventory = Bukkit.createInventory(this, this.holder.size, this.holder.titleFunction.apply(uuid));
     } else {
-      this.inventory = Bukkit.createInventory(this, this.holder.inventoryType, title);
+      this.inventory = Bukkit.createInventory(this, this.holder.inventoryType, this.holder.titleFunction.apply(uuid));
     }
     update();
 

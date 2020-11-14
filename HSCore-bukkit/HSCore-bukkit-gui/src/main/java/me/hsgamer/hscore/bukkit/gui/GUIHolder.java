@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -21,8 +22,8 @@ import java.util.function.Predicate;
 public class GUIHolder extends BaseHolder<GUIDisplay> {
 
   protected final Map<Integer, Button> buttonSlotMap = new HashMap<>();
-  protected String title;
   protected InventoryType inventoryType = InventoryType.CHEST;
+  protected Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
   protected int size = InventoryType.CHEST.getDefaultSize();
   protected Predicate<UUID> closeFilter = uuid -> true;
 
@@ -63,12 +64,23 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
   }
 
   /**
+   * Set the title function
+   *
+   * @param titleFunction the title function
+   */
+  public void setTitleFunction(Function<UUID, String> titleFunction) {
+    this.titleFunction = titleFunction;
+  }
+
+  /**
    * Set the title
    *
    * @param title the title
+   *
+   * @see #setTitleFunction(Function)
    */
   public void setTitle(String title) {
-    this.title = title;
+    setTitleFunction(uuid -> title);
   }
 
   /**
