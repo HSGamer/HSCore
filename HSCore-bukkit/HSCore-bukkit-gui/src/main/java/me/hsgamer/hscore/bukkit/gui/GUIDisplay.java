@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.bukkit.gui;
 
-import me.hsgamer.hscore.ui.Display;
+import me.hsgamer.hscore.ui.BaseDisplay;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
@@ -14,15 +14,18 @@ import java.util.stream.IntStream;
 /**
  * The display for {@link GUIHolder}
  */
-public class GUIDisplay implements Display, InventoryHolder {
+public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolder {
 
-  private final UUID uuid;
-  private final GUIHolder holder;
   private Inventory inventory;
 
+  /**
+   * Create a new display
+   *
+   * @param uuid   the unique id
+   * @param holder the holder
+   */
   protected GUIDisplay(UUID uuid, GUIHolder holder) {
-    this.uuid = uuid;
-    this.holder = holder;
+    super(uuid, holder);
   }
 
   @Override
@@ -60,16 +63,6 @@ public class GUIDisplay implements Display, InventoryHolder {
     if (inventory != null) {
       inventory.clear();
     }
-  }
-
-  @Override
-  public GUIHolder getHolder() {
-    return this.holder;
-  }
-
-  @Override
-  public UUID getUniqueId() {
-    return this.uuid;
   }
 
   @Override

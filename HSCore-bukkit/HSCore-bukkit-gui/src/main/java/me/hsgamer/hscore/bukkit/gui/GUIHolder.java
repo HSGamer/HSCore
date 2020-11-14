@@ -22,6 +22,7 @@ import java.util.function.Predicate;
 public class GUIHolder extends BaseHolder<GUIDisplay> {
 
   protected final Map<Integer, Button> buttonSlotMap = new HashMap<>();
+  protected final Plugin plugin;
   protected InventoryType inventoryType = InventoryType.CHEST;
   protected Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
   protected int size = InventoryType.CHEST.getDefaultSize();
@@ -34,6 +35,7 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    * @param removeDisplayOnClose whether the display should be removed on close event
    */
   public GUIHolder(Plugin plugin, boolean removeDisplayOnClose) {
+    this.plugin = plugin;
     addEventConsumer(InventoryCloseEvent.class, event -> {
       HumanEntity player = event.getPlayer();
       UUID uuid = player.getUniqueId();
@@ -139,6 +141,15 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    */
   public Button getButton(int slot) {
     return buttonSlotMap.get(slot);
+  }
+
+  /**
+   * Get the plugin
+   *
+   * @return the plugin
+   */
+  public Plugin getPlugin() {
+    return this.plugin;
   }
 
   @Override

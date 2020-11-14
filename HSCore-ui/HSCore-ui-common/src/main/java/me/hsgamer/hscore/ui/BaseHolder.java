@@ -3,6 +3,11 @@ package me.hsgamer.hscore.ui;
 import java.util.*;
 import java.util.function.Consumer;
 
+/**
+ * A simple implementation of {@link Holder}
+ *
+ * @param <D> The type of {@link Display}
+ */
 public abstract class BaseHolder<D extends Display> implements Holder<D> {
   private final Map<Class<?>, List<Consumer<Object>>> classListMap = new HashMap<>();
   private final HashMap<UUID, D> displayMap = new HashMap<>();
