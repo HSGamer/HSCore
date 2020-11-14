@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -121,6 +122,6 @@ public class CommandManager {
    */
   @NotNull
   public final Map<String, Command> getRegistered() {
-    return this.registered;
+    return Collections.unmodifiableMap(this.registered);
   }
 }
