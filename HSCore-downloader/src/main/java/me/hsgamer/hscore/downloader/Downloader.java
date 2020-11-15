@@ -4,10 +4,12 @@ import me.hsgamer.hscore.downloader.object.DownloadInfo;
 import me.hsgamer.hscore.web.UserAgent;
 import me.hsgamer.hscore.web.WebUtils;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -78,7 +80,7 @@ public class Downloader {
     downloadInfoMap.clear();
     CompletableFuture.supplyAsync(() -> {
       try {
-        return WebUtils.getJSONFromURL(dbUrl, UserAgent.FIREFOX);
+        return new JSONParser().parse(new InputStreamReader(WebUtils.openConnection(dbUrl, UserAgent.FIREFOX).getInputStream()));
       } catch (IOException | ParseException e) {
         LOGGER.log(Level.WARNING, e, () -> "Something wrong when getting the addon info");
         return null;

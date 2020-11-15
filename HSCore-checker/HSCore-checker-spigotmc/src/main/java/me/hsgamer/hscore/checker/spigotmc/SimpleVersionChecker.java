@@ -4,9 +4,11 @@ import me.hsgamer.hscore.web.UserAgent;
 import me.hsgamer.hscore.web.WebUtils;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -34,8 +36,7 @@ public final class SimpleVersionChecker {
   public final CompletableFuture<String> getVersion() {
     return CompletableFuture.supplyAsync(() -> {
       try {
-        JSONObject object = (JSONObject) WebUtils.getJSONFromURL(
-          "https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId, UserAgent.FIREFOX);
+        JSONObject object = (JSONObject) new JSONParser().parse(new InputStreamReader(WebUtils.openConnection("https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId, UserAgent.FIREFOX).getInputStream()));
         if (!object.containsKey("current_version")) {
           throw new IOException("Cannot get the plugin version");
         }

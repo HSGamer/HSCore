@@ -6,10 +6,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.util.Collections;
 
@@ -56,7 +53,23 @@ public class JSONUtils {
    */
   @Nullable
   public static Object getJSON(@NotNull File file) {
-    try (FileReader reader = new FileReader(file)) {
+    try {
+      return getJSON(new FileReader(file));
+    } catch (FileNotFoundException e) {
+      return null;
+    }
+  }
+
+  /**
+   * Get JSON object from a reader
+   *
+   * @param reader the reader
+   *
+   * @return the JSON object, or null if there is an error when parsing
+   */
+  @Nullable
+  public static Object getJSON(@NotNull Reader reader) {
+    try {
       return parser.parse(reader);
     } catch (IOException | ParseException e) {
       return null;
