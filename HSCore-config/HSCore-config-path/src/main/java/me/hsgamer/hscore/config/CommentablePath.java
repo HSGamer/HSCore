@@ -27,11 +27,11 @@ public class CommentablePath<T> implements ConfigPath<T> {
   public CommentablePath(@NotNull final ConfigPath<T> originalPath, @NotNull final String... defaultComments) {
     this.originalPath = originalPath;
 
-    if (defaultComments.length > 1) {
+    if (defaultComments.length > 0) {
       defaultCommentMap.put(CommentType.BLOCK, defaultComments[0]);
     }
 
-    if (defaultComments.length > 2) {
+    if (defaultComments.length > 1) {
       defaultCommentMap.put(CommentType.SIDE, defaultComments[1]);
     }
   }
