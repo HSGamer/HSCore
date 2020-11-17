@@ -17,6 +17,7 @@ import java.util.stream.IntStream;
 public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolder {
 
   private Inventory inventory;
+  private boolean forceUpdate = false;
 
   /**
    * Create a new display
@@ -26,6 +27,16 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
    */
   protected GUIDisplay(UUID uuid, GUIHolder holder) {
     super(uuid, holder);
+  }
+
+  /**
+   * Should the display force the viewers to update their inventory
+   *
+   * @param forceUpdate true to force them
+   */
+  public GUIDisplay setForceUpdate(boolean forceUpdate) {
+    this.forceUpdate = forceUpdate;
+    return this;
   }
 
   @Override
@@ -56,6 +67,13 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
           .orElse(null)
       )
     );
+
+    if (forceUpdate) {
+      inventory.getViewers()
+        .stream()
+        .filter(humanEntity -> humanEntity instanceof Player)
+        .forEach(humanEntity -> ((Player) humanEntity).updateInventory());
+    }
   }
 
   @Override
