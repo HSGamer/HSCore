@@ -16,16 +16,19 @@ public class PredicateButton implements Button {
   private final Button button;
   private final Predicate<UUID> viewPredicate;
   private final BiPredicate<UUID, InventoryClickEvent> clickPredicate;
+  private final Button fallbackButton;
 
   /**
    * Create a predicate button
    *
    * @param button         the original button
+   * @param fallbackButton the button used when the unique id fails the predicate
    * @param viewPredicate  the view predicate
    * @param clickPredicate the click predicate
    */
-  public PredicateButton(Button button, Predicate<UUID> viewPredicate, BiPredicate<UUID, InventoryClickEvent> clickPredicate) {
+  public PredicateButton(Button button, Button fallbackButton, Predicate<UUID> viewPredicate, BiPredicate<UUID, InventoryClickEvent> clickPredicate) {
     this.button = button;
+    this.fallbackButton = fallbackButton;
     this.viewPredicate = viewPredicate;
     this.clickPredicate = clickPredicate;
   }
@@ -37,7 +40,7 @@ public class PredicateButton implements Button {
    * @param clickPredicate the click predicate
    */
   public PredicateButton(Button button, BiPredicate<UUID, InventoryClickEvent> clickPredicate) {
-    this(button, uuid -> true, clickPredicate);
+    this(button, Button.EMPTY, uuid -> true, clickPredicate);
   }
 
   @Override
@@ -45,13 +48,15 @@ public class PredicateButton implements Button {
     if (viewPredicate.test(uuid)) {
       return button.getItemStack(uuid);
     }
-    return null;
+    return fallbackButton.getItemStack(uuid);
   }
 
   @Override
   public void handleAction(UUID uuid, InventoryClickEvent event) {
     if (viewPredicate.test(uuid) && clickPredicate.test(uuid, event)) {
       button.handleAction(uuid, event);
+    } else {
+      fallbackButton.handleAction(uuid, event);
     }
   }
 

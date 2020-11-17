@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.gui;
 
+import me.hsgamer.hscore.bukkit.gui.button.DummyButton;
 import me.hsgamer.hscore.ui.property.Initializable;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -10,6 +11,11 @@ import java.util.UUID;
  * An interface for all button
  */
 public interface Button extends Initializable {
+
+  /**
+   * The empty button
+   */
+  Button EMPTY = new DummyButton(null);
 
   /**
    * Get the item stack for the unique id
