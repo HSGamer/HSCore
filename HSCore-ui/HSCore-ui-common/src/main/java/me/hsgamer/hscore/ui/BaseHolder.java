@@ -46,10 +46,10 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
   @Override
   public <T> void addEventConsumer(Class<T> eventClass, Consumer<T> eventConsumer) {
     classListMap
-      .computeIfAbsent(eventClass, clazz -> new ArrayList<>())
+      .computeIfAbsent(eventClass, clazz -> new LinkedList<>())
       .add(o -> {
         if (eventClass.isInstance(o)) {
-          eventConsumer.accept((T) o);
+          eventConsumer.accept(eventClass.cast(o));
         }
       });
   }
