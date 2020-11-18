@@ -91,9 +91,5 @@ public class AnimatedButton implements Button, Updatable {
   @Override
   public void update() {
     this.currentIndex = (this.currentIndex + 1) % this.buttons.size();
-    Button button = this.buttons.get(this.currentIndex);
-    if (button instanceof Updatable) {
-      ((Updatable) button).update();
-    }
   }
 }
