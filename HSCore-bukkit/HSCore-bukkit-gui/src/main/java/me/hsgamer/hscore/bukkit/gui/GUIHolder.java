@@ -165,6 +165,14 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
     return new GUIDisplay(uuid, this);
   }
 
+  @Override
+  public void clearAll() {
+    removeAllButton();
+    clearAllEventConsumer();
+    displayMap.forEach((uuid, guiDisplay) -> guiDisplay.getInventory().getViewers().forEach(HumanEntity::closeInventory));
+    removeAllDisplay();
+  }
+
   /**
    * Handle open event
    *

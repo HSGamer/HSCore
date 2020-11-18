@@ -68,6 +68,11 @@ public interface Holder<D extends Display> {
   void removeAllDisplay();
 
   /**
+   * Clear everything in the holder
+   */
+  void clearAll();
+
+  /**
    * Handle the event
    *
    * @param event the event

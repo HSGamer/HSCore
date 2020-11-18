@@ -9,8 +9,8 @@ import java.util.function.Consumer;
  * @param <D> The type of {@link Display}
  */
 public abstract class BaseHolder<D extends Display> implements Holder<D> {
+  protected final HashMap<UUID, D> displayMap = new HashMap<>();
   private final Map<Class<?>, List<Consumer<Object>>> classListMap = new HashMap<>();
-  private final HashMap<UUID, D> displayMap = new HashMap<>();
 
   /**
    * Make a new display
@@ -58,6 +58,12 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
           eventConsumer.accept(eventClass.cast(o));
         }
       });
+  }
+
+  @Override
+  public void clearAll() {
+    clearAllEventConsumer();
+    removeAllDisplay();
   }
 
   @Override
