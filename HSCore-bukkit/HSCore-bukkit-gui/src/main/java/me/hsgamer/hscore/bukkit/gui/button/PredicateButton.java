@@ -14,33 +14,48 @@ import java.util.function.Predicate;
 public class PredicateButton implements Button {
 
   private final Button button;
-  private final Predicate<UUID> viewPredicate;
-  private final BiPredicate<UUID, InventoryClickEvent> clickPredicate;
-  private final Button fallbackButton;
+
+  private Predicate<UUID> viewPredicate = uuid -> true;
+  private BiPredicate<UUID, InventoryClickEvent> clickPredicate = (uuid, inventoryClickEvent) -> true;
+  private Button fallbackButton = Button.EMPTY;
 
   /**
    * Create a predicate button
    *
-   * @param button         the original button
-   * @param fallbackButton the button used when the unique id fails the predicate
-   * @param viewPredicate  the view predicate
-   * @param clickPredicate the click predicate
+   * @param button the original button
    */
-  public PredicateButton(Button button, Button fallbackButton, Predicate<UUID> viewPredicate, BiPredicate<UUID, InventoryClickEvent> clickPredicate) {
+  public PredicateButton(Button button) {
     this.button = button;
-    this.fallbackButton = fallbackButton;
-    this.viewPredicate = viewPredicate;
-    this.clickPredicate = clickPredicate;
   }
 
   /**
-   * Create a predicate button
+   * Set the view predicate
    *
-   * @param button         the original button
+   * @param viewPredicate the view predicate
+   */
+  public PredicateButton setViewPredicate(Predicate<UUID> viewPredicate) {
+    this.viewPredicate = viewPredicate;
+    return this;
+  }
+
+  /**
+   * Set the click predicate
+   *
    * @param clickPredicate the click predicate
    */
-  public PredicateButton(Button button, BiPredicate<UUID, InventoryClickEvent> clickPredicate) {
-    this(button, Button.EMPTY, uuid -> true, clickPredicate);
+  public PredicateButton setClickPredicate(BiPredicate<UUID, InventoryClickEvent> clickPredicate) {
+    this.clickPredicate = clickPredicate;
+    return this;
+  }
+
+  /**
+   * Set the fallback button
+   *
+   * @param fallbackButton the fallback button
+   */
+  public PredicateButton setFallbackButton(Button fallbackButton) {
+    this.fallbackButton = fallbackButton;
+    return this;
   }
 
   @Override
