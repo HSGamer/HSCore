@@ -9,10 +9,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.Plugin;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -169,7 +166,7 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
   public void clearAll() {
     removeAllButton();
     clearAllEventConsumer();
-    displayMap.forEach((uuid, guiDisplay) -> guiDisplay.getInventory().getViewers().forEach(HumanEntity::closeInventory));
+    displayMap.forEach((uuid, guiDisplay) -> new ArrayList<>(guiDisplay.getInventory().getViewers()).forEach(HumanEntity::closeInventory));
     removeAllDisplay();
   }
 
