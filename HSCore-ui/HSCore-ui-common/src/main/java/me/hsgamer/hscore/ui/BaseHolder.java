@@ -34,6 +34,12 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
   }
 
   @Override
+  public void removeAllDisplay() {
+    displayMap.values().forEach(D::stop);
+    displayMap.clear();
+  }
+
+  @Override
   public Optional<D> getDisplay(UUID uuid) {
     return Optional.ofNullable(displayMap.get(uuid));
   }
@@ -57,6 +63,11 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
   @Override
   public void clearEventConsumer(Class<?> eventClass) {
     classListMap.remove(eventClass);
+  }
+
+  @Override
+  public void clearAllEventConsumer() {
+    classListMap.clear();
   }
 
   @Override

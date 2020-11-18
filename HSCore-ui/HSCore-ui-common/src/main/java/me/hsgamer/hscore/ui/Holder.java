@@ -58,6 +58,16 @@ public interface Holder<D extends Display> {
   void clearEventConsumer(Class<?> eventClass);
 
   /**
+   * Clear all event consumers of all events
+   */
+  void clearAllEventConsumer();
+
+  /**
+   * Remove all displays
+   */
+  void removeAllDisplay();
+
+  /**
    * Handle the event
    *
    * @param event the event
