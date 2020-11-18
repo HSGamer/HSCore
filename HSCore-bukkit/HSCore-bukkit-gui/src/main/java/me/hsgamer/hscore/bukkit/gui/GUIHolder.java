@@ -133,6 +133,14 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
   }
 
   /**
+   * Remove all buttons
+   */
+  public void removeAllButton() {
+    buttonSlotMap.values().forEach(Button::stop);
+    buttonSlotMap.clear();
+  }
+
+  /**
    * Get the button
    *
    * @param slot the slot
