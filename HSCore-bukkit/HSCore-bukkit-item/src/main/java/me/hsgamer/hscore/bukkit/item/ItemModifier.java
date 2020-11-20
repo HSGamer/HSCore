@@ -21,6 +21,20 @@ public interface ItemModifier {
   ItemStack modify(ItemStack original, UUID uuid, StringReplacer replacer);
 
   /**
+   * Serialize the modifier to an object
+   *
+   * @return the object
+   */
+  Object toObject();
+
+  /**
+   * Load the modifier from an object
+   *
+   * @param object the object
+   */
+  void loadFromObject(Object object);
+
+  /**
    * Modify the item
    *
    * @param original the original item
