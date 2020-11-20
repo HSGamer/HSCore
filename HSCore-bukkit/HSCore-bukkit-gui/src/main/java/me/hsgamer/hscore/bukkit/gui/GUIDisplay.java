@@ -40,6 +40,15 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
     return this;
   }
 
+  /**
+   * Should the display force the viewers to update their inventory
+   *
+   * @return true if it should
+   */
+  public boolean isForceUpdate() {
+    return forceUpdate;
+  }
+
   @Override
   public void init() {
     if (this.holder.inventoryType == InventoryType.CHEST && this.holder.size > 0) {
