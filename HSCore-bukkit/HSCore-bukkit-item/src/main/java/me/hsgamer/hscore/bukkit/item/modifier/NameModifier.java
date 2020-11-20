@@ -5,6 +5,7 @@ import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -14,9 +15,9 @@ public class NameModifier implements ItemModifier {
   private String name;
 
   @Override
-  public ItemStack modify(ItemStack original, UUID uuid, StringReplacer replacer) {
+  public ItemStack modify(ItemStack original, UUID uuid, List<StringReplacer> stringReplacers) {
     ItemMeta itemMeta = original.getItemMeta();
-    itemMeta.setDisplayName(replacer.replace(name, uuid));
+    itemMeta.setDisplayName(StringReplacer.replace(name, uuid, stringReplacers));
     original.setItemMeta(itemMeta);
     return original;
   }

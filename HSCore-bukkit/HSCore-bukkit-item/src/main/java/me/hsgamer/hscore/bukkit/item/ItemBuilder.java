@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +15,7 @@ import java.util.UUID;
  */
 public class ItemBuilder {
   private final List<ItemModifier> itemModifiers = new LinkedList<>();
-  private StringReplacer stringReplacer = StringReplacer.DUMMY;
+  private final List<StringReplacer> stringReplacers = new LinkedList<>();
 
   /**
    * Add an item modifier
@@ -32,25 +33,25 @@ public class ItemBuilder {
    * @return the item modifiers
    */
   public List<ItemModifier> getItemModifiers() {
-    return itemModifiers;
+    return Collections.unmodifiableList(itemModifiers);
   }
 
   /**
-   * Get the string replacer
+   * Get the list of the string replacer
    *
-   * @return the string replacer
+   * @return the string replacers
    */
-  public StringReplacer getStringReplacer() {
-    return stringReplacer;
+  public List<StringReplacer> getStringReplacers() {
+    return Collections.unmodifiableList(stringReplacers);
   }
 
   /**
-   * Set the string replacer
+   * Add a string replacer
    *
    * @param replacer the string replacer
    */
-  public ItemBuilder setStringReplacer(StringReplacer replacer) {
-    this.stringReplacer = replacer;
+  public ItemBuilder addStringReplacer(StringReplacer replacer) {
+    this.stringReplacers.add(replacer);
     return this;
   }
 

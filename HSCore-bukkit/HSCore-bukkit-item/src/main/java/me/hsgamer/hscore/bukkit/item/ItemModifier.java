@@ -3,6 +3,8 @@ package me.hsgamer.hscore.bukkit.item;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -12,13 +14,13 @@ public interface ItemModifier {
   /**
    * Modify the item
    *
-   * @param original the original item
-   * @param uuid     the unique id
-   * @param replacer the string replacer
+   * @param original        the original item
+   * @param uuid            the unique id
+   * @param stringReplacers the list of string replacers
    *
    * @return the modified item
    */
-  ItemStack modify(ItemStack original, UUID uuid, StringReplacer replacer);
+  ItemStack modify(ItemStack original, UUID uuid, List<StringReplacer> stringReplacers);
 
   /**
    * Serialize the modifier to an object
@@ -43,7 +45,7 @@ public interface ItemModifier {
    * @return the modified item
    */
   default ItemStack modify(ItemStack original, UUID uuid) {
-    return modify(original, uuid, StringReplacer.DUMMY);
+    return modify(original, uuid, Collections.emptyList());
   }
 
   /**
@@ -56,6 +58,6 @@ public interface ItemModifier {
    * @return the modified item
    */
   default ItemStack modify(ItemStack original, UUID uuid, ItemBuilder itemBuilder) {
-    return modify(original, uuid, itemBuilder.getStringReplacer());
+    return modify(original, uuid, itemBuilder.getStringReplacers());
   }
 }

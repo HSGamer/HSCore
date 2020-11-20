@@ -4,6 +4,7 @@ import me.hsgamer.hscore.bukkit.item.ItemModifier;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -13,9 +14,9 @@ public class AmountModifier implements ItemModifier {
   private String amount = "1";
 
   @Override
-  public ItemStack modify(ItemStack original, UUID uuid, StringReplacer replacer) {
+  public ItemStack modify(ItemStack original, UUID uuid, List<StringReplacer> stringReplacers) {
     try {
-      original.setAmount(Integer.parseInt(amount));
+      original.setAmount(Integer.parseInt(StringReplacer.replace(amount, uuid, stringReplacers)));
     } catch (NumberFormatException exception) {
       // IGNORED
     }

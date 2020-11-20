@@ -16,9 +16,9 @@ public class LoreModifier implements ItemModifier {
   private List<String> lore = new ArrayList<>();
 
   @Override
-  public ItemStack modify(ItemStack original, UUID uuid, StringReplacer replacer) {
+  public ItemStack modify(ItemStack original, UUID uuid, List<StringReplacer> stringReplacers) {
     ItemMeta itemMeta = original.getItemMeta();
-    itemMeta.setLore(lore.stream().map(s -> replacer.replace(s, uuid)).collect(Collectors.toList()));
+    itemMeta.setLore(lore.stream().map(s -> StringReplacer.replace(s, uuid, stringReplacers)).collect(Collectors.toList()));
     original.setItemMeta(itemMeta);
     return original;
   }

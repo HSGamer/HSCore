@@ -5,6 +5,7 @@ import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,9 +16,9 @@ public class MaterialModifier implements ItemModifier {
   private String materialString;
 
   @Override
-  public ItemStack modify(ItemStack original, UUID uuid, StringReplacer replacer) {
+  public ItemStack modify(ItemStack original, UUID uuid, List<StringReplacer> stringReplacers) {
     Optional
-      .ofNullable(Material.matchMaterial(replacer.replace(materialString, uuid)))
+      .ofNullable(Material.matchMaterial(StringReplacer.replace(materialString, uuid, stringReplacers)))
       .ifPresent(original::setType);
     return original;
   }
