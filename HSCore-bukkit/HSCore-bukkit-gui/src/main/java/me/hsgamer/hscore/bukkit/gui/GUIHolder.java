@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.Plugin;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -18,7 +19,7 @@ import java.util.function.Predicate;
  */
 public class GUIHolder extends BaseHolder<GUIDisplay> {
 
-  protected final Map<Integer, Button> buttonSlotMap = new HashMap<>();
+  protected final Map<Integer, Button> buttonSlotMap = new ConcurrentHashMap<>();
   protected final Plugin plugin;
   protected final boolean removeDisplayOnClose;
   protected InventoryType inventoryType = InventoryType.CHEST;
