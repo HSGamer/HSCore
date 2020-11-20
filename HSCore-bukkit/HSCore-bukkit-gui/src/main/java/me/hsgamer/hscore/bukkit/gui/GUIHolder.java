@@ -19,13 +19,13 @@ import java.util.function.Predicate;
  */
 public class GUIHolder extends BaseHolder<GUIDisplay> {
 
-  protected final Map<Integer, Button> buttonSlotMap = new ConcurrentHashMap<>();
-  protected final Plugin plugin;
-  protected final boolean removeDisplayOnClose;
-  protected InventoryType inventoryType = InventoryType.CHEST;
-  protected Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
-  protected int size = InventoryType.CHEST.getDefaultSize();
-  protected Predicate<UUID> closeFilter = uuid -> true;
+  private final Map<Integer, Button> buttonSlotMap = new ConcurrentHashMap<>();
+  private final Plugin plugin;
+  private final boolean removeDisplayOnClose;
+  private InventoryType inventoryType = InventoryType.CHEST;
+  private Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
+  private int size = InventoryType.CHEST.getDefaultSize();
+  private Predicate<UUID> closeFilter = uuid -> true;
 
   /**
    * Create a new holder
@@ -45,53 +45,6 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    */
   public GUIHolder(Plugin plugin) {
     this(plugin, true);
-  }
-
-  /**
-   * Set the title function
-   *
-   * @param titleFunction the title function
-   */
-  public void setTitleFunction(Function<UUID, String> titleFunction) {
-    this.titleFunction = titleFunction;
-  }
-
-  /**
-   * Set the title
-   *
-   * @param title the title
-   *
-   * @see #setTitleFunction(Function)
-   */
-  public void setTitle(String title) {
-    setTitleFunction(uuid -> title);
-  }
-
-  /**
-   * Set the inventory type
-   *
-   * @param inventoryType the inventory type
-   */
-  public void setInventoryType(InventoryType inventoryType) {
-    this.inventoryType = inventoryType;
-  }
-
-  /**
-   * Set the close filter
-   *
-   * @param closeFilter the close filter
-   */
-  public void setCloseFilter(Predicate<UUID> closeFilter) {
-    this.closeFilter = closeFilter;
-  }
-
-  /**
-   * Set the size
-   *
-   * @param size the size
-   */
-  public void setSize(int size) {
-    this.size = size;
   }
 
   /**
@@ -129,8 +82,8 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    *
    * @return the button
    */
-  public Button getButton(int slot) {
-    return buttonSlotMap.get(slot);
+  public Optional<Button> getButton(int slot) {
+    return Optional.ofNullable(buttonSlotMap.get(slot));
   }
 
   /**
@@ -141,7 +94,120 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
   public Plugin getPlugin() {
     return this.plugin;
   }
-  
+
+  /**
+   * Get the map of buttons
+   *
+   * @return the map of buttons
+   */
+  public Map<Integer, Button> getButtonSlotMap() {
+    return Collections.unmodifiableMap(buttonSlotMap);
+  }
+
+  /**
+   * Check if the holder should remove the display on its close
+   *
+   * @return true if it should
+   */
+  public boolean isRemoveDisplayOnClose() {
+    return removeDisplayOnClose;
+  }
+
+  /**
+   * Get the inventory type
+   *
+   * @return the inventory type
+   */
+  public InventoryType getInventoryType() {
+    return inventoryType;
+  }
+
+  /**
+   * Set the inventory type
+   *
+   * @param inventoryType the inventory type
+   */
+  public void setInventoryType(InventoryType inventoryType) {
+    this.inventoryType = inventoryType;
+  }
+
+  /**
+   * Get the title function
+   *
+   * @return the title function
+   */
+  public Function<UUID, String> getTitleFunction() {
+    return titleFunction;
+  }
+
+  /**
+   * Set the title function
+   *
+   * @param titleFunction the title function
+   */
+  public void setTitleFunction(Function<UUID, String> titleFunction) {
+    this.titleFunction = titleFunction;
+  }
+
+  /**
+   * Get the title for the unique id
+   *
+   * @param uuid the unique id
+   *
+   * @return the title
+   */
+  public String getTitle(UUID uuid) {
+    return titleFunction.apply(uuid);
+  }
+
+  /**
+   * Set the title
+   *
+   * @param title the title
+   *
+   * @see #setTitleFunction(Function)
+   */
+  public void setTitle(String title) {
+    setTitleFunction(uuid -> title);
+  }
+
+  /**
+   * Get the size of the inventory
+   *
+   * @return the size
+   */
+  public int getSize() {
+    return size;
+  }
+
+  /**
+   * Set the size
+   *
+   * @param size the size
+   */
+  public void setSize(int size) {
+    this.size = size;
+  }
+
+  /**
+   * \
+   * Get the close filter
+   *
+   * @return the close filter
+   */
+  public Predicate<UUID> getCloseFilter() {
+    return closeFilter;
+  }
+
+  /**
+   * Set the close filter
+   *
+   * @param closeFilter the close filter
+   */
+  public void setCloseFilter(Predicate<UUID> closeFilter) {
+    this.closeFilter = closeFilter;
+  }
+
   @Override
   protected GUIDisplay newDisplay(UUID uuid) {
     return new GUIDisplay(uuid, this);

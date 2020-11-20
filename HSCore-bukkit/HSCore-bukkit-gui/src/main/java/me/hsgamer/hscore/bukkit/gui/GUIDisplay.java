@@ -8,7 +8,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
@@ -33,6 +32,15 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
   /**
    * Should the display force the viewers to update their inventory
    *
+   * @return true if it should
+   */
+  public boolean isForceUpdate() {
+    return forceUpdate;
+  }
+
+  /**
+   * Should the display force the viewers to update their inventory
+   *
    * @param forceUpdate true to force them
    */
   public GUIDisplay setForceUpdate(boolean forceUpdate) {
@@ -40,21 +48,12 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
     return this;
   }
 
-  /**
-   * Should the display force the viewers to update their inventory
-   *
-   * @return true if it should
-   */
-  public boolean isForceUpdate() {
-    return forceUpdate;
-  }
-
   @Override
   public void init() {
-    if (this.holder.inventoryType == InventoryType.CHEST && this.holder.size > 0) {
-      this.inventory = Bukkit.createInventory(this, this.holder.size, this.holder.titleFunction.apply(uuid));
+    if (this.holder.getInventoryType() == InventoryType.CHEST && this.holder.getSize() > 0) {
+      this.inventory = Bukkit.createInventory(this, this.holder.getSize(), this.holder.getTitle(uuid));
     } else {
-      this.inventory = Bukkit.createInventory(this, this.holder.inventoryType, this.holder.titleFunction.apply(uuid));
+      this.inventory = Bukkit.createInventory(this, this.holder.getInventoryType(), this.holder.getTitle(uuid));
     }
     update();
 
@@ -72,7 +71,7 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
 
     IntStream.range(0, inventory.getSize()).forEach(i ->
       inventory.setItem(i,
-        Optional.ofNullable(holder.buttonSlotMap.get(i))
+        this.holder.getButton(i)
           .map(button -> button.getItemStack(uuid))
           .orElse(null)
       )
