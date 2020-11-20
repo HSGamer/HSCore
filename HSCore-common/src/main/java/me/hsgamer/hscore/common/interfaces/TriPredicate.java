@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.common;
+package me.hsgamer.hscore.common.interfaces;
 
 /**
  * Predicate with THREE parameters

@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.bukkit.command.extra;
 
-import me.hsgamer.hscore.common.TriPredicate;
+import me.hsgamer.hscore.common.interfaces.TriPredicate;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collections;
