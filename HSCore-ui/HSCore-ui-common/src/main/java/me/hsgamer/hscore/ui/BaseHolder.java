@@ -45,7 +45,7 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
   }
 
   @Override
-  public void updateAll() {
+  public void update() {
     displayMap.values().forEach(D::update);
   }
 
@@ -61,7 +61,7 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
   }
 
   @Override
-  public void clearAll() {
+  public void stop() {
     clearAllEventConsumer();
     removeAllDisplay();
   }

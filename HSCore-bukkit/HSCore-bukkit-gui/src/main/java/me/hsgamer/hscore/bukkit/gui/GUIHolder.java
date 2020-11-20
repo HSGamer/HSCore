@@ -20,6 +20,7 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
 
   protected final Map<Integer, Button> buttonSlotMap = new HashMap<>();
   protected final Plugin plugin;
+  protected final boolean removeDisplayOnClose;
   protected InventoryType inventoryType = InventoryType.CHEST;
   protected Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
   protected int size = InventoryType.CHEST.getDefaultSize();
@@ -33,24 +34,7 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    */
   public GUIHolder(Plugin plugin, boolean removeDisplayOnClose) {
     this.plugin = plugin;
-    addEventConsumer(InventoryCloseEvent.class, event -> {
-      HumanEntity player = event.getPlayer();
-      UUID uuid = player.getUniqueId();
-      if (!closeFilter.test(uuid)) {
-        getDisplay(uuid).ifPresent(guiDisplay -> Bukkit.getScheduler().runTask(plugin, () -> player.openInventory(guiDisplay.getInventory())));
-      } else if (removeDisplayOnClose) {
-        removeDisplay(uuid);
-      }
-    });
-
-    addEventConsumer(InventoryOpenEvent.class, this::onOpen);
-    addEventConsumer(InventoryClickEvent.class, this::onClick);
-    addEventConsumer(InventoryCloseEvent.class, this::onClose);
-
-    addEventConsumer(InventoryClickEvent.class,
-      event -> Optional.ofNullable(buttonSlotMap.get(event.getRawSlot()))
-        .ifPresent(button -> button.handleAction(event.getWhoClicked().getUniqueId(), event))
-    );
+    this.removeDisplayOnClose = removeDisplayOnClose;
   }
 
   /**
@@ -156,18 +140,40 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
   public Plugin getPlugin() {
     return this.plugin;
   }
-
+  
   @Override
   protected GUIDisplay newDisplay(UUID uuid) {
     return new GUIDisplay(uuid, this);
   }
 
   @Override
-  public void clearAll() {
+  public void init() {
+    addEventConsumer(InventoryCloseEvent.class, event -> {
+      HumanEntity player = event.getPlayer();
+      UUID uuid = player.getUniqueId();
+      if (!closeFilter.test(uuid)) {
+        getDisplay(uuid).ifPresent(guiDisplay -> Bukkit.getScheduler().runTask(plugin, () -> player.openInventory(guiDisplay.getInventory())));
+      } else if (removeDisplayOnClose) {
+        removeDisplay(uuid);
+      }
+    });
+
+    addEventConsumer(InventoryOpenEvent.class, this::onOpen);
+    addEventConsumer(InventoryClickEvent.class, this::onClick);
+    addEventConsumer(InventoryCloseEvent.class, this::onClose);
+
+    addEventConsumer(InventoryClickEvent.class,
+      event -> Optional.ofNullable(buttonSlotMap.get(event.getRawSlot()))
+        .ifPresent(button -> button.handleAction(event.getWhoClicked().getUniqueId(), event))
+    );
+  }
+
+  @Override
+  public void stop() {
     removeAllButton();
-    clearAllEventConsumer();
-    displayMap.forEach((uuid, guiDisplay) -> new ArrayList<>(guiDisplay.getInventory().getViewers()).forEach(HumanEntity::closeInventory));
-    removeAllDisplay();
+    List<GUIDisplay> list = new ArrayList<>(displayMap.values());
+    super.stop();
+    list.forEach(guiDisplay -> new ArrayList<>(guiDisplay.getInventory().getViewers()).forEach(HumanEntity::closeInventory));
   }
 
   /**

@@ -1,5 +1,8 @@
 package me.hsgamer.hscore.ui;
 
+import me.hsgamer.hscore.ui.property.Initializable;
+import me.hsgamer.hscore.ui.property.Updatable;
+
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -9,7 +12,7 @@ import java.util.function.Consumer;
  *
  * @param <D> the type of the display
  */
-public interface Holder<D extends Display> {
+public interface Holder<D extends Display> extends Initializable, Updatable {
 
   /**
    * Create a display with the unique id
@@ -37,11 +40,6 @@ public interface Holder<D extends Display> {
   Optional<D> getDisplay(UUID uuid);
 
   /**
-   * Update all displays
-   */
-  void updateAll();
-
-  /**
    * Add an event consumer
    *
    * @param eventClass    the event class
@@ -66,11 +64,6 @@ public interface Holder<D extends Display> {
    * Remove all displays
    */
   void removeAllDisplay();
-
-  /**
-   * Clear everything in the holder
-   */
-  void clearAll();
 
   /**
    * Handle the event
