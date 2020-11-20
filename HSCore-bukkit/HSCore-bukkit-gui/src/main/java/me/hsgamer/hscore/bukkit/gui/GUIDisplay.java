@@ -7,6 +7,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.IntStream;
@@ -69,7 +70,7 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
     );
 
     if (forceUpdate) {
-      inventory.getViewers()
+      new ArrayList<>(inventory.getViewers())
         .stream()
         .filter(humanEntity -> humanEntity instanceof Player)
         .forEach(humanEntity -> ((Player) humanEntity).updateInventory());
