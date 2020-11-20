@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 
 /**
- * a YAML implementation for {@link ConfigProvider}.
+ * a JSON implementation for {@link ConfigProvider}.
  */
 public final class JsonProvider implements ConfigProvider<JsonConfiguration> {
 

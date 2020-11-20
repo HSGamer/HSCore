@@ -23,6 +23,11 @@
     </dependency>
     <dependency>
       <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-config-hjson</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
       <artifactId>HSCore-config-yaml</artifactId>
       <version>${project.version}</version>
     </dependency>

@@ -32,6 +32,7 @@
     * **`HSCore-config-common`**
     * **`HSCore-config-yaml`**
     * **`HSCore-config-json`**
+    * **`HSCore-config-hjson`**
     * **`HSCore-config-toml`**
     * **`HSCore-config-path`**
   * **`HSCore-ui-all`**
