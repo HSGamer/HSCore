@@ -24,7 +24,7 @@ public interface StringReplacer {
   static String replace(String original, UUID uuid, List<StringReplacer> stringReplacers) {
     String replaced = original;
     for (StringReplacer replacer : stringReplacers) {
-      replaced = replacer.replace(original, uuid);
+      replaced = replacer.replace(replaced, uuid);
     }
     return replaced;
   }
