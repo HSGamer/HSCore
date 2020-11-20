@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.bukkit.item;
 
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -61,7 +62,7 @@ public class ItemBuilder {
    * @return the item
    */
   public ItemStack build(UUID uuid) {
-    ItemStack itemStack = null;
+    ItemStack itemStack = new ItemStack(Material.AIR);
     for (ItemModifier modifier : itemModifiers) {
       itemStack = modifier.modify(itemStack, uuid, this);
     }
