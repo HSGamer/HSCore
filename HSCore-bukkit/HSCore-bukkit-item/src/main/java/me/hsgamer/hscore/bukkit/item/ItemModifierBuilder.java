@@ -1,9 +1,6 @@
 package me.hsgamer.hscore.bukkit.item;
 
-import me.hsgamer.hscore.bukkit.item.modifier.AmountModifier;
-import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
-import me.hsgamer.hscore.bukkit.item.modifier.MaterialModifier;
-import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
+import me.hsgamer.hscore.bukkit.item.modifier.*;
 import me.hsgamer.hscore.map.CaseInsensitiveStringLinkedMap;
 import org.bukkit.inventory.ItemStack;
 
@@ -22,6 +19,7 @@ public class ItemModifierBuilder {
     itemModifierMap.put("lore", LoreModifier::new);
     itemModifierMap.put("material", MaterialModifier::new);
     itemModifierMap.put("amount", AmountModifier::new);
+    itemModifierMap.put("durability", DurabilityModifier::new);
   }
 
   private ItemModifierBuilder() {
