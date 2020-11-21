@@ -40,6 +40,8 @@ public interface ItemModifier {
    * Load the modifier from an item <br> Should call {@link #canLoadFromItemStack(ItemStack)} before using this method
    *
    * @param itemStack the item
+   *
+   * @see #canLoadFromItemStack(ItemStack)
    */
   void loadFromItemStack(ItemStack itemStack);
 
@@ -49,6 +51,8 @@ public interface ItemModifier {
    * @param itemStack the item
    *
    * @return true if it can
+   *
+   * @see #loadFromItemStack(ItemStack)
    */
   default boolean canLoadFromItemStack(ItemStack itemStack) {
     return true;
