@@ -72,7 +72,7 @@ public class ItemBuilder {
    *
    * @param name the name of the string replacer
    */
-  public ItemBuilder addStringReplacer(String name) {
+  public ItemBuilder removeStringReplacer(String name) {
     this.stringReplacerMap.remove(name);
     return this;
   }
