@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
 import me.hsgamer.hscore.bukkit.item.ItemModifier;
+import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -30,6 +31,23 @@ public class NameModifier implements ItemModifier {
   @Override
   public void loadFromObject(Object object) {
     this.name = String.valueOf(object);
+  }
+
+  @Override
+  public void loadFromItemStack(ItemStack itemStack) {
+    this.name = itemStack.getItemMeta().getDisplayName();
+  }
+
+  @Override
+  public boolean canLoadFromItemStack(ItemStack itemStack) {
+    return itemStack.getItemMeta().hasDisplayName();
+  }
+
+  @Override
+  public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, List<StringReplacer> stringReplacers) {
+    ItemMeta itemMeta = itemStack.getItemMeta();
+    String replaced = StringReplacer.replace(this.name, uuid, stringReplacers);
+    return (!itemMeta.hasDisplayName() && Validate.isNullOrEmpty(replaced)) || replaced.equals(itemMeta.getDisplayName());
   }
 
   /**

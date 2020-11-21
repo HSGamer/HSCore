@@ -32,6 +32,18 @@ public class AmountModifier implements ItemModifier {
     this.amount = String.valueOf(object);
   }
 
+  @Override
+  public void loadFromItemStack(ItemStack itemStack) {
+    this.amount = String.valueOf(itemStack.getAmount());
+  }
+
+  @Override
+  public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, List<StringReplacer> stringReplacers) {
+    return Validate.getNumber(StringReplacer.replace(amount, uuid, stringReplacers))
+      .map(bigDecimal -> bigDecimal.intValue() >= itemStack.getAmount())
+      .orElse(false);
+  }
+
   /**
    * Set the amount
    *

@@ -33,6 +33,24 @@ public class LoreModifier implements ItemModifier {
     this.lore = CommonUtils.createStringListFromObject(object, false);
   }
 
+  @Override
+  public void loadFromItemStack(ItemStack itemStack) {
+    this.lore.clear();
+    this.lore.addAll(itemStack.getItemMeta().getLore());
+  }
+
+  @Override
+  public boolean canLoadFromItemStack(ItemStack itemStack) {
+    return itemStack.getItemMeta().hasLore();
+  }
+
+  @Override
+  public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, List<StringReplacer> stringReplacers) {
+    ItemMeta itemMeta = itemStack.getItemMeta();
+    return (!itemMeta.hasLore() && this.lore.isEmpty())
+      || this.lore.stream().map(s -> StringReplacer.replace(s, uuid, stringReplacers)).collect(Collectors.toList()).equals(itemMeta.getLore());
+  }
+
   /**
    * Set the lore
    *

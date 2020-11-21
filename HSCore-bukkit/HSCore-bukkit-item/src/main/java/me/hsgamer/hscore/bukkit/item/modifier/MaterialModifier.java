@@ -33,6 +33,18 @@ public class MaterialModifier implements ItemModifier {
     this.materialString = String.valueOf(object);
   }
 
+  @Override
+  public void loadFromItemStack(ItemStack itemStack) {
+    this.materialString = itemStack.getType().name();
+  }
+
+  @Override
+  public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, List<StringReplacer> stringReplacers) {
+    return Optional.ofNullable(Material.matchMaterial(StringReplacer.replace(materialString, uuid, stringReplacers)))
+      .map(material -> itemStack.getType().equals(material))
+      .orElse(false);
+  }
+
   /**
    * Set the material
    *
