@@ -17,5 +17,10 @@
       <artifactId>HSCore-common</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-collections</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>

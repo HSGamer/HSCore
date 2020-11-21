@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.common.interfaces;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -21,7 +21,7 @@ public interface StringReplacer {
    *
    * @return the replaced string
    */
-  static String replace(String original, UUID uuid, List<StringReplacer> stringReplacers) {
+  static String replace(String original, UUID uuid, Collection<StringReplacer> stringReplacers) {
     String replaced = original;
     for (StringReplacer replacer : stringReplacers) {
       replaced = replacer.replace(replaced, uuid);

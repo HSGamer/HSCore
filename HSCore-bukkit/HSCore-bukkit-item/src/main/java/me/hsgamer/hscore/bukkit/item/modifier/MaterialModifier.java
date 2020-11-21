@@ -5,7 +5,7 @@ import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,9 +16,9 @@ public class MaterialModifier implements ItemModifier {
   private String materialString;
 
   @Override
-  public ItemStack modify(ItemStack original, UUID uuid, List<StringReplacer> stringReplacers) {
+  public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
     Optional
-      .ofNullable(Material.matchMaterial(StringReplacer.replace(materialString, uuid, stringReplacers)))
+      .ofNullable(Material.matchMaterial(StringReplacer.replace(materialString, uuid, stringReplacerMap.values())))
       .ifPresent(original::setType);
     return original;
   }
@@ -39,8 +39,8 @@ public class MaterialModifier implements ItemModifier {
   }
 
   @Override
-  public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, List<StringReplacer> stringReplacers) {
-    return Optional.ofNullable(Material.matchMaterial(StringReplacer.replace(materialString, uuid, stringReplacers)))
+  public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+    return Optional.ofNullable(Material.matchMaterial(StringReplacer.replace(materialString, uuid, stringReplacerMap.values())))
       .map(material -> itemStack.getType().equals(material))
       .orElse(false);
   }

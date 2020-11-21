@@ -6,7 +6,7 @@ import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -16,9 +16,9 @@ public class NameModifier implements ItemModifier {
   private String name;
 
   @Override
-  public ItemStack modify(ItemStack original, UUID uuid, List<StringReplacer> stringReplacers) {
+  public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
     ItemMeta itemMeta = original.getItemMeta();
-    itemMeta.setDisplayName(StringReplacer.replace(name, uuid, stringReplacers));
+    itemMeta.setDisplayName(StringReplacer.replace(name, uuid, stringReplacerMap.values()));
     original.setItemMeta(itemMeta);
     return original;
   }
@@ -44,9 +44,9 @@ public class NameModifier implements ItemModifier {
   }
 
   @Override
-  public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, List<StringReplacer> stringReplacers) {
+  public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
     ItemMeta itemMeta = itemStack.getItemMeta();
-    String replaced = StringReplacer.replace(this.name, uuid, stringReplacers);
+    String replaced = StringReplacer.replace(this.name, uuid, stringReplacerMap.values());
     return (!itemMeta.hasDisplayName() && Validate.isNullOrEmpty(replaced)) || replaced.equals(itemMeta.getDisplayName());
   }
 

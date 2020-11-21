@@ -4,7 +4,7 @@ import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -14,13 +14,13 @@ public interface ItemModifier {
   /**
    * Modify the item
    *
-   * @param original        the original item
-   * @param uuid            the unique id
-   * @param stringReplacers the list of string replacers
+   * @param original          the original item
+   * @param uuid              the unique id
+   * @param stringReplacerMap the map of string replacers
    *
    * @return the modified item
    */
-  ItemStack modify(ItemStack original, UUID uuid, List<StringReplacer> stringReplacers);
+  ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap);
 
   /**
    * Serialize the modifier to an object
@@ -61,13 +61,13 @@ public interface ItemModifier {
   /**
    * Compare the modifier of an item
    *
-   * @param itemStack       the item
-   * @param uuid            the unique id
-   * @param stringReplacers the list of string replacers
+   * @param itemStack         the item
+   * @param uuid              the unique id
+   * @param stringReplacerMap the map of string replacers
    *
    * @return true if it matches, otherwise false
    */
-  boolean compareWithItemStack(ItemStack itemStack, UUID uuid, List<StringReplacer> stringReplacers);
+  boolean compareWithItemStack(ItemStack itemStack, UUID uuid, Map<String, StringReplacer> stringReplacerMap);
 
   /**
    * Compare the modifier of an item
@@ -78,7 +78,7 @@ public interface ItemModifier {
    * @return true if it matches, otherwise false
    */
   default boolean compareWithItemStack(ItemStack itemStack, UUID uuid) {
-    return compareWithItemStack(itemStack, uuid, Collections.emptyList());
+    return compareWithItemStack(itemStack, uuid, Collections.emptyMap());
   }
 
   /**
@@ -89,7 +89,7 @@ public interface ItemModifier {
    * @return true if it matches, otherwise false
    */
   default boolean compareWithItemStack(ItemStack itemStack) {
-    return compareWithItemStack(itemStack, UUID.randomUUID(), Collections.emptyList());
+    return compareWithItemStack(itemStack, UUID.randomUUID(), Collections.emptyMap());
   }
 
   /**
@@ -101,7 +101,7 @@ public interface ItemModifier {
    * @return the modified item
    */
   default ItemStack modify(ItemStack original, UUID uuid) {
-    return modify(original, uuid, Collections.emptyList());
+    return modify(original, uuid, Collections.emptyMap());
   }
 
   /**
@@ -114,6 +114,6 @@ public interface ItemModifier {
    * @return the modified item
    */
   default ItemStack modify(ItemStack original, UUID uuid, ItemBuilder itemBuilder) {
-    return modify(original, uuid, itemBuilder.getStringReplacers());
+    return modify(original, uuid, itemBuilder.getStringReplacerMap());
   }
 }

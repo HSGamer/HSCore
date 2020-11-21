@@ -16,9 +16,9 @@ public class LoreModifier implements ItemModifier {
   private List<String> lore = new ArrayList<>();
 
   @Override
-  public ItemStack modify(ItemStack original, UUID uuid, List<StringReplacer> stringReplacers) {
+  public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
     ItemMeta itemMeta = original.getItemMeta();
-    itemMeta.setLore(lore.stream().map(s -> StringReplacer.replace(s, uuid, stringReplacers)).collect(Collectors.toList()));
+    itemMeta.setLore(lore.stream().map(s -> StringReplacer.replace(s, uuid, stringReplacerMap.values())).collect(Collectors.toList()));
     original.setItemMeta(itemMeta);
     return original;
   }
@@ -45,10 +45,10 @@ public class LoreModifier implements ItemModifier {
   }
 
   @Override
-  public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, List<StringReplacer> stringReplacers) {
+  public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
     ItemMeta itemMeta = itemStack.getItemMeta();
     return (!itemMeta.hasLore() && this.lore.isEmpty())
-      || this.lore.stream().map(s -> StringReplacer.replace(s, uuid, stringReplacers)).collect(Collectors.toList()).equals(itemMeta.getLore());
+      || this.lore.stream().map(s -> StringReplacer.replace(s, uuid, stringReplacerMap.values())).collect(Collectors.toList()).equals(itemMeta.getLore());
   }
 
   /**
