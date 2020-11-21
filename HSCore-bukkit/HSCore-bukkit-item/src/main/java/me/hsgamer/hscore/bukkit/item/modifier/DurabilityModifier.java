@@ -49,7 +49,7 @@ public class DurabilityModifier implements ItemModifier {
    *
    * @param durability the durability
    */
-  public DurabilityModifier setAmount(String durability) {
+  public DurabilityModifier setDurability(String durability) {
     this.durability = durability;
     return this;
   }
@@ -59,7 +59,7 @@ public class DurabilityModifier implements ItemModifier {
    *
    * @param durability the durability
    */
-  public DurabilityModifier setAmount(short durability) {
+  public DurabilityModifier setDurability(short durability) {
     this.durability = String.valueOf(durability);
     return this;
   }
