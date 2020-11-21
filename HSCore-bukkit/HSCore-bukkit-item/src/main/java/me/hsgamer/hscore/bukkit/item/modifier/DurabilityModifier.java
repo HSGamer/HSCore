@@ -34,7 +34,7 @@ public class DurabilityModifier implements ItemModifier {
 
   @Override
   public void loadFromItemStack(ItemStack itemStack) {
-    this.durability = String.valueOf(itemStack.getAmount());
+    this.durability = String.valueOf(itemStack.getDurability());
   }
 
   @Override
