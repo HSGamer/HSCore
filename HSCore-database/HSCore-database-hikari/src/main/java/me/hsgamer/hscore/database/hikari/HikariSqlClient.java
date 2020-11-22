@@ -37,8 +37,7 @@ public class HikariSqlClient implements SqlClient<HikariDataSource> {
     } else {
       config.setUsername(setting.getUsername());
       config.setPassword(setting.getPassword());
-      config.addDataSourceProperty("useSSL", String.valueOf(setting.isUseSSL()));
-      config.addDataSourceProperty("verifyServerCertificate", String.valueOf(setting.isCertVerify()));
+      setting.getProperties().forEach(config::addDataSourceProperty);
       config.addDataSourceProperty("cachePrepStmts", true);
       config.addDataSourceProperty("prepStmtCacheSize", 250);
       config.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);

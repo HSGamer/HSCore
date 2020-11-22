@@ -1,16 +1,19 @@
 package me.hsgamer.hscore.database;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The setting for connection
  */
 public class Setting {
+  private final HashMap<String, Object> properties = new HashMap<>();
   private String host = "localhost";
   private String databaseName = "db";
   private String port = "3306";
   private String username = "";
   private String password = "";
-  private boolean useSSL = false;
-  private boolean certVerify = false;
 
   /**
    * Get the host
@@ -18,7 +21,7 @@ public class Setting {
    * @return the host
    */
   public String getHost() {
-    return host;
+    return this.host;
   }
 
   /**
@@ -37,7 +40,7 @@ public class Setting {
    * @return the database name
    */
   public String getDatabaseName() {
-    return databaseName;
+    return this.databaseName;
   }
 
   /**
@@ -56,7 +59,7 @@ public class Setting {
    * @return the port
    */
   public String getPort() {
-    return port;
+    return this.port;
   }
 
   /**
@@ -75,7 +78,7 @@ public class Setting {
    * @return the username
    */
   public String getUsername() {
-    return username;
+    return this.username;
   }
 
   /**
@@ -94,7 +97,7 @@ public class Setting {
    * @return the password
    */
   public String getPassword() {
-    return password;
+    return this.password;
   }
 
   /**
@@ -108,40 +111,33 @@ public class Setting {
   }
 
   /**
-   * Should it use SSL?
+   * Set the property
    *
-   * @return the boolean
+   * @param property the property
+   * @param value    the value
    */
-  public boolean isUseSSL() {
-    return useSSL;
-  }
-
-  /**
-   * Should it use SSL?
-   *
-   * @param useSSL the boolean
-   */
-  public Setting setUseSSL(boolean useSSL) {
-    this.useSSL = useSSL;
+  public Setting setProperty(String property, Object value) {
+    this.properties.put(property, value);
     return this;
   }
 
   /**
-   * Should it verify the certificate ?
+   * Get the property
    *
-   * @return the boolean
+   * @param property the property
+   *
+   * @return the value
    */
-  public boolean isCertVerify() {
-    return certVerify;
+  public Object getProperty(String property) {
+    return this.properties.get(property);
   }
 
   /**
-   * Should it verify the certificate ?
+   * Get all properties
    *
-   * @param certVerify the boolean
+   * @return the properties
    */
-  public Setting setCertVerify(boolean certVerify) {
-    this.certVerify = certVerify;
-    return this;
+  public Map<String, Object> getProperties() {
+    return Collections.unmodifiableMap(properties);
   }
 }
