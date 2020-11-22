@@ -17,10 +17,10 @@
     <module>HSCore-database-driver-sqlite</module>
     <module>HSCore-database-driver-mariadb</module>
     <module>HSCore-database-driver-postgresql</module>
-    <module>HSCore-database-sql</module>
-    <module>HSCore-database-hikari</module>
-    <module>HSCore-database-mongodb</module>
-    <module>HSCore-database-redis</module>
+    <module>HSCore-database-client-sql</module>
+    <module>HSCore-database-client-hikari</module>
+    <module>HSCore-database-client-mongodb</module>
+    <module>HSCore-database-client-redis</module>
     <module>HSCore-database-all</module>
   </modules>
 

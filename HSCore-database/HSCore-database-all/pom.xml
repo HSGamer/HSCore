@@ -18,12 +18,22 @@
     </dependency>
     <dependency>
       <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-database-sql</artifactId>
+      <artifactId>HSCore-database-client-sql</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-database-hikari</artifactId>
+      <artifactId>HSCore-database-client-mongodb</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-database-client-redis</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-database-client-hikari</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -44,16 +54,6 @@
     <dependency>
       <groupId>me.HSGamer</groupId>
       <artifactId>HSCore-database-driver-postgresql</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-database-mongodb</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-database-redis</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
