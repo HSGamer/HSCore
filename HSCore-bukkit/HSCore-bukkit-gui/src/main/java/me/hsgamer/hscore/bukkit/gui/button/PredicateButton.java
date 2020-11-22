@@ -4,6 +4,9 @@ import me.hsgamer.hscore.bukkit.gui.Button;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -14,6 +17,7 @@ import java.util.function.Predicate;
 public class PredicateButton implements Button {
 
   private final Button button;
+  private final List<UUID> failToViewList = Collections.synchronizedList(new ArrayList<>());
 
   private Predicate<UUID> viewPredicate = uuid -> true;
   private BiPredicate<UUID, InventoryClickEvent> clickPredicate = (uuid, inventoryClickEvent) -> true;
@@ -61,14 +65,17 @@ public class PredicateButton implements Button {
   @Override
   public ItemStack getItemStack(UUID uuid) {
     if (viewPredicate.test(uuid)) {
+      failToViewList.remove(uuid);
       return button.getItemStack(uuid);
+    } else {
+      failToViewList.add(uuid);
     }
     return fallbackButton.getItemStack(uuid);
   }
 
   @Override
   public void handleAction(UUID uuid, InventoryClickEvent event) {
-    if (viewPredicate.test(uuid) && clickPredicate.test(uuid, event)) {
+    if (!failToViewList.contains(uuid) && clickPredicate.test(uuid, event)) {
       button.handleAction(uuid, event);
     } else {
       fallbackButton.handleAction(uuid, event);
