@@ -26,7 +26,7 @@ public class MongoDBClient implements Client<MongoClient> {
   public MongoDBClient(Setting setting) {
     this.setting = setting;
     this.credential = MongoCredential.createCredential(setting.getUsername(), setting.getDatabaseName(), setting.getPassword().toCharArray());
-    this.options = MongoClientOptions.builder().sslEnabled(setting.getProperties().containsKey("useSSL") && Boolean.parseBoolean(String.valueOf(setting.getProperty("useSSL")))).build();
+    this.options = MongoClientOptions.builder().sslEnabled(setting.hasProperty("useSSL") && Boolean.parseBoolean(String.valueOf(setting.getProperty("useSSL")))).build();
     this.address = new ServerAddress(setting.getHost(), Integer.parseInt(setting.getPort()));
   }
 

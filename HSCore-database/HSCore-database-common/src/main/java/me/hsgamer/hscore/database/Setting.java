@@ -133,6 +133,17 @@ public class Setting {
   }
 
   /**
+   * Check if the setting has the property
+   *
+   * @param property the property
+   *
+   * @return true if it does
+   */
+  public boolean hasProperty(String property) {
+    return this.properties.containsKey(property);
+  }
+
+  /**
    * Get all properties
    *
    * @return the properties
