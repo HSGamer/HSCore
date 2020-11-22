@@ -33,12 +33,9 @@ public interface SqlClient<T> extends Client<T> {
    * @throws SQLException if there is an SQL error
    */
   default ResultSet query(String command) throws SQLException {
-    Connection connection = getConnection();
-    Statement statement = connection.createStatement();
-    ResultSet resultSet = statement.executeQuery(command);
-    connection.close();
-    statement.close();
-    return resultSet;
+    try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
+      return statement.executeQuery(command);
+    }
   }
 
   /**
@@ -49,12 +46,10 @@ public interface SqlClient<T> extends Client<T> {
    * @throws SQLException if there is an SQL error
    */
   default void execute(String... command) throws SQLException {
-    Connection connection = getConnection();
-    Statement statement = connection.createStatement();
-    for (String cmd : command) {
-      statement.executeUpdate(cmd);
+    try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
+      for (String cmd : command) {
+        statement.executeUpdate(cmd);
+      }
     }
-    connection.close();
-    statement.close();
   }
 }
