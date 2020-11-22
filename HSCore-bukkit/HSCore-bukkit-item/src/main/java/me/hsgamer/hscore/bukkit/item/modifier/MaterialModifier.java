@@ -40,7 +40,7 @@ public class MaterialModifier implements ItemModifier {
 
   @Override
   public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
-    return itemStack.getType().name().equals(StringReplacer.replace(materialString, uuid, stringReplacerMap.values()));
+    return itemStack.getType().name().equalsIgnoreCase(StringReplacer.replace(materialString, uuid, stringReplacerMap.values()));
   }
 
   /**
