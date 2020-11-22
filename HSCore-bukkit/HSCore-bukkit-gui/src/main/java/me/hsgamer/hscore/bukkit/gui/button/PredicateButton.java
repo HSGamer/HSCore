@@ -12,7 +12,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 /**
- * The button with click predicate
+ * The button with predicates
  */
 public class PredicateButton implements Button {
 
