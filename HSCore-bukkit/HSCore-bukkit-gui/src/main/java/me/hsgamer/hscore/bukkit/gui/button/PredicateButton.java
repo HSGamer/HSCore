@@ -69,16 +69,19 @@ public class PredicateButton implements Button {
       return button.getItemStack(uuid);
     } else {
       failToViewList.add(uuid);
+      return fallbackButton.getItemStack(uuid);
     }
-    return fallbackButton.getItemStack(uuid);
   }
 
   @Override
   public void handleAction(UUID uuid, InventoryClickEvent event) {
-    if (!failToViewList.contains(uuid) && clickPredicate.test(uuid, event)) {
-      button.handleAction(uuid, event);
-    } else {
+    if (failToViewList.contains(uuid)) {
       fallbackButton.handleAction(uuid, event);
+      return;
+    }
+
+    if (clickPredicate.test(uuid, event)) {
+      button.handleAction(uuid, event);
     }
   }
 
