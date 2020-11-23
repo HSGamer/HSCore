@@ -1,52 +1,95 @@
 package me.hsgamer.hscore.map;
 
-import java.util.HashMap;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * String Map but case-insensitive
+ *
+ * @param <V> the type of the value
  */
-public class CaseInsensitiveStringMap<V> extends HashMap<String, V> {
+public class CaseInsensitiveStringMap<V> implements Map<String, V> {
+  private final Map<String, V> original;
 
-  public CaseInsensitiveStringMap() {
-    super();
+  /**
+   * Create a new case-insensitive map
+   *
+   * @param original the original string map
+   */
+  public CaseInsensitiveStringMap(Map<String, V> original) {
+    this.original = original;
   }
 
-  public CaseInsensitiveStringMap(Map<? extends String, ? extends V> map) {
-    super();
-    putAll(map);
-  }
-
-  @Override
-  public V put(String key, V value) {
-    return super.put(key.toLowerCase(Locale.ENGLISH), value);
-  }
-
-  @Override
-  public V get(Object key) {
-    return super.get(String.valueOf(key).toLowerCase(Locale.ENGLISH));
+  private String getLowerCase(Object obj) {
+    return String.valueOf(obj).toLowerCase(Locale.ROOT);
   }
 
   @Override
-  public V getOrDefault(Object key, V def) {
-    return super.getOrDefault(String.valueOf(key).toLowerCase(Locale.ENGLISH), def);
+  public int size() {
+    return this.original.size();
   }
 
   @Override
-  public boolean containsKey(Object key) {
-    return super.containsKey(String.valueOf(key).toLowerCase(Locale.ENGLISH));
+  public boolean isEmpty() {
+    return this.original.isEmpty();
   }
 
   @Override
-  public V remove(Object key) {
-    return super.remove(String.valueOf(key).toLowerCase(Locale.ENGLISH));
+  public boolean containsKey(Object o) {
+    return this.original.containsKey(getLowerCase(o));
   }
 
   @Override
-  public void putAll(Map<? extends String, ? extends V> m) {
-    Map<String, V> mp = new HashMap<>();
-    m.forEach((s, o) -> mp.put(s.toLowerCase(Locale.ENGLISH), o));
-    super.putAll(mp);
+  public boolean containsValue(Object o) {
+    return this.original.containsValue(o);
+  }
+
+  @Override
+  public V get(Object o) {
+    return this.original.get(getLowerCase(o));
+  }
+
+  @Nullable
+  @Override
+  public V put(String s, V v) {
+    return this.original.put(getLowerCase(s), v);
+  }
+
+  @Override
+  public V remove(Object o) {
+    return this.original.remove(getLowerCase(o));
+  }
+
+  @Override
+  public void putAll(@NotNull Map<? extends String, ? extends V> map) {
+    map.forEach(this::put);
+  }
+
+  @Override
+  public void clear() {
+    this.original.clear();
+  }
+
+  @NotNull
+  @Override
+  public Set<String> keySet() {
+    return this.original.keySet();
+  }
+
+  @NotNull
+  @Override
+  public Collection<V> values() {
+    return this.original.values();
+  }
+
+  @NotNull
+  @Override
+  public Set<Entry<String, V>> entrySet() {
+    return this.original.entrySet();
   }
 }

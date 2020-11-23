@@ -2,7 +2,7 @@ package me.hsgamer.hscore.bukkit.item;
 
 import me.hsgamer.hscore.bukkit.item.modifier.*;
 import me.hsgamer.hscore.map.CaseInsensitiveStringLinkedMap;
-import me.hsgamer.hscore.map.CaseInsensitiveStringMap;
+import me.hsgamer.hscore.map.CaseInsensitiveStringHashMap;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import java.util.function.Supplier;
  */
 public class ItemModifierBuilder {
   private static final Map<String, Supplier<ItemModifier>> itemModifierMap = new CaseInsensitiveStringLinkedMap<>();
-  private static final Map<String, String> nameMap = new CaseInsensitiveStringMap<>();
+  private static final Map<String, String> nameMap = new CaseInsensitiveStringHashMap<>();
 
   static {
     registerDefaultModifiers();

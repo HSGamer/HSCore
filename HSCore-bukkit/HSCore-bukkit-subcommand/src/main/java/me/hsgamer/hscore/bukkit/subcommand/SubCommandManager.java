@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.bukkit.subcommand;
 
-import me.hsgamer.hscore.map.CaseInsensitiveStringMap;
+import me.hsgamer.hscore.map.CaseInsensitiveStringHashMap;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public abstract class SubCommandManager {
 
   protected static final String HELP = "help";
-  protected final Map<String, SubCommand> subcommands = new CaseInsensitiveStringMap<>();
+  protected final Map<String, SubCommand> subcommands = new CaseInsensitiveStringHashMap<>();
 
   /**
    * Execute the command
