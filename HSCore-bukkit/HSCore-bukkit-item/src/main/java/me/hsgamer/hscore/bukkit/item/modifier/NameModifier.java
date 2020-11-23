@@ -1,7 +1,6 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
 import me.hsgamer.hscore.bukkit.item.ItemModifier;
-import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -47,7 +46,7 @@ public class NameModifier implements ItemModifier {
   public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
     ItemMeta itemMeta = itemStack.getItemMeta();
     String replaced = StringReplacer.replace(this.name, uuid, stringReplacerMap.values());
-    return (!itemMeta.hasDisplayName() && Validate.isNullOrEmpty(replaced)) || replaced.equals(itemMeta.getDisplayName());
+    return (!itemMeta.hasDisplayName() && replaced == null) || replaced.equals(itemMeta.getDisplayName());
   }
 
   /**
