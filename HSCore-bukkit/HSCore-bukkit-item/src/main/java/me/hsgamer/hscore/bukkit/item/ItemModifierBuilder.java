@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bukkit.item;
 
 import me.hsgamer.hscore.bukkit.item.modifier.*;
 import me.hsgamer.hscore.map.CaseInsensitiveStringLinkedMap;
+import me.hsgamer.hscore.map.CaseInsensitiveStringMap;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -13,16 +14,24 @@ import java.util.function.Supplier;
  */
 public class ItemModifierBuilder {
   private static final Map<String, Supplier<ItemModifier>> itemModifierMap = new CaseInsensitiveStringLinkedMap<>();
+  private static final Map<String, String> nameMap = new CaseInsensitiveStringMap<>();
 
   static {
-    itemModifierMap.put("name", NameModifier::new);
-    itemModifierMap.put("lore", LoreModifier::new);
-    itemModifierMap.put("material", MaterialModifier::new);
-    itemModifierMap.put("amount", AmountModifier::new);
-    itemModifierMap.put("durability", DurabilityModifier::new);
+    registerDefaultModifiers();
   }
 
   private ItemModifierBuilder() {
+  }
+
+  /**
+   * Register default modifiers
+   */
+  public static void registerDefaultModifiers() {
+    register("name", NameModifier::new);
+    register("lore", LoreModifier::new);
+    register("material", MaterialModifier::new, "mat");
+    register("amount", AmountModifier::new);
+    register("durability", DurabilityModifier::new, "damage");
   }
 
   /**
@@ -30,18 +39,32 @@ public class ItemModifierBuilder {
    *
    * @param name             the name of the modifier
    * @param modifierSupplier the modifier supplier
+   * @param aliases          the aliases of the modifier
    */
-  public static void register(String name, Supplier<ItemModifier> modifierSupplier) {
+  public static void register(String name, Supplier<ItemModifier> modifierSupplier, String... aliases) {
     itemModifierMap.put(name, modifierSupplier);
+    nameMap.put(name, name);
+    for (String alias : aliases) {
+      nameMap.put(alias, name);
+    }
   }
 
   /**
    * Unregister a modifier
    *
-   * @param name the nae of the modifier
+   * @param name the name of the modifier
    */
   public static void unregister(String name) {
     itemModifierMap.remove(name);
+    nameMap.entrySet().removeIf(entry -> entry.getValue().equalsIgnoreCase(name));
+  }
+
+  /**
+   * Unregister all modifiers
+   */
+  public static void unregisterAll() {
+    itemModifierMap.clear();
+    nameMap.clear();
   }
 
   /**
@@ -54,9 +77,9 @@ public class ItemModifierBuilder {
   public static Map<String, ItemModifier> deserializeFromMap(Map<String, Object> stringObjectMap) {
     Map<String, ItemModifier> modifierMap = new CaseInsensitiveStringLinkedMap<>();
     stringObjectMap.entrySet().stream()
-      .filter(entry -> itemModifierMap.containsKey(entry.getKey()))
+      .filter(entry -> nameMap.containsKey(entry.getKey()))
       .forEach(entry -> {
-        String key = entry.getKey();
+        String key = nameMap.get(entry.getKey());
         ItemModifier modifier = itemModifierMap.get(key).get();
         modifier.loadFromObject(entry.getValue());
         modifierMap.put(key, modifier);
