@@ -21,11 +21,35 @@ import java.util.logging.Level;
  */
 public class CommandManager {
 
-  protected final Map<String, Command> registered = new HashMap<>();
+  private static final Field knownCommandsField;
+  private static final CommandMap bukkitCommandMap;
+  private static Method syncCommandsMethod;
+
+  static {
+    try {
+      Method commandMapMethod = Bukkit.getServer().getClass().getMethod("getCommandMap");
+      bukkitCommandMap = (CommandMap) commandMapMethod.invoke(Bukkit.getServer());
+
+      knownCommandsField = SimpleCommandMap.class.getDeclaredField("knownCommands");
+      knownCommandsField.setAccessible(true);
+    } catch (ReflectiveOperationException e) {
+      throw new ExceptionInInitializerError(e);
+    }
+
+    try {
+      Class<?> craftServer = Bukkit.getServer().getClass();
+      syncCommandsMethod = craftServer.getDeclaredMethod("syncCommands");
+    } catch (Exception e) {
+      // Ignored
+    } finally {
+      if (syncCommandsMethod != null) {
+        syncCommandsMethod.setAccessible(true);
+      }
+    }
+  }
+
   protected final JavaPlugin plugin;
-  protected final Field knownCommandsField;
-  protected final CommandMap bukkitCommandMap;
-  protected Method syncCommandsMethod;
+  private final Map<String, Command> registered = new HashMap<>();
 
   /**
    * Create a new command manager
@@ -34,25 +58,6 @@ public class CommandManager {
    */
   public CommandManager(@NotNull final JavaPlugin plugin) {
     this.plugin = plugin;
-    try {
-      Method commandMapMethod = Bukkit.getServer().getClass().getMethod("getCommandMap");
-      this.bukkitCommandMap = (CommandMap) commandMapMethod.invoke(Bukkit.getServer());
-
-      this.knownCommandsField = SimpleCommandMap.class.getDeclaredField("knownCommands");
-      this.knownCommandsField.setAccessible(true);
-    } catch (ReflectiveOperationException e) {
-      throw new ExceptionInInitializerError(e);
-    }
-
-    try {
-      Class<?> craftServer = Bukkit.getServer().getClass();
-      this.syncCommandsMethod = craftServer.getDeclaredMethod("syncCommands");
-    } catch (Exception e) {
-      // Ignored
-    }
-    if (this.syncCommandsMethod != null) {
-      this.syncCommandsMethod.setAccessible(true);
-    }
   }
 
   /**
@@ -67,7 +72,7 @@ public class CommandManager {
       return;
     }
 
-    this.bukkitCommandMap.register(this.plugin.getName(), command);
+    bukkitCommandMap.register(this.plugin.getName(), command);
     this.registered.put(name, command);
   }
 
@@ -78,11 +83,11 @@ public class CommandManager {
    */
   public final void unregister(@NotNull final Command command) {
     try {
-      Map<?, ?> knownCommands = (Map<?, ?>) this.knownCommandsField.get(this.bukkitCommandMap);
+      Map<?, ?> knownCommands = (Map<?, ?>) knownCommandsField.get(bukkitCommandMap);
 
       knownCommands.values().removeIf(command::equals);
 
-      command.unregister(this.bukkitCommandMap);
+      command.unregister(bukkitCommandMap);
       this.registered.remove(command.getLabel());
     } catch (ReflectiveOperationException e) {
       this.plugin.getLogger()
@@ -112,12 +117,12 @@ public class CommandManager {
    * Sync the commands to the server. Mainly used to make tab completer work in 1.13+
    */
   public final void syncCommand() {
-    if (this.syncCommandsMethod == null) {
+    if (syncCommandsMethod == null) {
       return;
     }
 
     try {
-      this.syncCommandsMethod.invoke(this.plugin.getServer());
+      syncCommandsMethod.invoke(this.plugin.getServer());
     } catch (IllegalAccessException | InvocationTargetException e) {
       this.plugin.getLogger().log(Level.WARNING, "Error when syncing commands", e);
     }
