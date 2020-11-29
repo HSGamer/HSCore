@@ -28,7 +28,7 @@ public final class MessageUtils {
   }
 
   /**
-   * Convert to colored string. Support hex color with "&#rrggbb"
+   * Convert to colored string. Support hex color with "&amp;#rrggbb"
    *
    * @param input the string
    *
