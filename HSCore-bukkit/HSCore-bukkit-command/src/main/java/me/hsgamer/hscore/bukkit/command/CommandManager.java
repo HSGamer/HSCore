@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,6 +60,44 @@ public class CommandManager {
   }
 
   /**
+   * Sync the commands to the server. Mainly used to make tab completer work in 1.13+
+   */
+  public static void syncCommand() {
+    if (syncCommandsMethod == null) {
+      return;
+    }
+
+    try {
+      syncCommandsMethod.invoke(Bukkit.getServer());
+    } catch (IllegalAccessException | InvocationTargetException e) {
+      Bukkit.getLogger().log(Level.WARNING, "Error when syncing commands", e);
+    }
+  }
+
+  /**
+   * Unregister a command from the known commands
+   *
+   * @param command the command
+   *
+   * @throws IllegalAccessException if this can not get the known commands
+   */
+  public static void unregisterFromKnownCommands(@NotNull final Command command) throws IllegalAccessException {
+    Map<?, ?> knownCommands = (Map<?, ?>) knownCommandsField.get(bukkitCommandMap);
+    knownCommands.values().removeIf(command::equals);
+    command.unregister(bukkitCommandMap);
+  }
+
+  /**
+   * Register the command to the command map
+   *
+   * @param label   the label of the command
+   * @param command the command
+   */
+  public static void registerCommandToCommandMap(@NotNull final String label, @NotNull final Command command) {
+    bukkitCommandMap.register(label, command);
+  }
+
+  /**
    * Register the command
    *
    * @param command the command object
@@ -72,7 +109,7 @@ public class CommandManager {
       return;
     }
 
-    bukkitCommandMap.register(this.plugin.getName(), command);
+    registerCommandToCommandMap(this.plugin.getName(), command);
     this.registered.put(name, command);
   }
 
@@ -83,15 +120,10 @@ public class CommandManager {
    */
   public final void unregister(@NotNull final Command command) {
     try {
-      Map<?, ?> knownCommands = (Map<?, ?>) knownCommandsField.get(bukkitCommandMap);
-
-      knownCommands.values().removeIf(command::equals);
-
-      command.unregister(bukkitCommandMap);
+      unregisterFromKnownCommands(command);
       this.registered.remove(command.getLabel());
     } catch (ReflectiveOperationException e) {
-      this.plugin.getLogger()
-        .log(Level.WARNING, "Something wrong when unregister the command", e);
+      this.plugin.getLogger().log(Level.WARNING, "Something wrong when unregister the command", e);
     }
   }
 
@@ -110,22 +142,14 @@ public class CommandManager {
    * Unregister all commands
    */
   public final void unregisterAll() {
-    new ArrayList<>(registered.values()).forEach(this::unregister);
-  }
-
-  /**
-   * Sync the commands to the server. Mainly used to make tab completer work in 1.13+
-   */
-  public final void syncCommand() {
-    if (syncCommandsMethod == null) {
-      return;
+    for (Command command : this.registered.values()) {
+      try {
+        unregisterFromKnownCommands(command);
+      } catch (ReflectiveOperationException e) {
+        this.plugin.getLogger().log(Level.WARNING, "Something wrong when unregister the command", e);
+      }
     }
-
-    try {
-      syncCommandsMethod.invoke(this.plugin.getServer());
-    } catch (IllegalAccessException | InvocationTargetException e) {
-      this.plugin.getLogger().log(Level.WARNING, "Error when syncing commands", e);
-    }
+    this.registered.clear();
   }
 
   /**
