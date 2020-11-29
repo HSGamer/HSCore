@@ -2,8 +2,12 @@ package me.hsgamer.hscore.bukkit.utils;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -11,6 +15,7 @@ import java.util.function.Supplier;
  */
 public final class MessageUtils {
 
+  private static final Map<Plugin, Supplier<String>> pluginPrefixMap = new HashMap<>();
   private static Supplier<String> defaultPrefix = () -> "&7[&cHSCore&7] &f";
 
   private MessageUtils() {
@@ -65,6 +70,17 @@ public final class MessageUtils {
   }
 
   /**
+   * Send message with the prefix from the plugin
+   *
+   * @param sender  the receiver
+   * @param message the message
+   * @param plugin  the plugin
+   */
+  public static void sendMessage(@NotNull final CommandSender sender, @NotNull final String message, @NotNull final Plugin plugin) {
+    sendMessage(sender, message, getPrefix(plugin).orElse(getPrefix()));
+  }
+
+  /**
    * Get the default prefix
    *
    * @return the prefix
@@ -90,5 +106,45 @@ public final class MessageUtils {
    */
   public static void setPrefix(@NotNull final String prefix) {
     setPrefix(() -> prefix);
+  }
+
+  /**
+   * Get prefix of a plugin
+   *
+   * @param plugin the plugin
+   *
+   * @return the prefix
+   */
+  public static Optional<String> getPrefix(@NotNull final Plugin plugin) {
+    return Optional.ofNullable(pluginPrefixMap.get(plugin)).map(Supplier::get);
+  }
+
+  /**
+   * Set the prefix of a plugin
+   *
+   * @param plugin the plugin
+   * @param prefix the prefix
+   */
+  public static void setPrefix(@NotNull final Plugin plugin, @NotNull final Supplier<String> prefix) {
+    pluginPrefixMap.put(plugin, prefix);
+  }
+
+  /**
+   * Set the prefix of a plugin
+   *
+   * @param plugin the plugin
+   * @param prefix the prefix
+   */
+  public static void setPrefix(@NotNull final Plugin plugin, @NotNull final String prefix) {
+    setPrefix(plugin, () -> prefix);
+  }
+
+  /**
+   * Remove the prefix of a plugin
+   *
+   * @param plugin the plugin
+   */
+  public static void removePrefix(@NotNull final Plugin plugin) {
+    pluginPrefixMap.remove(plugin);
   }
 }
