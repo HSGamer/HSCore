@@ -142,13 +142,13 @@ public class CommandManager {
    * Unregister all commands
    */
   public final void unregisterAll() {
-    for (Command command : this.registered.values()) {
+    this.registered.values().forEach(command -> {
       try {
         unregisterFromKnownCommands(command);
       } catch (ReflectiveOperationException e) {
         this.plugin.getLogger().log(Level.WARNING, "Something wrong when unregister the command", e);
       }
-    }
+    });
     this.registered.clear();
   }
 
