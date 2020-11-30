@@ -1,8 +1,8 @@
 package me.hsgamer.hscore.bukkit.item;
 
 import me.hsgamer.hscore.bukkit.item.modifier.*;
-import me.hsgamer.hscore.map.CaseInsensitiveStringLinkedMap;
 import me.hsgamer.hscore.map.CaseInsensitiveStringHashMap;
+import me.hsgamer.hscore.map.CaseInsensitiveStringLinkedMap;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -27,11 +27,11 @@ public class ItemModifierBuilder {
    * Register default modifiers
    */
   public static void registerDefaultModifiers() {
-    register("name", NameModifier::new);
-    register("lore", LoreModifier::new);
-    register("material", MaterialModifier::new, "mat");
-    register("amount", AmountModifier::new);
-    register("durability", DurabilityModifier::new, "damage");
+    register(NameModifier::new, "name");
+    register(LoreModifier::new, "lore");
+    register(MaterialModifier::new, "material", "mat", "id");
+    register(AmountModifier::new, "amount");
+    register(DurabilityModifier::new, "durability", "damage");
   }
 
   /**
@@ -41,7 +41,7 @@ public class ItemModifierBuilder {
    * @param modifierSupplier the modifier supplier
    * @param aliases          the aliases of the modifier
    */
-  public static void register(String name, Supplier<ItemModifier> modifierSupplier, String... aliases) {
+  public static void register(Supplier<ItemModifier> modifierSupplier, String name, String... aliases) {
     itemModifierMap.put(name, modifierSupplier);
     nameMap.put(name, name);
     for (String alias : aliases) {
@@ -56,7 +56,7 @@ public class ItemModifierBuilder {
    */
   public static void unregister(String name) {
     itemModifierMap.remove(name);
-    nameMap.entrySet().removeIf(entry -> entry.getValue().equalsIgnoreCase(name));
+    nameMap.values().removeIf(s -> s.equalsIgnoreCase(name));
   }
 
   /**
