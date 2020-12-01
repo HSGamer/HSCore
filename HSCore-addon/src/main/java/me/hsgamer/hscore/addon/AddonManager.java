@@ -172,7 +172,7 @@ public abstract class AddonManager {
    * Enable all addons from the addon directory
    */
   public final void enableAddons() {
-    final List<String> failed = new ArrayList<>();
+    final List<String> failed = new LinkedList<>();
     this.addons.keySet().forEach(name -> {
       if (!this.enableAddon(name, true)) {
         failed.add(name);
