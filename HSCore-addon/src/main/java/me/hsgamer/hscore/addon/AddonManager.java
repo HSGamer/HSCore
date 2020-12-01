@@ -266,10 +266,7 @@ public abstract class AddonManager {
     return this.loaderMap.entrySet()
       .stream()
       .filter(entry -> entry.getKey() != addon)
-      .flatMap(entry -> {
-        final Class<?> clazz = entry.getValue().findClass(name, false);
-        return clazz != null ? Stream.of(clazz) : Stream.empty();
-      })
+      .flatMap(entry -> Optional.ofNullable(entry.getValue().findClass(name, false)).map(Stream::of).orElse(Stream.empty()))
       .findFirst()
       .orElse(null);
   }
