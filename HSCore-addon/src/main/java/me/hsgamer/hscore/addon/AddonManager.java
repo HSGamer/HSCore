@@ -265,7 +265,7 @@ public abstract class AddonManager {
   public final Class<?> findClass(@NotNull final Addon addon, @NotNull final String name) {
     return this.loaderMap.entrySet()
       .stream()
-      .filter(entry -> !entry.getKey().equals(addon))
+      .filter(entry -> entry.getKey() != addon)
       .flatMap(entry -> {
         final Class<?> clazz = entry.getValue().findClass(name, false);
         return clazz != null ? Stream.of(clazz) : Stream.empty();
