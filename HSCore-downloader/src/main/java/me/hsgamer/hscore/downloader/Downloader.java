@@ -76,6 +76,7 @@ public class Downloader {
   /**
    * Load download infos
    */
+  @SuppressWarnings("unchecked")
   public void loadDownloadsInfo() {
     downloadInfoMap.clear();
     CompletableFuture.supplyAsync(() -> {

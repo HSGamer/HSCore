@@ -37,8 +37,7 @@ public class JSONUtils {
     }
 
     File file = new File(path, filename);
-    if (!file.exists()) {
-      file.createNewFile();
+    if (!file.exists() && file.createNewFile()) {
       Files.write(file.toPath(), Collections.singletonList("{}"));
     }
     return file;
