@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * The lore modifier
  */
 public class LoreModifier implements ItemModifier {
-  private List<String> lore = new ArrayList<>();
+  private final List<String> lore = new ArrayList<>();
 
   @Override
   public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
@@ -30,13 +30,12 @@ public class LoreModifier implements ItemModifier {
 
   @Override
   public void loadFromObject(Object object) {
-    this.lore = CommonUtils.createStringListFromObject(object, false);
+    setLore(CommonUtils.createStringListFromObject(object, false));
   }
 
   @Override
   public void loadFromItemStack(ItemStack itemStack) {
-    this.lore.clear();
-    this.lore.addAll(itemStack.getItemMeta().getLore());
+    setLore(itemStack.getItemMeta().getLore());
   }
 
   @Override
@@ -57,9 +56,7 @@ public class LoreModifier implements ItemModifier {
    * @param lore the lore
    */
   public LoreModifier setLore(String... lore) {
-    this.lore.clear();
-    this.lore = Arrays.asList(lore);
-    return this;
+    return setLore(Arrays.asList(lore));
   }
 
   /**
@@ -78,7 +75,7 @@ public class LoreModifier implements ItemModifier {
    * @param lore the lore
    */
   public LoreModifier setLore(Collection<String> lore) {
-    this.lore.clear();
+    clearLore();
     this.lore.addAll(lore);
     return this;
   }

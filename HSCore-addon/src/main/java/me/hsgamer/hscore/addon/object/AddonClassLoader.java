@@ -95,14 +95,11 @@ public final class AddonClassLoader extends URLClassLoader {
   @Nullable
   public Class<?> findClass(@NotNull final String name, final boolean global) {
     Class<?> clazz = null;
-    if (global) {
-      clazz = this.addonManager.findClass(this.addon, name);
-    }
-    if (clazz == null) {
-      try {
-        clazz = super.findClass(name);
-      } catch (final ClassNotFoundException | NoClassDefFoundError ignored) {
-        // IGNORED
+    try {
+      clazz = super.findClass(name);
+    } catch (final ClassNotFoundException | NoClassDefFoundError e) {
+      if (global) {
+        clazz = this.addonManager.findClass(this.addon, name);
       }
     }
     return clazz;
@@ -139,8 +136,13 @@ public final class AddonClassLoader extends URLClassLoader {
   }
 
   @Override
-  @Nullable
-  protected Class<?> findClass(@NotNull final String name) {
-    return this.findClass(name, true);
+  @NotNull
+  protected Class<?> findClass(@NotNull final String name) throws ClassNotFoundException {
+    Class<?> clazz = this.findClass(name, true);
+    if (clazz == null) {
+      throw new ClassNotFoundException(name);
+    } else {
+      return clazz;
+    }
   }
 }

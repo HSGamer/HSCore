@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 /**
  * A class that manages all addons in it
@@ -94,7 +95,7 @@ public abstract class AddonManager {
             loader.close();
           }
         } catch (final Exception e) {
-          this.logger.log(Level.WARNING, "Error when loading jar", e);
+          this.logger.log(Level.WARNING, e, () -> "Error when loading " + file.getName());
         }
       });
     // Filter and sort the addons
@@ -262,16 +263,15 @@ public abstract class AddonManager {
    */
   @Nullable
   public final Class<?> findClass(@NotNull final Addon addon, @NotNull final String name) {
-    for (final AddonClassLoader loader : this.loaderMap.values()) {
-      if (this.loaderMap.containsKey(addon)) {
-        continue;
-      }
-      final Class<?> clazz = loader.findClass(name, false);
-      if (clazz != null) {
-        return clazz;
-      }
-    }
-    return null;
+    return this.loaderMap.entrySet()
+      .stream()
+      .filter(entry -> !entry.getKey().equals(addon))
+      .flatMap(entry -> {
+        final Class<?> clazz = entry.getValue().findClass(name, false);
+        return clazz != null ? Stream.of(clazz) : Stream.empty();
+      })
+      .findFirst()
+      .orElse(null);
   }
 
   /**
