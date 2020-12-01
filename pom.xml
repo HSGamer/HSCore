@@ -35,6 +35,7 @@
 
   <modules>
     <module>HSCore-common</module>
+    <module>HSCore-variable</module>
     <module>HSCore-collections</module>
     <module>HSCore-expression</module>
     <module>HSCore-web</module>

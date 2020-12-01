@@ -17,6 +17,7 @@
   * **`HSCore-json`**
   * **`HSCore-request`**
   * **`HSCore-web`**
+  * **`HSCore-variable`**
   * **`HSCore-checker-all`**
     * **`HSCore-checker-spigotmc`**
   * **`HSCore-database-all`**
