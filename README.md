@@ -68,15 +68,18 @@
     <url>https://repo.codemc.io/repository/maven-public/</url>
   </repository>
 </repositories>
+```
+
+```xml
 
 <dependencies>
-<dependency>
-  <groupId>me.HSGamer</groupId>
-  <artifactId>HSCore-MODULE</artifactId>
-  <version>VERSION</version>
+  <dependency>
+    <groupId>me.HSGamer</groupId>
+    <artifactId>HSCore-MODULE</artifactId>
+    <version>VERSION</version>
 
-  <!-- Add this line if you want to get the shaded artifact -->
-  <classifier>jar-with-dependencies</classifier>
-</dependency>
+    <!-- Add this line if you want to get the shaded artifact -->
+    <classifier>jar-with-dependencies</classifier>
+  </dependency>
 </dependencies>
 ```
