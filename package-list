@@ -15,8 +15,10 @@ me.hsgamer.hscore.bukkit.item.modifier
 me.hsgamer.hscore.bukkit.subcommand
 me.hsgamer.hscore.bukkit.utils
 me.hsgamer.hscore.checker.spigotmc
+me.hsgamer.hscore.collections.map
 me.hsgamer.hscore.common
 me.hsgamer.hscore.common.interfaces
+me.hsgamer.hscore.common.supplier
 me.hsgamer.hscore.config
 me.hsgamer.hscore.config.hjson
 me.hsgamer.hscore.config.json
@@ -37,8 +39,8 @@ me.hsgamer.hscore.expression
 me.hsgamer.hscore.expression.number
 me.hsgamer.hscore.expression.string
 me.hsgamer.hscore.json
-me.hsgamer.hscore.map
 me.hsgamer.hscore.request
 me.hsgamer.hscore.ui
 me.hsgamer.hscore.ui.property
+me.hsgamer.hscore.variable
 me.hsgamer.hscore.web
