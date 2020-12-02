@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.bukkit.subcommand;
 
-import me.hsgamer.hscore.map.CaseInsensitiveStringHashMap;
+import me.hsgamer.hscore.collections.map.CaseInsensitiveStringHashMap;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 

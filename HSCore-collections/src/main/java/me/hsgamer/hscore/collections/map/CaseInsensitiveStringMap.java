@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.map;
+package me.hsgamer.hscore.collections.map;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

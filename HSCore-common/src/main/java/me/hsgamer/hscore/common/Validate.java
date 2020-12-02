@@ -7,6 +7,9 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Optional;
 
+/**
+ * Methods to validate
+ */
 public final class Validate {
 
   private Validate() {

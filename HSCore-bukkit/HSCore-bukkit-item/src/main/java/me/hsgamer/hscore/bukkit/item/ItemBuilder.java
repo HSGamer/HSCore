@@ -1,7 +1,7 @@
 package me.hsgamer.hscore.bukkit.item;
 
+import me.hsgamer.hscore.collections.map.CaseInsensitiveStringLinkedMap;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
-import me.hsgamer.hscore.map.CaseInsensitiveStringLinkedMap;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

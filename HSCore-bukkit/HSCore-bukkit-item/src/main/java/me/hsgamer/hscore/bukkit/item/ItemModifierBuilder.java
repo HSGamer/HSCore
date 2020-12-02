@@ -1,8 +1,8 @@
 package me.hsgamer.hscore.bukkit.item;
 
 import me.hsgamer.hscore.bukkit.item.modifier.*;
-import me.hsgamer.hscore.map.CaseInsensitiveStringHashMap;
-import me.hsgamer.hscore.map.CaseInsensitiveStringLinkedMap;
+import me.hsgamer.hscore.collections.map.CaseInsensitiveStringHashMap;
+import me.hsgamer.hscore.collections.map.CaseInsensitiveStringLinkedMap;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;

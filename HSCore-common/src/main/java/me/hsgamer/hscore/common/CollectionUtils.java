@@ -9,9 +9,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class CommonUtils {
+/**
+ * Methods on collections
+ */
+public class CollectionUtils {
 
-  private CommonUtils() {
+  private CollectionUtils() {
     // EMPTY
   }
 

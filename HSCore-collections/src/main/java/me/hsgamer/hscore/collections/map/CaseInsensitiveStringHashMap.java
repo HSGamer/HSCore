@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.map;
+package me.hsgamer.hscore.collections.map;
 
 import java.util.HashMap;
 import java.util.Map;

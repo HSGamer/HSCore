@@ -1,7 +1,7 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
 import me.hsgamer.hscore.bukkit.item.ItemModifier;
-import me.hsgamer.hscore.common.CommonUtils;
+import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -30,7 +30,7 @@ public class LoreModifier implements ItemModifier {
 
   @Override
   public void loadFromObject(Object object) {
-    setLore(CommonUtils.createStringListFromObject(object, false));
+    setLore(CollectionUtils.createStringListFromObject(object, false));
   }
 
   @Override
