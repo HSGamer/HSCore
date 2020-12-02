@@ -3,6 +3,7 @@ package me.hsgamer.hscore.builder;
 import me.hsgamer.hscore.collections.map.CaseInsensitiveStringHashMap;
 import me.hsgamer.hscore.collections.map.CaseInsensitiveStringLinkedMap;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -17,6 +18,24 @@ import java.util.function.Function;
 public class Builder<R, V> {
   private final Map<String, BiFunction<String, R, V>> functionMap = new CaseInsensitiveStringLinkedMap<>();
   private final Map<String, String> nameMap = new CaseInsensitiveStringHashMap<>();
+
+  /**
+   * Get the function map
+   *
+   * @return the function map
+   */
+  public Map<String, BiFunction<String, R, V>> getFunctionMap() {
+    return Collections.unmodifiableMap(functionMap);
+  }
+
+  /**
+   * Get the name map
+   *
+   * @return the name map
+   */
+  public Map<String, String> getNameMap() {
+    return Collections.unmodifiableMap(nameMap);
+  }
 
   /**
    * Register a new function
@@ -52,6 +71,20 @@ public class Builder<R, V> {
   public void unregister(String name) {
     functionMap.remove(name);
     nameMap.values().removeIf(s -> s.equalsIgnoreCase(name));
+  }
+
+  /**
+   * Remove a name from the name map
+   *
+   * @param name the name
+   *
+   * @throws IllegalArgumentException if the function map contains the name
+   */
+  public void removeName(String name) {
+    if (functionMap.containsKey(name)) {
+      throw new IllegalArgumentException("You can not remove the key name of the function");
+    }
+    nameMap.remove(name);
   }
 
   /**
