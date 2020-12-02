@@ -15,6 +15,11 @@ public class AmountModifier implements ItemModifier {
   private String amount = "1";
 
   @Override
+  public String getName() {
+    return "amount";
+  }
+
+  @Override
   public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
     Validate
       .getNumber(StringReplacer.replace(amount, uuid, stringReplacerMap.values()))

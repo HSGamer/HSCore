@@ -15,6 +15,11 @@ public class DurabilityModifier implements ItemModifier {
   private String durability = "1";
 
   @Override
+  public String getName() {
+    return "durability";
+  }
+
+  @Override
   public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
     Validate
       .getNumber(StringReplacer.replace(durability, uuid, stringReplacerMap.values()))

@@ -16,6 +16,11 @@ public class MaterialModifier implements ItemModifier {
   private String materialString;
 
   @Override
+  public String getName() {
+    return "material";
+  }
+
+  @Override
   public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
     Optional
       .ofNullable(Material.matchMaterial(StringReplacer.replace(materialString, uuid, stringReplacerMap.values())))

@@ -16,6 +16,11 @@ public class LoreModifier implements ItemModifier {
   private final List<String> lore = new ArrayList<>();
 
   @Override
+  public String getName() {
+    return "lore";
+  }
+
+  @Override
   public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
     ItemMeta itemMeta = original.getItemMeta();
     itemMeta.setLore(lore.stream().map(s -> StringReplacer.replace(s, uuid, stringReplacerMap.values())).collect(Collectors.toList()));

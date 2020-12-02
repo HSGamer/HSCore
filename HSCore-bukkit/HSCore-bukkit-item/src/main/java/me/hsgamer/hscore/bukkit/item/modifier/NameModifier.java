@@ -15,6 +15,21 @@ public class NameModifier implements ItemModifier {
   private String name;
 
   @Override
+  public String getName() {
+    return "name";
+  }
+
+  /**
+   * Set the name
+   *
+   * @param name the name
+   */
+  public NameModifier setName(String name) {
+    this.name = name;
+    return this;
+  }
+
+  @Override
   public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
     ItemMeta itemMeta = original.getItemMeta();
     itemMeta.setDisplayName(StringReplacer.replace(name, uuid, stringReplacerMap.values()));
@@ -47,15 +62,5 @@ public class NameModifier implements ItemModifier {
     ItemMeta itemMeta = itemStack.getItemMeta();
     String replaced = StringReplacer.replace(this.name, uuid, stringReplacerMap.values());
     return (!itemMeta.hasDisplayName() && replaced == null) || replaced.equals(itemMeta.getDisplayName());
-  }
-
-  /**
-   * Set the name
-   *
-   * @param name the name
-   */
-  public NameModifier setName(String name) {
-    this.name = name;
-    return this;
   }
 }

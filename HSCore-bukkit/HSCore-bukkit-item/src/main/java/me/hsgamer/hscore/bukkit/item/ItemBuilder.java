@@ -6,25 +6,22 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * The item builder
  */
 public class ItemBuilder {
-  private final Map<String, ItemModifier> itemModifierMap = new CaseInsensitiveStringLinkedMap<>();
+  private final List<ItemModifier> itemModifiers = new LinkedList<>();
   private final Map<String, StringReplacer> stringReplacerMap = new CaseInsensitiveStringLinkedMap<>();
 
   /**
    * Add an item modifier
    *
-   * @param name     the name of the modifier
    * @param modifier the item modifier
    */
-  public ItemBuilder addItemModifier(String name, ItemModifier modifier) {
-    itemModifierMap.put(name, modifier);
+  public ItemBuilder addItemModifier(ItemModifier modifier) {
+    itemModifiers.add(modifier);
     return this;
   }
 
@@ -34,7 +31,7 @@ public class ItemBuilder {
    * @param name the name of the modifier
    */
   public ItemBuilder removeItemModifier(String name) {
-    itemModifierMap.remove(name);
+    itemModifiers.removeIf(itemModifier -> itemModifier.getName().equals(name));
     return this;
   }
 
@@ -43,8 +40,19 @@ public class ItemBuilder {
    *
    * @return the item modifiers
    */
-  public Map<String, ItemModifier> getItemModifierMap() {
-    return Collections.unmodifiableMap(itemModifierMap);
+  public List<ItemModifier> getItemModifiers() {
+    return Collections.unmodifiableList(itemModifiers);
+  }
+
+  /**
+   * Serialize the item modifiers
+   *
+   * @return the object map
+   */
+  public Map<String, Object> serializeItemModifiers() {
+    Map<String, Object> map = new HashMap<>();
+    itemModifiers.forEach(itemModifier -> map.put(itemModifier.getName(), itemModifier.toObject()));
+    return map;
   }
 
   /**
@@ -86,7 +94,7 @@ public class ItemBuilder {
    */
   public ItemStack build(UUID uuid) {
     ItemStack itemStack = new ItemStack(Material.AIR);
-    for (ItemModifier modifier : itemModifierMap.values()) {
+    for (ItemModifier modifier : itemModifiers) {
       itemStack = modifier.modify(itemStack, uuid, this);
     }
     return itemStack;
