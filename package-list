@@ -1,6 +1,7 @@
 me.hsgamer.hscore.addon
 me.hsgamer.hscore.addon.exception
 me.hsgamer.hscore.addon.object
+me.hsgamer.hscore.builder
 me.hsgamer.hscore.bukkit.addon
 me.hsgamer.hscore.bukkit.clicktype
 me.hsgamer.hscore.bukkit.command
