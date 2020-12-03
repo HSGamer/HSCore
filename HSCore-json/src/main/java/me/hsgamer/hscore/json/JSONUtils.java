@@ -1,10 +1,10 @@
 package me.hsgamer.hscore.json;
 
+import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonValue;
+import com.eclipsesource.json.WriterConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -14,8 +14,6 @@ import java.util.Collections;
  * An simple JSON Utils, using json-simple
  */
 public class JSONUtils {
-
-  private static final JSONParser parser = new JSONParser();
 
   private JSONUtils() {
   }
@@ -44,14 +42,14 @@ public class JSONUtils {
   }
 
   /**
-   * Get JSON object from a file
+   * Get JSON value from a file
    *
    * @param file the file
    *
-   * @return the JSON object, or null if there is an error when parsing
+   * @return the JSON value, or null if there is an I/O error or the file does not exist
    */
   @Nullable
-  public static Object getJSON(@NotNull File file) {
+  public static JsonValue getJSON(@NotNull File file) {
     try {
       return getJSON(new FileReader(file));
     } catch (FileNotFoundException e) {
@@ -60,48 +58,44 @@ public class JSONUtils {
   }
 
   /**
-   * Get JSON object from a reader
+   * Get JSON value from a reader
    *
    * @param reader the reader
    *
-   * @return the JSON object, or null if there is an error when parsing
+   * @return the JSON value, or null if there is an I/O error
    */
   @Nullable
-  public static Object getJSON(@NotNull Reader reader) {
+  public static JsonValue getJSON(@NotNull Reader reader) {
     try {
-      return parser.parse(reader);
-    } catch (IOException | ParseException e) {
+      return Json.parse(reader);
+    } catch (IOException e) {
       return null;
     }
   }
 
   /**
-   * Get JSON object from a string
+   * Get JSON value from a string
    *
    * @param string the string
    *
-   * @return the JSON object, or null if there is an error when parsing
+   * @return the JSON value, or null if there is an error when parsing
    */
-  @Nullable
-  public static Object getJSON(@NotNull String string) {
-    try {
-      return parser.parse(string);
-    } catch (ParseException e) {
-      return null;
-    }
+  @NotNull
+  public static JsonValue getJSON(@NotNull String string) {
+    return Json.parse(string);
   }
 
   /**
-   * Write JSON object to file
+   * Write JSON value to file
    *
-   * @param file       the file
-   * @param jsonObject the object
+   * @param file      the file
+   * @param jsonValue the object
    *
    * @throws IOException if the file is not found or it's a directory or an I/O error occurred
    */
-  public static void writeToFile(@NotNull File file, @NotNull JSONObject jsonObject) throws IOException {
+  public static void writeToFile(@NotNull File file, @NotNull JsonValue jsonValue) throws IOException {
     FileWriter writer = new FileWriter(file);
-    jsonObject.writeJSONString(writer);
+    jsonValue.writeTo(writer, WriterConfig.PRETTY_PRINT);
     writer.flush();
   }
 }

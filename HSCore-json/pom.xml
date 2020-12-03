@@ -12,15 +12,9 @@
 
   <dependencies>
     <dependency>
-      <artifactId>json-simple</artifactId>
-      <groupId>com.googlecode.json-simple</groupId>
-      <version>1.1.1</version>
-      <exclusions>
-        <exclusion>
-          <groupId>junit</groupId>
-          <artifactId>junit</artifactId>
-        </exclusion>
-      </exclusions>
+      <groupId>com.eclipsesource.minimal-json</groupId>
+      <artifactId>minimal-json</artifactId>
+      <version>0.9.5</version>
     </dependency>
   </dependencies>
 
