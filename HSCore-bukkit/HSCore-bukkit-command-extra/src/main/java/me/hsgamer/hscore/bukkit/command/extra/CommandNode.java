@@ -103,32 +103,27 @@ public interface CommandNode {
    * @return a list of tab-completions for the specified arguments. This
    * will never be null. List may be immutable.
    */
-  default List<String> tabComplete(final CommandSender sender, final String[] args) {
+  default List<String> tabComplete(final CommandSender sender, final String... args) {
     CommandNode current = this;
-    String[] currentArgs = args;
-    while (!current.subCommands().isEmpty() && currentArgs.length > 1) {
-      String incompleteWord = currentArgs[0].toLowerCase();
+
+    for (int i = 0; i < args.length - 1; i++) {
+      String currentArg = args[i];
       Optional<CommandNode> found = current.subCommands().stream()
-        .filter(subCommand ->
-          (
-            !subCommand.onlyPlayer() ||
-              sender instanceof Player
-          ) && (
-            subCommand.permissions().isEmpty() ||
-              subCommand.permissions().stream().anyMatch(sender::hasPermission)
-          ) && (
-            subCommand.label().toLowerCase().startsWith(incompleteWord) ||
-              subCommand.aliases().stream().anyMatch(
-                alias -> alias.toLowerCase().startsWith(incompleteWord)
-              )
-          )
-        ).findFirst();
-      if (found.isPresent()) {
-        current = found.get();
-        currentArgs = Arrays.copyOfRange(currentArgs, 1, currentArgs.length);
-      } else return Collections.emptyList();
+        .filter(node -> node.label().equalsIgnoreCase(currentArg))
+        .findFirst();
+      if (!found.isPresent() || current.subCommands().isEmpty()) {
+        return Collections.emptyList();
+      }
+      current = found.get();
     }
-    return current.subCommands().stream().map(CommandNode::label).collect(Collectors.toList());
+    return current.subCommands().stream()
+      .map(CommandNode::label)
+      .filter(token -> token.toLowerCase().startsWith(args[args.length - 1]))
+      .collect(Collectors.toList());
+  }
+
+  default CommandFeedback feedback() {
+    return new CommandFeedback();
   }
 
   /**
@@ -139,37 +134,39 @@ public interface CommandNode {
    *
    * @return true if the command was successful, otherwise false
    */
-  default boolean handle(final CommandSender sender, final String[] args) {
+  default boolean handle(final CommandSender sender, final String... args) {
     CommandNode current = this;
     String[] currentArgs = args;
-    while (!current.subCommands().isEmpty() && currentArgs.length > 0) {
-      if (current.consume()) break;
-      String label = currentArgs[0];
-      currentArgs = Arrays.copyOfRange(currentArgs, 1, currentArgs.length);
-      Optional<CommandNode> found = current.subCommands().stream()
-        .filter(subCommand ->
-          subCommand.match(label)
-        ).findFirst();
-      if (found.isPresent()) {
-        current = found.get();
-      } else {
-        sender.sendMessage(CommandFeedback.UNKNOWN_COMMAND.getFeedback());
-        return false;
+    if (!current.consume()) {
+      while (!current.subCommands().isEmpty() && currentArgs.length > 0) {
+        String label = currentArgs[0];
+        currentArgs = Arrays.copyOfRange(currentArgs, 1, currentArgs.length);
+        Optional<CommandNode> found = current.subCommands()
+          .stream()
+          .filter(subCommand -> subCommand.match(label))
+          .findFirst();
+        if (found.isPresent()) {
+          current = found.get();
+        } else {
+          sender.sendMessage(feedback().INVALID_COMMAND.getFeedback()
+            .replace("%arg%", currentArgs.length > 0 ? currentArgs[0] : ""));
+          return false;
+        }
       }
     }
 
     if (current.onlyPlayer() && !(sender instanceof Player)) {
-      sender.sendMessage(CommandFeedback.ONLY_PLAYER.getFeedback());
+      sender.sendMessage(feedback().ONLY_PLAYER.getFeedback());
       return false;
     }
 
     if (!current.permissions().isEmpty() && current.permissions().stream().noneMatch(sender::hasPermission)) {
-      sender.sendMessage(CommandFeedback.NO_PERMISSION.getFeedback());
+      sender.sendMessage(feedback().NO_PERMISSION.getFeedback());
       return false;
     }
 
     if (currentArgs.length > 0 && !current.consume()) {
-      sender.sendMessage(CommandFeedback.TOO_MANY_ARGUMENTS.getFeedback());
+      sender.sendMessage(feedback().TOO_MANY_ARGUMENTS.getFeedback());
       return false;
     }
 

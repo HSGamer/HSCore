@@ -5,66 +5,57 @@ import java.util.function.Supplier;
 /**
  * Feedback for {@link CommandNode}
  */
-public class CommandFeedback {
+public class CommandFeedback implements Cloneable {
   /**
    * Unknown command
    */
-  public static final CommandFeedback UNKNOWN_COMMAND = new CommandFeedback("§cUnknown command");
+  public final Feedback INVALID_COMMAND;
 
   /**
    * Only the player can use the command
    */
-  public static final CommandFeedback ONLY_PLAYER = new CommandFeedback("§cOnly player can use this command");
+  public final Feedback ONLY_PLAYER;
 
   /**
    * No permission
    */
-  public static final CommandFeedback NO_PERMISSION = new CommandFeedback("§cYou don't have permission to do this");
+  public final Feedback NO_PERMISSION;
 
   /**
    * Too many arguments for the command
    */
-  public static final CommandFeedback TOO_MANY_ARGUMENTS = new CommandFeedback("§cToo many arguments");
+  public final Feedback TOO_MANY_ARGUMENTS;
 
   /**
    * Too few arguments for the command (Optional)
    */
-  public static final CommandFeedback TOO_FEW_ARGUMENTS = new CommandFeedback("§cToo few arguments");
+  public final Feedback TOO_FEW_ARGUMENTS;
 
-  private Supplier<String> feedback;
-
-  private CommandFeedback(Supplier<String> feedback) {
-    this.feedback = feedback;
+  public CommandFeedback() {
+    this.INVALID_COMMAND = new Feedback("§cUnknown command");
+    this.ONLY_PLAYER = new Feedback("§cOnly player can use this command");
+    this.NO_PERMISSION = new Feedback("§cYou don't have permission to do this");
+    this.TOO_MANY_ARGUMENTS = new Feedback("§cToo many arguments");
+    this.TOO_FEW_ARGUMENTS = new Feedback("§cToo few arguments");
   }
 
-  private CommandFeedback(String string) {
-    this(() -> string);
-  }
-
-  /**
-   * Get the feedback
-   *
-   * @return the feedback
-   */
-  public String getFeedback() {
-    return feedback.get();
-  }
-
-  /**
-   * Set the feedback
-   *
-   * @param feedback the feedback
-   */
-  public void setFeedback(Supplier<String> feedback) {
-    this.feedback = feedback;
-  }
-
-  /**
-   * Set the feedback
-   *
-   * @param feedback the feedback
-   */
-  public void setFeedback(String feedback) {
-    setFeedback(() -> feedback);
+  @SafeVarargs
+  public CommandFeedback(Supplier<String>... suppliers) {
+    this();
+    switch (suppliers.length) {
+      case 0:
+        throw new IndexOutOfBoundsException();
+      default:
+      case 5:
+        TOO_FEW_ARGUMENTS.setFeedback(suppliers[4]);
+      case 4:
+        TOO_MANY_ARGUMENTS.setFeedback(suppliers[3]);
+      case 3:
+        NO_PERMISSION.setFeedback(suppliers[2]);
+      case 2:
+        ONLY_PLAYER.setFeedback(suppliers[1]);
+      case 1:
+        INVALID_COMMAND.setFeedback(suppliers[0]);
+    }
   }
 }
