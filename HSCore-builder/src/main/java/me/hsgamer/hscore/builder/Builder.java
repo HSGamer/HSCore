@@ -1,7 +1,6 @@
 package me.hsgamer.hscore.builder;
 
 import me.hsgamer.hscore.collections.map.CaseInsensitiveStringHashMap;
-import me.hsgamer.hscore.collections.map.CaseInsensitiveStringLinkedMap;
 
 import java.util.Collections;
 import java.util.Map;
@@ -16,7 +15,7 @@ import java.util.function.Function;
  * @param <V> the type of the final value
  */
 public class Builder<R, V> {
-  private final Map<String, BiFunction<String, R, V>> functionMap = new CaseInsensitiveStringLinkedMap<>();
+  private final Map<String, BiFunction<String, R, V>> functionMap = new CaseInsensitiveStringHashMap<>();
   private final Map<String, String> nameMap = new CaseInsensitiveStringHashMap<>();
 
   /**
