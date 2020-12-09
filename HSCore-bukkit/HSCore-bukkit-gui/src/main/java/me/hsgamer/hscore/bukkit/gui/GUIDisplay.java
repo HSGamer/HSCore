@@ -3,12 +3,15 @@ package me.hsgamer.hscore.bukkit.gui;
 import me.hsgamer.hscore.ui.BaseDisplay;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -16,6 +19,7 @@ import java.util.stream.IntStream;
  */
 public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolder {
 
+  private final Map<Integer, Button> viewedButtons = new ConcurrentHashMap<>();
   private Inventory inventory;
   private boolean forceUpdate = false;
 
@@ -48,6 +52,16 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
     return this;
   }
 
+  /**
+   * Handle the click event
+   *
+   * @param uuid  the unique id
+   * @param event the click event
+   */
+  public void handleClickEvent(UUID uuid, InventoryClickEvent event) {
+    Optional.ofNullable(viewedButtons.get(event.getRawSlot())).ifPresent(button -> button.handleAction(uuid, event));
+  }
+
   @Override
   public void init() {
     if (this.holder.getInventoryType() == InventoryType.CHEST && this.holder.getSize() > 0) {
@@ -68,14 +82,29 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
     if (inventory == null) {
       return;
     }
+    viewedButtons.clear();
 
-    IntStream.range(0, inventory.getSize()).forEach(i ->
-      inventory.setItem(i,
-        this.holder.getButton(i)
-          .map(button -> button.getItemStack(uuid))
-          .orElse(null)
-      )
-    );
+    List<Integer> emptySlots = IntStream.range(0, inventory.getSize()).boxed().collect(Collectors.toList());
+    this.holder.getButtonSlotMap().forEach((button, slots) -> {
+      ItemStack itemStack = button.getItemStack(uuid);
+      if (itemStack != null) {
+        slots.forEach(slot -> {
+          inventory.setItem(slot, itemStack);
+          emptySlots.remove(slot);
+          viewedButtons.put(slot, button);
+        });
+      }
+    });
+
+    emptySlots.sort(Integer::compareTo);
+    Button defaultButton = this.holder.getDefaultButton();
+    ItemStack itemStack = defaultButton.getItemStack(uuid);
+    if (itemStack != null) {
+      emptySlots.forEach(slot -> {
+        inventory.setItem(slot, itemStack);
+        viewedButtons.put(slot, defaultButton);
+      });
+    }
 
     if (forceUpdate) {
       new ArrayList<>(inventory.getViewers())

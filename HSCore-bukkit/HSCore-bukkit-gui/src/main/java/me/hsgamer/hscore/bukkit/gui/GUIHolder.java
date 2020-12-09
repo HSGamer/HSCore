@@ -19,13 +19,14 @@ import java.util.function.Predicate;
  */
 public class GUIHolder extends BaseHolder<GUIDisplay> {
 
-  private final Map<Integer, Button> buttonSlotMap = new ConcurrentHashMap<>();
+  private final Map<Button, List<Integer>> buttonSlotMap = new ConcurrentHashMap<>();
   private final Plugin plugin;
   private final boolean removeDisplayOnClose;
   private InventoryType inventoryType = InventoryType.CHEST;
   private Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
   private int size = InventoryType.CHEST.getDefaultSize();
   private Predicate<UUID> closeFilter = uuid -> true;
+  private Button defaultButton = Button.EMPTY;
 
   /**
    * Create a new holder
@@ -54,8 +55,7 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    * @param button the button
    */
   public void setButton(int slot, Button button) {
-    buttonSlotMap.put(slot, button);
-    button.init();
+    buttonSlotMap.computeIfAbsent(button, b -> new LinkedList<>()).add(slot);
   }
 
   /**
@@ -64,15 +64,17 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    * @param slot the slot
    */
   public void removeButton(int slot) {
-    Optional.ofNullable(buttonSlotMap.remove(slot)).ifPresent(Button::stop);
+    buttonSlotMap.values().forEach(list -> list.removeIf(i -> i == slot));
   }
 
   /**
    * Remove all buttons
    */
-  public void removeAllButton() {
-    buttonSlotMap.values().forEach(Button::stop);
+  public Collection<Button> removeAllButton() {
+    List<Button> buttons = new LinkedList<>(buttonSlotMap.keySet());
+    buttonSlotMap.values().forEach(List::clear);
     buttonSlotMap.clear();
+    return buttons;
   }
 
   /**
@@ -83,7 +85,7 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    * @return the button
    */
   public Optional<Button> getButton(int slot) {
-    return Optional.ofNullable(buttonSlotMap.get(slot));
+    return buttonSlotMap.entrySet().stream().parallel().filter(entry -> entry.getValue().contains(slot)).map(Map.Entry::getKey).findAny();
   }
 
   /**
@@ -100,7 +102,7 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    *
    * @return the map of buttons
    */
-  public Map<Integer, Button> getButtonSlotMap() {
+  public Map<Button, List<Integer>> getButtonSlotMap() {
     return Collections.unmodifiableMap(buttonSlotMap);
   }
 
@@ -229,15 +231,15 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
     addEventConsumer(InventoryClickEvent.class, this::onClick);
     addEventConsumer(InventoryCloseEvent.class, this::onClose);
 
-    addEventConsumer(InventoryClickEvent.class,
-      event -> Optional.ofNullable(buttonSlotMap.get(event.getRawSlot()))
-        .ifPresent(button -> button.handleAction(event.getWhoClicked().getUniqueId(), event))
-    );
+    addEventConsumer(InventoryClickEvent.class, event -> {
+      UUID uuid = event.getWhoClicked().getUniqueId();
+      getDisplay(uuid).ifPresent(guiDisplay -> guiDisplay.handleClickEvent(uuid, event));
+    });
   }
 
   @Override
   public void stop() {
-    removeAllButton();
+    removeAllButton().forEach(Button::stop);
     List<GUIDisplay> list = new ArrayList<>(displayMap.values());
     super.stop();
     list.forEach(guiDisplay -> new ArrayList<>(guiDisplay.getInventory().getViewers()).forEach(HumanEntity::closeInventory));
@@ -268,5 +270,23 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    */
   protected void onClose(InventoryCloseEvent event) {
     // EMPTY
+  }
+
+  /**
+   * Get the default button
+   *
+   * @return the button
+   */
+  public Button getDefaultButton() {
+    return defaultButton;
+  }
+
+  /**
+   * Set the default button
+   *
+   * @param defaultButton the button
+   */
+  public void setDefaultButton(Button defaultButton) {
+    this.defaultButton = defaultButton;
   }
 }

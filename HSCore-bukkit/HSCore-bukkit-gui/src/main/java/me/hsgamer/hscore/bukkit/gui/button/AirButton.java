@@ -1,6 +1,8 @@
 package me.hsgamer.hscore.bukkit.gui.button;
 
+import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 import java.util.function.BiConsumer;
@@ -15,6 +17,6 @@ public class AirButton extends SimpleButton {
    * @param consumer the consumer
    */
   public AirButton(BiConsumer<UUID, InventoryClickEvent> consumer) {
-    super(null, consumer);
+    super(new ItemStack(Material.AIR), consumer);
   }
 }
