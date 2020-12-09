@@ -14,6 +14,7 @@ import java.util.*;
 public class ItemBuilder {
   private final List<ItemModifier> itemModifiers = new LinkedList<>();
   private final Map<String, StringReplacer> stringReplacerMap = new CaseInsensitiveStringLinkedMap<>();
+  private Material defaultMaterial = Material.STONE;
 
   /**
    * Add an item modifier
@@ -93,7 +94,7 @@ public class ItemBuilder {
    * @return the item
    */
   public ItemStack build(UUID uuid) {
-    ItemStack itemStack = new ItemStack(Material.AIR);
+    ItemStack itemStack = new ItemStack(defaultMaterial);
     for (ItemModifier modifier : itemModifiers) {
       itemStack = modifier.modify(itemStack, uuid, this);
     }
@@ -118,5 +119,14 @@ public class ItemBuilder {
    */
   public ItemStack build() {
     return build(UUID.randomUUID());
+  }
+
+  /**
+   * Set the default material
+   *
+   * @param material the material
+   */
+  public void setDefaultMaterial(Material material) {
+    this.defaultMaterial = material;
   }
 }
