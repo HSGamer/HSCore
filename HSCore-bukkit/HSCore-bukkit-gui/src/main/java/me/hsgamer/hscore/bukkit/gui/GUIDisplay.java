@@ -83,7 +83,6 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
     if (inventory == null) {
       return;
     }
-    viewedButtons.clear();
 
     List<Integer> emptySlots = IntStream.range(0, inventory.getSize()).boxed().collect(Collectors.toList());
     this.holder.getButtonSlotMap().forEach((button, slots) -> {
@@ -119,6 +118,7 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
     if (inventory != null) {
       inventory.clear();
     }
+    viewedButtons.clear();
   }
 
   @Override
