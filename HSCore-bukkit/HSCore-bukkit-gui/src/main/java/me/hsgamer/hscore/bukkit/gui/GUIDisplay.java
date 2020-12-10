@@ -97,7 +97,6 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
       }
     });
 
-    emptySlots.sort(Integer::compareTo);
     Button defaultButton = this.holder.getDefaultButton();
     ItemStack itemStack = defaultButton.getItemStack(uuid);
     if (itemStack != null) {
