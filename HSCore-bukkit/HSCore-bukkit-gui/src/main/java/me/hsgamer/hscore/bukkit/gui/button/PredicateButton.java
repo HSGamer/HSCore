@@ -106,10 +106,12 @@ public class PredicateButton implements Button {
   @Override
   public void init() {
     button.init();
+    fallbackButton.init();
   }
 
   @Override
   public void stop() {
     button.stop();
+    fallbackButton.stop();
   }
 }
