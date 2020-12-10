@@ -53,6 +53,24 @@ public class PredicateButton implements Button {
   }
 
   /**
+   * Get the button
+   *
+   * @return the button
+   */
+  public Button getButton() {
+    return button;
+  }
+
+  /**
+   * Get the fallback button
+   *
+   * @return the fallback button
+   */
+  public Button getFallbackButton() {
+    return fallbackButton;
+  }
+
+  /**
    * Set the fallback button
    *
    * @param fallbackButton the fallback button

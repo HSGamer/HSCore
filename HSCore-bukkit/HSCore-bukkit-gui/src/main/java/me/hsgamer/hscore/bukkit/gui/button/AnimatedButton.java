@@ -92,4 +92,13 @@ public class AnimatedButton implements Button, Updatable {
   public void update() {
     this.currentIndex = (this.currentIndex + 1) % this.buttons.size();
   }
+
+  /**
+   * Get the list of buttons
+   *
+   * @return the buttons
+   */
+  public List<Button> getButtons() {
+    return buttons;
+  }
 }

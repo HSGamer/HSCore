@@ -75,4 +75,13 @@ public class ListButton implements Button {
   public void setKeepCurrentIndex(boolean keepCurrentIndex) {
     this.keepCurrentIndex = keepCurrentIndex;
   }
+
+  /**
+   * Get the list of buttons
+   *
+   * @return the buttons
+   */
+  public List<Button> getButtons() {
+    return buttons;
+  }
 }
