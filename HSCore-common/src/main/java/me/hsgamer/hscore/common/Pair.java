@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class Pair<K, V> {
   private final K key;
-  private final V value;
+  private V value;
 
   private Pair(K key, V value) {
     this.key = key;
@@ -60,5 +60,14 @@ public class Pair<K, V> {
    */
   public V getValue() {
     return value;
+  }
+
+  /**
+   * Set the value
+   *
+   * @param value the value
+   */
+  public void setValue(V value) {
+    this.value = value;
   }
 }
