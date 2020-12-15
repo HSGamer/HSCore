@@ -31,6 +31,7 @@ public abstract class SerializableMapConfigPath<T> extends AdvancedConfigPath<Ma
         if (!(mapObj instanceof Map<?, ?>)) {
           return null;
         }
+        //noinspection unchecked
         return ((Map<String, Object>) mapObj);
       });
   }
