@@ -4,32 +4,35 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * The menu builder for {@link GUIHolder}
+ */
 public class MenuBuilder {
 
   /**
-   * menu itself.
+   * menu itself
    */
   @NotNull
   private final GUIHolder holder;
 
   /**
-   * current slot.
+   * current slot
    */
   private final AtomicInteger slot = new AtomicInteger();
 
   /**
-   * ctor.
+   * ctor
    *
-   * @param holder the holder.
+   * @param holder the holder
    */
   private MenuBuilder(@NotNull final GUIHolder holder) {
     this.holder = holder;
   }
 
   /**
-   * creates a new instance of {@code this}.
+   * Create a new instance of {@code this}
    *
-   * @return a new builder.
+   * @return a new builder
    */
   @NotNull
   public static MenuBuilder create(@NotNull final GUIHolder holder) {
@@ -37,11 +40,11 @@ public class MenuBuilder {
   }
 
   /**
-   * adds the given button to the holder and, increase {@link #slot} by 1.
+   * Add the given button to the holder and increase {@link #slot} by 1
    *
-   * @param button the button to add.
+   * @param button the button to add
    *
-   * @return {@code this} for builder chain.
+   * @return {@code this} for builder chain
    */
   @NotNull
   public MenuBuilder add(@NotNull final Button button) {
@@ -50,9 +53,9 @@ public class MenuBuilder {
   }
 
   /**
-   * increases {@link #slot} by 1.
+   * Increase {@link #slot} by 1
    *
-   * @return {@code this} for builder chain.
+   * @return {@code this} for builder chain
    */
   @NotNull
   public MenuBuilder next() {
@@ -60,9 +63,9 @@ public class MenuBuilder {
   }
 
   /**
-   * increases {@link #slot} by the given slot size.
+   * Increase {@link #slot} by the given slot size
    *
-   * @return {@code this} for builder chain.
+   * @return {@code this} for builder chain
    */
   @NotNull
   public MenuBuilder next(final int slot) {
