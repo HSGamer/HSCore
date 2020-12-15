@@ -20,10 +20,14 @@ public final class PathLoader {
     Arrays.stream(config.getClass().getDeclaredFields())
       .filter(field -> ConfigPath.class.isAssignableFrom(field.getType()))
       .forEach(field -> {
+        final boolean accessible = field.isAccessible();
         try {
+          field.setAccessible(true);
           ((ConfigPath<?>) field.get(config)).setConfig(config);
         } catch (IllegalAccessException e) {
           e.printStackTrace();
+        } finally {
+          field.setAccessible(accessible);
         }
       });
   }
