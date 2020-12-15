@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
 import me.hsgamer.hscore.bukkit.config.object.PlayableSound;
+import me.hsgamer.hscore.bukkit.config.object.Position;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
@@ -124,5 +125,17 @@ public final class BukkitPaths {
    */
   public static SoundConfigPath soundPath(String path, PlayableSound def) {
     return new SoundConfigPath(path, def);
+  }
+
+  /**
+   * Create a config path
+   *
+   * @param path the path to the value
+   * @param def  the default value if it's not found
+   *
+   * @return the config path
+   */
+  public static PositionConfigPath positionPath(String path, Position def) {
+    return new PositionConfigPath(path, def);
   }
 }
