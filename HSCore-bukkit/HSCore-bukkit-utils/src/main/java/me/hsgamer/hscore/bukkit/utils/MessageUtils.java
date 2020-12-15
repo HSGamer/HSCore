@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
@@ -8,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -94,6 +96,49 @@ public final class MessageUtils {
    */
   public static void sendMessage(@NotNull final CommandSender sender, @NotNull final String message, @NotNull final Plugin plugin) {
     sendMessage(sender, message, getPrefix(plugin).orElse(getPrefix()));
+  }
+
+  /**
+   * Send message
+   *
+   * @param uuid    the unique id of the receiver
+   * @param message the message
+   */
+  public static void sendMessage(@NotNull final UUID uuid, @NotNull final String message) {
+    sendMessage(uuid, message, defaultPrefix);
+  }
+
+  /**
+   * Send message with prefix
+   *
+   * @param uuid    the unique id of the receiver
+   * @param message the message
+   * @param prefix  the prefix
+   */
+  public static void sendMessage(@NotNull final UUID uuid, @NotNull final String message, @NotNull final String prefix) {
+    Optional.ofNullable(Bukkit.getPlayer(uuid)).ifPresent(player -> sendMessage(player, message, prefix));
+  }
+
+  /**
+   * Send message with prefix
+   *
+   * @param uuid    the unique id of the receiver
+   * @param message the message
+   * @param prefix  the prefix
+   */
+  public static void sendMessage(@NotNull final UUID uuid, @NotNull final String message, @NotNull final Supplier<String> prefix) {
+    sendMessage(uuid, message, prefix.get());
+  }
+
+  /**
+   * Send message with the prefix from the plugin
+   *
+   * @param uuid    the unique id of the receiver
+   * @param message the message
+   * @param plugin  the plugin
+   */
+  public static void sendMessage(@NotNull final UUID uuid, @NotNull final String message, @NotNull final Plugin plugin) {
+    sendMessage(uuid, message, getPrefix(plugin).orElse(getPrefix()));
   }
 
   /**
