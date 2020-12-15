@@ -5,12 +5,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * The menu builder for {@link GUIHolder}
+ * The builder for {@link GUIHolder}
  */
-public class MenuBuilder {
+public class GUIBuilder {
 
   /**
-   * menu itself
+   * the holder
    */
   @NotNull
   private final GUIHolder holder;
@@ -25,18 +25,20 @@ public class MenuBuilder {
    *
    * @param holder the holder
    */
-  private MenuBuilder(@NotNull final GUIHolder holder) {
+  private GUIBuilder(@NotNull final GUIHolder holder) {
     this.holder = holder;
   }
 
   /**
    * Create a new instance of {@code this}
    *
+   * @param holder the GUI holder
+   *
    * @return a new builder
    */
   @NotNull
-  public static MenuBuilder create(@NotNull final GUIHolder holder) {
-    return new MenuBuilder(holder);
+  public static GUIBuilder create(@NotNull final GUIHolder holder) {
+    return new GUIBuilder(holder);
   }
 
   /**
@@ -47,7 +49,7 @@ public class MenuBuilder {
    * @return {@code this} for builder chain
    */
   @NotNull
-  public MenuBuilder add(@NotNull final Button button) {
+  public GUIBuilder add(@NotNull final Button button) {
     this.holder.setButton(this.slot.get(), button);
     return this.next();
   }
@@ -58,7 +60,7 @@ public class MenuBuilder {
    * @return {@code this} for builder chain
    */
   @NotNull
-  public MenuBuilder next() {
+  public GUIBuilder next() {
     return this.next(1);
   }
 
@@ -68,7 +70,7 @@ public class MenuBuilder {
    * @return {@code this} for builder chain
    */
   @NotNull
-  public MenuBuilder next(final int slot) {
+  public GUIBuilder next(final int slot) {
     this.slot.addAndGet(slot);
     return this;
   }
