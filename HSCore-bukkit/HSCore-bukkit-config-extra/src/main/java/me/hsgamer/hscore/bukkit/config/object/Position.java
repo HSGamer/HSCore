@@ -81,8 +81,8 @@ public final class Position {
       ((Number) Objects.requireNonNull(map.get("x"), "The map has not x key!")).doubleValue(),
       ((Number) Objects.requireNonNull(map.get("y"), "The map has not y key!")).doubleValue(),
       ((Number) Objects.requireNonNull(map.get("z"), "The map has not z key!")).doubleValue(),
-      ((Number) Objects.requireNonNull(map.get("yaw"), "The map has not yaw key!")).doubleValue(),
-      ((Number) Objects.requireNonNull(map.get("pitch"), "The map has not pitch key!")).doubleValue());
+      ((Number) Objects.requireNonNull(map.get("yaw"), "The map has not yaw key!")).floatValue(),
+      ((Number) Objects.requireNonNull(map.get("pitch"), "The map has not pitch key!")).floatValue());
   }
 
   /**
