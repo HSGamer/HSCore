@@ -69,6 +69,8 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
 
   /**
    * Remove all buttons
+   *
+   * @return all cleared buttons
    */
   public Collection<Button> removeAllButton() {
     List<Button> buttons = new LinkedList<>(buttonSlotMap.keySet());

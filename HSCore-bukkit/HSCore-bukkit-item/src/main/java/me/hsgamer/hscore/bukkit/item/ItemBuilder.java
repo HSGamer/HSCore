@@ -20,6 +20,8 @@ public class ItemBuilder {
    * Add an item modifier
    *
    * @param modifier the item modifier
+   *
+   * @return {@code this} for builder chain
    */
   public ItemBuilder addItemModifier(ItemModifier modifier) {
     itemModifiers.add(modifier);
@@ -30,6 +32,8 @@ public class ItemBuilder {
    * Remove an item modifier
    *
    * @param name the name of the modifier
+   *
+   * @return {@code this} for builder chain
    */
   public ItemBuilder removeItemModifier(String name) {
     itemModifiers.removeIf(itemModifier -> itemModifier.getName().equals(name));
@@ -70,6 +74,8 @@ public class ItemBuilder {
    *
    * @param name     the name of the string replacer
    * @param replacer the string replacer
+   *
+   * @return {@code this} for builder chain
    */
   public ItemBuilder addStringReplacer(String name, StringReplacer replacer) {
     this.stringReplacerMap.put(name, replacer);
@@ -80,6 +86,8 @@ public class ItemBuilder {
    * Remove a string replacer
    *
    * @param name the name of the string replacer
+   *
+   * @return {@code this} for builder chain
    */
   public ItemBuilder removeStringReplacer(String name) {
     this.stringReplacerMap.remove(name);

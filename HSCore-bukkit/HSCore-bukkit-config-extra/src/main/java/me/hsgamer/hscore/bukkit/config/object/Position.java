@@ -78,11 +78,11 @@ public final class Position {
   public static Position deserialize(@NotNull final Map<String, Object> map) {
     return new Position(
       (String) Objects.requireNonNull(map.get("world"), "The map has not world key!"),
-      (double) Objects.requireNonNull(map.get("x"), "The map has not x key!"),
-      (double) Objects.requireNonNull(map.get("y"), "The map has not y key!"),
-      (double) Objects.requireNonNull(map.get("z"), "The map has not z key!"),
-      (float) Objects.requireNonNull(map.get("yaw"), "The map has not yaw key!"),
-      (float) Objects.requireNonNull(map.get("pitch"), "The map has not pitch key!"));
+      ((Number) Objects.requireNonNull(map.get("x"), "The map has not x key!")).doubleValue(),
+      ((Number) Objects.requireNonNull(map.get("y"), "The map has not y key!")).doubleValue(),
+      ((Number) Objects.requireNonNull(map.get("z"), "The map has not z key!")).doubleValue(),
+      ((Number) Objects.requireNonNull(map.get("yaw"), "The map has not yaw key!")).floatValue(),
+      ((Number) Objects.requireNonNull(map.get("pitch"), "The map has not pitch key!")).floatValue());
   }
 
   /**

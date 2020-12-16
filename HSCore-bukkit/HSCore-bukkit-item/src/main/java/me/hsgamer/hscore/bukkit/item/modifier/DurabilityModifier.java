@@ -53,6 +53,8 @@ public class DurabilityModifier implements ItemModifier {
    * Set the durability
    *
    * @param durability the durability
+   *
+   * @return {@code this} for builder chain
    */
   public DurabilityModifier setDurability(String durability) {
     this.durability = durability;
@@ -63,6 +65,8 @@ public class DurabilityModifier implements ItemModifier {
    * Set the durability
    *
    * @param durability the durability
+   *
+   * @return {@code this} for builder chain
    */
   public DurabilityModifier setDurability(short durability) {
     this.durability = String.valueOf(durability);

@@ -28,6 +28,8 @@ public class Setting {
    * Set the host
    *
    * @param host the host
+   *
+   * @return {@code this} for builder chain
    */
   public Setting setHost(String host) {
     this.host = host;
@@ -47,6 +49,8 @@ public class Setting {
    * Set the database name
    *
    * @param databaseName the database name
+   *
+   * @return {@code this} for builder chain
    */
   public Setting setDatabaseName(String databaseName) {
     this.databaseName = databaseName;
@@ -66,6 +70,8 @@ public class Setting {
    * Set the port
    *
    * @param port the port
+   *
+   * @return {@code this} for builder chain
    */
   public Setting setPort(String port) {
     this.port = port;
@@ -85,6 +91,8 @@ public class Setting {
    * Set the username
    *
    * @param username the username
+   *
+   * @return {@code this} for builder chain
    */
   public Setting setUsername(String username) {
     this.username = username;
@@ -104,6 +112,8 @@ public class Setting {
    * Set the password
    *
    * @param password the password
+   *
+   * @return {@code this} for builder chain
    */
   public Setting setPassword(String password) {
     this.password = password;

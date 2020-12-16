@@ -59,6 +59,8 @@ public class LoreModifier implements ItemModifier {
    * Set the lore
    *
    * @param lore the lore
+   *
+   * @return {@code this} for builder chain
    */
   public LoreModifier setLore(String... lore) {
     return setLore(Arrays.asList(lore));
@@ -68,6 +70,8 @@ public class LoreModifier implements ItemModifier {
    * Add a lore
    *
    * @param lore the lore
+   *
+   * @return {@code this} for builder chain
    */
   public LoreModifier addLore(String lore) {
     this.lore.add(lore);
@@ -78,6 +82,8 @@ public class LoreModifier implements ItemModifier {
    * Set the lore
    *
    * @param lore the lore
+   *
+   * @return {@code this} for builder chain
    */
   public LoreModifier setLore(Collection<String> lore) {
     clearLore();
@@ -87,6 +93,8 @@ public class LoreModifier implements ItemModifier {
 
   /**
    * Clear the lore
+   *
+   * @return {@code this} for builder chain
    */
   public LoreModifier clearLore() {
     this.lore.clear();
