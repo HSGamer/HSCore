@@ -67,6 +67,8 @@ public class GUIBuilder {
   /**
    * Increase {@link #slot} by the given slot size
    *
+   * @param slot the slot to increase
+   *
    * @return {@code this} for builder chain
    */
   @NotNull

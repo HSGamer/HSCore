@@ -47,6 +47,8 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
    * Should the display force the viewers to update their inventory
    *
    * @param forceUpdate true to force them
+   *
+   * @return {@code this} for builder chain
    */
   public GUIDisplay setForceUpdate(boolean forceUpdate) {
     this.forceUpdate = forceUpdate;

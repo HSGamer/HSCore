@@ -36,6 +36,8 @@ public class PredicateButton implements Button {
    * Set the view predicate
    *
    * @param viewPredicate the view predicate
+   *
+   * @return {@code this} for builder chain
    */
   public PredicateButton setViewPredicate(Predicate<UUID> viewPredicate) {
     this.viewPredicate = viewPredicate;
@@ -46,6 +48,8 @@ public class PredicateButton implements Button {
    * Set the click predicate
    *
    * @param clickPredicate the click predicate
+   *
+   * @return {@code this} for builder chain
    */
   public PredicateButton setClickPredicate(BiPredicate<UUID, InventoryClickEvent> clickPredicate) {
     this.clickPredicate = clickPredicate;
@@ -74,6 +78,8 @@ public class PredicateButton implements Button {
    * Set the fallback button
    *
    * @param fallbackButton the fallback button
+   *
+   * @return {@code this} for builder chain
    */
   public PredicateButton setFallbackButton(Button fallbackButton) {
     this.fallbackButton = fallbackButton;

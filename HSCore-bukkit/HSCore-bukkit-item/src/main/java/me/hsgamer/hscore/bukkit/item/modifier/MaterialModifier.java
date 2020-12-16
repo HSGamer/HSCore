@@ -52,6 +52,8 @@ public class MaterialModifier implements ItemModifier {
    * Set the material
    *
    * @param material the material
+   *
+   * @return {@code this} for builder chain
    */
   public MaterialModifier setMaterial(Material material) {
     this.materialString = material.name();
@@ -62,6 +64,8 @@ public class MaterialModifier implements ItemModifier {
    * Set the material
    *
    * @param material the material
+   *
+   * @return {@code this} for builder chain
    */
   public MaterialModifier setMaterial(String material) {
     this.materialString = material;

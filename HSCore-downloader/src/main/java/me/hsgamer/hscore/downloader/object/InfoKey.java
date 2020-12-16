@@ -27,6 +27,7 @@ public abstract class InfoKey<T> {
    * Create an info key
    *
    * @param key the key to the value
+   * @param required the required to the value
    */
   public InfoKey(@NotNull final String key, final boolean required) {
     this.key = key;

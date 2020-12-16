@@ -53,6 +53,8 @@ public class AmountModifier implements ItemModifier {
    * Set the amount
    *
    * @param amount the amount
+   *
+   * @return {@code this} for builder chain
    */
   public AmountModifier setAmount(String amount) {
     this.amount = amount;
@@ -63,6 +65,8 @@ public class AmountModifier implements ItemModifier {
    * Set the amount
    *
    * @param amount the amount
+   *
+   * @return {@code this} for builder chain
    */
   public AmountModifier setAmount(int amount) {
     this.amount = String.valueOf(amount);

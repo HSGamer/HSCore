@@ -23,6 +23,8 @@ public class NameModifier implements ItemModifier {
    * Set the name
    *
    * @param name the name
+   *
+   * @return {@code this} for builder chain
    */
   public NameModifier setName(String name) {
     this.name = name;
