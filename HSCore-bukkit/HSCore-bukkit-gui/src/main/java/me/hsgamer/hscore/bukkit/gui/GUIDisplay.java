@@ -86,11 +86,15 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
       return;
     }
 
-    List<Integer> emptySlots = IntStream.range(0, inventory.getSize()).boxed().collect(Collectors.toList());
+    int size = inventory.getSize();
+    List<Integer> emptySlots = IntStream.range(0, size).boxed().collect(Collectors.toList());
     this.holder.getButtonSlotMap().forEach((button, slots) -> {
       ItemStack itemStack = button.getItemStack(uuid);
       if (itemStack != null) {
         slots.forEach(slot -> {
+          if (slot >= size) {
+            return;
+          }
           inventory.setItem(slot, itemStack);
           emptySlots.remove(slot);
           viewedButtons.put(slot, button::handleAction);
