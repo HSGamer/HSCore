@@ -126,6 +126,9 @@ public final class VariableManager {
     do {
       old = message;
       message = setSingleVariables(message, uuid);
+      for (ExternalStringReplacer externalStringReplacer : externalReplacers) {
+        message = externalStringReplacer.replace(message, uuid);
+      }
     } while (hasVariables(message) && !old.equals(message));
     return message;
   }
