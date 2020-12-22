@@ -126,9 +126,6 @@ public final class VariableManager {
     do {
       old = message;
       message = setSingleVariables(message, uuid);
-      for (ExternalStringReplacer externalStringReplacer : externalReplacers) {
-        message = externalStringReplacer.replace(message, uuid);
-      }
     } while (hasVariables(message) && !old.equals(message));
     return message;
   }
@@ -146,19 +143,24 @@ public final class VariableManager {
     while (matcher.find()) {
       String identifier = matcher.group(1).trim();
       for (Map.Entry<String, ? extends StringReplacer> variable : variables.entrySet()) {
-        if (identifier.startsWith(variable.getKey())) {
-          String replace = variable.getValue().replace(identifier.substring(variable.getKey().length()), uuid);
-          if (replace == null) {
-            continue;
-          }
+        if (!identifier.startsWith(variable.getKey())) {
+          continue;
+        }
 
-          if (replaceAll.getAsBoolean()) {
-            message = message.replaceAll(Pattern.quote(matcher.group()), Matcher.quoteReplacement(replace));
-          } else {
-            message = message.replaceFirst(Pattern.quote(matcher.group()), Matcher.quoteReplacement(replace));
-          }
+        String replace = variable.getValue().replace(identifier.substring(variable.getKey().length()), uuid);
+        if (replace == null) {
+          continue;
+        }
+
+        if (replaceAll.getAsBoolean()) {
+          message = message.replaceAll(Pattern.quote(matcher.group()), Matcher.quoteReplacement(replace));
+        } else {
+          message = message.replaceFirst(Pattern.quote(matcher.group()), Matcher.quoteReplacement(replace));
         }
       }
+    }
+    for (ExternalStringReplacer externalStringReplacer : externalReplacers) {
+      message = externalStringReplacer.replace(message, uuid);
     }
     return message;
   }
