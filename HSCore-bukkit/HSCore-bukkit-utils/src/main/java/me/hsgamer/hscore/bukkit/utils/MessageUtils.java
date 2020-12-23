@@ -82,6 +82,8 @@ public final class MessageUtils {
       } else if (chars[i] == '\\') {
         builder.append(chars[i + 1]);
         i++;
+      } else {
+        builder.append(chars[i]);
       }
       i++;
     }
