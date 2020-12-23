@@ -71,7 +71,7 @@ public final class MessageUtils {
    * @return the colored string
    */
   @NotNull
-  public static String colorize(char altColorChar, String input) {
+  public static String colorize(final char altColorChar, @NotNull final String input) {
     char[] chars = input.toCharArray();
     StringBuilder builder = new StringBuilder(chars.length);
     int i = 0;
