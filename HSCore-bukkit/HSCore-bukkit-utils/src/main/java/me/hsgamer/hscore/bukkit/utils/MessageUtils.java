@@ -73,19 +73,18 @@ public final class MessageUtils {
   @NotNull
   public static String colorize(char altColorChar, String input) {
     char[] chars = input.toCharArray();
-    StringBuilder builder = new StringBuilder();
+    StringBuilder builder = new StringBuilder(chars.length);
     int i = 0;
     while (i < chars.length - 1) {
-      if (chars[i] == altColorChar && "0123456789AaBbCcDdEeFfKkLlMmNnOoRrXx".indexOf(chars[i + 1]) > -1) {
+      if (chars[i] == altColorChar && Character.isLetterOrDigit(chars[i + 1])) {
         builder.append(COLOR_CHAR);
-        builder.append(Character.toLowerCase(chars[i + 1]));
-        i += 2;
+        builder.append(Character.toLowerCase(chars[++i]));
       } else if (chars[i] == '\\') {
-        builder.append(chars[i + 1]);
-        i += 2;
+        builder.append(chars[++i]);
       } else {
-        builder.append(chars[i++]);
+        builder.append(chars[i]);
       }
+      i++;
     }
     if (i == chars.length - 1) {
       builder.append(chars[i]);
