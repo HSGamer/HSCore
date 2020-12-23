@@ -78,14 +78,14 @@ public final class MessageUtils {
     while (i < chars.length - 1) {
       if (chars[i] == altColorChar && "0123456789AaBbCcDdEeFfKkLlMmNnOoRrXx".indexOf(chars[i + 1]) > -1) {
         builder.append(COLOR_CHAR);
-        chars[i + 1] = Character.toLowerCase(chars[i + 1]);
+        builder.append(Character.toLowerCase(chars[i + 1]));
+        i += 2;
       } else if (chars[i] == '\\') {
         builder.append(chars[i + 1]);
-        i++;
+        i += 2;
       } else {
-        builder.append(chars[i]);
+        builder.append(chars[i++]);
       }
-      i++;
     }
     if (i == chars.length - 1) {
       builder.append(chars[i]);
