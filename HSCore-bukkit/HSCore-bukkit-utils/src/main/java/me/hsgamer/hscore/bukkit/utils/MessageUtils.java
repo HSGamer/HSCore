@@ -1,7 +1,6 @@
 package me.hsgamer.hscore.bukkit.utils;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +21,7 @@ import static org.bukkit.ChatColor.COLOR_CHAR;
 public final class MessageUtils {
 
   private static final Pattern hexPattern = Pattern.compile("&#([A-Fa-f0-9]{6})");
-  private static final Map<Plugin, Supplier<String>> pluginPrefixMap = new HashMap<>();
+  private static final Map<Object, Supplier<String>> objectPrefixMap = new HashMap<>();
   private static Supplier<String> defaultPrefix = () -> "&7[&cHSCore&7] &f";
 
   private MessageUtils() {
@@ -30,7 +29,7 @@ public final class MessageUtils {
   }
 
   /**
-   * Convert to colored string. Support hex color with "&amp;#rrggbb"
+   * Convert to colored string
    *
    * @param input the string
    *
@@ -38,10 +37,18 @@ public final class MessageUtils {
    */
   @NotNull
   public static String colorize(@NotNull final String input) {
-    if (input.trim().isEmpty()) {
-      return input;
-    }
+    return colorize('&', colorizeHex(input));
+  }
 
+  /**
+   * Convert HEX ("&amp;#rrggbb") string to color
+   *
+   * @param input the string
+   *
+   * @return the colored string
+   */
+  @NotNull
+  public static String colorizeHex(@NotNull final String input) {
     Matcher matcher = hexPattern.matcher(input);
     StringBuffer buffer = new StringBuffer(input.length() + 4 * 8);
     while (matcher.find()) {
@@ -52,7 +59,36 @@ public final class MessageUtils {
         + COLOR_CHAR + group.charAt(4) + COLOR_CHAR + group.charAt(5)
       );
     }
-    return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
+    return matcher.appendTail(buffer).toString();
+  }
+
+  /**
+   * Convert to colored string
+   *
+   * @param altColorChar the alternative color char
+   * @param input        the string
+   *
+   * @return the colored string
+   */
+  @NotNull
+  public static String colorize(char altColorChar, String input) {
+    char[] chars = input.toCharArray();
+    StringBuilder builder = new StringBuilder();
+    int i = 0;
+    while (i < chars.length - 1) {
+      if (chars[i] == altColorChar && "0123456789AaBbCcDdEeFfKkLlMmNnOoRrXx".indexOf(chars[i + 1]) > -1) {
+        builder.append(COLOR_CHAR);
+        chars[i + 1] = Character.toLowerCase(chars[i + 1]);
+      } else if (chars[i] == '\\') {
+        builder.append(chars[i + 1]);
+        i++;
+      }
+      i++;
+    }
+    if (i == chars.length - 1) {
+      builder.append(chars[i]);
+    }
+    return builder.toString();
   }
 
   /**
@@ -170,42 +206,42 @@ public final class MessageUtils {
   }
 
   /**
-   * Get prefix of a plugin
+   * Get prefix of an object
    *
-   * @param plugin the plugin
+   * @param object the object
    *
    * @return the prefix
    */
-  public static Optional<String> getPrefix(@NotNull final Plugin plugin) {
-    return Optional.ofNullable(pluginPrefixMap.get(plugin)).map(Supplier::get);
+  public static Optional<String> getPrefix(@NotNull final Object object) {
+    return Optional.ofNullable(objectPrefixMap.get(object)).map(Supplier::get);
   }
 
   /**
-   * Set the prefix of a plugin
+   * Set the prefix of an object
    *
-   * @param plugin the plugin
+   * @param object the object
    * @param prefix the prefix
    */
-  public static void setPrefix(@NotNull final Plugin plugin, @NotNull final Supplier<String> prefix) {
-    pluginPrefixMap.put(plugin, prefix);
+  public static void setPrefix(@NotNull final Object object, @NotNull final Supplier<String> prefix) {
+    objectPrefixMap.put(object, prefix);
   }
 
   /**
-   * Set the prefix of a plugin
+   * Set the prefix of an object
    *
-   * @param plugin the plugin
+   * @param object the object
    * @param prefix the prefix
    */
-  public static void setPrefix(@NotNull final Plugin plugin, @NotNull final String prefix) {
-    setPrefix(plugin, () -> prefix);
+  public static void setPrefix(@NotNull final Object object, @NotNull final String prefix) {
+    setPrefix(object, () -> prefix);
   }
 
   /**
-   * Remove the prefix of a plugin
+   * Remove the prefix of an object
    *
-   * @param plugin the plugin
+   * @param object the object
    */
-  public static void removePrefix(@NotNull final Plugin plugin) {
-    pluginPrefixMap.remove(plugin);
+  public static void removePrefix(@NotNull final Object object) {
+    objectPrefixMap.remove(object);
   }
 }
