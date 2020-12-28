@@ -12,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -87,29 +86,28 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
     }
 
     int size = inventory.getSize();
-    List<Integer> emptySlots = IntStream.range(0, size).boxed().collect(Collectors.toList());
+    List<Integer> emptySlots = IntStream.range(0, size).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
     this.holder.getButtonSlotMap().forEach((button, slots) -> {
       ItemStack itemStack = button.getItemStack(uuid);
-      if (itemStack != null) {
-        slots.forEach(slot -> {
-          if (slot >= size) {
-            return;
-          }
-          inventory.setItem(slot, itemStack);
-          emptySlots.remove(slot);
-          viewedButtons.put(slot, button::handleAction);
-        });
+      if (itemStack == null) {
+        return;
       }
+      slots.forEach(slot -> {
+        if (slot >= size) {
+          return;
+        }
+        inventory.setItem(slot, itemStack);
+        emptySlots.remove(slot);
+        viewedButtons.put(slot, button::handleAction);
+      });
     });
 
     Button defaultButton = this.holder.getDefaultButton();
     ItemStack itemStack = defaultButton.getItemStack(uuid);
-    if (itemStack != null) {
-      emptySlots.forEach(slot -> {
-        inventory.setItem(slot, itemStack);
-        viewedButtons.put(slot, defaultButton::handleAction);
-      });
-    }
+    emptySlots.forEach(slot -> {
+      inventory.setItem(slot, itemStack);
+      viewedButtons.put(slot, defaultButton::handleAction);
+    });
 
     if (forceUpdate) {
       new ArrayList<>(inventory.getViewers())
