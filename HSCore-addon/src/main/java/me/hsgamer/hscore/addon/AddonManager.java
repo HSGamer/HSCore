@@ -264,10 +264,10 @@ public abstract class AddonManager {
   @Nullable
   public final Class<?> findClass(@NotNull final Addon addon, @NotNull final String name) {
     return this.loaderMap.entrySet()
-      .stream()
+      .parallelStream()
       .filter(entry -> entry.getKey() != addon)
       .flatMap(entry -> Optional.ofNullable(entry.getValue().findClass(name, false)).map(Stream::of).orElse(Stream.empty()))
-      .findFirst()
+      .findAny()
       .orElse(null);
   }
 
