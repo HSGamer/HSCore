@@ -14,15 +14,15 @@ import java.util.Set;
  * @param <V> the type of the value
  */
 public class CaseInsensitiveStringMap<V> implements Map<String, V> {
-  private final Map<String, V> original;
+  private final Map<String, V> delegate;
 
   /**
    * Create a new case-insensitive map
    *
-   * @param original the original string map
+   * @param delegate the background map
    */
-  public CaseInsensitiveStringMap(Map<String, V> original) {
-    this.original = original;
+  public CaseInsensitiveStringMap(Map<String, V> delegate) {
+    this.delegate = delegate;
   }
 
   private String getLowerCase(Object obj) {
@@ -31,38 +31,38 @@ public class CaseInsensitiveStringMap<V> implements Map<String, V> {
 
   @Override
   public int size() {
-    return this.original.size();
+    return this.delegate.size();
   }
 
   @Override
   public boolean isEmpty() {
-    return this.original.isEmpty();
+    return this.delegate.isEmpty();
   }
 
   @Override
   public boolean containsKey(Object o) {
-    return this.original.containsKey(getLowerCase(o));
+    return this.delegate.containsKey(getLowerCase(o));
   }
 
   @Override
   public boolean containsValue(Object o) {
-    return this.original.containsValue(o);
+    return this.delegate.containsValue(o);
   }
 
   @Override
   public V get(Object o) {
-    return this.original.get(getLowerCase(o));
+    return this.delegate.get(getLowerCase(o));
   }
 
   @Nullable
   @Override
   public V put(String s, V v) {
-    return this.original.put(getLowerCase(s), v);
+    return this.delegate.put(getLowerCase(s), v);
   }
 
   @Override
   public V remove(Object o) {
-    return this.original.remove(getLowerCase(o));
+    return this.delegate.remove(getLowerCase(o));
   }
 
   @Override
@@ -72,24 +72,24 @@ public class CaseInsensitiveStringMap<V> implements Map<String, V> {
 
   @Override
   public void clear() {
-    this.original.clear();
+    this.delegate.clear();
   }
 
   @NotNull
   @Override
   public Set<String> keySet() {
-    return this.original.keySet();
+    return this.delegate.keySet();
   }
 
   @NotNull
   @Override
   public Collection<V> values() {
-    return this.original.values();
+    return this.delegate.values();
   }
 
   @NotNull
   @Override
   public Set<Entry<String, V>> entrySet() {
-    return this.original.entrySet();
+    return this.delegate.entrySet();
   }
 }
