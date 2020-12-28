@@ -14,7 +14,7 @@ public final class VariableManager {
 
   private static final Pattern PATTERN = Pattern.compile("[{]([^{}]+)[}]");
   private static final Map<String, StringReplacer> variables = new HashMap<>();
-  private static final List<ExternalStringReplacer> externalReplacers = new LinkedList<>();
+  private static final List<ExternalStringReplacer> externalReplacers = new ArrayList<>();
   private static BooleanSupplier replaceAll = () -> false;
 
   private VariableManager() {

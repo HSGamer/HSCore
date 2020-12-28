@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
 import java.util.Map;
+
 import me.hsgamer.hscore.bukkit.config.object.Position;
 import me.hsgamer.hscore.config.SerializableMapConfigPath;
 import org.jetbrains.annotations.NotNull;

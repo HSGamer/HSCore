@@ -7,7 +7,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * The lore modifier
@@ -20,10 +19,16 @@ public class LoreModifier implements ItemModifier {
     return "lore";
   }
 
+  private List<String> getReplacedLore(UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+    List<String> replacedLore = new ArrayList<>(lore);
+    replacedLore.replaceAll(s -> StringReplacer.replace(s, uuid, stringReplacerMap.values()));
+    return replacedLore;
+  }
+
   @Override
   public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
     ItemMeta itemMeta = original.getItemMeta();
-    itemMeta.setLore(lore.stream().map(s -> StringReplacer.replace(s, uuid, stringReplacerMap.values())).collect(Collectors.toList()));
+    itemMeta.setLore(getReplacedLore(uuid, stringReplacerMap));
     original.setItemMeta(itemMeta);
     return original;
   }
@@ -51,8 +56,7 @@ public class LoreModifier implements ItemModifier {
   @Override
   public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
     ItemMeta itemMeta = itemStack.getItemMeta();
-    return (!itemMeta.hasLore() && this.lore.isEmpty())
-      || this.lore.stream().map(s -> StringReplacer.replace(s, uuid, stringReplacerMap.values())).collect(Collectors.toList()).equals(itemMeta.getLore());
+    return (!itemMeta.hasLore() && this.lore.isEmpty()) || getReplacedLore(uuid, stringReplacerMap).equals(itemMeta.getLore());
   }
 
   /**

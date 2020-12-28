@@ -3,6 +3,7 @@ package me.hsgamer.hscore.bukkit.config.object;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
@@ -47,10 +48,10 @@ public final class Position {
    * ctor.
    *
    * @param world the world.
-   * @param x the x.
-   * @param y the y.
-   * @param z the z.
-   * @param yaw the yaw.
+   * @param x     the x.
+   * @param y     the y.
+   * @param z     the z.
+   * @param yaw   the yaw.
    * @param pitch the pitch.
    */
   public Position(@NotNull final String world, final double x, final double y, final double z, final float yaw,
@@ -71,8 +72,8 @@ public final class Position {
    * @return deserialized {@code this} instance.
    *
    * @throws NullPointerException if the given map has not world, x, y, z, yaw, pitch keys.
-   * @throws ClassCastException if the given map values contain wrong type of value for
-   *   {@link #Position(String, double, double, double, float, float)}
+   * @throws ClassCastException   if the given map values contain wrong type of value for
+   *                              {@link #Position(String, double, double, double, float, float)}
    */
   @NotNull
   public static Position deserialize(@NotNull final Map<String, Object> map) {
