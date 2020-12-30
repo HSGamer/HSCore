@@ -72,6 +72,9 @@ public final class MessageUtils {
    */
   @NotNull
   public static String colorize(final char altColorChar, @NotNull final String input) {
+    if (input.isEmpty()) {
+      return input;
+    }
     char[] chars = input.toCharArray();
     int i = 0;
     int oi = 0;
