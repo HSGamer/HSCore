@@ -1,18 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE project [
-  <!ELEMENT project (parent|modelVersion|artifactId|dependencies)*>
-  <!ATTLIST project
-    xmlns:xsi CDATA #REQUIRED
-    xmlns CDATA #REQUIRED
-    xsi:schemaLocation CDATA #REQUIRED>
-  <!ELEMENT parent (artifactId|groupId|version)*>
-  <!ELEMENT artifactId (#PCDATA)>
-  <!ELEMENT groupId (#PCDATA)>
-  <!ELEMENT version (#PCDATA)>
-  <!ELEMENT modelVersion (#PCDATA)>
-  <!ELEMENT dependencies (dependency)*>
-  <!ELEMENT dependency (groupId|artifactId|version)*>
-  ]>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -74,6 +60,11 @@
     <dependency>
       <groupId>me.HSGamer</groupId>
       <artifactId>HSCore-bukkit-command-extra</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-bukkit-baseplugin</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

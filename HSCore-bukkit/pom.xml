@@ -22,6 +22,7 @@
     <module>HSCore-bukkit-item</module>
     <module>HSCore-bukkit-config</module>
     <module>HSCore-bukkit-gui</module>
+    <module>HSCore-bukkit-baseplugin</module>
     <module>HSCore-bukkit-all</module>
   </modules>
 

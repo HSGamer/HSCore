@@ -57,6 +57,7 @@
     * **`HSCore-bukkit-utils`**
     * **`HSCore-bukkit-gui`**
     * **`HSCore-bukkit-item`**
+    * **`HSCore-bukkit-baseplugin`**
 
 ## Add as a dependency (Maven)
 
