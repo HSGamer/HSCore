@@ -109,7 +109,8 @@ public abstract class BasePlugin extends JavaPlugin {
    * @return the command
    */
   public Command getRegisteredCommand(String label) {
-    return commandManager.getRegistered().get(label);
+    Command command = commandManager.getRegistered().get(label);
+    return command != null ? command : getCommand(label);
   }
 
   /**
