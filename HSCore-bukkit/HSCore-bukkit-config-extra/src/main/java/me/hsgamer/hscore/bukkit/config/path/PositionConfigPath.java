@@ -1,10 +1,10 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
-import java.util.Map;
-
 import me.hsgamer.hscore.bukkit.config.object.Position;
 import me.hsgamer.hscore.config.SerializableMapConfigPath;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
 
 public final class PositionConfigPath extends SerializableMapConfigPath<Position> {
 
