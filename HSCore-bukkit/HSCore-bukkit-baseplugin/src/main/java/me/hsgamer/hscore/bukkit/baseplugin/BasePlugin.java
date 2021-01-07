@@ -36,7 +36,10 @@ public abstract class BasePlugin extends JavaPlugin {
   public final void onEnable() {
     enable();
 
-    Bukkit.getScheduler().scheduleSyncDelayedTask(this, this::postEnable);
+    Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+      postEnable();
+      CommandManager.syncCommand();
+    });
   }
 
   @Override
