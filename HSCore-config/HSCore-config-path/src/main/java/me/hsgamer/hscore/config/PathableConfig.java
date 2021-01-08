@@ -25,6 +25,7 @@ public class PathableConfig implements Config {
   @Override
   public void setupConfig() {
     config.setupConfig();
+    config.getConfig().options().copyDefaults(true);
   }
 
   @Override
