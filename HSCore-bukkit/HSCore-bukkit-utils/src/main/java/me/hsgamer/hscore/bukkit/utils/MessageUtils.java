@@ -37,7 +37,7 @@ public final class MessageUtils {
    */
   @NotNull
   public static String colorize(@NotNull final String input) {
-    return colorize('&', colorizeHex(input));
+    return colorizeHex(colorize('&', input));
   }
 
   /**
