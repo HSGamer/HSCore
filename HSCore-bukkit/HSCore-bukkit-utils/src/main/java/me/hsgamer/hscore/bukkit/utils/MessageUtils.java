@@ -90,9 +90,9 @@ public final class MessageUtils {
       i++;
     }
     if (i == chars.length - 1) {
-      chars[oi] = chars[i];
+      chars[oi++] = chars[i];
     }
-    return new String(chars, 0, oi + 1);
+    return new String(chars, 0, oi);
   }
 
   /**
