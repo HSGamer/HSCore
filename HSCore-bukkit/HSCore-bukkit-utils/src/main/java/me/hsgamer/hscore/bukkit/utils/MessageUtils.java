@@ -92,7 +92,7 @@ public final class MessageUtils {
     if (i == chars.length - 1) {
       chars[oi++] = chars[i];
     }
-    return new String(chars, 0, oi);
+    return new String(chars, 0, Math.min(oi, chars.length));
   }
 
   /**
