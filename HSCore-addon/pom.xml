@@ -6,7 +6,7 @@
   <parent>
     <artifactId>HSCore</artifactId>
     <groupId>me.HSGamer</groupId>
-    <version>2.8</version>
+    <version>3.0-SNAPSHOT</version>
   </parent>
   <artifactId>HSCore-addon</artifactId>
 
