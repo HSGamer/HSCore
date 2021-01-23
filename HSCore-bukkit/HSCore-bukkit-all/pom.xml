@@ -29,11 +29,6 @@
     </dependency>
     <dependency>
       <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-bukkit-config</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>me.HSGamer</groupId>
       <artifactId>HSCore-bukkit-config-extra</artifactId>
       <version>${project.version}</version>
     </dependency>
