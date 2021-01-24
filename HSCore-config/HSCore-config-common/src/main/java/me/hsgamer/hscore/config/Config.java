@@ -105,6 +105,15 @@ public interface Config {
   boolean isNormalizable(Object object);
 
   /**
+   * Remove the path from the configuration
+   *
+   * @param path the path
+   */
+  default void remove(String path) {
+    set(path, null);
+  }
+
+  /**
    * Get the value from the path
    *
    * @param path the path
