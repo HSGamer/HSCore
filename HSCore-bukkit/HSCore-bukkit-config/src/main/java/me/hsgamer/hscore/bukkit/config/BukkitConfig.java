@@ -110,6 +110,7 @@ public class BukkitConfig implements Config {
 
   @Override
   public void save() {
+    this.configuration.options().copyDefaults(true);
     try {
       this.configuration.save(file);
     } catch (IOException e) {
