@@ -106,11 +106,11 @@ public class BukkitConfig implements Config {
       }
     }
     this.configuration = YamlConfiguration.loadConfiguration(file);
+    this.configuration.options().copyDefaults(true);
   }
 
   @Override
   public void save() {
-    this.configuration.options().copyDefaults(true);
     try {
       this.configuration.save(file);
     } catch (IOException e) {
@@ -121,5 +121,6 @@ public class BukkitConfig implements Config {
   @Override
   public void reload() {
     this.configuration = YamlConfiguration.loadConfiguration(file);
+    this.configuration.options().copyDefaults(true);
   }
 }
