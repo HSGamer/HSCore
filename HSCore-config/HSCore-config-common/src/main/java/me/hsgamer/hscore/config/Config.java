@@ -1,8 +1,6 @@
 package me.hsgamer.hscore.config;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -87,6 +85,24 @@ public interface Config {
    * Reload the configuration
    */
   void reload();
+
+  /**
+   * Normalize the library-specific object
+   *
+   * @param object the object
+   *
+   * @return the normalized object
+   */
+  Object normalize(Object object);
+
+  /**
+   * Check if the object is normalizable
+   *
+   * @param object the object
+   *
+   * @return true if it is
+   */
+  boolean isNormalizable(Object object);
 
   /**
    * Get the value from the path
@@ -207,7 +223,22 @@ public interface Config {
    */
   default Map<String, Object> getNormalizedValues(String path, boolean deep) {
     Map<String, Object> normalized = new LinkedHashMap<>();
-    getValues(path, deep).forEach((k, v) -> normalized.put(k, normalize(v)));
+    getValues(path, deep).forEach((k, v) -> {
+      if (!isNormalizable(v)) {
+        normalized.put(k, v);
+      }
+      Object normalizedValue = normalize(v);
+      if (normalizedValue instanceof Map) {
+        // noinspection unchecked
+        ((Map) normalizedValue).replaceAll((k1, v1) -> isNormalizable(v1) ? normalize(v1) : v1);
+      } else if (normalizedValue instanceof Collection) {
+        List<Object> normalizedList = new ArrayList<>();
+        // noinspection unchecked
+        ((Collection) normalizedValue).forEach(v1 -> normalizedList.add(isNormalizable(v1) ? normalize(v1) : v1));
+        normalizedValue = normalizedList;
+      }
+      normalized.put(k, normalizedValue);
+    });
     return normalized;
   }
 
@@ -220,17 +251,6 @@ public interface Config {
    */
   default Map<String, Object> getNormalizedValues(boolean deep) {
     return getNormalizedValues("", deep);
-  }
-
-  /**
-   * Normalize the library-specific object
-   *
-   * @param object the object
-   *
-   * @return the normalized object
-   */
-  default Object normalize(Object object) {
-    return object;
   }
 
   /**
