@@ -250,11 +250,11 @@ public interface Config {
     Object normalizedValue = normalize(object);
     if (normalizedValue instanceof Map) {
       // noinspection unchecked
-      ((Map) normalizedValue).replaceAll((k1, v1) -> isNormalizable(v1) ? normalize(v1) : v1);
+      ((Map) normalizedValue).replaceAll((k1, v1) -> normalizeObject(v1));
     } else if (normalizedValue instanceof Collection) {
       List<Object> normalizedList = new ArrayList<>();
       // noinspection unchecked
-      ((Collection) normalizedValue).forEach(v1 -> normalizedList.add(isNormalizable(v1) ? normalize(v1) : v1));
+      ((Collection) normalizedValue).forEach(v1 -> normalizedList.add(normalizeObject(v1)));
       normalizedValue = normalizedList;
     }
     return normalizedValue;
