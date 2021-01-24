@@ -1,25 +1,27 @@
 package me.hsgamer.hscore.config.simplixstorage;
 
 import de.leonhard.storage.internal.FlatFile;
-import de.leonhard.storage.internal.settings.ReloadSettings;
 import me.hsgamer.hscore.config.Config;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
 /**
  * The {@link Config} implementation for SimplixStorage
+ *
+ * @param <F> the flat file type
  */
-public class LightningConfig implements Config {
-  private final FlatFile flatFile;
+public class LightningConfig<F extends FlatFile> implements Config {
+  private final F flatFile;
 
   /**
    * Create a new config
    *
    * @param flatFile the flat file
    */
-  public LightningConfig(FlatFile flatFile) {
+  public LightningConfig(F flatFile) {
     this.flatFile = flatFile;
   }
 
@@ -54,21 +56,29 @@ public class LightningConfig implements Config {
   }
 
   @Override
-  public Map<String, Object> getValues(String path, boolean deep) {
-    Set<String> paths;
+  public Set<String> getKeys(String path, boolean deep) {
+    Set<String> keys;
     if (path == null || path.isEmpty()) {
-      paths = deep ? flatFile.keySet() : flatFile.singleLayerKeySet();
+      keys = deep ? flatFile.keySet() : flatFile.singleLayerKeySet();
     } else {
-      paths = deep ? flatFile.keySet(path) : flatFile.singleLayerKeySet(path);
+      keys = deep ? flatFile.keySet(path) : flatFile.singleLayerKeySet(path);
     }
+    if (keys == null) {
+      keys = Collections.emptySet();
+    }
+    return keys;
+  }
+
+  @Override
+  public Map<String, Object> getValues(String path, boolean deep) {
     Map<String, Object> values = new LinkedHashMap<>();
-    paths.forEach(p -> values.put(p, flatFile.get(p)));
+    getKeys(path, deep).forEach(p -> values.put(p, flatFile.get(p)));
     return values;
   }
 
   @Override
   public void setup() {
-    flatFile.setReloadSettings(ReloadSettings.AUTOMATICALLY);
+    // EMPTY
   }
 
   @Override
