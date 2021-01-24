@@ -89,6 +89,11 @@ public class BukkitConfig implements Config {
   }
 
   @Override
+  public boolean isNormalizable(Object object) {
+    return object instanceof ConfigurationSection;
+  }
+
+  @Override
   public void setup() {
     if (!file.exists()) {
       if (!file.getParentFile().exists()) {
