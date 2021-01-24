@@ -37,7 +37,7 @@ public class BaseConfigPath<T> implements ConfigPath<T> {
       return def;
     }
 
-    Object rawValue = config.get(path, def);
+    Object rawValue = config.getNormalized(path, def);
     if (rawValue == null) {
       return def;
     }
