@@ -128,23 +128,23 @@ public interface Config {
    * Get the normalized value from the path
    *
    * @param path the path
+   * @param def  the default value the default value if the value is not found
    *
    * @return the value
    */
-  default Object getNormalized(String path) {
-    return normalize(get(path));
+  default Object getNormalized(String path, Object def) {
+    return normalizeObject(get(path, def));
   }
 
   /**
    * Get the normalized value from the path
    *
    * @param path the path
-   * @param def  the default value the default value if the value is not found
    *
    * @return the value
    */
-  default Object getNormalized(String path, Object def) {
-    return normalize(get(path, def));
+  default Object getNormalized(String path) {
+    return getNormalized(path, null);
   }
 
   /**
@@ -232,23 +232,32 @@ public interface Config {
    */
   default Map<String, Object> getNormalizedValues(String path, boolean deep) {
     Map<String, Object> normalized = new LinkedHashMap<>();
-    getValues(path, deep).forEach((k, v) -> {
-      if (!isNormalizable(v)) {
-        normalized.put(k, v);
-      }
-      Object normalizedValue = normalize(v);
-      if (normalizedValue instanceof Map) {
-        // noinspection unchecked
-        ((Map) normalizedValue).replaceAll((k1, v1) -> isNormalizable(v1) ? normalize(v1) : v1);
-      } else if (normalizedValue instanceof Collection) {
-        List<Object> normalizedList = new ArrayList<>();
-        // noinspection unchecked
-        ((Collection) normalizedValue).forEach(v1 -> normalizedList.add(isNormalizable(v1) ? normalize(v1) : v1));
-        normalizedValue = normalizedList;
-      }
-      normalized.put(k, normalizedValue);
-    });
+    getValues(path, deep).forEach((k, v) -> normalized.put(k, normalizeObject(v)));
     return normalized;
+  }
+
+  /**
+   * Normalize the object and its elements if it is a map or a collection
+   *
+   * @param object the object
+   *
+   * @return the normalized object
+   */
+  default Object normalizeObject(Object object) {
+    if (!isNormalizable(object)) {
+      return object;
+    }
+    Object normalizedValue = normalize(object);
+    if (normalizedValue instanceof Map) {
+      // noinspection unchecked
+      ((Map) normalizedValue).replaceAll((k1, v1) -> isNormalizable(v1) ? normalize(v1) : v1);
+    } else if (normalizedValue instanceof Collection) {
+      List<Object> normalizedList = new ArrayList<>();
+      // noinspection unchecked
+      ((Collection) normalizedValue).forEach(v1 -> normalizedList.add(isNormalizable(v1) ? normalize(v1) : v1));
+      normalizedValue = normalizedList;
+    }
+    return normalizedValue;
   }
 
   /**
