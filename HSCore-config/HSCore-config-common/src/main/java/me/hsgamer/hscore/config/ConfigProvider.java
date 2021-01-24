@@ -7,11 +7,11 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
 /**
- * Config provider for {@link Configuration}
+ * Config provider for {@link Config}
  *
  * @param <F> File configuration class type
  */
-public interface ConfigProvider<F extends Configuration> {
+public interface ConfigProvider<F extends Config> {
 
   /**
    * Load configuration from a file

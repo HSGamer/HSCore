@@ -298,7 +298,7 @@ public abstract class AddonManager {
    * @return the provider
    */
   @NotNull
-  protected abstract ConfigProvider<?> getConfigProvider();
+  public abstract ConfigProvider<?> getConfigProvider();
 
   /**
    * Called when the addon is on loading

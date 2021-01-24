@@ -13,7 +13,7 @@ public abstract class AdvancedConfigPath<F, T> implements ConfigPath<T> {
 
   private final String path;
   private final T def;
-  private Configuration config;
+  private Config config;
 
   /**
    * Create a config path
@@ -34,7 +34,7 @@ public abstract class AdvancedConfigPath<F, T> implements ConfigPath<T> {
    * @return the raw value
    */
   @Nullable
-  public abstract F getFromConfig(@NotNull final Configuration config);
+  public abstract F getFromConfig(@NotNull final Config config);
 
   /**
    * Convert to the final value
@@ -89,12 +89,12 @@ public abstract class AdvancedConfigPath<F, T> implements ConfigPath<T> {
 
   @Override
   @Nullable
-  public Configuration getConfig() {
+  public Config getConfig() {
     return config;
   }
 
   @Override
-  public void setConfig(@NotNull final Configuration config) {
+  public void setConfig(@NotNull final Config config) {
     this.config = config;
     config.addDefault(path, def != null ? convertToRaw(def) : null);
   }

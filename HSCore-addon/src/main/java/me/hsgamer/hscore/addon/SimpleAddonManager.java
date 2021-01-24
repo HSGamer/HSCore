@@ -147,7 +147,7 @@ public final class SimpleAddonManager extends AddonManager {
 
   @NotNull
   @Override
-  protected ConfigProvider<?> getConfigProvider() {
+  public ConfigProvider<?> getConfigProvider() {
     return this.configProvider.get();
   }
 

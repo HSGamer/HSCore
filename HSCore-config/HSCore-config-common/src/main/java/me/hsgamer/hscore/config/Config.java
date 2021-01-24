@@ -2,11 +2,17 @@ package me.hsgamer.hscore.config;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * The interface for all configurations
  */
-public interface Configuration {
+public interface Config {
+  /**
+   * The logger for ease
+   */
+  Logger LOGGER = Logger.getLogger("Config");
 
   /**
    * Get the original instance
@@ -166,6 +172,29 @@ public interface Configuration {
    */
   default Map<String, Object> getValues(boolean deep) {
     return getValues("", deep);
+  }
+
+  /**
+   * Get all keys from the path
+   *
+   * @param path the path
+   * @param deep should we go deeper from the path?
+   *
+   * @return the keys
+   */
+  default Set<String> getKeys(String path, boolean deep) {
+    return getValues(path, deep).keySet();
+  }
+
+  /**
+   * Get all keys from the root path
+   *
+   * @param deep should we go deeper from the path?
+   *
+   * @return the keys
+   */
+  default Set<String> getKeys(boolean deep) {
+    return getKeys("", deep);
   }
 
   /**

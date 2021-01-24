@@ -39,12 +39,12 @@ public interface ConfigPath<T> {
    * @return the config
    */
   @Nullable
-  Configuration getConfig();
+  Config getConfig();
 
   /**
    * Set the config.
    *
    * @param config the config
    */
-  void setConfig(@NotNull final Configuration config);
+  void setConfig(@NotNull final Config config);
 }

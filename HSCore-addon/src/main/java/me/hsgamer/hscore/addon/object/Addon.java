@@ -2,7 +2,7 @@ package me.hsgamer.hscore.addon.object;
 
 import me.hsgamer.hscore.addon.AddonManager;
 import me.hsgamer.hscore.common.Validate;
-import me.hsgamer.hscore.config.Configuration;
+import me.hsgamer.hscore.config.Config;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +27,7 @@ public abstract class Addon {
   /**
    * The addon's config
    */
-  private Configuration addonConfig;
+  private Config addonConfig;
 
   /**
    * The addon's data folder
@@ -101,7 +101,7 @@ public abstract class Addon {
    * @return the config
    */
   @NotNull
-  public final Configuration getConfig() {
+  public final Config getConfig() {
     if (this.addonConfig == null) {
       this.setupConfig();
     }
@@ -112,10 +112,12 @@ public abstract class Addon {
    * Get the config
    *
    * @return the config
+   *
+   * @deprecated use {@link #getConfig()}
    */
   @Deprecated
   @NotNull
-  public final Configuration getAddonConfig() {
+  public final Config getAddonConfig() {
     return this.getConfig();
   }
 
@@ -232,5 +234,5 @@ public abstract class Addon {
    * Create the config
    */
   @NotNull
-  protected abstract Configuration createConfig();
+  protected abstract Config createConfig();
 }

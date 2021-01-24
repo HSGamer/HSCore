@@ -51,12 +51,12 @@ public class CommentablePath<T> implements ConfigPath<T> {
   }
 
   @Override
-  public @Nullable Configuration getConfig() {
+  public @Nullable Config getConfig() {
     return originalPath.getConfig();
   }
 
   @Override
-  public void setConfig(@NotNull final Configuration config) {
+  public void setConfig(@NotNull final Config config) {
     originalPath.setConfig(config);
     if (!(config instanceof Commentable)) {
       return;

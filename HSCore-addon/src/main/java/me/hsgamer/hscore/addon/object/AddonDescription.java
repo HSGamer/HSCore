@@ -1,8 +1,8 @@
 package me.hsgamer.hscore.addon.object;
 
 import me.hsgamer.hscore.addon.exception.RequiredAddonPathException;
+import me.hsgamer.hscore.config.Config;
 import me.hsgamer.hscore.config.ConfigProvider;
-import me.hsgamer.hscore.config.Configuration;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -38,22 +38,22 @@ public final class AddonDescription {
    * The configuration of the addon
    */
   @NotNull
-  private final Configuration configuration;
+  private final Config config;
 
   /**
    * Create an addon description
    *
-   * @param name          the name of the addon
-   * @param version       the version of the addon
-   * @param mainClass     the main class of the addon
-   * @param configuration the configuration of the addon
+   * @param name      the name of the addon
+   * @param version   the version of the addon
+   * @param mainClass the main class of the addon
+   * @param config    the configuration of the addon
    */
   public AddonDescription(@NotNull final String name, @NotNull final String version, @NotNull final String mainClass,
-                          @NotNull final Configuration configuration) {
+                          @NotNull final Config config) {
     this.name = name;
     this.version = version;
     this.mainClass = mainClass;
-    this.configuration = configuration;
+    this.config = config;
   }
 
   /**
@@ -69,7 +69,7 @@ public final class AddonDescription {
    */
   @NotNull
   public static AddonDescription get(@NotNull final JarFile jar, @NotNull final String addonConfigFileName,
-                                     @NotNull final ConfigProvider<? extends Configuration> provider)
+                                     @NotNull final ConfigProvider<? extends Config> provider)
     throws IOException {
     // Load the addon config file
     final JarEntry entry = jar.getJarEntry(addonConfigFileName);
@@ -77,7 +77,7 @@ public final class AddonDescription {
       throw new NoSuchFileException("Addon '" + jar.getName() + "' doesn't contain " + addonConfigFileName + " file");
     }
     final InputStream inputStream = jar.getInputStream(entry);
-    final Configuration data = provider.loadConfiguration(inputStream);
+    final Config data = provider.loadConfiguration(inputStream);
     inputStream.close();
     // Load required descriptions
     final String name = data.getInstance("name", String.class);
@@ -134,7 +134,7 @@ public final class AddonDescription {
    * @return the file
    */
   @NotNull
-  public Configuration getConfiguration() {
-    return this.configuration;
+  public Config getConfiguration() {
+    return this.config;
   }
 }
