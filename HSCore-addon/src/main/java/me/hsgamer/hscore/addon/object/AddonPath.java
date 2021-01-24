@@ -1,9 +1,9 @@
 package me.hsgamer.hscore.addon.object;
 
 import me.hsgamer.hscore.addon.exception.RequiredAddonPathException;
+import me.hsgamer.hscore.config.Configuration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.simpleyaml.configuration.file.FileConfiguration;
 
 /**
  * A path to get value from the addon config file
@@ -74,8 +74,8 @@ public abstract class AddonPath<T> {
    */
   @Nullable
   public final T get(@NotNull final Addon addon) {
-    final FileConfiguration configuration = addon.getDescription().getConfiguration();
-    if (this.required && !configuration.isSet(this.path)) {
+    final Configuration configuration = addon.getDescription().getConfiguration();
+    if (this.required && !configuration.contains(this.path)) {
       throw new RequiredAddonPathException(
         this.path + " is not found in the addon '" + addon.getDescription().getName() + "'");
     }

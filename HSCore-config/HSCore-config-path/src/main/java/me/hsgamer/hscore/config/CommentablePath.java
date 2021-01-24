@@ -1,10 +1,9 @@
 package me.hsgamer.hscore.config;
 
+import me.hsgamer.hscore.config.comment.CommentType;
+import me.hsgamer.hscore.config.comment.Commentable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.simpleyaml.configuration.comments.CommentType;
-import org.simpleyaml.configuration.comments.Commentable;
-import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.EnumMap;
 import java.util.Optional;
@@ -52,20 +51,19 @@ public class CommentablePath<T> implements ConfigPath<T> {
   }
 
   @Override
-  public @Nullable Config getConfig() {
+  public @Nullable Configuration getConfig() {
     return originalPath.getConfig();
   }
 
   @Override
-  public void setConfig(@NotNull final Config config) {
+  public void setConfig(@NotNull final Configuration config) {
     originalPath.setConfig(config);
-    FileConfiguration configuration = config.getConfig();
-    if (!(configuration instanceof Commentable)) {
+    if (!(config instanceof Commentable)) {
       return;
     }
     defaultCommentMap.forEach((type, s) -> {
-      if (((Commentable) configuration).getComment(getPath(), type) == null) {
-        ((Commentable) configuration).setComment(getPath(), s, type);
+      if (((Commentable) config).getComment(getPath(), type) == null) {
+        ((Commentable) config).setComment(getPath(), s, type);
       }
     });
   }
@@ -99,7 +97,6 @@ public class CommentablePath<T> implements ConfigPath<T> {
   @Nullable
   public String getComment(@NotNull final CommentType commentType) {
     return Optional.ofNullable(getConfig())
-      .map(Config::getConfig)
       .filter(config -> config instanceof Commentable)
       .map(config -> ((Commentable) config).getComment(getPath(), commentType))
       .orElse(defaultCommentMap.get(commentType));
@@ -113,7 +110,6 @@ public class CommentablePath<T> implements ConfigPath<T> {
    */
   public void setComment(@NotNull final CommentType commentType, @Nullable final String comment) {
     Optional.ofNullable(getConfig())
-      .map(Config::getConfig)
       .filter(config -> config instanceof Commentable)
       .ifPresent(config -> ((Commentable) config).setComment(getPath(), comment, commentType));
   }

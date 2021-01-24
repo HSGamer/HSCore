@@ -15,7 +15,7 @@ public class BaseConfigPath<T> implements ConfigPath<T> {
   private final Function<Object, T> typeConverter;
   private final String path;
   private final T def;
-  private Config config;
+  private Configuration config;
 
   /**
    * Create a config path
@@ -51,7 +51,7 @@ public class BaseConfigPath<T> implements ConfigPath<T> {
       return;
     }
 
-    config.getConfig().set(path, value);
+    config.set(path, value);
   }
 
   @Override
@@ -62,13 +62,13 @@ public class BaseConfigPath<T> implements ConfigPath<T> {
 
   @Override
   @Nullable
-  public Config getConfig() {
+  public Configuration getConfig() {
     return config;
   }
 
   @Override
-  public void setConfig(@NotNull final Config config) {
+  public void setConfig(@NotNull final Configuration config) {
     this.config = config;
-    config.getConfig().addDefault(path, def);
+    config.addDefault(path, def);
   }
 }

@@ -9,6 +9,13 @@ import java.util.Map;
 public interface Configuration {
 
   /**
+   * Get the original instance
+   *
+   * @return the original instance
+   */
+  Object getOriginal();
+
+  /**
    * Get the value from the path
    *
    * @param path the path
@@ -61,6 +68,21 @@ public interface Configuration {
   Map<String, Object> getValues(String path, boolean deep);
 
   /**
+   * Setup the configuration
+   */
+  void setup();
+
+  /**
+   * Save the configuration
+   */
+  void save();
+
+  /**
+   * Reload the configuration
+   */
+  void reload();
+
+  /**
    * Get the value from the path
    *
    * @param path the path
@@ -69,6 +91,29 @@ public interface Configuration {
    */
   default Object get(String path) {
     return get(path, null);
+  }
+
+  /**
+   * Get the normalized value from the path
+   *
+   * @param path the path
+   *
+   * @return the value
+   */
+  default Object getNormalized(String path) {
+    return normalize(get(path));
+  }
+
+  /**
+   * Get the normalized value from the path
+   *
+   * @param path the path
+   * @param def  the default value the default value if the value is not found
+   *
+   * @return the value
+   */
+  default Object getNormalized(String path, Object def) {
+    return normalize(get(path, def));
   }
 
   /**
@@ -82,7 +127,7 @@ public interface Configuration {
    * @return the value
    */
   default <T> T getInstance(String path, T def, Class<T> type) {
-    Object value = get(path, def);
+    Object value = getNormalized(path, def);
     // noinspection unchecked
     return type.isInstance(type) ? (T) value : def;
   }

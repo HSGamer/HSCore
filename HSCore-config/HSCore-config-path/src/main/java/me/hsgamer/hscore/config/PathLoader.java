@@ -16,7 +16,7 @@ public final class PathLoader {
    * @param config config instance to load
    * @param <C>    config instance's class type
    */
-  public static <C extends Config> void loadPath(C config) {
+  public static <C extends Configuration> void loadPath(C config) {
     Arrays.stream(config.getClass().getDeclaredFields())
       .filter(field -> ConfigPath.class.isAssignableFrom(field.getType()))
       .forEach(field -> {

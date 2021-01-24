@@ -1,7 +1,5 @@
 package me.hsgamer.hscore.config;
 
-import org.simpleyaml.configuration.file.FileConfiguration;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,11 +7,11 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
 /**
- * Config provider for {@link Config}
+ * Config provider for {@link Configuration}
  *
  * @param <F> File configuration class type
  */
-public interface ConfigProvider<F extends FileConfiguration> {
+public interface ConfigProvider<F extends Configuration> {
 
   /**
    * Load configuration from a file
@@ -38,17 +36,5 @@ public interface ConfigProvider<F extends FileConfiguration> {
     file.deleteOnExit();
     Files.copy(inputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
     return loadConfiguration(file);
-  }
-
-  /**
-   * Save the configuration to the file
-   *
-   * @param fileConfiguration the configuration
-   * @param file              the file
-   *
-   * @throws IOException if there is an I/O error occurred
-   */
-  default void saveConfiguration(F fileConfiguration, File file) throws IOException {
-    fileConfiguration.save(file);
   }
 }

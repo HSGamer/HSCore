@@ -2,10 +2,9 @@ package me.hsgamer.hscore.addon.object;
 
 import me.hsgamer.hscore.addon.AddonManager;
 import me.hsgamer.hscore.common.Validate;
-import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.Configuration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +27,7 @@ public abstract class Addon {
   /**
    * The addon's config
    */
-  private Config addonConfig;
+  private Configuration addonConfig;
 
   /**
    * The addon's data folder
@@ -102,17 +101,7 @@ public abstract class Addon {
    * @return the config
    */
   @NotNull
-  public final FileConfiguration getConfig() {
-    return this.getAddonConfig().getConfig();
-  }
-
-  /**
-   * Get the {@link Config} of the addon
-   *
-   * @return the {@link Config}
-   */
-  @NotNull
-  public final Config getAddonConfig() {
+  public final Configuration getConfig() {
     if (this.addonConfig == null) {
       this.setupConfig();
     }
@@ -120,17 +109,28 @@ public abstract class Addon {
   }
 
   /**
+   * Get the config
+   *
+   * @return the config
+   */
+  @Deprecated
+  @NotNull
+  public final Configuration getAddonConfig() {
+    return this.getConfig();
+  }
+
+  /**
    * Reload the config
    */
   public final void reloadConfig() {
-    this.getAddonConfig().reloadConfig();
+    this.getConfig().reload();
   }
 
   /**
    * Save the config
    */
   public final void saveConfig() {
-    this.getAddonConfig().saveConfig();
+    this.getConfig().save();
   }
 
   /**
@@ -232,5 +232,5 @@ public abstract class Addon {
    * Create the config
    */
   @NotNull
-  protected abstract Config createConfig();
+  protected abstract Configuration createConfig();
 }

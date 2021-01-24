@@ -78,8 +78,7 @@ public abstract class AddonManager {
       .forEach(file -> {
         try (final JarFile jar = new JarFile(file)) {
           // Get addon description
-          final AddonDescription addonDescription = AddonDescription.get(jar, this.getAddonConfigFileName(),
-            this.getConfigProvider());
+          final AddonDescription addonDescription = AddonDescription.get(jar, this.getAddonConfigFileName(), this.getConfigProvider());
           if (addonMap.containsKey(addonDescription.getName())) {
             this.logger.warning("Duplicated addon " + addonDescription.getName());
             return;

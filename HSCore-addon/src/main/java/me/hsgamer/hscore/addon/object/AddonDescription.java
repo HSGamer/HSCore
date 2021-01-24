@@ -2,8 +2,8 @@ package me.hsgamer.hscore.addon.object;
 
 import me.hsgamer.hscore.addon.exception.RequiredAddonPathException;
 import me.hsgamer.hscore.config.ConfigProvider;
+import me.hsgamer.hscore.config.Configuration;
 import org.jetbrains.annotations.NotNull;
-import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +38,7 @@ public final class AddonDescription {
    * The configuration of the addon
    */
   @NotNull
-  private final FileConfiguration configuration;
+  private final Configuration configuration;
 
   /**
    * Create an addon description
@@ -49,7 +49,7 @@ public final class AddonDescription {
    * @param configuration the configuration of the addon
    */
   public AddonDescription(@NotNull final String name, @NotNull final String version, @NotNull final String mainClass,
-                          @NotNull final FileConfiguration configuration) {
+                          @NotNull final Configuration configuration) {
     this.name = name;
     this.version = version;
     this.mainClass = mainClass;
@@ -69,7 +69,7 @@ public final class AddonDescription {
    */
   @NotNull
   public static AddonDescription get(@NotNull final JarFile jar, @NotNull final String addonConfigFileName,
-                                     @NotNull final ConfigProvider<? extends FileConfiguration> provider)
+                                     @NotNull final ConfigProvider<? extends Configuration> provider)
     throws IOException {
     // Load the addon config file
     final JarEntry entry = jar.getJarEntry(addonConfigFileName);
@@ -77,12 +77,12 @@ public final class AddonDescription {
       throw new NoSuchFileException("Addon '" + jar.getName() + "' doesn't contain " + addonConfigFileName + " file");
     }
     final InputStream inputStream = jar.getInputStream(entry);
-    final FileConfiguration data = provider.loadConfiguration(inputStream);
+    final Configuration data = provider.loadConfiguration(inputStream);
     inputStream.close();
     // Load required descriptions
-    final String name = data.getString("name");
-    final String version = data.getString("version");
-    final String mainClass = data.getString("main");
+    final String name = data.getInstance("name", String.class);
+    final String version = data.getInstance("version", String.class);
+    final String mainClass = data.getInstance("main", String.class);
     if (name == null) {
       throw new RequiredAddonPathException("Addon '" + jar.getName() + "' doesn't have a name on " +
         addonConfigFileName);
@@ -134,7 +134,7 @@ public final class AddonDescription {
    * @return the file
    */
   @NotNull
-  public FileConfiguration getConfiguration() {
+  public Configuration getConfiguration() {
     return this.configuration;
   }
 }
