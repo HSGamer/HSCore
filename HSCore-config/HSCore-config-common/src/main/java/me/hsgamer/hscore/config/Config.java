@@ -54,14 +54,6 @@ public interface Config {
   String getName();
 
   /**
-   * Add a default value to the path
-   *
-   * @param path  the path
-   * @param value the value
-   */
-  void addDefault(String path, Object value);
-
-  /**
    * Get all values from the path
    *
    * @param path the path
@@ -268,6 +260,18 @@ public interface Config {
    */
   default Map<String, Object> getNormalizedValues(boolean deep) {
     return getNormalizedValues("", deep);
+  }
+
+  /**
+   * Add a default value to the path
+   *
+   * @param path  the path
+   * @param value the value
+   */
+  default void addDefault(String path, Object value) {
+    if (!contains(path)) {
+      set(path, value);
+    }
   }
 
   /**
