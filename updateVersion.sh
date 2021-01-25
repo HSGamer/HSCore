@@ -6,7 +6,5 @@ cd ../HSCore-config || return
 mvn -N versions:update-child-modules -DgenerateBackupPoms=false
 cd ../HSCore-database || return
 mvn -N versions:update-child-modules -DgenerateBackupPoms=false
-cd ../HSCore-ui || return
-mvn -N versions:update-child-modules -DgenerateBackupPoms=false
 cd ../HSCore-checker || return
 mvn -N versions:update-child-modules -DgenerateBackupPoms=false

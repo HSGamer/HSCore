@@ -10,10 +10,4 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>HSCore-ui</artifactId>
-  <packaging>pom</packaging>
-
-  <modules>
-    <module>HSCore-ui-common</module>
-    <module>HSCore-ui-all</module>
-  </modules>
 </project>
