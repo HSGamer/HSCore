@@ -26,5 +26,10 @@
       <artifactId>HSCore-config-simplixstorage</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-config-simpleconfiguration</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>

@@ -15,6 +15,7 @@
     <module>HSCore-config-common</module>
     <module>HSCore-config-path</module>
     <module>HSCore-config-simplixstorage</module>
+    <module>HSCore-config-simpleconfiguration</module>
     <module>HSCore-config-all</module>
   </modules>
 

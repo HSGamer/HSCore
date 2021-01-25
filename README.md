@@ -42,6 +42,7 @@
     * **`HSCore-config-common`**
     * **`HSCore-config-path`**
     * **`HSCore-config-simplixstorage`**
+    * **`HSCore-config-simpleconfiguration`**
   * **`HSCore-ui`**
   * **`HSCore-bukkit-all`**
     * **`HSCore-bukkit-addon`**

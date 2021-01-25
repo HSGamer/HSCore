@@ -1,42 +1,35 @@
-package me.hsgamer.hscore.bukkit.config;
+package me.hsgamer.hscore.config.simpleconfiguration;
 
 import me.hsgamer.hscore.config.Config;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
+import org.simpleyaml.configuration.ConfigurationSection;
+import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.logging.Level;
 
 /**
- * The bukkit configuration
+ * The {@link Config} implementation for SimpleYAML
  */
-public class BukkitConfig implements Config {
+public class SimpleConfig implements Config {
   private final File file;
-  private YamlConfiguration configuration;
+  private final Function<File, FileConfiguration> loader;
+  private FileConfiguration configuration;
 
   /**
    * Create a new config
    *
-   * @param file the file
+   * @param file   the file
+   * @param loader the loader
    */
-  public BukkitConfig(File file) {
+  public SimpleConfig(File file, Function<File, FileConfiguration> loader) {
     this.file = file;
+    this.loader = loader;
     setup();
-  }
-
-  /**
-   * Create a new config
-   *
-   * @param plugin   the plugin
-   * @param filename the file name
-   */
-  public BukkitConfig(Plugin plugin, String filename) {
-    this(new File(plugin.getDataFolder(), filename));
   }
 
   @Override
@@ -81,19 +74,6 @@ public class BukkitConfig implements Config {
   }
 
   @Override
-  public Object normalize(Object object) {
-    if (object instanceof ConfigurationSection) {
-      return ((ConfigurationSection) object).getValues(false);
-    }
-    return object;
-  }
-
-  @Override
-  public boolean isNormalizable(Object object) {
-    return object instanceof ConfigurationSection;
-  }
-
-  @Override
   public void setup() {
     if (!file.exists()) {
       if (!file.getParentFile().exists()) {
@@ -105,7 +85,7 @@ public class BukkitConfig implements Config {
         LOGGER.log(Level.WARNING, e, () -> "Something wrong when creating " + file.getName());
       }
     }
-    this.configuration = YamlConfiguration.loadConfiguration(file);
+    this.configuration = loader.apply(file);
     this.configuration.options().copyDefaults(true);
   }
 
@@ -120,7 +100,20 @@ public class BukkitConfig implements Config {
 
   @Override
   public void reload() {
-    this.configuration = YamlConfiguration.loadConfiguration(file);
+    this.configuration = loader.apply(file);
     this.configuration.options().copyDefaults(true);
+  }
+
+  @Override
+  public Object normalize(Object object) {
+    if (object instanceof ConfigurationSection) {
+      return ((ConfigurationSection) object).getValues(false);
+    }
+    return object;
+  }
+
+  @Override
+  public boolean isNormalizable(Object object) {
+    return object instanceof ConfigurationSection;
   }
 }
