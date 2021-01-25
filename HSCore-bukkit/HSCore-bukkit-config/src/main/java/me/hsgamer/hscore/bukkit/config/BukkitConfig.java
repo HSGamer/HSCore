@@ -56,7 +56,7 @@ public class BukkitConfig implements Config {
 
   @Override
   public boolean contains(String path) {
-    return configuration.contains(path);
+    return configuration.isSet(path);
   }
 
   @Override
