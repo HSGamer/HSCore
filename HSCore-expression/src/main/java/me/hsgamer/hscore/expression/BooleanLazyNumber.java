@@ -57,6 +57,6 @@ public class BooleanLazyNumber {
    */
   @NotNull
   public static LazyNumber invert(@NotNull LazyNumber input) {
-    return input == TRUE ? FALSE : TRUE;
+    return input.equals(TRUE) ? FALSE : TRUE;
   }
 }
