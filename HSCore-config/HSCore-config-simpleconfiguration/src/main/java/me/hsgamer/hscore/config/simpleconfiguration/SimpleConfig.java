@@ -29,7 +29,6 @@ public class SimpleConfig implements Config {
   public SimpleConfig(File file, Function<File, FileConfiguration> loader) {
     this.file = file;
     this.loader = loader;
-    setup();
   }
 
   @Override

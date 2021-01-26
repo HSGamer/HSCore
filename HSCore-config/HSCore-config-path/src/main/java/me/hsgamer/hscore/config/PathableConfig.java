@@ -15,9 +15,6 @@ public class PathableConfig implements Config {
    */
   public PathableConfig(Config config) {
     this.config = config;
-    setup();
-    PathLoader.loadPath(this);
-    save();
   }
 
   @Override
@@ -58,6 +55,8 @@ public class PathableConfig implements Config {
   @Override
   public void setup() {
     config.setup();
+    PathLoader.loadPath(this);
+    save();
   }
 
   @Override

@@ -26,7 +26,6 @@ public class BukkitConfig implements Config {
    */
   public BukkitConfig(File file) {
     this.file = file;
-    setup();
   }
 
   /**
@@ -42,7 +41,6 @@ public class BukkitConfig implements Config {
     } catch (IllegalArgumentException e) {
       // IGNORED
     }
-    setup();
   }
 
   @Override
