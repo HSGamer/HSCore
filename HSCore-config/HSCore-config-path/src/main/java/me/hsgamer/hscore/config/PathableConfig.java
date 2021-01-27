@@ -19,63 +19,63 @@ public class PathableConfig implements Config {
 
   @Override
   public Object getOriginal() {
-    return config.getOriginal();
+    return this.config.getOriginal();
   }
 
   @Override
   public Object get(String path, Object def) {
-    return config.get(path, def);
+    return this.config.get(path, def);
   }
 
   @Override
   public void set(String path, Object value) {
-    config.set(path, value);
+    this.config.set(path, value);
   }
 
   @Override
   public boolean contains(String path) {
-    return config.contains(path);
+    return this.config.contains(path);
   }
 
   @Override
   public String getName() {
-    return config.getName();
+    return this.config.getName();
   }
 
   @Override
   public void addDefault(String path, Object value) {
-    config.addDefault(path, value);
+    this.config.addDefault(path, value);
   }
 
   @Override
   public Map<String, Object> getValues(String path, boolean deep) {
-    return config.getValues(path, deep);
+    return this.config.getValues(path, deep);
   }
 
   @Override
   public void setup() {
-    config.setup();
+    this.config.setup();
     PathLoader.loadPath(this);
     save();
   }
 
   @Override
   public void save() {
-    config.save();
+    this.config.save();
   }
 
   @Override
   public void reload() {
-    config.reload();
+    this.config.reload();
   }
 
   @Override
   public Object normalize(Object object) {
-    return config.normalize(object);
+    return this.config.normalize(object);
   }
 
   @Override
   public boolean isNormalizable(Object object) {
-    return config.isNormalizable(object);
+    return this.config.isNormalizable(object);
   }
 }

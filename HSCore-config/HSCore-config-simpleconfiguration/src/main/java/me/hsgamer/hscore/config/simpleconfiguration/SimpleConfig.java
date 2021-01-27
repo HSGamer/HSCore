@@ -33,40 +33,40 @@ public class SimpleConfig implements Config {
 
   @Override
   public Object getOriginal() {
-    return configuration;
+    return this.configuration;
   }
 
   @Override
   public Object get(String path, Object def) {
-    return configuration.get(path, def);
+    return this.configuration.get(path, def);
   }
 
   @Override
   public void set(String path, Object value) {
-    configuration.set(path, value);
+    this.configuration.set(path, value);
   }
 
   @Override
   public boolean contains(String path) {
-    return configuration.isSet(path);
+    return this.configuration.isSet(path);
   }
 
   @Override
   public String getName() {
-    return file.getName();
+    return this.file.getName();
   }
 
   @Override
   public void addDefault(String path, Object value) {
-    configuration.addDefault(path, value);
+    this.configuration.addDefault(path, value);
   }
 
   @Override
   public Map<String, Object> getValues(String path, boolean deep) {
     if (path == null || path.isEmpty()) {
-      return configuration.getValues(deep);
+      return this.configuration.getValues(deep);
     } else {
-      return Optional.ofNullable(configuration.getConfigurationSection(path))
+      return Optional.ofNullable(this.configuration.getConfigurationSection(path))
         .map(configurationSection -> configurationSection.getValues(deep))
         .orElse(Collections.emptyMap());
     }
@@ -74,33 +74,32 @@ public class SimpleConfig implements Config {
 
   @Override
   public void setup() {
-    if (!file.exists()) {
-      if (!file.getParentFile().exists()) {
-        file.getParentFile().mkdirs();
+    if (!this.file.exists()) {
+      if (!this.file.getParentFile().exists()) {
+        this.file.getParentFile().mkdirs();
       }
       try {
-        file.createNewFile();
+        this.file.createNewFile();
       } catch (IOException e) {
-        LOGGER.log(Level.WARNING, e, () -> "Something wrong when creating " + file.getName());
+        LOGGER.log(Level.WARNING, e, () -> "Something wrong when creating " + this.file.getName());
       }
     }
-    this.configuration = loader.apply(file);
+    this.configuration = this.loader.apply(this.file);
     this.configuration.options().copyDefaults(true);
   }
 
   @Override
   public void save() {
     try {
-      this.configuration.save(file);
+      this.configuration.save(this.file);
     } catch (IOException e) {
-      LOGGER.log(Level.WARNING, e, () -> "Something wrong when saving " + file.getName());
+      LOGGER.log(Level.WARNING, e, () -> "Something wrong when saving " + this.file.getName());
     }
   }
 
   @Override
   public void reload() {
-    this.configuration = loader.apply(file);
-    this.configuration.options().copyDefaults(true);
+    setup();
   }
 
   @Override

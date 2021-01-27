@@ -23,6 +23,6 @@ public class SimpleConfigProvider implements ConfigProvider<SimpleConfig> {
 
   @Override
   public SimpleConfig loadConfiguration(File file) {
-    return new SimpleConfig(file, loader);
+    return new SimpleConfig(file, this.loader);
   }
 }

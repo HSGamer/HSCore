@@ -27,41 +27,41 @@ public class LightningConfig<F extends FlatFile> implements Config {
 
   @Override
   public Object getOriginal() {
-    return flatFile;
+    return this.flatFile;
   }
 
   @Override
   public Object get(String path, Object def) {
-    return flatFile.get(path, def);
+    return this.flatFile.get(path, def);
   }
 
   @Override
   public void set(String path, Object value) {
-    flatFile.set(path, value);
+    this.flatFile.set(path, value);
   }
 
   @Override
   public boolean contains(String path) {
-    return flatFile.contains(path);
+    return this.flatFile.contains(path);
   }
 
   @Override
   public String getName() {
-    return flatFile.getFilePath();
+    return this.flatFile.getFilePath();
   }
 
   @Override
   public void addDefault(String path, Object value) {
-    flatFile.setDefault(path, value);
+    this.flatFile.setDefault(path, value);
   }
 
   @Override
   public Set<String> getKeys(String path, boolean deep) {
     Set<String> keys;
     if (path == null || path.isEmpty()) {
-      keys = deep ? flatFile.keySet() : flatFile.singleLayerKeySet();
+      keys = deep ? this.flatFile.keySet() : this.flatFile.singleLayerKeySet();
     } else {
-      keys = deep ? flatFile.keySet(path) : flatFile.singleLayerKeySet(path);
+      keys = deep ? this.flatFile.keySet(path) : this.flatFile.singleLayerKeySet(path);
     }
     if (keys == null) {
       keys = Collections.emptySet();
@@ -72,7 +72,7 @@ public class LightningConfig<F extends FlatFile> implements Config {
   @Override
   public Map<String, Object> getValues(String path, boolean deep) {
     Map<String, Object> values = new LinkedHashMap<>();
-    getKeys(path, deep).forEach(p -> values.put(p, flatFile.get(p)));
+    getKeys(path, deep).forEach(p -> values.put(p, this.flatFile.get(p)));
     return values;
   }
 
@@ -83,12 +83,12 @@ public class LightningConfig<F extends FlatFile> implements Config {
 
   @Override
   public void save() {
-    flatFile.write();
+    this.flatFile.write();
   }
 
   @Override
   public void reload() {
-    flatFile.forceReload();
+    this.flatFile.forceReload();
   }
 
   @Override
