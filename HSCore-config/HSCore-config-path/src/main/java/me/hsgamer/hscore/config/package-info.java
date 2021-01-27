@@ -1,4 +1,4 @@
 /**
- * Contains the classes to work with the config path
+ * Contains the config's base classes
  */
 package me.hsgamer.hscore.config;
