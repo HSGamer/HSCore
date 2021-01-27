@@ -235,17 +235,14 @@ public interface Config {
    * @return the normalized object
    */
   default Object normalizeObject(Object object) {
-    if (!isNormalizable(object)) {
-      return object;
-    }
-    Object normalizedValue = normalize(object);
+    Object normalizedValue = isNormalizable(object) ? normalize(object) : object;
     if (normalizedValue instanceof Map) {
       // noinspection unchecked
-      ((Map) normalizedValue).replaceAll((k1, v1) -> normalizeObject(v1));
+      ((Map) normalizedValue).replaceAll((k, v) -> normalizeObject(v));
     } else if (normalizedValue instanceof Collection) {
       List<Object> normalizedList = new ArrayList<>();
       // noinspection unchecked
-      ((Collection) normalizedValue).forEach(v1 -> normalizedList.add(normalizeObject(v1)));
+      ((Collection) normalizedValue).forEach(v -> normalizedList.add(normalizeObject(v)));
       normalizedValue = normalizedList;
     }
     return normalizedValue;
