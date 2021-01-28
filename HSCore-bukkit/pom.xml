@@ -21,9 +21,11 @@
     <module>HSCore-bukkit-config-extra</module>
     <module>HSCore-bukkit-clicktype</module>
     <module>HSCore-bukkit-item</module>
-    <module>HSCore-bukkit-gui</module>
+    <module>HSCore-bukkit-gui-button</module>
+    <module>HSCore-bukkit-gui-simple</module>
     <module>HSCore-bukkit-baseplugin</module>
     <module>HSCore-bukkit-all</module>
+    <module>HSCore-bukkit-gui-button</module>
   </modules>
 
   <repositories>

@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.bukkit.gui;
+package me.hsgamer.hscore.bukkit.gui.simple;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;

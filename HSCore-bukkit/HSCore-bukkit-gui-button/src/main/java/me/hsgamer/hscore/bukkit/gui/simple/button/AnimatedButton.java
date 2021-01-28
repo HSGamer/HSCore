@@ -1,6 +1,5 @@
-package me.hsgamer.hscore.bukkit.gui.button;
+package me.hsgamer.hscore.bukkit.gui.simple.button;
 
-import me.hsgamer.hscore.bukkit.gui.Button;
 import me.hsgamer.hscore.ui.property.Updatable;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryClickEvent;

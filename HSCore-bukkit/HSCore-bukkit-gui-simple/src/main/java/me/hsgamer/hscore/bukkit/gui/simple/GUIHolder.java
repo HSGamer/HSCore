@@ -1,5 +1,6 @@
-package me.hsgamer.hscore.bukkit.gui;
+package me.hsgamer.hscore.bukkit.gui.simple;
 
+import me.hsgamer.hscore.bukkit.gui.simple.button.Button;
 import me.hsgamer.hscore.ui.BaseHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;

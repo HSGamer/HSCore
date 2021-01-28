@@ -1,6 +1,5 @@
-package me.hsgamer.hscore.bukkit.gui.button;
+package me.hsgamer.hscore.bukkit.gui.simple.button;
 
-import me.hsgamer.hscore.bukkit.gui.Button;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,7 +19,7 @@ public class PredicateButton implements Button {
 
   private Predicate<UUID> viewPredicate = uuid -> true;
   private BiPredicate<UUID, InventoryClickEvent> clickPredicate = (uuid, inventoryClickEvent) -> true;
-  private Button fallbackButton = Button.EMPTY;
+  private Button fallbackButton = EMPTY;
 
   /**
    * Create a predicate button

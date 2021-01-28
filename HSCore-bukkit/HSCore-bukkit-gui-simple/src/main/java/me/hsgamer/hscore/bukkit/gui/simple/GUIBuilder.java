@@ -1,5 +1,6 @@
-package me.hsgamer.hscore.bukkit.gui;
+package me.hsgamer.hscore.bukkit.gui.simple;
 
+import me.hsgamer.hscore.bukkit.gui.simple.button.Button;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
