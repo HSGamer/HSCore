@@ -1,6 +1,8 @@
 package me.hsgamer.hscore.config.simpleconfiguration;
 
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.comment.CommentType;
+import me.hsgamer.hscore.config.comment.Commentable;
 import org.simpleyaml.configuration.ConfigurationSection;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
@@ -15,7 +17,7 @@ import java.util.logging.Level;
 /**
  * The {@link Config} implementation for SimpleYAML
  */
-public class SimpleConfig implements Config {
+public class SimpleConfig implements Config, Commentable {
   private final File file;
   private final Function<File, FileConfiguration> loader;
   private FileConfiguration configuration;
@@ -113,5 +115,30 @@ public class SimpleConfig implements Config {
   @Override
   public boolean isNormalizable(Object object) {
     return object instanceof ConfigurationSection;
+  }
+
+  @Override
+  public String getComment(String path, CommentType type) {
+    if (configuration instanceof org.simpleyaml.configuration.comments.Commentable) {
+      try {
+        org.simpleyaml.configuration.comments.CommentType commentType = org.simpleyaml.configuration.comments.CommentType.valueOf(type.name());
+        return ((org.simpleyaml.configuration.comments.Commentable) configuration).getComment(path, commentType);
+      } catch (Exception e) {
+        // IGNORED
+      }
+    }
+    return "";
+  }
+
+  @Override
+  public void setComment(String path, String value, CommentType type) {
+    if (configuration instanceof org.simpleyaml.configuration.comments.Commentable) {
+      try {
+        org.simpleyaml.configuration.comments.CommentType commentType = org.simpleyaml.configuration.comments.CommentType.valueOf(type.name());
+        ((org.simpleyaml.configuration.comments.Commentable) configuration).setComment(path, value, commentType);
+      } catch (Exception e) {
+        // IGNORED
+      }
+    }
   }
 }
