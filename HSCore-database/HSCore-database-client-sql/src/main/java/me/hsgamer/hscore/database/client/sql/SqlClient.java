@@ -1,11 +1,13 @@
 package me.hsgamer.hscore.database.client.sql;
 
 import me.hsgamer.hscore.database.Client;
+import org.intellij.lang.annotations.Language;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.Optional;
 
 /**
  * The interface for SQL client
@@ -26,30 +28,70 @@ public interface SqlClient<T> extends Client<T> {
   /**
    * Query from the connection
    *
-   * @param command the query command
+   * @param query  the query command
+   * @param values the values for the designated parameters
    *
    * @return the result set
    *
    * @throws SQLException if there is an SQL error
    */
-  default ResultSet query(String command) throws SQLException {
-    try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
-      return statement.executeQuery(command);
+  default ResultSet query(@Language("SQL") String query, Object... values) throws SQLException {
+    try (Connection connection = this.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+      for (int i = 0; i < values.length; i++) {
+        preparedStatement.setObject(i + 1, values[i]);
+      }
+      return preparedStatement.executeQuery();
     }
   }
 
   /**
-   * Execute the commands
+   * Query from the connection but ignores the exception
    *
-   * @param command the command
+   * @param query  the query command
+   * @param values the values for the designated parameters
+   *
+   * @return the result set
+   */
+  default Optional<ResultSet> querySafe(@Language("SQL") String query, Object... values) {
+    try {
+      return Optional.of(this.query(query, values));
+    } catch (Exception e) {
+      return Optional.empty();
+    }
+  }
+
+  /**
+   * Update the database
+   *
+   * @param command the update command
+   * @param values  the values for the designated parameters
+   *
+   * @return the row count or 0 for nothing
    *
    * @throws SQLException if there is an SQL error
    */
-  default void execute(String... command) throws SQLException {
-    try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
-      for (String cmd : command) {
-        statement.executeUpdate(cmd);
+  default int update(@Language("SQL") String command, Object... values) throws SQLException {
+    try (Connection connection = this.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(command)) {
+      for (int i = 0; i < values.length; i++) {
+        preparedStatement.setObject(i + 1, values[i]);
       }
+      return preparedStatement.executeUpdate();
+    }
+  }
+
+  /**
+   * Update the database but ignores the exception
+   *
+   * @param command the update command
+   * @param values  the values for the designated parameters
+   *
+   * @return the row count or 0 for nothing
+   */
+  default int updateSafe(boolean closeOnComplete, @Language("SQL") String command, Object... values) {
+    try {
+      return update(command, values);
+    } catch (Exception e) {
+      return 0;
     }
   }
 }
