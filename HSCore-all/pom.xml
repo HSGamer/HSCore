@@ -78,7 +78,7 @@
     </dependency>
     <dependency>
       <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-ui-all</artifactId>
+      <artifactId>HSCore-ui</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
