@@ -15,8 +15,8 @@ jobs:
           java-version: 1.8
       - name: Unshallow
         run: git fetch --unshallow --quiet
-      - name: Generate Javadocs
-        run: mvn clean package
+      - name: Build
+        run: mvn package
   javadocs:
     runs-on: ubuntu-latest
     if: "contains(github.event.head_commit.message, '[UPDATE-DOCS]')"
