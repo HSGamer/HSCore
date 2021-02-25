@@ -1,9 +1,8 @@
 package me.hsgamer.hscore.common.supplier;
 
+import me.hsgamer.hscore.common.CachedValue;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -11,19 +10,12 @@ import java.util.function.Supplier;
  *
  * @param <T> the value's type.
  */
-public final class StickySupplier<T> implements Supplier<T> {
-
+public final class StickySupplier<T> extends CachedValue<T> implements Supplier<T> {
   /**
    * the original {@link Supplier}.
    */
   @NotNull
   private final Supplier<T> origin;
-
-  /**
-   * the cache value.
-   */
-  @Nullable
-  private T cache;
 
   /**
    * ctor.
@@ -45,9 +37,11 @@ public final class StickySupplier<T> implements Supplier<T> {
 
   @Override
   public T get() {
-    return Optional.ofNullable(this.cache).orElseGet(() -> {
-      this.cache = this.origin.get();
-      return this.cache;
-    });
+    return this.getValue();
+  }
+
+  @Override
+  public T generate() {
+    return this.origin.get();
   }
 }
