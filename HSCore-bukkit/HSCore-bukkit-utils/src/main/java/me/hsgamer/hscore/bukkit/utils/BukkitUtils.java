@@ -71,7 +71,7 @@ public final class BukkitUtils {
    */
   @NotNull
   public static List<String> getMissingDepends(@NotNull final List<String> depends) {
-    return depends.stream()
+    return depends.parallelStream()
       .filter(depend -> Bukkit.getPluginManager().getPlugin(depend) == null)
       .collect(Collectors.toList());
   }
