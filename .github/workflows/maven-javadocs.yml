@@ -16,7 +16,7 @@ jobs:
       - name: Unshallow
         run: git fetch --unshallow --quiet
       - name: Build
-        run: mvn package
+        run: mvn clean install
   javadocs:
     runs-on: ubuntu-latest
     if: "contains(github.event.head_commit.message, '[UPDATE-DOCS]')"
