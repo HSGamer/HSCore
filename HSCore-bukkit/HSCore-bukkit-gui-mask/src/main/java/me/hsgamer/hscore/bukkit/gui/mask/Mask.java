@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.bukkit.gui.advanced;
+package me.hsgamer.hscore.bukkit.gui.mask;
 
 import me.hsgamer.hscore.bukkit.gui.button.Button;
 import me.hsgamer.hscore.ui.property.Initializable;
@@ -16,4 +16,9 @@ public interface Mask extends Initializable {
    * @return the map contains the slots and the buttons
    */
   Map<Integer, Button> generateButtons(UUID uuid);
+
+  /**
+   * Get the name of the mask
+   */
+  String getName();
 }

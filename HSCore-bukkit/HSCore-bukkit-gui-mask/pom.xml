@@ -9,17 +9,12 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>HSCore-bukkit-gui-advanced</artifactId>
+  <artifactId>HSCore-bukkit-gui-mask</artifactId>
 
   <dependencies>
     <dependency>
       <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-ui</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-bukkit-gui-mask</artifactId>
+      <artifactId>HSCore-bukkit-gui-button</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

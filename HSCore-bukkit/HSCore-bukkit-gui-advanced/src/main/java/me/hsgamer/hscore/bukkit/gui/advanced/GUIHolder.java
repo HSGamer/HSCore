@@ -1,6 +1,6 @@
-package me.hsgamer.hscore.bukkit.gui.simple;
+package me.hsgamer.hscore.bukkit.gui.advanced;
 
-import me.hsgamer.hscore.bukkit.gui.button.Button;
+import me.hsgamer.hscore.bukkit.gui.mask.Mask;
 import me.hsgamer.hscore.ui.BaseHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
@@ -11,23 +11,20 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.Plugin;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
- * The UI Holder for Bukkit
+ * The advanced UI Holder for Bukkit (Only accepts {@link InventoryType#CHEST}
  */
 public class GUIHolder extends BaseHolder<GUIDisplay> {
-
-  private final Map<Button, List<Integer>> buttonSlotMap = new ConcurrentHashMap<>();
+  private final List<Mask> masks = new LinkedList<>();
   private final Plugin plugin;
   private final boolean removeDisplayOnClose;
-  private InventoryType inventoryType = InventoryType.CHEST;
-  private Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
+  private Function<UUID, String> titleFunction = uuid -> InventoryType.CHEST.getDefaultTitle();
   private int size = InventoryType.CHEST.getDefaultSize();
   private Predicate<UUID> closeFilter = uuid -> true;
-  private Button defaultButton = Button.EMPTY;
 
   /**
    * Create a new holder
@@ -50,45 +47,52 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
   }
 
   /**
-   * Set the button
+   * Add a mask
    *
-   * @param slot   the slot
-   * @param button the button
+   * @param mask the mask
    */
-  public void setButton(int slot, Button button) {
-    buttonSlotMap.computeIfAbsent(button, b -> new LinkedList<>()).add(slot);
+  public void addMask(Mask mask) {
+    masks.add(mask);
   }
 
   /**
-   * Remove the button
+   * Remove masks by name
    *
-   * @param slot the slot
+   * @param name the name of the mask
    */
-  public void removeButton(int slot) {
-    buttonSlotMap.values().forEach(list -> list.removeIf(i -> i == slot));
+  public void removeMask(String name) {
+    masks.removeIf(mask -> mask.getName().equals(name));
   }
 
   /**
-   * Remove all buttons
+   * Remove all masks
    *
-   * @return all cleared buttons
+   * @return the removed masks
    */
-  public Collection<Button> removeAllButton() {
-    List<Button> buttons = new LinkedList<>(buttonSlotMap.keySet());
-    buttonSlotMap.values().forEach(List::clear);
-    buttonSlotMap.clear();
-    return buttons;
+  public Collection<Mask> removeAllMasks() {
+    List<Mask> removedMasks = new LinkedList<>(this.masks);
+    masks.clear();
+    return removedMasks;
   }
 
   /**
-   * Get the button
+   * Get masks by name
    *
-   * @param slot the slot
+   * @param name the name of the mask
    *
-   * @return the button
+   * @return the list of masks
    */
-  public Optional<Button> getButton(int slot) {
-    return buttonSlotMap.entrySet().stream().parallel().filter(entry -> entry.getValue().contains(slot)).map(Map.Entry::getKey).findAny();
+  public List<Mask> getMasks(String name) {
+    return masks.parallelStream().filter(mask -> mask.getName().equals(name)).collect(Collectors.toList());
+  }
+
+  /**
+   * Get all masks
+   *
+   * @return the list of all masks
+   */
+  public List<Mask> getMasks() {
+    return Collections.unmodifiableList(masks);
   }
 
   /**
@@ -101,39 +105,12 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
   }
 
   /**
-   * Get the map of buttons
-   *
-   * @return the map of buttons
-   */
-  public Map<Button, List<Integer>> getButtonSlotMap() {
-    return Collections.unmodifiableMap(buttonSlotMap);
-  }
-
-  /**
    * Check if the holder should remove the display on its close
    *
    * @return true if it should
    */
   public boolean isRemoveDisplayOnClose() {
     return removeDisplayOnClose;
-  }
-
-  /**
-   * Get the inventory type
-   *
-   * @return the inventory type
-   */
-  public InventoryType getInventoryType() {
-    return inventoryType;
-  }
-
-  /**
-   * Set the inventory type
-   *
-   * @param inventoryType the inventory type
-   */
-  public void setInventoryType(InventoryType inventoryType) {
-    this.inventoryType = inventoryType;
   }
 
   /**
@@ -241,7 +218,7 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
 
   @Override
   public void stop() {
-    removeAllButton().forEach(Button::stop);
+    removeAllMasks().forEach(Mask::stop);
     List<GUIDisplay> list = new ArrayList<>(displayMap.values());
     super.stop();
     list.forEach(guiDisplay -> new ArrayList<>(guiDisplay.getInventory().getViewers()).forEach(HumanEntity::closeInventory));
@@ -272,23 +249,5 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    */
   protected void onClose(InventoryCloseEvent event) {
     // EMPTY
-  }
-
-  /**
-   * Get the default button
-   *
-   * @return the button
-   */
-  public Button getDefaultButton() {
-    return defaultButton;
-  }
-
-  /**
-   * Set the default button
-   *
-   * @param defaultButton the button
-   */
-  public void setDefaultButton(Button defaultButton) {
-    this.defaultButton = defaultButton;
   }
 }
