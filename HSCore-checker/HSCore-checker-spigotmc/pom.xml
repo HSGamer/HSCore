@@ -14,6 +14,11 @@
   <dependencies>
     <dependency>
       <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-checker-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
       <artifactId>HSCore-web</artifactId>
       <version>${project.version}</version>
     </dependency>

@@ -12,6 +12,7 @@
   <artifactId>HSCore-checker</artifactId>
 
   <modules>
+    <module>HSCore-checker-common</module>
     <module>HSCore-checker-spigotmc</module>
     <module>HSCore-checker-all</module>
   </modules>

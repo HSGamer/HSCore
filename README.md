@@ -26,6 +26,7 @@
   * **`HSCore-web`**
   * **`HSCore-variable`**
   * **`HSCore-checker-all`**
+    * **`HSCore-checker-common`**
     * **`HSCore-checker-spigotmc`**
   * **`HSCore-database-all`**
     * **`HSCore-database-common`**

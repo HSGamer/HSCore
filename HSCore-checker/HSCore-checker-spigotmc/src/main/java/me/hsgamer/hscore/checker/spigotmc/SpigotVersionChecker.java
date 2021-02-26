@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.checker.spigotmc;
 
+import me.hsgamer.hscore.checker.VersionChecker;
 import me.hsgamer.hscore.web.UserAgent;
 import me.hsgamer.hscore.web.WebUtils;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * A simple version checker for SpigotMC
  */
-public final class SimpleVersionChecker {
+public final class SpigotVersionChecker implements VersionChecker {
 
   private final int resourceId;
 
@@ -23,7 +24,7 @@ public final class SimpleVersionChecker {
    *
    * @param resourceId the resource id from SpigotMC
    */
-  public SimpleVersionChecker(final int resourceId) {
+  public SpigotVersionChecker(final int resourceId) {
     this.resourceId = resourceId;
   }
 
