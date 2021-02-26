@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.bukkit.gui.mask;
 
 import me.hsgamer.hscore.bukkit.gui.button.Button;
+import me.hsgamer.hscore.common.Pair;
 
 import java.util.Collections;
 import java.util.Map;
@@ -23,6 +24,19 @@ public class SingleMask extends BaseMask {
   public SingleMask(String name, int slot, Button button) {
     super(name);
     this.slot = slot;
+    this.button = button;
+  }
+
+  /**
+   * Create a new mask
+   *
+   * @param name     the name of the mask
+   * @param position the position
+   * @param button   the button
+   */
+  public SingleMask(String name, Pair<Integer, Integer> position, Button button) {
+    super(name);
+    this.slot = Mask.generateSlot(position);
     this.button = button;
   }
 
