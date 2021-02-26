@@ -21,7 +21,7 @@ public class MaskUtils {
    *
    * @return the raw slot
    */
-  static int generateSlot(int x, int y) {
+  static int toSlot(int x, int y) {
     return x + y * 9;
   }
 
@@ -45,8 +45,8 @@ public class MaskUtils {
    *
    * @return the raw slot
    */
-  static int generateSlot(Pair<Integer, Integer> position) {
-    return generateSlot(position.getKey(), position.getValue());
+  static int toSlot(Pair<Integer, Integer> position) {
+    return toSlot(position.getKey(), position.getValue());
   }
 
   /**
@@ -64,7 +64,7 @@ public class MaskUtils {
     int yMin = Math.min(y1, y2);
     int xMax = Math.max(x1, x2);
     int yMax = Math.max(y1, y2);
-    return IntStream.rangeClosed(yMin, yMax).flatMap(y -> IntStream.rangeClosed(generateSlot(xMin, y), generateSlot(xMax, y)));
+    return IntStream.rangeClosed(yMin, yMax).flatMap(y -> IntStream.rangeClosed(toSlot(xMin, y), toSlot(xMax, y)));
   }
 
   /**
