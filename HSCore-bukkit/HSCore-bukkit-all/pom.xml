@@ -59,6 +59,11 @@
     </dependency>
     <dependency>
       <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-bukkit-gui-advanced</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
       <artifactId>HSCore-bukkit-item</artifactId>
       <version>${project.version}</version>
     </dependency>
