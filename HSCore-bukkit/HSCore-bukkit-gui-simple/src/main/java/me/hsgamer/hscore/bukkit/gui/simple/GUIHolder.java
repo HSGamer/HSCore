@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * The UI Holder for Bukkit
@@ -81,14 +82,14 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
   }
 
   /**
-   * Get the button
+   * Get buttons by the slot
    *
    * @param slot the slot
    *
    * @return the button
    */
-  public Optional<Button> getButton(int slot) {
-    return buttonSlotMap.entrySet().stream().parallel().filter(entry -> entry.getValue().contains(slot)).map(Map.Entry::getKey).findAny();
+  public List<Button> getButtons(int slot) {
+    return buttonSlotMap.entrySet().stream().parallel().filter(entry -> entry.getValue().contains(slot)).map(Map.Entry::getKey).collect(Collectors.toList());
   }
 
   /**
