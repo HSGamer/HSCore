@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.UUID;
 
 /**
- * An interface for all button
+ * An interface for all buttons
  */
 public interface Button extends Initializable {
 

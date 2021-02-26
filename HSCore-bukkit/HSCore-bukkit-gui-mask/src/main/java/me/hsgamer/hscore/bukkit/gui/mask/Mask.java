@@ -6,6 +6,9 @@ import me.hsgamer.hscore.ui.property.Initializable;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * The interface for all masks
+ */
 public interface Mask extends Initializable {
 
   /**
