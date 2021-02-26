@@ -36,7 +36,7 @@ public class SingleMask extends BaseMask {
    */
   public SingleMask(String name, Pair<Integer, Integer> position, Button button) {
     super(name);
-    this.slot = Mask.generateSlot(position);
+    this.slot = MaskUtils.generateSlot(position);
     this.button = button;
   }
 

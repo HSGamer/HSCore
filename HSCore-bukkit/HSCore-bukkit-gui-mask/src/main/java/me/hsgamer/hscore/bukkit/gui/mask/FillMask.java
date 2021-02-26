@@ -19,7 +19,7 @@ public class FillMask extends BaseMask {
    */
   public FillMask(String name, Pair<Integer, Integer> position1, Pair<Integer, Integer> position2, Button button) {
     super(name);
-    this.slots.addAll(Mask.generateAreaSlots(position1, position2).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
+    this.slots.addAll(MaskUtils.generateAreaSlots(position1, position2).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
     this.button = button;
   }
 
@@ -32,7 +32,7 @@ public class FillMask extends BaseMask {
    * @param button the button
    */
   public FillMask(String name, int slot1, int slot2, Button button) {
-    this(name, Mask.toPosition(slot1), Mask.toPosition(slot2), button);
+    this(name, MaskUtils.toPosition(slot1), MaskUtils.toPosition(slot2), button);
   }
 
   @Override
