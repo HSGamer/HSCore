@@ -3,6 +3,7 @@ package me.hsgamer.hscore.bukkit.gui.mask.multi;
 import me.hsgamer.hscore.bukkit.gui.button.Button;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,5 +27,14 @@ public interface PerUserSetButtons {
    */
   default void setButtons(UUID uuid, Button... buttons) {
     setButtons(uuid, Arrays.asList(buttons));
+  }
+
+  /**
+   * Remove the buttons for the unique id
+   *
+   * @param uuid the unique id
+   */
+  default void removeButtons(UUID uuid) {
+    setButtons(uuid, Collections.emptyList());
   }
 }
