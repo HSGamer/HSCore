@@ -36,9 +36,10 @@ public class MultiUserMultiSlotsMask extends MultiSlotsMask implements PerUserSe
 
   @Override
   public void setButtons(UUID uuid, List<Button> buttons) {
-    Optional.of(buttons)
+    this.userButtons.put(uuid, Optional.of(buttons)
       .filter(buttons1 -> !buttons1.isEmpty())
       .map(buttons1 -> buttons1.get(0))
-      .ifPresent(button1 -> this.userButtons.put(uuid, button1));
+      .orElse(null)
+    );
   }
 }
