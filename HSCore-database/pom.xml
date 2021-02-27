@@ -19,8 +19,6 @@
     <module>HSCore-database-driver-postgresql</module>
     <module>HSCore-database-client-sql</module>
     <module>HSCore-database-client-hikari</module>
-    <module>HSCore-database-client-mongodb</module>
-    <module>HSCore-database-client-redis</module>
     <module>HSCore-database-client-java</module>
     <module>HSCore-database-all</module>
   </modules>

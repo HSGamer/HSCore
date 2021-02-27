@@ -36,8 +36,6 @@
     * **`HSCore-database-driver-postgresql`**
     * **`HSCore-database-client-sql`**
     * **`HSCore-database-client-hikari`**
-    * **`HSCore-database-client-mongodb`**
-    * **`HSCore-database-client-redis`**
     * **`HSCore-database-client-java`**
   * **`HSCore-config-all`**
     * **`HSCore-config-common`**

@@ -23,16 +23,6 @@
     </dependency>
     <dependency>
       <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-database-client-mongodb</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-database-client-redis</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>me.HSGamer</groupId>
       <artifactId>HSCore-database-client-hikari</artifactId>
       <version>${project.version}</version>
     </dependency>
