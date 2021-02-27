@@ -78,4 +78,16 @@ public class MaskUtils {
   public static IntStream generateAreaSlots(Pair<Integer, Integer> position1, Pair<Integer, Integer> position2) {
     return generateAreaSlots(position1.getKey(), position1.getValue(), position2.getKey(), position2.getValue());
   }
+
+  /**
+   * Generate the stream of slots in the area between two slots
+   *
+   * @param slot1 the first slot
+   * @param slot2 the second slot
+   *
+   * @return the stream of slots
+   */
+  public static IntStream generateAreaSlots(int slot1, int slot2) {
+    return generateAreaSlots(toPosition(slot1), toPosition(slot2));
+  }
 }
