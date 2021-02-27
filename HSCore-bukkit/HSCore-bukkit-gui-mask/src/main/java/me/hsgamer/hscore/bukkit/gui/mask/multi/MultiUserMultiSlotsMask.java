@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MultiUserMultiSlotsMask extends MultiSlotsMask implements PerUserSetButtons, PerUserGetButtons {
   protected final Map<UUID, Button> userButtons = new ConcurrentHashMap<>();
-  private boolean stopUserButtons = false;
 
   public MultiUserMultiSlotsMask(String name, List<Integer> slots, Button button) {
     super(name, slots, button);
@@ -25,9 +24,6 @@ public class MultiUserMultiSlotsMask extends MultiSlotsMask implements PerUserSe
   @Override
   public void stop() {
     super.stop();
-    if (stopUserButtons) {
-      this.userButtons.values().forEach(Button::stop);
-    }
     this.userButtons.clear();
   }
 
@@ -45,14 +41,5 @@ public class MultiUserMultiSlotsMask extends MultiSlotsMask implements PerUserSe
       .map(buttons1 -> buttons1.get(0))
       .orElse(null)
     );
-  }
-
-  /**
-   * Will this mask also stop the user buttons on stop
-   *
-   * @param stopUserButtons true if it will
-   */
-  public void setStopUserButtons(boolean stopUserButtons) {
-    this.stopUserButtons = stopUserButtons;
   }
 }

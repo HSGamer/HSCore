@@ -58,12 +58,12 @@ public class ListButton implements Button {
 
   @Override
   public void init() {
-    // EMPTY
+    this.buttons.forEach(Button::init);
   }
 
   @Override
   public void stop() {
-    // EMPTY
+    this.buttons.forEach(Button::stop);
   }
 
   /**
