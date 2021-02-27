@@ -57,7 +57,6 @@ public abstract class AdvancedConfigPath<F, T> implements ConfigPath<T> {
   public abstract F convertToRaw(@NotNull final T value);
 
   @Override
-  @Nullable
   public T getValue() {
     if (config == null) {
       return def;

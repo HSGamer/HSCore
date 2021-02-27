@@ -36,7 +36,7 @@ public class CommentablePath<T> implements ConfigPath<T> {
   }
 
   @Override
-  public @Nullable T getValue() {
+  public T getValue() {
     return originalPath.getValue();
   }
 

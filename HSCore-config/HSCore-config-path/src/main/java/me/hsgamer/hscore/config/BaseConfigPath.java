@@ -31,7 +31,6 @@ public class BaseConfigPath<T> implements ConfigPath<T> {
   }
 
   @Override
-  @Nullable
   public final T getValue() {
     if (config == null) {
       return def;
