@@ -21,7 +21,7 @@ public class MaskUtils {
    *
    * @return the raw slot
    */
-  static int toSlot(int x, int y) {
+  public static int toSlot(int x, int y) {
     return x + y * 9;
   }
 
@@ -32,7 +32,7 @@ public class MaskUtils {
    *
    * @return the position
    */
-  static Pair<Integer, Integer> toPosition(int slot) {
+  public static Pair<Integer, Integer> toPosition(int slot) {
     int x = slot % 9;
     int y = slot / 9;
     return Pair.of(x, y);
@@ -45,7 +45,7 @@ public class MaskUtils {
    *
    * @return the raw slot
    */
-  static int toSlot(Pair<Integer, Integer> position) {
+  public static int toSlot(Pair<Integer, Integer> position) {
     return toSlot(position.getKey(), position.getValue());
   }
 
@@ -59,7 +59,7 @@ public class MaskUtils {
    *
    * @return the stream of slots
    */
-  static IntStream generateAreaSlots(int x1, int y1, int x2, int y2) {
+  public static IntStream generateAreaSlots(int x1, int y1, int x2, int y2) {
     int xMin = Math.min(x1, x2);
     int yMin = Math.min(y1, y2);
     int xMax = Math.max(x1, x2);
@@ -75,7 +75,7 @@ public class MaskUtils {
    *
    * @return the stream of slots
    */
-  static IntStream generateAreaSlots(Pair<Integer, Integer> position1, Pair<Integer, Integer> position2) {
+  public static IntStream generateAreaSlots(Pair<Integer, Integer> position1, Pair<Integer, Integer> position2) {
     return generateAreaSlots(position1.getKey(), position1.getValue(), position2.getKey(), position2.getValue());
   }
 }

@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.bukkit.gui.mask;
+package me.hsgamer.hscore.bukkit.gui.mask.multi;
 
 import me.hsgamer.hscore.bukkit.gui.button.Button;
 
