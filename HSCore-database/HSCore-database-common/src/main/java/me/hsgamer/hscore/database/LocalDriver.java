@@ -11,7 +11,7 @@ public abstract class LocalDriver implements Driver {
   /**
    * Create a new local driver with the default folder
    */
-  public LocalDriver() {
+  protected LocalDriver() {
     this(new File("."));
   }
 
@@ -20,7 +20,7 @@ public abstract class LocalDriver implements Driver {
    *
    * @param folder the folder to store databases
    */
-  public LocalDriver(File folder) {
+  protected LocalDriver(File folder) {
     this.folder = folder;
     if (!folder.exists()) {
       folder.mkdirs();
