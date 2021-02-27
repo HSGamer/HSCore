@@ -15,8 +15,9 @@ public class MultiUserMultiSlotsMask extends MultiSlotsMask implements PerUserSe
 
   @Override
   public Map<Integer, Button> generateButtons(UUID uuid) {
+    Button finalButton = this.userButtons.getOrDefault(uuid, this.button);
     Map<Integer, Button> map = new HashMap<>();
-    this.slots.forEach(slot -> map.put(slot, this.userButtons.getOrDefault(uuid, this.button)));
+    this.slots.forEach(slot -> map.put(slot, finalButton));
     return map;
   }
 
