@@ -83,7 +83,9 @@ public class AnimatedButton implements Button, Updatable {
 
   @Override
   public void stop() {
-    this.task.cancel();
+    if (!this.task.isCancelled()) {
+      this.task.cancel();
+    }
     this.buttons.forEach(Button::stop);
   }
 
