@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bukkit.gui.mask.multi;
 
 import me.hsgamer.hscore.bukkit.gui.button.Button;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -11,20 +12,22 @@ import java.util.UUID;
  */
 public interface PerUserGetButtons {
   /**
+   * Get the user-buttons map
+   *
+   * @return the user-buttons map
+   */
+  Map<UUID, List<Button>> getUserButtons();
+
+  /**
    * Get the buttons for the unique id
    *
    * @param uuid the unique id
    *
    * @return the buttons
    */
-  List<Button> getButtons(UUID uuid);
-
-  /**
-   * Get the user-buttons map
-   *
-   * @return the user-buttons map
-   */
-  Map<UUID, List<Button>> getUserButtons();
+  default List<Button> getButtons(UUID uuid) {
+    return getUserButtons().getOrDefault(uuid, Collections.emptyList());
+  }
 
   /**
    * Get the first button for the unique id
