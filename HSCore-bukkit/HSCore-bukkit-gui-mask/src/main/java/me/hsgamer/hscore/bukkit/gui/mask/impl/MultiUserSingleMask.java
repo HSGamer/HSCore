@@ -1,7 +1,8 @@
-package me.hsgamer.hscore.bukkit.gui.mask.multi;
+package me.hsgamer.hscore.bukkit.gui.mask.impl;
 
 import me.hsgamer.hscore.bukkit.gui.button.Button;
-import me.hsgamer.hscore.bukkit.gui.mask.simple.SingleMask;
+import me.hsgamer.hscore.bukkit.gui.mask.PerUserGetButtons;
+import me.hsgamer.hscore.bukkit.gui.mask.PerUserSetButtons;
 import me.hsgamer.hscore.common.Pair;
 
 import java.util.*;

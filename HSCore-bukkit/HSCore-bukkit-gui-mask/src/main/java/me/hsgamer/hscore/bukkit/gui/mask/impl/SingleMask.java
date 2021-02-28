@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.bukkit.gui.mask.simple;
+package me.hsgamer.hscore.bukkit.gui.mask.impl;
 
 import me.hsgamer.hscore.bukkit.gui.button.Button;
 import me.hsgamer.hscore.bukkit.gui.mask.BaseMask;
