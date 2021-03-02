@@ -24,9 +24,7 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
 
   @Override
   public D createDisplay(UUID uuid) {
-    D display = newDisplay(uuid);
-    displayMap.put(uuid, display);
-    return display;
+    return displayMap.computeIfAbsent(uuid, this::newDisplay);
   }
 
   @Override
