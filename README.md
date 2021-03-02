@@ -53,6 +53,7 @@
     * **`HSCore-bukkit-utils`**
     * **`HSCore-bukkit-gui-button`**
     * **`HSCore-bukkit-gui-mask`**
+    * **`HSCore-bukkit-gui-common`**
     * **`HSCore-bukkit-gui-simple`**
     * **`HSCore-bukkit-gui-advanced`**
     * **`HSCore-bukkit-item`**

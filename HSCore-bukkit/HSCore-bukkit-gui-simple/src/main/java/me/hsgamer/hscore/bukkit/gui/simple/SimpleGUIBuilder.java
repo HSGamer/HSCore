@@ -6,15 +6,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * The builder for {@link GUIHolder}
+ * The builder for {@link SimpleGUIHolder}
  */
-public class GUIBuilder {
+public class SimpleGUIBuilder {
 
   /**
    * the holder
    */
   @NotNull
-  private final GUIHolder holder;
+  private final SimpleGUIHolder holder;
 
   /**
    * current slot
@@ -26,7 +26,7 @@ public class GUIBuilder {
    *
    * @param holder the holder
    */
-  private GUIBuilder(@NotNull final GUIHolder holder) {
+  private SimpleGUIBuilder(@NotNull final SimpleGUIHolder holder) {
     this.holder = holder;
   }
 
@@ -38,8 +38,8 @@ public class GUIBuilder {
    * @return a new builder
    */
   @NotNull
-  public static GUIBuilder create(@NotNull final GUIHolder holder) {
-    return new GUIBuilder(holder);
+  public static SimpleGUIBuilder create(@NotNull final SimpleGUIHolder holder) {
+    return new SimpleGUIBuilder(holder);
   }
 
   /**
@@ -50,7 +50,7 @@ public class GUIBuilder {
    * @return {@code this} for builder chain
    */
   @NotNull
-  public GUIBuilder add(@NotNull final Button button) {
+  public SimpleGUIBuilder add(@NotNull final Button button) {
     this.holder.setButton(this.slot.get(), button);
     return this.next();
   }
@@ -61,7 +61,7 @@ public class GUIBuilder {
    * @return {@code this} for builder chain
    */
   @NotNull
-  public GUIBuilder next() {
+  public SimpleGUIBuilder next() {
     return this.next(1);
   }
 
@@ -73,7 +73,7 @@ public class GUIBuilder {
    * @return {@code this} for builder chain
    */
   @NotNull
-  public GUIBuilder next(final int slot) {
+  public SimpleGUIBuilder next(final int slot) {
     this.slot.addAndGet(slot);
     return this;
   }

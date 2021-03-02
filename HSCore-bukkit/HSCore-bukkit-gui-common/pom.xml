@@ -9,17 +9,17 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>HSCore-bukkit-gui-simple</artifactId>
+  <artifactId>HSCore-bukkit-gui-common</artifactId>
+
+  <properties>
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
+  </properties>
 
   <dependencies>
     <dependency>
       <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-bukkit-gui-common</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-bukkit-gui-button</artifactId>
+      <artifactId>HSCore-ui</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

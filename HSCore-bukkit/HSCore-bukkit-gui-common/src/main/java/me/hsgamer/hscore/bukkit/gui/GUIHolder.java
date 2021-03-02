@@ -1,7 +1,7 @@
-package me.hsgamer.hscore.bukkit.gui.advanced;
+package me.hsgamer.hscore.bukkit.gui;
 
-import me.hsgamer.hscore.bukkit.gui.mask.Mask;
 import me.hsgamer.hscore.ui.BaseHolder;
+import me.hsgamer.hscore.ui.Display;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -10,21 +10,24 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.Plugin;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
- * The advanced UI Holder for Bukkit (Only accepts {@link InventoryType#CHEST}
+ * The base {@link me.hsgamer.hscore.ui.Holder} for UI in Bukkit
+ *
+ * @param <D> The type of {@link Display}
  */
-public class GUIHolder extends BaseHolder<GUIDisplay> {
-  private final List<Mask> masks = new LinkedList<>();
-  private final Plugin plugin;
-  private final boolean removeDisplayOnClose;
-  private Function<UUID, String> titleFunction = uuid -> InventoryType.CHEST.getDefaultTitle();
-  private int size = InventoryType.CHEST.getDefaultSize();
-  private Predicate<UUID> closeFilter = uuid -> true;
+public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
+  protected final Plugin plugin;
+  protected final boolean removeDisplayOnClose;
+  protected InventoryType inventoryType = InventoryType.CHEST;
+  protected Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
+  protected int size = InventoryType.CHEST.getDefaultSize();
+  protected Predicate<UUID> closeFilter = uuid -> true;
 
   /**
    * Create a new holder
@@ -32,7 +35,7 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    * @param plugin               the plugin
    * @param removeDisplayOnClose whether the display should be removed on close event
    */
-  public GUIHolder(Plugin plugin, boolean removeDisplayOnClose) {
+  protected GUIHolder(Plugin plugin, boolean removeDisplayOnClose) {
     this.plugin = plugin;
     this.removeDisplayOnClose = removeDisplayOnClose;
   }
@@ -42,57 +45,8 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    *
    * @param plugin the plugin
    */
-  public GUIHolder(Plugin plugin) {
+  protected GUIHolder(Plugin plugin) {
     this(plugin, true);
-  }
-
-  /**
-   * Add a mask
-   *
-   * @param mask the mask
-   */
-  public void addMask(Mask mask) {
-    masks.add(mask);
-  }
-
-  /**
-   * Remove masks by name
-   *
-   * @param name the name of the mask
-   */
-  public void removeMask(String name) {
-    masks.removeIf(mask -> mask.getName().equals(name));
-  }
-
-  /**
-   * Remove all masks
-   *
-   * @return the removed masks
-   */
-  public Collection<Mask> removeAllMasks() {
-    List<Mask> removedMasks = new LinkedList<>(this.masks);
-    masks.clear();
-    return removedMasks;
-  }
-
-  /**
-   * Get masks by name
-   *
-   * @param name the name of the mask
-   *
-   * @return the list of masks
-   */
-  public List<Mask> getMasks(String name) {
-    return masks.parallelStream().filter(mask -> mask.getName().equals(name)).collect(Collectors.toList());
-  }
-
-  /**
-   * Get all masks
-   *
-   * @return the list of all masks
-   */
-  public List<Mask> getMasks() {
-    return Collections.unmodifiableList(masks);
   }
 
   /**
@@ -111,6 +65,15 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    */
   public boolean isRemoveDisplayOnClose() {
     return removeDisplayOnClose;
+  }
+
+  /**
+   * Get the inventory type
+   *
+   * @return the inventory type
+   */
+  public InventoryType getInventoryType() {
+    return inventoryType;
   }
 
   /**
@@ -190,11 +153,6 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
   }
 
   @Override
-  protected GUIDisplay newDisplay(UUID uuid) {
-    return new GUIDisplay(uuid, this);
-  }
-
-  @Override
   public void init() {
     addEventConsumer(InventoryCloseEvent.class, event -> {
       HumanEntity player = event.getPlayer();
@@ -218,8 +176,7 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
 
   @Override
   public void stop() {
-    removeAllMasks().forEach(Mask::stop);
-    List<GUIDisplay> list = new ArrayList<>(displayMap.values());
+    List<D> list = new ArrayList<>(displayMap.values());
     super.stop();
     list.forEach(guiDisplay -> new ArrayList<>(guiDisplay.getInventory().getViewers()).forEach(HumanEntity::closeInventory));
   }

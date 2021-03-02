@@ -1,14 +1,13 @@
-package me.hsgamer.hscore.bukkit.gui.advanced;
+package me.hsgamer.hscore.bukkit.gui;
 
 import me.hsgamer.hscore.ui.BaseDisplay;
+import me.hsgamer.hscore.ui.Holder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,12 +15,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
 /**
- * The display for {@link GUIHolder}
+ * The base {@link me.hsgamer.hscore.ui.Display} for UI in Bukkit
+ *
+ * @param <H> the type of {@link Holder}
  */
-public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolder {
-  private final Map<Integer, BiConsumer<UUID, InventoryClickEvent>> viewedButtons = new ConcurrentHashMap<>();
-  private Inventory inventory;
-  private boolean forceUpdate = false;
+public abstract class GUIDisplay<H extends GUIHolder<?>> extends BaseDisplay<H> implements InventoryHolder {
+  protected final Map<Integer, BiConsumer<UUID, InventoryClickEvent>> viewedButtons = new ConcurrentHashMap<>();
+  protected Inventory inventory;
+  protected boolean forceUpdate = false;
 
   /**
    * Create a new display
@@ -29,7 +30,7 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
    * @param uuid   the unique id
    * @param holder the holder
    */
-  protected GUIDisplay(UUID uuid, GUIHolder holder) {
+  protected GUIDisplay(UUID uuid, H holder) {
     super(uuid, holder);
   }
 
@@ -49,7 +50,7 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
    *
    * @return {@code this} for builder chain
    */
-  public GUIDisplay setForceUpdate(boolean forceUpdate) {
+  public GUIDisplay<?> setForceUpdate(boolean forceUpdate) {
     this.forceUpdate = forceUpdate;
     return this;
   }
@@ -64,41 +65,21 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
     Optional.ofNullable(viewedButtons.get(event.getRawSlot())).ifPresent(consumer -> consumer.accept(uuid, event));
   }
 
+  /**
+   * Create the inventory
+   *
+   * @return the inventory
+   */
+  protected abstract Inventory createInventory();
+
   @Override
   public void init() {
-    this.inventory = Bukkit.createInventory(this, this.holder.getSize(), this.holder.getTitle(uuid));
+    this.inventory = createInventory();
     update();
 
     Player player = Bukkit.getPlayer(this.uuid);
     if (player != null) {
       player.openInventory(this.inventory);
-    }
-  }
-
-  @Override
-  public void update() {
-    if (inventory == null) {
-      return;
-    }
-
-    int size = inventory.getSize();
-    this.holder.getMasks().forEach(mask -> mask.generateButtons(this.getUniqueId()).forEach((slot, button) -> {
-      if (slot >= size) {
-        return;
-      }
-      ItemStack itemStack = button.getItemStack(uuid);
-      if (itemStack == null) {
-        return;
-      }
-      inventory.setItem(slot, itemStack);
-      viewedButtons.put(slot, button::handleAction);
-    }));
-
-    if (forceUpdate) {
-      new ArrayList<>(inventory.getViewers())
-        .stream()
-        .filter(humanEntity -> humanEntity instanceof Player)
-        .forEach(humanEntity -> ((Player) humanEntity).updateInventory());
     }
   }
 
