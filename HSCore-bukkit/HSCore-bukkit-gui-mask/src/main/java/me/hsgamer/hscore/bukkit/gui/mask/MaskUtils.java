@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.bukkit.gui.mask;
 
-import me.hsgamer.hscore.common.Pair;
+import me.hsgamer.hscore.ui.Position2D;
 
 import java.util.stream.IntStream;
 
@@ -32,10 +32,10 @@ public class MaskUtils {
    *
    * @return the position
    */
-  public static Pair<Integer, Integer> toPosition(int slot) {
+  public static Position2D toPosition(int slot) {
     int x = slot % 9;
     int y = slot / 9;
-    return Pair.of(x, y);
+    return Position2D.of(x, y);
   }
 
   /**
@@ -45,8 +45,8 @@ public class MaskUtils {
    *
    * @return the raw slot
    */
-  public static int toSlot(Pair<Integer, Integer> position) {
-    return toSlot(position.getKey(), position.getValue());
+  public static int toSlot(Position2D position) {
+    return toSlot(position.getX(), position.getY());
   }
 
   /**
@@ -60,34 +60,54 @@ public class MaskUtils {
    * @return the stream of slots
    */
   public static IntStream generateAreaSlots(int x1, int y1, int x2, int y2) {
-    int xMin = Math.min(x1, x2);
-    int yMin = Math.min(y1, y2);
-    int xMax = Math.max(x1, x2);
-    int yMax = Math.max(y1, y2);
-    return IntStream.rangeClosed(yMin, yMax).flatMap(y -> IntStream.rangeClosed(toSlot(xMin, y), toSlot(xMax, y)));
+    Position2D max = Position2D.maxPosition(x1, y1, x2, y2);
+    Position2D min = Position2D.minPosition(x1, y1, x2, y2);
+    return IntStream.rangeClosed(min.getY(), max.getY()).flatMap(y -> IntStream.rangeClosed(toSlot(min.getX(), y), toSlot(max.getX(), y)));
   }
 
   /**
    * Generate the stream of slots in the area between two positions
    *
-   * @param position1 the pair value for the first position
-   * @param position2 the pair value for the second position
+   * @param position1 the first position
+   * @param position2 the second position
    *
    * @return the stream of slots
    */
-  public static IntStream generateAreaSlots(Pair<Integer, Integer> position1, Pair<Integer, Integer> position2) {
-    return generateAreaSlots(position1.getKey(), position1.getValue(), position2.getKey(), position2.getValue());
+  public static IntStream generateAreaSlots(Position2D position1, Position2D position2) {
+    return generateAreaSlots(position1.getX(), position1.getY(), position2.getX(), position2.getY());
   }
 
   /**
-   * Generate the stream of slots in the area between two slots
+   * Get the stream of slots drawing the outline of the area between 2 positions
    *
-   * @param slot1 the first slot
-   * @param slot2 the second slot
+   * @param x1 the x of the first position
+   * @param y1 the y of the first position
+   * @param x2 the x of the second position
+   * @param y2 the y of the second position
    *
    * @return the stream of slots
    */
-  public static IntStream generateAreaSlots(int slot1, int slot2) {
-    return generateAreaSlots(toPosition(slot1), toPosition(slot2));
+  public static IntStream generateOutlineSlots(int x1, int y1, int x2, int y2) {
+    Position2D max = Position2D.maxPosition(x1, y1, x2, y2);
+    Position2D min = Position2D.minPosition(x1, y1, x2, y2);
+    return IntStream
+      .rangeClosed(min.getY(), max.getY())
+      .flatMap(y ->
+        y > min.getY() && y < max.getY()
+          ? IntStream.of(toSlot(min.getX(), y), toSlot(max.getX(), y))
+          : IntStream.rangeClosed(toSlot(min.getX(), y), toSlot(max.getX(), y))
+      );
+  }
+
+  /**
+   * Get the stream of slots drawing the outline of the area between 2 positions
+   *
+   * @param position1 the first position
+   * @param position2 the second position
+   *
+   * @return the stream of slots
+   */
+  public static IntStream generateOutlineSlots(Position2D position1, Position2D position2) {
+    return generateOutlineSlots(position1.getX(), position1.getY(), position2.getX(), position2.getY());
   }
 }

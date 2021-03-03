@@ -3,7 +3,7 @@ package me.hsgamer.hscore.bukkit.gui.mask.impl;
 import me.hsgamer.hscore.bukkit.gui.button.Button;
 import me.hsgamer.hscore.bukkit.gui.mask.BaseMask;
 import me.hsgamer.hscore.bukkit.gui.mask.MaskUtils;
-import me.hsgamer.hscore.common.Pair;
+import me.hsgamer.hscore.ui.Position2D;
 
 import java.util.Collections;
 import java.util.Map;
@@ -36,7 +36,7 @@ public class SingleMask extends BaseMask {
    * @param position the position
    * @param button   the button
    */
-  public SingleMask(String name, Pair<Integer, Integer> position, Button button) {
+  public SingleMask(String name, Position2D position, Button button) {
     this(name, MaskUtils.toSlot(position), button);
   }
 

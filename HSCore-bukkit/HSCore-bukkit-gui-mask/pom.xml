@@ -17,10 +17,5 @@
       <artifactId>HSCore-bukkit-gui-button</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-common</artifactId>
-      <version>${project.version}</version>
-    </dependency>
   </dependencies>
 </project>
