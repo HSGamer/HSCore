@@ -77,6 +77,15 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
   }
 
   /**
+   * Set the inventory type
+   *
+   * @param inventoryType the inventory type
+   */
+  public void setInventoryType(InventoryType inventoryType) {
+    this.inventoryType = inventoryType;
+  }
+
+  /**
    * Get the title function
    *
    * @return the title function

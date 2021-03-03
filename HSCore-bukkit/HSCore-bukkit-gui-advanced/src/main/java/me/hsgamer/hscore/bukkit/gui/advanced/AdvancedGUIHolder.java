@@ -72,6 +72,11 @@ public class AdvancedGUIHolder extends GUIHolder<AdvancedGUIDisplay> {
   }
 
   @Override
+  public void setInventoryType(InventoryType inventoryType) {
+    throw new UnsupportedOperationException("This holder applies CHEST only");
+  }
+
+  @Override
   protected AdvancedGUIDisplay newDisplay(UUID uuid) {
     return new AdvancedGUIDisplay(uuid, this);
   }

@@ -2,7 +2,6 @@ package me.hsgamer.hscore.bukkit.gui.simple;
 
 import me.hsgamer.hscore.bukkit.gui.GUIHolder;
 import me.hsgamer.hscore.bukkit.gui.button.Button;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.Plugin;
 
 import java.util.*;
@@ -74,15 +73,6 @@ public class SimpleGUIHolder extends GUIHolder<SimpleGUIDisplay> {
    */
   public Map<Button, List<Integer>> getButtonSlotMap() {
     return Collections.unmodifiableMap(buttonSlotMap);
-  }
-
-  /**
-   * Set the inventory type
-   *
-   * @param inventoryType the inventory type
-   */
-  public void setInventoryType(InventoryType inventoryType) {
-    this.inventoryType = inventoryType;
   }
 
   /**
