@@ -3,7 +3,7 @@ package me.hsgamer.hscore.bukkit.gui.mask.impl;
 import me.hsgamer.hscore.bukkit.gui.button.Button;
 import me.hsgamer.hscore.bukkit.gui.mask.PerUserGetButtons;
 import me.hsgamer.hscore.bukkit.gui.mask.PerUserSetButtons;
-import me.hsgamer.hscore.common.Pair;
+import me.hsgamer.hscore.ui.Position2D;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,7 +15,7 @@ public class MultiUserSingleMask extends SingleMask implements PerUserSetButtons
     super(name, slot, button);
   }
 
-  public MultiUserSingleMask(String name, Pair<Integer, Integer> position, Button button) {
+  public MultiUserSingleMask(String name, Position2D position, Button button) {
     super(name, position, button);
   }
 
