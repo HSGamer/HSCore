@@ -87,7 +87,7 @@ public interface SqlClient<T> extends Client<T> {
    *
    * @return the row count or 0 for nothing
    */
-  default int updateSafe(boolean closeOnComplete, @Language("SQL") String command, Object... values) {
+  default int updateSafe(@Language("SQL") String command, Object... values) {
     try {
       return update(command, values);
     } catch (Exception e) {
