@@ -8,6 +8,7 @@ import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -37,25 +38,41 @@ public class PermissionUtils {
   }
 
   /**
-   * Get the numbers from the permissions the permissible object has ([prefix].[number])
+   * Get the numbers from the permissions the permissible object has ([prefix].[value])
+   *
+   * @param permissible     the permissible object
+   * @param prefix          the permission prefix
+   * @param numberConverter the number converter
+   *
+   * @return the stream of numbers
+   */
+  @NotNull
+  public static Stream<Number> getNumbersFromPermissions(Permissible permissible, String prefix, Function<String, Stream<Number>> numberConverter) {
+    return permissible.getEffectivePermissions().parallelStream()
+      .map(PermissionAttachmentInfo::getPermission)
+      .filter(permission -> permission.startsWith(prefix))
+      .map(permission -> permission.substring(prefix.length() + 1))
+      .flatMap(numberConverter);
+  }
+
+  /**
+   * Get the numbers from the permissions the permissible object has ([prefix].[value])
    *
    * @param permissible the permissible object
    * @param prefix      the permission prefix
    *
    * @return the stream of numbers
+   *
+   * @see #getNumbersFromPermissions(Permissible, String, Function)
    */
   @NotNull
-  public static Stream<Integer> getNumbersFromPermissions(Permissible permissible, String prefix) {
-    return permissible.getEffectivePermissions().stream()
-      .map(PermissionAttachmentInfo::getPermission)
-      .filter(permission -> permission.startsWith(prefix))
-      .map(permission -> permission.substring(prefix.length() + 1))
-      .flatMap(rawNumber -> {
-        try {
-          return Stream.of(Integer.parseInt(rawNumber));
-        } catch (Exception exception) {
-          return Stream.empty();
-        }
-      });
+  public static Stream<Number> getNumbersFromPermissions(Permissible permissible, String prefix) {
+    return getNumbersFromPermissions(permissible, prefix, rawValue -> {
+      try {
+        return Stream.of(Integer.parseInt(rawValue));
+      } catch (Exception e) {
+        return Stream.empty();
+      }
+    });
   }
 }
