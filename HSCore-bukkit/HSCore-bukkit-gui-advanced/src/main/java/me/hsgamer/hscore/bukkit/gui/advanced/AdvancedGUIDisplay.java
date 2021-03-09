@@ -7,7 +7,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 /**
  * The display for {@link AdvancedGUIHolder}
@@ -30,6 +32,7 @@ public class AdvancedGUIDisplay extends GUIDisplay<AdvancedGUIHolder> {
     }
 
     int size = inventory.getSize();
+    List<Integer> emptySlots = IntStream.range(0, size).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
     this.holder.getMasks().forEach(mask -> mask.generateButtons(this.getUniqueId()).forEach((slot, button) -> {
       if (slot >= size) {
         return;
@@ -39,8 +42,15 @@ public class AdvancedGUIDisplay extends GUIDisplay<AdvancedGUIHolder> {
         return;
       }
       inventory.setItem(slot, itemStack);
+      emptySlots.remove(slot);
       viewedButtons.put(slot, button::handleAction);
     }));
+
+    // Clear empty slots
+    emptySlots.forEach(slot -> {
+      inventory.clear(slot);
+      viewedButtons.remove(slot);
+    });
 
     if (forceUpdate) {
       new ArrayList<>(inventory.getViewers())
