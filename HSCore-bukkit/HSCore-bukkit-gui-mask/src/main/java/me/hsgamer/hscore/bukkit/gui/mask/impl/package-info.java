@@ -1,4 +1,4 @@
 /**
- * Contains the implementations of {@link me.hsgamer.hscore.bukkit.gui.mask.Mask}
+ * Contains the pre-made masks for UI in Bukkit
  */
 package me.hsgamer.hscore.bukkit.gui.mask.impl;

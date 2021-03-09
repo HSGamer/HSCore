@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.gui.button;
 
+import me.hsgamer.hscore.bukkit.gui.button.impl.DummyButton;
 import me.hsgamer.hscore.ui.property.Initializable;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
