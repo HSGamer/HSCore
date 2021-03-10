@@ -35,7 +35,7 @@ public class BukkitConfig implements Config {
    * @param filename the file name
    */
   public BukkitConfig(Plugin plugin, String filename) {
-    this.file = new File(plugin.getDataFolder(), filename);
+    this(new File(plugin.getDataFolder(), filename));
     try {
       plugin.saveResource(filename, false);
     } catch (IllegalArgumentException e) {
