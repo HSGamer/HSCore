@@ -32,18 +32,14 @@
 
   <repositories>
     <repository>
-      <id>spigotmc-repo</id>
-      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-    </repository>
-    <repository>
-      <id>sonatype</id>
-      <url>https://oss.sonatype.org/content/groups/public/</url>
+      <id>nms-repo</id>
+      <url>https://repo.codemc.org/repository/nms/</url>
     </repository>
   </repositories>
 
   <dependencies>
     <dependency>
-      <artifactId>spigot-api</artifactId>
+      <artifactId>spigot</artifactId>
       <groupId>org.spigotmc</groupId>
       <scope>provided</scope>
       <version>1.12.2-R0.1-SNAPSHOT</version>

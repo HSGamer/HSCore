@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -126,5 +127,21 @@ public final class Validate {
    */
   public static boolean isNullOrEmpty(@Nullable String string) {
     return string == null || string.isEmpty();
+  }
+
+  /**
+   * Check if the string is a valid URL
+   *
+   * @param string the input string
+   *
+   * @return true if it is
+   */
+  public static boolean isValidURL(String string) {
+    try {
+      new URL(string).toURI();
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
   }
 }
