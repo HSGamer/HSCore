@@ -7,7 +7,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -15,8 +18,37 @@ import java.util.stream.Collectors;
  * Methods on Bukkit
  */
 public final class BukkitUtils {
+  private static final Map<String, CompletableFuture<OfflinePlayer>> offlinePlayersByNameMap = new ConcurrentHashMap<>();
+  private static final Map<UUID, CompletableFuture<OfflinePlayer>> offlinePlayersByIdMap = new ConcurrentHashMap<>();
 
   private BukkitUtils() {
+    // EMPTY
+  }
+
+  /**
+   * Get the offline player asynchronously
+   *
+   * @param name the player's name
+   *
+   * @return the offline player
+   */
+  @SuppressWarnings("deprecation")
+  @NotNull
+  public static CompletableFuture<OfflinePlayer> getOfflinePlayerAsync(@NotNull String name) {
+    // noinspection deprecation
+    return offlinePlayersByNameMap.computeIfAbsent(name, s -> CompletableFuture.supplyAsync(() -> Bukkit.getOfflinePlayer(name)));
+  }
+
+  /**
+   * Get the offline player asynchronously
+   *
+   * @param uuid the player's unique id
+   *
+   * @return the offline player
+   */
+  @NotNull
+  public static CompletableFuture<OfflinePlayer> getOfflinePlayerAsync(@NotNull UUID uuid) {
+    return offlinePlayersByIdMap.computeIfAbsent(uuid, s -> CompletableFuture.supplyAsync(() -> Bukkit.getOfflinePlayer(uuid)));
   }
 
   /**
@@ -74,5 +106,23 @@ public final class BukkitUtils {
     return depends.parallelStream()
       .filter(depend -> Bukkit.getPluginManager().getPlugin(depend) == null)
       .collect(Collectors.toList());
+  }
+
+  /**
+   * Check if the string is the username (https://github.com/CryptoMorin/XSeries/blob/3ec904a8d85695729ad51e7bbd06a65362357706/src/main/java/com/cryptomorin/xseries/SkullUtils.java#L200-L209)
+   *
+   * @param string the input string
+   *
+   * @return true if it is
+   */
+  public static boolean isUsername(@NotNull String string) {
+    int len = string.length();
+    if (len < 3 || len > 16) return false;
+
+    for (char ch : string.toCharArray()) {
+      if (ch != '_' && !(ch >= 'A' && ch <= 'Z') && !(ch >= 'a' && ch <= 'z') && !(ch >= '0' && ch <= '9'))
+        return false;
+    }
+    return true;
   }
 }
