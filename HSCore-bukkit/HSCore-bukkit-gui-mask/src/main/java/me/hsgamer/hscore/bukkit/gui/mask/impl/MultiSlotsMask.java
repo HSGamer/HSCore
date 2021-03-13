@@ -40,5 +40,6 @@ public class MultiSlotsMask extends BaseMask {
   @Override
   public void stop() {
     this.button.stop();
+    this.slots.clear();
   }
 }
