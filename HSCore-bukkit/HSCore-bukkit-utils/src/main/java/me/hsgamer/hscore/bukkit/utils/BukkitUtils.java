@@ -120,7 +120,7 @@ public final class BukkitUtils {
     if (len < 3 || len > 16) return false;
 
     for (char ch : string.toCharArray()) {
-      if (ch != '_' && !(ch >= 'A' && ch <= 'Z') && !(ch >= 'a' && ch <= 'z') && !(ch >= '0' && ch <= '9'))
+      if (ch != '_' && !Character.isLetterOrDigit(ch))
         return false;
     }
     return true;
