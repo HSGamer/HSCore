@@ -59,10 +59,15 @@ public class PaginatedMask extends BaseMask {
   @Override
   public Map<Integer, Button> generateButtons(UUID uuid) {
     Map<Integer, Button> map = new HashMap<>();
+
     int pageNumber = this.pageNumberMap.computeIfAbsent(uuid, uuid1 -> 0);
-    for (int i = 0; i < this.slots.size(); i++) {
-      int index = i + (pageNumber * this.slots.size());
-      if (index >= buttons.size()) {
+    int offset = pageNumber * this.slots.size();
+    int buttonsSize = this.buttons.size();
+    int slotsSize = this.slots.size();
+
+    for (int i = 0; i < slotsSize; i++) {
+      int index = i + offset;
+      if (index >= buttonsSize) {
         break;
       }
       map.put(this.slots.get(i), this.buttons.get(index));
