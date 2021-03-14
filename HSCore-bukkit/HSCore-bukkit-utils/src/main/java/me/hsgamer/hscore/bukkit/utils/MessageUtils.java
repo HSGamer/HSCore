@@ -82,7 +82,7 @@ public final class MessageUtils {
       if (chars[i] == altColorChar && Character.isLetterOrDigit(chars[i + 1])) {
         chars[oi++] = COLOR_CHAR;
         chars[oi++] = Character.toLowerCase(chars[++i]);
-        if (Character.isWhitespace(chars[i + 1])) {
+        if (i + 1 < chars.length && Character.isWhitespace(chars[i + 1])) {
           i++;
         }
       } else if (chars[i] == '\\' && chars[i + 1] == altColorChar) {
