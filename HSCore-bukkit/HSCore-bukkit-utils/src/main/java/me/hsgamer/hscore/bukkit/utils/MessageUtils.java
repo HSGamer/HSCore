@@ -77,10 +77,6 @@ public final class MessageUtils {
     if (input.isEmpty()) {
       return input;
     }
-
-    ChatColor[] chatColors = ChatColor.values();
-    ThreadLocalRandom random = ThreadLocalRandom.current();
-
     char[] chars = input.toCharArray();
     int i = 0;
     int oi = 0;
@@ -88,7 +84,7 @@ public final class MessageUtils {
       if (chars[i] == altColorChar && Character.isLetterOrDigit(chars[i + 1])) {
         chars[oi++] = COLOR_CHAR;
         char c = Character.toLowerCase(chars[++i]);
-        chars[oi++] = c == 'u' ? chatColors[random.nextInt(chatColors.length)].getChar() : c;
+        chars[oi++] = c == 'u' ? getRandomColor().getChar() : c;
         if (i + 1 < chars.length && Character.isWhitespace(chars[i + 1])) {
           i++;
         }
@@ -103,6 +99,25 @@ public final class MessageUtils {
       chars[oi++] = chars[i];
     }
     return new String(chars, 0, Math.min(oi, chars.length));
+  }
+
+  /**
+   * Get a random chat color
+   *
+   * @return the chat color
+   */
+  public static ChatColor getRandomColor() {
+    ChatColor[] values = ChatColor.values();
+    ChatColor color;
+    do {
+      color = values[ThreadLocalRandom.current().nextInt(values.length - 1)];
+    } while (color.equals(ChatColor.BOLD)
+      || color.equals(ChatColor.ITALIC)
+      || color.equals(ChatColor.STRIKETHROUGH)
+      || color.equals(ChatColor.RESET)
+      || color.equals(ChatColor.MAGIC)
+      || color.equals(ChatColor.UNDERLINE));
+    return color;
   }
 
   /**
