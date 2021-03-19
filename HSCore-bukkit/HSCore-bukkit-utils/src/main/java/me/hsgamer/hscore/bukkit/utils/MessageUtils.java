@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.bukkit.utils;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -75,13 +77,18 @@ public final class MessageUtils {
     if (input.isEmpty()) {
       return input;
     }
+
+    ChatColor[] chatColors = ChatColor.values();
+    ThreadLocalRandom random = ThreadLocalRandom.current();
+
     char[] chars = input.toCharArray();
     int i = 0;
     int oi = 0;
     while (i < chars.length - 1) {
       if (chars[i] == altColorChar && Character.isLetterOrDigit(chars[i + 1])) {
         chars[oi++] = COLOR_CHAR;
-        chars[oi++] = Character.toLowerCase(chars[++i]);
+        char c = Character.toLowerCase(chars[++i]);
+        chars[oi++] = c == 'u' ? chatColors[random.nextInt(chatColors.length)].getChar() : c;
         if (i + 1 < chars.length && Character.isWhitespace(chars[i + 1])) {
           i++;
         }
