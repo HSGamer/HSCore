@@ -58,7 +58,7 @@ public abstract class PaginatedMask extends BaseMask {
    * @param uuid the unique id
    */
   public void nextPage(UUID uuid) {
-    this.setPage(uuid, this.pageNumberMap.computeIfAbsent(uuid, uuid1 -> 0) + 1);
+    this.setPage(uuid, this.getPage(uuid) + 1);
   }
 
   /**
@@ -67,6 +67,6 @@ public abstract class PaginatedMask extends BaseMask {
    * @param uuid the unique id
    */
   public void previousPage(UUID uuid) {
-    this.setPage(uuid, this.pageNumberMap.computeIfAbsent(uuid, uuid1 -> 0) - 1);
+    this.setPage(uuid, this.getPage(uuid) - 1);
   }
 }
