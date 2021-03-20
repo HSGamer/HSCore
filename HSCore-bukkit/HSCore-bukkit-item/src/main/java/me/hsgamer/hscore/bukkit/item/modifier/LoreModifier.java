@@ -91,7 +91,7 @@ public class LoreModifier implements ItemModifier {
    */
   public LoreModifier setLore(Collection<String> lore) {
     clearLore();
-    this.lore.addAll(CollectionUtils.splitNewLine(lore));
+    this.lore.addAll(CollectionUtils.splitAll("\n", lore));
     return this;
   }
 

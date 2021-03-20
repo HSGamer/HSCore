@@ -104,13 +104,14 @@ public class CollectionUtils {
   }
 
   /**
-   * Split new line (\n) in the string list
+   * Split the strings from the string list
    *
+   * @param regex  the delimiting regular expression
    * @param strings the string list
    *
    * @return the split string list
    */
-  public static List<String> splitNewLine(Collection<String> strings) {
-    return strings.stream().flatMap(s -> Stream.of(s.split("\n"))).collect(Collectors.toList());
+  public static List<String> splitAll(String regex, Collection<String> strings) {
+    return strings.stream().flatMap(s -> Stream.of(s.split(regex))).collect(Collectors.toList());
   }
 }
