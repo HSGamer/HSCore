@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Methods on collections
@@ -100,5 +101,16 @@ public class CollectionUtils {
     List<T> list = new ArrayList<>();
     IntStream.range(0, repeat).mapToObj(i -> original).forEach(list::addAll);
     return list;
+  }
+
+  /**
+   * Split new line (\n) in the string list
+   *
+   * @param strings the string list
+   *
+   * @return the split string list
+   */
+  public static List<String> splitNewLine(Collection<String> strings) {
+    return strings.stream().flatMap(s -> Stream.of(s.split("\n"))).collect(Collectors.toList());
   }
 }

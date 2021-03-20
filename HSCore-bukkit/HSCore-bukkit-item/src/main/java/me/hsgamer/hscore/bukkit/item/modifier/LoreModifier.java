@@ -78,7 +78,7 @@ public class LoreModifier implements ItemModifier {
    * @return {@code this} for builder chain
    */
   public LoreModifier addLore(String lore) {
-    this.lore.add(lore);
+    this.lore.addAll(Arrays.asList(lore.split("\n")));
     return this;
   }
 
@@ -91,7 +91,7 @@ public class LoreModifier implements ItemModifier {
    */
   public LoreModifier setLore(Collection<String> lore) {
     clearLore();
-    this.lore.addAll(lore);
+    this.lore.addAll(CollectionUtils.splitNewLine(lore));
     return this;
   }
 
