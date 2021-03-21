@@ -12,24 +12,21 @@ import java.util.Optional;
  * The prepared statement container
  */
 public class PreparedStatementContainer implements AutoCloseable {
-  private final Connection connection;
   private final PreparedStatement statement;
 
-  private PreparedStatementContainer(Connection connection, PreparedStatement statement) {
-    this.connection = connection;
+  private PreparedStatementContainer(PreparedStatement statement) {
     this.statement = statement;
   }
 
   /**
    * Create a new statement container
    *
-   * @param connection        the connection
    * @param preparedStatement the prepared statement
    *
    * @return the container
    */
-  public static PreparedStatementContainer of(Connection connection, PreparedStatement preparedStatement) {
-    return new PreparedStatementContainer(connection, preparedStatement);
+  public static PreparedStatementContainer of(PreparedStatement preparedStatement) {
+    return new PreparedStatementContainer(preparedStatement);
   }
 
   /**
@@ -48,7 +45,7 @@ public class PreparedStatementContainer implements AutoCloseable {
     for (int i = 0; i < values.length; i++) {
       preparedStatement.setObject(i + 1, values[i]);
     }
-    return of(connection, preparedStatement);
+    return of(preparedStatement);
   }
 
   /**
@@ -103,7 +100,6 @@ public class PreparedStatementContainer implements AutoCloseable {
 
   @Override
   public void close() throws SQLException {
-    connection.close();
     statement.close();
   }
 
@@ -121,7 +117,7 @@ public class PreparedStatementContainer implements AutoCloseable {
    *
    * @return the connection
    */
-  public Connection getConnection() {
-    return connection;
+  public Connection getConnection() throws SQLException {
+    return statement.getConnection();
   }
 }
