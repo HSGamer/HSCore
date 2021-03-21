@@ -4,8 +4,6 @@ import me.hsgamer.hscore.database.Client;
 import org.intellij.lang.annotations.Language;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
@@ -26,72 +24,33 @@ public interface SqlClient<T> extends Client<T> {
   Connection getConnection() throws SQLException;
 
   /**
-   * Query from the connection
+   * Prepare the statement
    *
-   * @param query  the query command
-   * @param values the values for the designated parameters
+   * @param statement the statement
+   * @param values    the values for the designated parameters
    *
-   * @return the result set
+   * @return the prepared statement container
    *
    * @throws SQLException if there is an SQL error
    */
-  default ResultSet query(@Language("SQL") String query, Object... values) throws SQLException {
-    try (Connection connection = this.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      for (int i = 0; i < values.length; i++) {
-        preparedStatement.setObject(i + 1, values[i]);
-      }
-      return preparedStatement.executeQuery();
-    }
+  default PreparedStatementContainer prepareStatement(@Language("SQL") String statement, Object... values) throws SQLException {
+    return PreparedStatementContainer.of(this.getConnection(), statement, values);
   }
 
   /**
-   * Query from the connection but ignores the exception
+   * Prepare the statement but ignores exceptions (Print them as warnings)
    *
-   * @param query  the query command
-   * @param values the values for the designated parameters
+   * @param statement the statement
+   * @param values    the values for the designated parameters
    *
-   * @return the result set
+   * @return the prepared statement container
    */
-  default Optional<ResultSet> querySafe(@Language("SQL") String query, Object... values) {
+  default Optional<PreparedStatementContainer> prepareStatementSafe(@Language("SQL") String statement, Object... values) {
     try {
-      return Optional.of(this.query(query, values));
+      return Optional.of(this.prepareStatement(statement, values));
     } catch (Exception e) {
+      e.printStackTrace();
       return Optional.empty();
-    }
-  }
-
-  /**
-   * Update the database
-   *
-   * @param command the update command
-   * @param values  the values for the designated parameters
-   *
-   * @return the row count or 0 for nothing
-   *
-   * @throws SQLException if there is an SQL error
-   */
-  default int update(@Language("SQL") String command, Object... values) throws SQLException {
-    try (Connection connection = this.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(command)) {
-      for (int i = 0; i < values.length; i++) {
-        preparedStatement.setObject(i + 1, values[i]);
-      }
-      return preparedStatement.executeUpdate();
-    }
-  }
-
-  /**
-   * Update the database but ignores the exception
-   *
-   * @param command the update command
-   * @param values  the values for the designated parameters
-   *
-   * @return the row count or 0 for nothing
-   */
-  default int updateSafe(@Language("SQL") String command, Object... values) {
-    try {
-      return update(command, values);
-    } catch (Exception e) {
-      return 0;
     }
   }
 }
