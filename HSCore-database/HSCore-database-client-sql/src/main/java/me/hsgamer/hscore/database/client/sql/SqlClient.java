@@ -6,6 +6,8 @@ import org.intellij.lang.annotations.Language;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The interface for SQL client
@@ -38,7 +40,7 @@ public interface SqlClient<T> extends Client<T> {
   }
 
   /**
-   * Prepare the statement but ignores exceptions (Print them as warnings)
+   * Prepare the statement but ignores exceptions
    *
    * @param statement the statement
    * @param values    the values for the designated parameters
@@ -49,7 +51,7 @@ public interface SqlClient<T> extends Client<T> {
     try {
       return Optional.of(this.prepareStatement(statement, values));
     } catch (Exception e) {
-      e.printStackTrace();
+      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is a error when preparing the statement", e);
       return Optional.empty();
     }
   }

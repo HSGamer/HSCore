@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The prepared statement container
@@ -71,7 +73,7 @@ public class PreparedStatementContainer implements AutoCloseable {
   }
 
   /**
-   * Query from the connection but ignores the exception
+   * Query from the connection but ignores exceptions
    *
    * @return the result set
    */
@@ -79,13 +81,13 @@ public class PreparedStatementContainer implements AutoCloseable {
     try {
       return Optional.of(this.query());
     } catch (Exception e) {
-      e.printStackTrace();
+      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is a error when querying", e);
       return Optional.empty();
     }
   }
 
   /**
-   * Update the database but ignores the exception
+   * Update the database but ignores exceptions
    *
    * @return the row count or 0 for nothing
    */
@@ -93,7 +95,7 @@ public class PreparedStatementContainer implements AutoCloseable {
     try {
       return this.update();
     } catch (Exception e) {
-      e.printStackTrace();
+      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is a error when updating", e);
       return 0;
     }
   }
