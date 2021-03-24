@@ -10,9 +10,9 @@ import java.util.Map;
 public class Setting {
   private final HashMap<String, Object> properties = new HashMap<>();
   private String host = "localhost";
-  private String databaseName = "db";
+  private String databaseName = "";
   private String port = "3306";
-  private String username = "";
+  private String username = "root";
   private String password = "";
 
   /**
