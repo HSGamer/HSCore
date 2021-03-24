@@ -14,15 +14,6 @@ public class MaskPaginatedMask extends PaginatedMask {
   /**
    * Create a new mask
    *
-   * @param name the name of the mask
-   */
-  public MaskPaginatedMask(String name) {
-    super(name);
-  }
-
-  /**
-   * Create a new mask
-   *
    * @param name  the name of the mask
    * @param masks the masks
    */

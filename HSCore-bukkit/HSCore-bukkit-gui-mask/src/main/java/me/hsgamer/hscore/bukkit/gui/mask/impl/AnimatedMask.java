@@ -24,21 +24,6 @@ public class AnimatedMask extends BaseMask implements Updatable {
   /**
    * Create a new mask
    *
-   * @param name   the name of the mask
-   * @param plugin the plugin
-   * @param period the period between 2 child buttons
-   * @param async  should the update task be asynchronous ?
-   */
-  public AnimatedMask(String name, Plugin plugin, long period, boolean async) {
-    super(name);
-    this.period = period;
-    this.plugin = plugin;
-    this.async = async;
-  }
-
-  /**
-   * Create a new mask
-   *
    * @param name      the name of the mask
    * @param plugin    the plugin
    * @param period    the period between 2 child buttons
@@ -46,7 +31,10 @@ public class AnimatedMask extends BaseMask implements Updatable {
    * @param childMask the child mask (or frame)
    */
   public AnimatedMask(String name, Plugin plugin, long period, boolean async, Mask... childMask) {
-    this(name, plugin, period, async);
+    super(name);
+    this.period = period;
+    this.plugin = plugin;
+    this.async = async;
     addChildMasks(childMask);
   }
 

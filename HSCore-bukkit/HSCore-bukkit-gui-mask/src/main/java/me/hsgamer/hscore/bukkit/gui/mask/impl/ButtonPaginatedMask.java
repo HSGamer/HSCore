@@ -14,17 +14,6 @@ public class ButtonPaginatedMask extends PaginatedMask {
   /**
    * Create a new mask
    *
-   * @param name  the name of the mask
-   * @param slots the slots
-   */
-  public ButtonPaginatedMask(String name, List<Integer> slots) {
-    super(name);
-    this.slots.addAll(slots);
-  }
-
-  /**
-   * Create a new mask
-   *
    * @param name    the name of the mask
    * @param slots   the slots
    * @param buttons the buttons
