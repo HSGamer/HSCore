@@ -51,7 +51,7 @@ public interface SqlClient<T> extends Client<T> {
     try {
       return Optional.of(this.prepareStatement(statement, values));
     } catch (Exception e) {
-      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is a error when preparing the statement", e);
+      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is an error when preparing the statement", e);
       return Optional.empty();
     }
   }
