@@ -8,7 +8,7 @@ import java.util.Map;
  * The setting for connection
  */
 public class Setting {
-  private final HashMap<String, Object> properties = new HashMap<>();
+  private final Map<String, Object> properties = new HashMap<>();
   private String host = "localhost";
   private String databaseName = "";
   private String port = "3306";
