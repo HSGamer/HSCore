@@ -68,6 +68,15 @@ public class ListButton implements Button {
   }
 
   /**
+   * Remove the current index for the unique id
+   *
+   * @param uuid the unique id
+   */
+  public void removeCurrentIndex(UUID uuid) {
+    this.currentIndexMap.remove(uuid);
+  }
+
+  /**
    * Should the button keep the current index for the unique id on every {@link #getItemStack(UUID)} times?
    *
    * @param keepCurrentIndex true if it should
