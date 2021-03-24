@@ -1,6 +1,8 @@
 package me.hsgamer.hscore.common.function;
 
 import java.util.function.BiFunction;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * {@link BiFunction} but returns null if there is an exception
@@ -15,6 +17,7 @@ public interface ThrowableBiFunction<T, U, R> extends BiFunction<T, U, R> {
     try {
       return applySafe(t, u);
     } catch (Throwable throwable) {
+      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is an exception on applying", throwable);
       return null;
     }
   }

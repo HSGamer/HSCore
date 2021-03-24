@@ -106,7 +106,7 @@ public class CollectionUtils {
   /**
    * Split the strings from the string list
    *
-   * @param regex  the delimiting regular expression
+   * @param regex   the delimiting regular expression
    * @param strings the string list
    *
    * @return the split string list

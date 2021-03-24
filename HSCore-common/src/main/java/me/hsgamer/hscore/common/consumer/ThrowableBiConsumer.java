@@ -1,6 +1,8 @@
 package me.hsgamer.hscore.common.consumer;
 
 import java.util.function.BiConsumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * {@link BiConsumer} but ignores exceptions
@@ -14,7 +16,7 @@ public interface ThrowableBiConsumer<T, U> extends BiConsumer<T, U> {
     try {
       acceptSafe(t, u);
     } catch (Throwable throwable) {
-      // IGNORED
+      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is an exception on accepting", throwable);
     }
   }
 
