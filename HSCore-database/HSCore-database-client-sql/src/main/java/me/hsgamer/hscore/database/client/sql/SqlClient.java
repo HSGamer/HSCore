@@ -55,4 +55,29 @@ public interface SqlClient<T> extends Client<T> {
       return Optional.empty();
     }
   }
+
+  /**
+   * Create a new batch builder for this client
+   *
+   * @return the batch builder
+   *
+   * @throws SQLException if there is an SQL error
+   */
+  default BatchBuilder createBatchBuilder() throws SQLException {
+    return new BatchBuilder(this.getConnection());
+  }
+
+  /**
+   * Create a new batch builder for this client but ignores exceptions
+   *
+   * @return the batch builder
+   */
+  default Optional<BatchBuilder> createBatchBuilderSafe() {
+    try {
+      return Optional.of(this.createBatchBuilder());
+    } catch (Exception e) {
+      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is an error when creating the batch builder", e);
+      return Optional.empty();
+    }
+  }
 }
