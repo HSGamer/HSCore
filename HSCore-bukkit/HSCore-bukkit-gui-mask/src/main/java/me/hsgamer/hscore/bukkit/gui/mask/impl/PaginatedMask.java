@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class PaginatedMask extends BaseMask {
   protected final Map<UUID, Integer> pageNumberMap = new ConcurrentHashMap<>();
-  protected boolean cycle;
+  protected boolean cycle = false;
 
   /**
    * Create a new mask
