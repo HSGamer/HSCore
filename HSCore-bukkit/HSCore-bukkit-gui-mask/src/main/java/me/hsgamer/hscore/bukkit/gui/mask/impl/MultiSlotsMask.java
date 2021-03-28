@@ -65,7 +65,11 @@ public class MultiSlotsMask extends BaseMask {
   public Map<Integer, Button> generateButtons(UUID uuid) {
     Map<Integer, Button> map = new HashMap<>();
     if (!this.buttons.isEmpty()) {
-      this.slots.forEach(slot -> map.put(slot, this.buttons.get(slot % this.buttons.size())));
+      int slotsSize = this.slots.size();
+      int buttonsSize = this.buttons.size();
+      for (int i = 0; i < slotsSize; i++) {
+        map.put(this.slots.get(i), this.buttons.get(i % buttonsSize));
+      }
     }
     return map;
   }
