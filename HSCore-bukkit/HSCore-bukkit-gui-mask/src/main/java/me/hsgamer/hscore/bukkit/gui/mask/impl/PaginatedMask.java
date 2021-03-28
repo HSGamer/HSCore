@@ -33,6 +33,17 @@ public abstract class PaginatedMask extends BaseMask {
    * @param page the page
    */
   public void setPage(UUID uuid, int page) {
+    this.pageNumberMap.put(uuid, this.getExactPage(page));
+  }
+
+  /**
+   * Get the exact page from the input page
+   *
+   * @param page the input page
+   *
+   * @return the exact page
+   */
+  public int getExactPage(int page) {
     int pageAmount = this.getPageAmount();
     if (cycle) {
       while (page < 0) {
@@ -44,7 +55,7 @@ public abstract class PaginatedMask extends BaseMask {
     } else if (page >= pageAmount) {
       page = pageAmount - 1;
     }
-    this.pageNumberMap.put(uuid, page);
+    return page;
   }
 
   /**
