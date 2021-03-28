@@ -39,14 +39,15 @@ public class AdvancedGUIDisplay extends GUIDisplay<AdvancedGUIHolder> {
         return;
       }
       ItemStack itemStack = button.getItemStack(uuid);
+      if (itemStack == null && !button.forceSetAction(uuid)) {
+        return;
+      }
       if (itemStack != null) {
         inventory.setItem(slot, itemStack);
         emptyItemSlots.remove(slot);
       }
-      if (button.forceSetAction(uuid)) {
-        viewedButtons.put(slot, button::handleAction);
-        emptyActionSlots.remove(slot);
-      }
+      viewedButtons.put(slot, button::handleAction);
+      emptyActionSlots.remove(slot);
     }));
 
     // Clear empty slots
