@@ -63,9 +63,19 @@ public class SequencePaginatedMask extends PaginatedMask {
   @Override
   public Map<Integer, Button> generateButtons(UUID uuid) {
     Map<Integer, Button> map = new HashMap<>();
+
     int basePage = this.getPage(uuid);
-    for (int i = 0; i < this.slots.size(); i++) {
-      map.put(this.slots.get(i), this.buttons.get(getExactPage(basePage + i)));
+    int buttonsSize = this.buttons.size();
+    int slotsSize = this.slots.size();
+
+    for (int i = 0; i < slotsSize; i++) {
+      int index = i + basePage;
+      if (this.cycle) {
+        index = this.getExactPage(index);
+      } else if (index >= buttonsSize) {
+        break;
+      }
+      map.put(this.slots.get(i), this.buttons.get(index));
     }
     return map;
   }

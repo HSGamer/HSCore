@@ -45,7 +45,7 @@ public abstract class PaginatedMask extends BaseMask {
    */
   public int getExactPage(int page) {
     int pageAmount = this.getPageAmount();
-    if (cycle) {
+    if (this.cycle) {
       while (page < 0) {
         page += pageAmount;
       }
