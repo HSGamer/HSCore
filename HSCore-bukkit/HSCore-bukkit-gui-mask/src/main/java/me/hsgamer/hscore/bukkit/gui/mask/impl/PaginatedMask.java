@@ -39,12 +39,10 @@ public abstract class PaginatedMask extends BaseMask {
         page += pageAmount;
       }
       page = page % pageAmount;
-    } else {
-      if (page < 0) {
-        page = 0;
-      } else if (page >= pageAmount) {
-        page = pageAmount - 1;
-      }
+    } else if (page < 0) {
+      page = 0;
+    } else if (page >= pageAmount) {
+      page = pageAmount - 1;
     }
     this.pageNumberMap.put(uuid, page);
   }
