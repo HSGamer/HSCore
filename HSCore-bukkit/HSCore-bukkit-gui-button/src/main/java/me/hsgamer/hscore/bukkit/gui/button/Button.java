@@ -33,4 +33,15 @@ public interface Button extends Initializable {
    * @param event the click event
    */
   void handleAction(UUID uuid, InventoryClickEvent event);
+
+  /**
+   * Check if the action of this button should be set even if the display item is null
+   *
+   * @param uuid the unique id
+   *
+   * @return true if it should
+   */
+  default boolean forceSetAction(UUID uuid) {
+    return false;
+  }
 }

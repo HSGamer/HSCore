@@ -109,6 +109,15 @@ public class PredicateButton implements Button {
   }
 
   @Override
+  public boolean forceSetAction(UUID uuid) {
+    if (failToViewList.contains(uuid)) {
+      return fallbackButton.forceSetAction(uuid);
+    } else {
+      return button.forceSetAction(uuid);
+    }
+  }
+
+  @Override
   public void init() {
     button.init();
     fallbackButton.init();

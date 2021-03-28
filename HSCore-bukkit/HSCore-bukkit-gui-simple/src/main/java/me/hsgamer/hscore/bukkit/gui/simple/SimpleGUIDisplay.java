@@ -36,28 +36,34 @@ public class SimpleGUIDisplay extends GUIDisplay<SimpleGUIHolder> {
     }
 
     int size = inventory.getSize();
-    List<Integer> emptySlots = IntStream.range(0, size).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+    List<Integer> emptyItemSlots = IntStream.range(0, size).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+    List<Integer> emptyActionSlots = IntStream.range(0, size).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
     this.holder.getButtonSlotMap().forEach((button, slots) -> {
       ItemStack itemStack = button.getItemStack(uuid);
-      if (itemStack == null) {
-        return;
+      if (itemStack != null) {
+        slots.forEach(slot -> {
+          if (slot >= size) {
+            return;
+          }
+          inventory.setItem(slot, itemStack);
+          emptyItemSlots.remove(slot);
+        });
       }
-      slots.forEach(slot -> {
-        if (slot >= size) {
-          return;
-        }
-        inventory.setItem(slot, itemStack);
-        emptySlots.remove(slot);
-        viewedButtons.put(slot, button::handleAction);
-      });
+      if (button.forceSetAction(uuid)) {
+        slots.forEach(slot -> {
+          if (slot >= size) {
+            return;
+          }
+          viewedButtons.put(slot, button::handleAction);
+          emptyActionSlots.remove(slot);
+        });
+      }
     });
 
     Button defaultButton = this.holder.getDefaultButton();
     ItemStack itemStack = defaultButton.getItemStack(uuid);
-    emptySlots.forEach(slot -> {
-      inventory.setItem(slot, itemStack);
-      viewedButtons.put(slot, defaultButton::handleAction);
-    });
+    emptyItemSlots.forEach(slot -> inventory.setItem(slot, itemStack));
+    emptyActionSlots.forEach(slot -> viewedButtons.put(slot, defaultButton::handleAction));
 
     if (forceUpdate) {
       new ArrayList<>(inventory.getViewers())

@@ -32,25 +32,26 @@ public class AdvancedGUIDisplay extends GUIDisplay<AdvancedGUIHolder> {
     }
 
     int size = inventory.getSize();
-    List<Integer> emptySlots = IntStream.range(0, size).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+    List<Integer> emptyItemSlots = IntStream.range(0, size).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+    List<Integer> emptyActionSlots = IntStream.range(0, size).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
     this.holder.getMasks().forEach(mask -> mask.generateButtons(this.getUniqueId()).forEach((slot, button) -> {
       if (slot >= size) {
         return;
       }
       ItemStack itemStack = button.getItemStack(uuid);
-      if (itemStack == null) {
-        return;
+      if (itemStack != null) {
+        inventory.setItem(slot, itemStack);
+        emptyItemSlots.remove(slot);
       }
-      inventory.setItem(slot, itemStack);
-      emptySlots.remove(slot);
-      viewedButtons.put(slot, button::handleAction);
+      if (button.forceSetAction(uuid)) {
+        viewedButtons.put(slot, button::handleAction);
+        emptyActionSlots.remove(slot);
+      }
     }));
 
     // Clear empty slots
-    emptySlots.forEach(slot -> {
-      inventory.clear(slot);
-      viewedButtons.remove(slot);
-    });
+    emptyItemSlots.forEach(inventory::clear);
+    emptyActionSlots.forEach(viewedButtons::remove);
 
     if (forceUpdate) {
       new ArrayList<>(inventory.getViewers())

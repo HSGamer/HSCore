@@ -58,6 +58,14 @@ public class ListButton implements Button {
   }
 
   @Override
+  public boolean forceSetAction(UUID uuid) {
+    return Optional.ofNullable(currentIndexMap.get(uuid))
+      .map(buttons::get)
+      .map(button -> button.forceSetAction(uuid))
+      .orElse(false);
+  }
+
+  @Override
   public void init() {
     this.buttons.forEach(Button::init);
   }

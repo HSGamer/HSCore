@@ -70,6 +70,11 @@ public class AnimatedButton implements Button, Updatable {
   }
 
   @Override
+  public boolean forceSetAction(UUID uuid) {
+    return this.buttons.get(currentIndex).forceSetAction(uuid);
+  }
+
+  @Override
   public void init() {
     if (this.buttons.isEmpty()) {
       throw new IllegalArgumentException("There is no child button for this animated button");
