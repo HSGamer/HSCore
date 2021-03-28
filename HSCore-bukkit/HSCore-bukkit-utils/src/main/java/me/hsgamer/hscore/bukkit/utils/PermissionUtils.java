@@ -38,6 +38,22 @@ public class PermissionUtils {
   }
 
   /**
+   * Get the strings from the permissions the permissible object has ([prefix].[string])
+   *
+   * @param permissible the permissible object
+   * @param prefix      the permission prefix
+   *
+   * @return the stream of strings
+   */
+  @NotNull
+  public static Stream<String> getStringsFromPermissions(Permissible permissible, String prefix) {
+    return permissible.getEffectivePermissions().parallelStream()
+      .map(PermissionAttachmentInfo::getPermission)
+      .filter(permission -> permission.startsWith(prefix))
+      .map(permission -> permission.substring(prefix.length() + 1));
+  }
+
+  /**
    * Get the numbers from the permissions the permissible object has ([prefix].[value])
    *
    * @param permissible     the permissible object
@@ -48,11 +64,7 @@ public class PermissionUtils {
    */
   @NotNull
   public static Stream<Number> getNumbersFromPermissions(Permissible permissible, String prefix, Function<String, Stream<Number>> numberConverter) {
-    return permissible.getEffectivePermissions().parallelStream()
-      .map(PermissionAttachmentInfo::getPermission)
-      .filter(permission -> permission.startsWith(prefix))
-      .map(permission -> permission.substring(prefix.length() + 1))
-      .flatMap(numberConverter);
+    return getStringsFromPermissions(permissible, prefix).flatMap(numberConverter);
   }
 
   /**
