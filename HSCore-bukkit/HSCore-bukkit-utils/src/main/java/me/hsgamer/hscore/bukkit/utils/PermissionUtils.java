@@ -61,6 +61,8 @@ public class PermissionUtils {
    * @param numberConverter the number converter
    *
    * @return the stream of numbers
+   *
+   * @see #getStringsFromPermissions(Permissible, String)
    */
   @NotNull
   public static Stream<Number> getNumbersFromPermissions(Permissible permissible, String prefix, Function<String, Stream<Number>> numberConverter) {
