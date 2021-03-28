@@ -55,8 +55,8 @@ public class MaskPaginatedMask extends PaginatedMask {
   }
 
   @Override
-  protected int getMaxPage() {
-    return this.masks.isEmpty() ? 0 : this.masks.size() - 1;
+  protected int getPageAmount() {
+    return this.masks.size();
   }
 
   @Override

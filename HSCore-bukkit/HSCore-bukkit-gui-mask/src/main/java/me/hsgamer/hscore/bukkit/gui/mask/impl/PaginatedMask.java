@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class PaginatedMask extends BaseMask {
   protected final Map<UUID, Integer> pageNumberMap = new ConcurrentHashMap<>();
+  protected boolean cycle;
 
   /**
    * Create a new mask
@@ -19,11 +20,11 @@ public abstract class PaginatedMask extends BaseMask {
   }
 
   /**
-   * Get the maximum page number
+   * Get the amount of pages
    *
-   * @return the maximum page number
+   * @return the amount of pages
    */
-  protected abstract int getMaxPage();
+  protected abstract int getPageAmount();
 
   /**
    * Set the page for the unique id
@@ -32,11 +33,18 @@ public abstract class PaginatedMask extends BaseMask {
    * @param page the page
    */
   public void setPage(UUID uuid, int page) {
-    int maxPage = getMaxPage();
-    if (page < 0) {
-      page = 0;
-    } else if (page > maxPage) {
-      page = maxPage;
+    int pageAmount = this.getPageAmount();
+    if (cycle) {
+      while (page < 0) {
+        page += pageAmount;
+      }
+      page = page % pageAmount;
+    } else {
+      if (page < 0) {
+        page = 0;
+      } else if (page >= pageAmount) {
+        page = pageAmount - 1;
+      }
     }
     this.pageNumberMap.put(uuid, page);
   }
@@ -68,5 +76,23 @@ public abstract class PaginatedMask extends BaseMask {
    */
   public void previousPage(UUID uuid) {
     this.setPage(uuid, this.getPage(uuid) - 1);
+  }
+
+  /**
+   * Check if this paginated mask allows cycle page (The first page after the last page)
+   *
+   * @return true if it does
+   */
+  public boolean isCycle() {
+    return cycle;
+  }
+
+  /**
+   * Set if this paginated mask allows cycle page (The first page after the last page)
+   *
+   * @param cycle true if it does
+   */
+  public void setCycle(boolean cycle) {
+    this.cycle = cycle;
   }
 }

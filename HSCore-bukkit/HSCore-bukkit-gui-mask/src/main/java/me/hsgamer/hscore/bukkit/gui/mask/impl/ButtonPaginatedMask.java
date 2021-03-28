@@ -92,7 +92,7 @@ public class ButtonPaginatedMask extends PaginatedMask {
   }
 
   @Override
-  protected int getMaxPage() {
-    return this.buttons.size() <= this.slots.size() ? 0 : (int) Math.ceil((double) this.buttons.size() / this.slots.size()) - 1;
+  protected int getPageAmount() {
+    return (int) Math.ceil((double) this.buttons.size() / this.slots.size());
   }
 }
