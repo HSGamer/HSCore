@@ -1,6 +1,5 @@
 package me.hsgamer.hscore.bukkit.utils;
 
-import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -28,13 +27,13 @@ public class PermissionUtils {
    * @param permissionDefault who have this by default
    *
    * @return the permission
+   *
+   * @deprecated use Bukkit's {@link Permission} instead
    */
+  @Deprecated
   @NotNull
-  public static Permission createPermission(@NotNull final String name, @Nullable final String description,
-                                            @Nullable final PermissionDefault permissionDefault) {
-    Permission permission = new Permission(name, description, permissionDefault);
-    Bukkit.getServer().getPluginManager().addPermission(permission);
-    return permission;
+  public static Permission createPermission(@NotNull final String name, @Nullable final String description, @Nullable final PermissionDefault permissionDefault) {
+    return new Permission(name, description, permissionDefault);
   }
 
   /**
