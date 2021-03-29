@@ -96,6 +96,6 @@ public class ButtonPaginatedMask extends PaginatedMask {
 
   @Override
   protected int getPageAmount() {
-    return (int) Math.ceil((double) this.buttons.size() / this.slots.size());
+    return this.slots.isEmpty() ? 0 : (int) Math.ceil((double) this.buttons.size() / this.slots.size());
   }
 }
