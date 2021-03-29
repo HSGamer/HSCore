@@ -62,8 +62,11 @@ public class SequencePaginatedMask extends PaginatedMask {
 
   @Override
   public Map<Integer, Button> generateButtons(UUID uuid) {
-    Map<Integer, Button> map = new HashMap<>();
+    if (this.buttons.isEmpty() || this.slots.isEmpty()) {
+      return Collections.emptyMap();
+    }
 
+    Map<Integer, Button> map = new HashMap<>();
     int basePage = this.getPage(uuid);
     int buttonsSize = this.buttons.size();
     int slotsSize = this.slots.size();

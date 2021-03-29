@@ -62,8 +62,11 @@ public class ButtonPaginatedMask extends PaginatedMask {
 
   @Override
   public Map<Integer, Button> generateButtons(UUID uuid) {
-    Map<Integer, Button> map = new HashMap<>();
+    if (this.buttons.isEmpty() || this.slots.isEmpty()) {
+      return Collections.emptyMap();
+    }
 
+    Map<Integer, Button> map = new HashMap<>();
     int pageNumber = this.getPage(uuid);
     int offset = pageNumber * this.slots.size();
     int buttonsSize = this.buttons.size();
