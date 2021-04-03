@@ -21,7 +21,6 @@
   * **`HSCore-collections`**
   * **`HSCore-downloader`**
   * **`HSCore-expression`**
-  * **`HSCore-json`**
   * **`HSCore-request`**
   * **`HSCore-web`**
   * **`HSCore-variable`**

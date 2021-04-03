@@ -40,7 +40,6 @@
     <module>HSCore-collections</module>
     <module>HSCore-expression</module>
     <module>HSCore-web</module>
-    <module>HSCore-json</module>
     <module>HSCore-request</module>
     <module>HSCore-config</module>
     <module>HSCore-addon</module>
