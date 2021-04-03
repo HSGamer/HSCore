@@ -77,8 +77,9 @@ public class SimpleConfig implements Config, Commentable {
   @Override
   public void setup() {
     if (!this.file.exists()) {
-      if (!this.file.getParentFile().exists()) {
-        this.file.getParentFile().mkdirs();
+      File parentFile = this.file.getAbsoluteFile().getParentFile();
+      if (!parentFile.exists()) {
+        parentFile.mkdirs();
       }
       try {
         this.file.createNewFile();
