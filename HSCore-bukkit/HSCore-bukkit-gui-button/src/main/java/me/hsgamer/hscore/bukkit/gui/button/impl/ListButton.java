@@ -5,13 +5,14 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The button with a list of child buttons
  */
 public class ListButton implements Button {
   private final List<Button> buttons = new ArrayList<>();
-  private final Map<UUID, Integer> currentIndexMap = new HashMap<>();
+  private final Map<UUID, Integer> currentIndexMap = new ConcurrentHashMap<>();
   private boolean keepCurrentIndex = false;
 
   /**
