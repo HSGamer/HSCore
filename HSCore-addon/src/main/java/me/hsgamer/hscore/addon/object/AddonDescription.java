@@ -78,6 +78,7 @@ public final class AddonDescription {
     }
     final InputStream inputStream = jar.getInputStream(entry);
     final Config data = provider.loadConfiguration(inputStream);
+    data.setup();
     inputStream.close();
     // Load required descriptions
     final String name = data.getInstance("name", String.class);

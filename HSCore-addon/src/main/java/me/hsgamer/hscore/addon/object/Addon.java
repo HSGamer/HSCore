@@ -93,6 +93,7 @@ public abstract class Addon {
    */
   public final void setupConfig() {
     this.addonConfig = this.createConfig();
+    this.addonConfig.setup();
   }
 
   /**
