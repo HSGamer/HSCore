@@ -41,7 +41,7 @@ public class ListButton implements Button {
     for (int i = 0; i < buttons.size(); i++) {
       Button button = buttons.get(i);
       ItemStack item = button.getItemStack(uuid);
-      if (item != null) {
+      if (item != null || button.forceSetAction(uuid)) {
         currentIndexMap.put(uuid, i);
         return item;
       }
@@ -82,6 +82,15 @@ public class ListButton implements Button {
    */
   public void removeCurrentIndex(UUID uuid) {
     this.currentIndexMap.remove(uuid);
+  }
+
+  /**
+   * Should the button keep the current index for the unique id on every {@link #getItemStack(UUID)} times?
+   *
+   * @return true if it should
+   */
+  public boolean isKeepCurrentIndex() {
+    return keepCurrentIndex;
   }
 
   /**
