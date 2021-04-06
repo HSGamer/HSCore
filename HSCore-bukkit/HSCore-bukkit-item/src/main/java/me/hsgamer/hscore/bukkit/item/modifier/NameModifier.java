@@ -31,8 +31,9 @@ public class NameModifier extends ItemMetaModifier {
   }
 
   @Override
-  public void modifyMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public ItemMeta modifyMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
     meta.setDisplayName(StringReplacer.replace(name, uuid, stringReplacerMap.values()));
+    return meta;
   }
 
   @Override

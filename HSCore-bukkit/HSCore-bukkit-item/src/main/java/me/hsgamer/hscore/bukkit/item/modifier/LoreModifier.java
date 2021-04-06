@@ -25,8 +25,9 @@ public class LoreModifier extends ItemMetaModifier {
   }
 
   @Override
-  public void modifyMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public ItemMeta modifyMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
     meta.setLore(getReplacedLore(uuid, stringReplacerMap));
+    return meta;
   }
 
   @Override

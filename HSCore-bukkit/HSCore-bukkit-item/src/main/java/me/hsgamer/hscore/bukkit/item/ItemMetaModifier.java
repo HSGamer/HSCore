@@ -17,8 +17,10 @@ public abstract class ItemMetaModifier implements ItemModifier {
    * @param meta              the item meta
    * @param uuid              the unique id
    * @param stringReplacerMap the map of string replacers
+   *
+   * @return the modified item meta
    */
-  public abstract void modifyMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap);
+  public abstract ItemMeta modifyMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap);
 
   /**
    * Load the modifier from the item meta
@@ -56,8 +58,7 @@ public abstract class ItemMetaModifier implements ItemModifier {
   @Override
   public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
     if (original.hasItemMeta()) {
-      ItemMeta itemMeta = original.getItemMeta();
-      this.modifyMeta(itemMeta, uuid, stringReplacerMap);
+      ItemMeta itemMeta = this.modifyMeta(original.getItemMeta(), uuid, stringReplacerMap);
       original.setItemMeta(itemMeta);
     }
     return original;
