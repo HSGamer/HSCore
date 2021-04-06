@@ -1,8 +1,7 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
-import me.hsgamer.hscore.bukkit.item.ItemModifier;
+import me.hsgamer.hscore.bukkit.item.ItemMetaModifier;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Map;
@@ -11,7 +10,7 @@ import java.util.UUID;
 /**
  * The name modifier
  */
-public class NameModifier implements ItemModifier {
+public class NameModifier extends ItemMetaModifier {
   private String name;
 
   @Override
@@ -32,11 +31,24 @@ public class NameModifier implements ItemModifier {
   }
 
   @Override
-  public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
-    ItemMeta itemMeta = original.getItemMeta();
-    itemMeta.setDisplayName(StringReplacer.replace(name, uuid, stringReplacerMap.values()));
-    original.setItemMeta(itemMeta);
-    return original;
+  public void modifyMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+    meta.setDisplayName(StringReplacer.replace(name, uuid, stringReplacerMap.values()));
+  }
+
+  @Override
+  public void loadFromItemMeta(ItemMeta meta) {
+    this.name = meta.getDisplayName();
+  }
+
+  @Override
+  public boolean canLoadFromItemMeta(ItemMeta meta) {
+    return meta.hasDisplayName();
+  }
+
+  @Override
+  public boolean compareWithItemMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+    String replaced = StringReplacer.replace(this.name, uuid, stringReplacerMap.values());
+    return (!meta.hasDisplayName() && replaced == null) || replaced.equals(meta.getDisplayName());
   }
 
   @Override
@@ -47,22 +59,5 @@ public class NameModifier implements ItemModifier {
   @Override
   public void loadFromObject(Object object) {
     this.name = String.valueOf(object);
-  }
-
-  @Override
-  public void loadFromItemStack(ItemStack itemStack) {
-    this.name = itemStack.getItemMeta().getDisplayName();
-  }
-
-  @Override
-  public boolean canLoadFromItemStack(ItemStack itemStack) {
-    return itemStack.getItemMeta().hasDisplayName();
-  }
-
-  @Override
-  public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
-    ItemMeta itemMeta = itemStack.getItemMeta();
-    String replaced = StringReplacer.replace(this.name, uuid, stringReplacerMap.values());
-    return (!itemMeta.hasDisplayName() && replaced == null) || replaced.equals(itemMeta.getDisplayName());
   }
 }

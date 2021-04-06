@@ -1,9 +1,8 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
-import me.hsgamer.hscore.bukkit.item.ItemModifier;
+import me.hsgamer.hscore.bukkit.item.ItemMetaModifier;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
@@ -11,7 +10,7 @@ import java.util.*;
 /**
  * The lore modifier
  */
-public class LoreModifier implements ItemModifier {
+public class LoreModifier extends ItemMetaModifier {
   private final List<String> lore = new ArrayList<>();
 
   @Override
@@ -26,11 +25,23 @@ public class LoreModifier implements ItemModifier {
   }
 
   @Override
-  public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
-    ItemMeta itemMeta = original.getItemMeta();
-    itemMeta.setLore(getReplacedLore(uuid, stringReplacerMap));
-    original.setItemMeta(itemMeta);
-    return original;
+  public void modifyMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+    meta.setLore(getReplacedLore(uuid, stringReplacerMap));
+  }
+
+  @Override
+  public void loadFromItemMeta(ItemMeta meta) {
+    setLore(meta.getLore());
+  }
+
+  @Override
+  public boolean canLoadFromItemMeta(ItemMeta meta) {
+    return meta.hasLore();
+  }
+
+  @Override
+  public boolean compareWithItemMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+    return (!meta.hasLore() && this.lore.isEmpty()) || getReplacedLore(uuid, stringReplacerMap).equals(meta.getLore());
   }
 
   @Override
@@ -41,22 +52,6 @@ public class LoreModifier implements ItemModifier {
   @Override
   public void loadFromObject(Object object) {
     setLore(CollectionUtils.createStringListFromObject(object, false));
-  }
-
-  @Override
-  public void loadFromItemStack(ItemStack itemStack) {
-    setLore(itemStack.getItemMeta().getLore());
-  }
-
-  @Override
-  public boolean canLoadFromItemStack(ItemStack itemStack) {
-    return itemStack.getItemMeta().hasLore();
-  }
-
-  @Override
-  public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
-    ItemMeta itemMeta = itemStack.getItemMeta();
-    return (!itemMeta.hasLore() && this.lore.isEmpty()) || getReplacedLore(uuid, stringReplacerMap).equals(itemMeta.getLore());
   }
 
   /**
