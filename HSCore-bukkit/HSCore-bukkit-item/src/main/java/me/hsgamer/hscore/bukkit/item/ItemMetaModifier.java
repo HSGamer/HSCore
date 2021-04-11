@@ -57,9 +57,9 @@ public abstract class ItemMetaModifier implements ItemModifier {
 
   @Override
   public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
-    if (original.hasItemMeta()) {
-      ItemMeta itemMeta = this.modifyMeta(original.getItemMeta(), uuid, stringReplacerMap);
-      original.setItemMeta(itemMeta);
+    ItemMeta itemMeta = original.getItemMeta();
+    if (itemMeta != null) {
+      original.setItemMeta(this.modifyMeta(itemMeta, uuid, stringReplacerMap));
     }
     return original;
   }
