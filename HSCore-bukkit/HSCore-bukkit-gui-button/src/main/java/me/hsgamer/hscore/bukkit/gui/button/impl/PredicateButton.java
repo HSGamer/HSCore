@@ -4,9 +4,9 @@ import me.hsgamer.hscore.bukkit.gui.button.Button;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 public class PredicateButton implements Button {
 
   private final Button button;
-  private final List<UUID> failToViewList = new CopyOnWriteArrayList<>();
+  private final Set<UUID> failToViewList = new ConcurrentSkipListSet<>();
 
   private Predicate<UUID> viewPredicate = uuid -> true;
   private BiPredicate<UUID, InventoryClickEvent> clickPredicate = (uuid, inventoryClickEvent) -> true;
