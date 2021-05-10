@@ -68,6 +68,11 @@ public class CommentablePath<T> implements ConfigPath<T> {
     });
   }
 
+  @Override
+  public void migrateConfig(@NotNull final Config config) {
+    originalPath.migrateConfig(config);
+  }
+
   /**
    * Get the block comment
    *
@@ -97,7 +102,7 @@ public class CommentablePath<T> implements ConfigPath<T> {
   @Nullable
   public String getComment(@NotNull final CommentType commentType) {
     return Optional.ofNullable(getConfig())
-      .filter(config -> config instanceof Commentable)
+      .filter(Commentable.class::isInstance)
       .map(config -> ((Commentable) config).getComment(getPath(), commentType))
       .orElse(defaultCommentMap.get(commentType));
   }
@@ -110,7 +115,7 @@ public class CommentablePath<T> implements ConfigPath<T> {
    */
   public void setComment(@NotNull final CommentType commentType, @Nullable final String comment) {
     Optional.ofNullable(getConfig())
-      .filter(config -> config instanceof Commentable)
+      .filter(Commentable.class::isInstance)
       .ifPresent(config -> ((Commentable) config).setComment(getPath(), comment, commentType));
   }
 }

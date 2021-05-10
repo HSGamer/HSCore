@@ -95,6 +95,11 @@ public abstract class AdvancedConfigPath<F, T> implements ConfigPath<T> {
   @Override
   public void setConfig(@NotNull final Config config) {
     this.config = config;
+    this.migrateConfig(config);
+  }
+
+  @Override
+  public void migrateConfig(@NotNull final Config config) {
     config.addDefault(path, def != null ? convertToRaw(def) : null);
   }
 }

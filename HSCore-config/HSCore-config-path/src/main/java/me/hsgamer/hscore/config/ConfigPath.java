@@ -46,4 +46,13 @@ public interface ConfigPath<T> {
    * @param config the config
    */
   void setConfig(@NotNull final Config config);
+
+  /**
+   * Manually update the config (Mainly used when updating new settings)
+   *
+   * @param config the config
+   */
+  default void migrateConfig(@NotNull final Config config) {
+    // EMPTY
+  }
 }
