@@ -20,23 +20,6 @@ public class PermissionUtils {
   }
 
   /**
-   * Create a permission
-   *
-   * @param name              the name
-   * @param description       the description
-   * @param permissionDefault who have this by default
-   *
-   * @return the permission
-   *
-   * @deprecated use Bukkit's {@link Permission} instead
-   */
-  @Deprecated
-  @NotNull
-  public static Permission createPermission(@NotNull final String name, @Nullable final String description, @Nullable final PermissionDefault permissionDefault) {
-    return new Permission(name, description, permissionDefault);
-  }
-
-  /**
    * Get the strings from the permissions the permissible object has ([prefix].[string])
    *
    * @param permissible the permissible object
