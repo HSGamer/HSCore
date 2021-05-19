@@ -151,6 +151,10 @@ public interface Config {
    */
   default <T> T getInstance(String path, T def, Class<T> type) {
     Object value = getNormalized(path, def);
+    if (type == String.class) {
+      // noinspection unchecked
+      return value != null ? (T) String.valueOf(value) : def;
+    }
     return type.isInstance(value) ? type.cast(value) : def;
   }
 
