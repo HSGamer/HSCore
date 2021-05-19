@@ -49,6 +49,8 @@ public abstract class BasePlugin extends JavaPlugin {
     getServer().getScheduler().cancelTasks(this);
     HandlerList.unregisterAll(this);
     commandManager.unregisterAll();
+
+    postDisable();
   }
 
   /**
@@ -84,6 +86,13 @@ public abstract class BasePlugin extends JavaPlugin {
    */
   public void disable() {
     // Disable logic
+  }
+
+  /**
+   * Execute after disabling all tasks, listeners and commands
+   */
+  public void postDisable() {
+    // Post Disable logic
   }
 
   /**
