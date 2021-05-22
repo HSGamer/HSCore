@@ -27,6 +27,7 @@
     <module>HSCore-bukkit-gui-simple</module>
     <module>HSCore-bukkit-gui-advanced</module>
     <module>HSCore-bukkit-baseplugin</module>
+    <module>HSCore-bukkit-channel</module>
     <module>HSCore-bukkit-all</module>
   </modules>
 
