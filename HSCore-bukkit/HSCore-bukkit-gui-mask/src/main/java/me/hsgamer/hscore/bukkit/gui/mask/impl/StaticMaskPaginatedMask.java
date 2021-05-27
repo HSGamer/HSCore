@@ -57,4 +57,15 @@ public class StaticMaskPaginatedMask extends MaskPaginatedMask {
   public List<Mask> getMasks(UUID uuid) {
     return this.masks;
   }
+
+  @Override
+  public void init() {
+    this.masks.forEach(Mask::init);
+  }
+
+  @Override
+  public void stop() {
+    this.masks.forEach(Mask::stop);
+    super.stop();
+  }
 }

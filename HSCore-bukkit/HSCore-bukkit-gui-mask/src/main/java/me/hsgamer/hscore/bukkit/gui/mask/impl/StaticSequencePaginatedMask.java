@@ -59,4 +59,15 @@ public class StaticSequencePaginatedMask extends SequencePaginatedMask {
   public List<Button> getButtons(UUID uuid) {
     return this.buttons;
   }
+
+  @Override
+  public void init() {
+    this.buttons.forEach(Button::init);
+  }
+
+  @Override
+  public void stop() {
+    this.buttons.forEach(Button::stop);
+    super.stop();
+  }
 }
