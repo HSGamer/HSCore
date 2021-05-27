@@ -20,11 +20,13 @@ public abstract class PaginatedMask extends BaseMask {
   }
 
   /**
-   * Get the amount of pages
+   * Get the amount of pages for the unique id
+   *
+   * @param uuid the unique id
    *
    * @return the amount of pages
    */
-  protected abstract int getPageAmount();
+  protected abstract int getPageAmount(UUID uuid);
 
   /**
    * Set the page for the unique id
@@ -33,18 +35,19 @@ public abstract class PaginatedMask extends BaseMask {
    * @param page the page
    */
   public void setPage(UUID uuid, int page) {
-    this.pageNumberMap.put(uuid, this.getExactPage(page));
+    this.pageNumberMap.put(uuid, this.getExactPage(page, uuid));
   }
 
   /**
-   * Get the exact page from the input page
+   * Get the exact page from the input page for the unique id
    *
    * @param page the input page
+   * @param uuid the unique id
    *
    * @return the exact page
    */
-  public int getExactPage(int page) {
-    int pageAmount = this.getPageAmount();
+  public int getExactPage(int page, UUID uuid) {
+    int pageAmount = this.getPageAmount(uuid);
     if (this.cycle) {
       while (page < 0) {
         page += pageAmount;

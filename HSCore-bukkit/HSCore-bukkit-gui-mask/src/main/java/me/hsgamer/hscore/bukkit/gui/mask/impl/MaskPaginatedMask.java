@@ -3,70 +3,52 @@ package me.hsgamer.hscore.bukkit.gui.mask.impl;
 import me.hsgamer.hscore.bukkit.gui.button.Button;
 import me.hsgamer.hscore.bukkit.gui.mask.Mask;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * The mask paginated mask, those with a long list of {@link Mask} divided into pages.
  */
-public class MaskPaginatedMask extends PaginatedMask {
-  protected final List<Mask> masks = new ArrayList<>();
+public abstract class MaskPaginatedMask extends PaginatedMask {
 
   /**
    * Create a new mask
    *
-   * @param name  the name of the mask
-   * @param masks the masks
+   * @param name the name of the mask
    */
-  public MaskPaginatedMask(String name, Mask... masks) {
+  protected MaskPaginatedMask(String name) {
     super(name);
-    this.addMasks(masks);
   }
 
   /**
-   * Add masks to the masks
+   * Get the masks for the unique id
    *
-   * @param masks the masks
-   */
-  public void addMasks(Mask... masks) {
-    this.addMasks(Arrays.asList(masks));
-  }
-
-  /**
-   * Add masks to the masks
-   *
-   * @param masks the masks
-   */
-  public void addMasks(List<Mask> masks) {
-    this.masks.addAll(masks);
-  }
-
-  /**
-   * Get the masks
+   * @param uuid the unique id
    *
    * @return the masks
    */
-  public List<Mask> getMasks() {
-    return Collections.unmodifiableList(masks);
-  }
+  public abstract List<Mask> getMasks(UUID uuid);
 
   @Override
   public Map<Integer, Button> generateButtons(UUID uuid) {
-    return this.masks.isEmpty() ? Collections.emptyMap() : this.masks.get(this.getPage(uuid)).generateButtons(uuid);
+    List<Mask> masks = getMasks(uuid);
+    return masks.isEmpty() ? Collections.emptyMap() : masks.get(this.getPage(uuid)).generateButtons(uuid);
   }
 
   @Override
-  protected int getPageAmount() {
-    return this.masks.size();
+  protected int getPageAmount(UUID uuid) {
+    return getMasks(uuid).size();
   }
 
   @Override
   public void init() {
-    this.masks.forEach(Mask::init);
+    // EMPTY
   }
 
   @Override
   public void stop() {
-    this.masks.forEach(Mask::stop);
     this.pageNumberMap.clear();
   }
 }
