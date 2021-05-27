@@ -4,6 +4,7 @@ me.hsgamer.hscore.addon.object
 me.hsgamer.hscore.builder
 me.hsgamer.hscore.bukkit.addon
 me.hsgamer.hscore.bukkit.baseplugin
+me.hsgamer.hscore.bukkit.channel
 me.hsgamer.hscore.bukkit.clicktype
 me.hsgamer.hscore.bukkit.command
 me.hsgamer.hscore.bukkit.command.extra
@@ -21,6 +22,7 @@ me.hsgamer.hscore.bukkit.item
 me.hsgamer.hscore.bukkit.item.modifier
 me.hsgamer.hscore.bukkit.subcommand
 me.hsgamer.hscore.bukkit.utils
+me.hsgamer.hscore.bungeecord.channel
 me.hsgamer.hscore.checker
 me.hsgamer.hscore.checker.spigotmc
 me.hsgamer.hscore.collections.map
