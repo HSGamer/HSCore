@@ -66,6 +66,7 @@ public class StaticMaskPaginatedMask extends MaskPaginatedMask {
   @Override
   public void stop() {
     this.masks.forEach(Mask::stop);
+    this.masks.clear();
     super.stop();
   }
 }

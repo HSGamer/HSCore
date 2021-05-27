@@ -68,6 +68,7 @@ public class StaticSequencePaginatedMask extends SequencePaginatedMask {
   @Override
   public void stop() {
     this.buttons.forEach(Button::stop);
+    this.buttons.clear();
     super.stop();
   }
 }
