@@ -48,6 +48,7 @@
     <module>HSCore-ui</module>
     <module>HSCore-downloader</module>
     <module>HSCore-bukkit</module>
+    <module>HSCore-bungeecord</module>
     <module>HSCore-all</module>
   </modules>
 

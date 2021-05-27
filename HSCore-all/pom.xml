@@ -33,6 +33,11 @@
     </dependency>
     <dependency>
       <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-bungeecord-all</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
       <artifactId>HSCore-checker-all</artifactId>
       <version>${project.version}</version>
     </dependency>

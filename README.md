@@ -58,6 +58,8 @@
     * **`HSCore-bukkit-item`**
     * **`HSCore-bukkit-baseplugin`**
     * **`HSCore-bukkit-channel`**
+  * **`HSCore-bungeecord-all`**
+    * **`HSCore-bungeecord-channel`**
 
 ## Add as a dependency (Maven)
 

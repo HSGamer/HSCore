@@ -8,3 +8,5 @@ cd ../HSCore-database || return
 mvn -N versions:update-child-modules -DgenerateBackupPoms=false
 cd ../HSCore-checker || return
 mvn -N versions:update-child-modules -DgenerateBackupPoms=false
+cd ../HSCore-bungeecord || return
+mvn -N versions:update-child-modules -DgenerateBackupPoms=false
