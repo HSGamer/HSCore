@@ -14,7 +14,7 @@
     <dependency>
       <artifactId>EvalEx</artifactId>
       <groupId>com.udojava</groupId>
-      <version>2.5</version>
+      <version>2.6</version>
     </dependency>
   </dependencies>
 
