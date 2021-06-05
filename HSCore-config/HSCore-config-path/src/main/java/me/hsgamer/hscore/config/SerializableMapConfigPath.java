@@ -3,7 +3,6 @@ package me.hsgamer.hscore.config;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * An serializable map config path
@@ -24,14 +23,11 @@ public abstract class SerializableMapConfigPath<T> extends AdvancedConfigPath<Ma
 
   @Override
   public final Map<String, Object> getFromConfig(@NotNull final Config config) {
-    return Optional.ofNullable(config.getNormalizedValues(getPath(), false))
-      .orElseGet(() -> {
-        final Object mapObj = config.get(getPath());
-        if (!(mapObj instanceof Map<?, ?>)) {
-          return null;
-        }
-        //noinspection unchecked
-        return ((Map<String, Object>) mapObj);
-      });
+    final Object mapObj = config.get(getPath());
+    if (mapObj instanceof Map<?, ?>) {
+      //noinspection unchecked
+      return ((Map<String, Object>) mapObj);
+    }
+    return config.getNormalizedValues(getPath(), false);
   }
 }
