@@ -3,6 +3,7 @@ package me.hsgamer.hscore.bukkit.channel;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+import org.bukkit.plugin.messaging.PluginMessageRecipient;
 
 /**
  * The base channel
@@ -56,17 +57,17 @@ public abstract class Channel implements PluginMessageListener {
    * @param data the data
    */
   public void send(byte[] data) {
-    this.plugin.getServer().sendPluginMessage(this.plugin, this.name, data);
+    this.send(this.plugin.getServer(), data);
   }
 
   /**
-   * Send the data via the channel with the player as the source
+   * Send the data via the channel with the recipient
    *
-   * @param player the source player
-   * @param data   the data
+   * @param recipient the recipient
+   * @param data      the data
    */
-  public void send(Player player, byte[] data) {
-    player.sendPluginMessage(this.plugin, this.name, data);
+  public void send(PluginMessageRecipient recipient, byte[] data) {
+    recipient.sendPluginMessage(this.plugin, this.name, data);
   }
 
   @Override
