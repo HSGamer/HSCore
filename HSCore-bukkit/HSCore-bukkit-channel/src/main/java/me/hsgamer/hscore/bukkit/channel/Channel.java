@@ -55,6 +55,16 @@ public abstract class Channel implements PluginMessageListener {
     this.plugin.getServer().sendPluginMessage(this.plugin, this.name, data);
   }
 
+  /**
+   * Send the data via the channel with the player as the source
+   *
+   * @param player the source player
+   * @param data   the data
+   */
+  public void send(Player player, byte[] data) {
+    player.sendPluginMessage(this.plugin, this.name, data);
+  }
+
   @Override
   public void onPluginMessageReceived(String channel, Player player, byte[] data) {
     if (channel.equalsIgnoreCase(this.name)) {
