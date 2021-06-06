@@ -25,6 +25,15 @@ public abstract class BungeeSubChannel extends Channel {
   }
 
   /**
+   * Get the sub-channel name
+   *
+   * @return the sub-channel name
+   */
+  public String getSubChannel() {
+    return subChannel;
+  }
+
+  /**
    * Handle the received data from plugin messaging through sub-channel
    *
    * @param player    the player involved
