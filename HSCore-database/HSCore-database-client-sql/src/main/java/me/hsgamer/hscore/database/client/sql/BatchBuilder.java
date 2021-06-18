@@ -99,6 +99,5 @@ public class BatchBuilder implements AutoCloseable {
   @Override
   public void close() throws Exception {
     this.clear();
-    this.connection.close();
   }
 }
