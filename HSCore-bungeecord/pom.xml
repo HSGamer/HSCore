@@ -13,6 +13,7 @@
   <artifactId>HSCore-bungeecord</artifactId>
 
   <modules>
+    <module>HSCore-bungeecord-config</module>
     <module>HSCore-bungeecord-channel</module>
     <module>HSCore-bungeecord-all</module>
   </modules>

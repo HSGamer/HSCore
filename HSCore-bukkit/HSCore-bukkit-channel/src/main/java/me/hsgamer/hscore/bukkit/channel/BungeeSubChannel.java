@@ -56,6 +56,7 @@ public abstract class BungeeSubChannel extends Channel {
    * @param recipient the recipient
    * @param data      the data
    */
+  @Override
   public void send(PluginMessageRecipient recipient, byte[] data) {
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
     out.writeUTF(this.subChannel);
