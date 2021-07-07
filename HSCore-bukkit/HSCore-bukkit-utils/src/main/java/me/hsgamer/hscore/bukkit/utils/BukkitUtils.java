@@ -59,13 +59,24 @@ public final class BukkitUtils {
    * @return the ping of the player
    */
   public static int getPing(@NotNull final Player player) {
+    Object entityPlayer;
+    int ping = -9;
     try {
-      Object entityPlayer = player.getClass().getMethod("getHandle").invoke(player);
-      return entityPlayer.getClass().getField("ping").getInt(entityPlayer);
+      entityPlayer = player.getClass().getMethod("getHandle").invoke(player);
     } catch (Exception e) {
-      Bukkit.getServer().getLogger().log(Level.WARNING, "Unexpected error when getting ping", e);
-      return -9;
+      Bukkit.getServer().getLogger().log(Level.WARNING, "Unexpected error when getting handle", e);
+      return ping;
     }
+    try {
+      ping = entityPlayer.getClass().getField("ping").getInt(entityPlayer);
+    } catch (Exception e) {
+      try {
+        ping = entityPlayer.getClass().getField("e").getInt(entityPlayer);
+      } catch (Exception e1) {
+        Bukkit.getServer().getLogger().log(Level.WARNING, "Unexpected error when getting ping", e1);
+      }
+    }
+    return ping;
   }
 
   /**
