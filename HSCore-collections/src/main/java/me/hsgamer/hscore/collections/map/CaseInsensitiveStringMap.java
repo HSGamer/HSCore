@@ -3,10 +3,7 @@ package me.hsgamer.hscore.collections.map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * String Map but case-insensitive
@@ -23,10 +20,18 @@ public class CaseInsensitiveStringMap<V> implements Map<String, V> {
    */
   public CaseInsensitiveStringMap(Map<String, V> delegate) {
     this.delegate = delegate;
+    this.normalize();
   }
 
   private String getLowerCase(Object obj) {
     return String.valueOf(obj).toLowerCase(Locale.ROOT);
+  }
+
+  private void normalize() {
+    Map<String, V> linkedMap = new LinkedHashMap<>(delegate);
+    this.clear();
+    this.putAll(linkedMap);
+    linkedMap.clear();
   }
 
   @Override
