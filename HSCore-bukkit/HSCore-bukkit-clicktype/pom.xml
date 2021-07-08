@@ -6,7 +6,7 @@
   <parent>
     <artifactId>HSCore-bukkit</artifactId>
     <groupId>me.HSGamer</groupId>
-    <version>3.6</version>
+    <version>3.7-SNAPSHOT</version>
   </parent>
   <artifactId>HSCore-bukkit-clicktype</artifactId>
 
