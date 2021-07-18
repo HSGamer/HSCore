@@ -55,8 +55,6 @@
   <properties>
     <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>8</maven.compiler.source>
-    <maven.compiler.target>8</maven.compiler.target>
   </properties>
 
   <build>
@@ -104,7 +102,7 @@
         <configuration>
           <shadedArtifactAttached>true</shadedArtifactAttached>
           <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
-          <createDependencyReducedPom>false</createDependencyReducedPom>
+          <keepDependenciesWithProvidedScope>false</keepDependenciesWithProvidedScope>
         </configuration>
         <executions>
           <execution>

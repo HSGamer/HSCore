@@ -11,6 +11,10 @@
 
   <artifactId>HSCore-database-client-hikari</artifactId>
 
+  <properties>
+    <java.version>11</java.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>me.HSGamer</groupId>
