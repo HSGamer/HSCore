@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 public class AdvancedGUIHolder extends GUIHolder<AdvancedGUIDisplay> {
   private final List<Mask> masks = new LinkedList<>();
 
-  protected AdvancedGUIHolder(Plugin plugin, boolean removeDisplayOnClose) {
+  public AdvancedGUIHolder(Plugin plugin, boolean removeDisplayOnClose) {
     super(plugin, removeDisplayOnClose);
   }
 
-  protected AdvancedGUIHolder(Plugin plugin) {
+  public AdvancedGUIHolder(Plugin plugin) {
     super(plugin);
   }
 
