@@ -57,7 +57,7 @@ public class AdvancedGUIDisplay extends GUIDisplay<AdvancedGUIHolder> {
     if (forceUpdate) {
       new ArrayList<>(inventory.getViewers())
         .stream()
-        .filter(humanEntity -> humanEntity instanceof Player)
+        .filter(Player.class::isInstance)
         .forEach(humanEntity -> ((Player) humanEntity).updateInventory());
     }
   }

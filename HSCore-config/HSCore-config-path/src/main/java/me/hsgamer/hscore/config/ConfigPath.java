@@ -55,4 +55,11 @@ public interface ConfigPath<T> {
   default void migrateConfig(@NotNull final Config config) {
     // EMPTY
   }
+
+  /**
+   * Reload the path
+   */
+  default void reload() {
+    // EMPTY
+  }
 }
