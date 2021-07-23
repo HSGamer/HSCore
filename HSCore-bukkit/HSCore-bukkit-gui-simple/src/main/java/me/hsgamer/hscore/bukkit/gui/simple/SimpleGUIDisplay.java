@@ -24,9 +24,12 @@ public class SimpleGUIDisplay extends GUIDisplay<SimpleGUIHolder> {
 
   @Override
   protected Inventory createInventory() {
-    return this.holder.getInventoryType() == InventoryType.CHEST && this.holder.getSize() > 0
-      ? Bukkit.createInventory(this, this.holder.getSize(), this.holder.getTitle(uuid))
-      : Bukkit.createInventory(this, this.holder.getInventoryType(), this.holder.getTitle(uuid));
+    InventoryType type = this.holder.getInventoryType();
+    int size = this.holder.getSize(uuid);
+    String title = this.holder.getTitle(uuid);
+    return type == InventoryType.CHEST && size > 0
+      ? Bukkit.createInventory(this, size, title)
+      : Bukkit.createInventory(this, type, title);
   }
 
   @Override
@@ -64,7 +67,7 @@ public class SimpleGUIDisplay extends GUIDisplay<SimpleGUIHolder> {
     if (forceUpdate) {
       new ArrayList<>(inventory.getViewers())
         .stream()
-        .filter(humanEntity -> humanEntity instanceof Player)
+        .filter(Player.class::isInstance)
         .forEach(humanEntity -> ((Player) humanEntity).updateInventory());
     }
   }

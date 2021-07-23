@@ -22,7 +22,7 @@ public class AdvancedGUIDisplay extends GUIDisplay<AdvancedGUIHolder> {
 
   @Override
   protected Inventory createInventory() {
-    return Bukkit.createInventory(this, this.holder.getSize(), this.holder.getTitle(uuid));
+    return Bukkit.createInventory(this, this.holder.getSize(uuid), this.holder.getTitle(uuid));
   }
 
   @Override

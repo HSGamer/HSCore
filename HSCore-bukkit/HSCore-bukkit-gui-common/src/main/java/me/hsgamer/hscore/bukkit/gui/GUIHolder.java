@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
 
 /**
  * The base {@link me.hsgamer.hscore.ui.Holder} for UI in Bukkit
@@ -26,7 +27,7 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
   protected final boolean removeDisplayOnClose;
   protected InventoryType inventoryType = InventoryType.CHEST;
   protected Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
-  protected int size = InventoryType.CHEST.getDefaultSize();
+  protected ToIntFunction<UUID> sizeFunction = uuid -> InventoryType.CHEST.getDefaultSize();
   protected Predicate<UUID> closeFilter = uuid -> true;
 
   /**
@@ -109,6 +110,8 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
    * @param uuid the unique id
    *
    * @return the title
+   *
+   * @see #getTitleFunction()
    */
   public String getTitle(UUID uuid) {
     return titleFunction.apply(uuid);
@@ -126,21 +129,45 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
   }
 
   /**
-   * Get the size of the inventory
+   * Get the size function
+   *
+   * @return the size function
+   */
+  public ToIntFunction<UUID> getSizeFunction() {
+    return sizeFunction;
+  }
+
+  /**
+   * Set the size function
+   *
+   * @param sizeFunction the size function
+   */
+  public void setSizeFunction(ToIntFunction<UUID> sizeFunction) {
+    this.sizeFunction = sizeFunction;
+  }
+
+  /**
+   * Get the size of the inventory for the unique id
+   *
+   * @param uuid the unique id
    *
    * @return the size
+   *
+   * @see #getSizeFunction()
    */
-  public int getSize() {
-    return size;
+  public int getSize(UUID uuid) {
+    return sizeFunction.applyAsInt(uuid);
   }
 
   /**
    * Set the size
    *
    * @param size the size
+   *
+   * @see #setSizeFunction(ToIntFunction)
    */
   public void setSize(int size) {
-    this.size = size;
+    setSizeFunction(uuid -> size);
   }
 
   /**
