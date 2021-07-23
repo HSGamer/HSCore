@@ -95,4 +95,16 @@ public abstract class GUIDisplay<H extends GUIHolder<?>> extends BaseDisplay<H> 
   public Inventory getInventory() {
     return inventory;
   }
+
+  /**
+   * Normalize raw size to chest size
+   * @param size raw size
+   * @return chest size
+   */
+  public int normalizeToChestSize(int size) {
+    int remain = size % 9;
+    size -= remain;
+    size += remain > 0 ? 9 : 0;
+    return size;
+  }
 }

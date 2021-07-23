@@ -28,7 +28,7 @@ public class SimpleGUIDisplay extends GUIDisplay<SimpleGUIHolder> {
     int size = this.holder.getSize(uuid);
     String title = this.holder.getTitle(uuid);
     return type == InventoryType.CHEST && size > 0
-      ? Bukkit.createInventory(this, size, title)
+      ? Bukkit.createInventory(this, this.normalizeToChestSize(size), title)
       : Bukkit.createInventory(this, type, title);
   }
 
