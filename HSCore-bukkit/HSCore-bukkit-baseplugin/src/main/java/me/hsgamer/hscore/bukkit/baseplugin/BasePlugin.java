@@ -47,6 +47,7 @@ public abstract class BasePlugin extends JavaPlugin {
     disable();
 
     getServer().getScheduler().cancelTasks(this);
+    getServer().getServicesManager().unregisterAll(this);
     HandlerList.unregisterAll(this);
     commandManager.unregisterAll();
 
