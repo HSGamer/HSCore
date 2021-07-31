@@ -1,7 +1,6 @@
 package me.hsgamer.hscore.bungeecord.config;
 
 import me.hsgamer.hscore.config.Config;
-import me.hsgamer.hscore.config.ConfigOptions;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -16,7 +15,6 @@ import java.util.logging.Level;
  * The BungeeCord Configuration
  */
 public class BungeeConfig implements Config {
-  private ConfigOptions options;
   private final File file;
   private Configuration configuration;
 
@@ -40,16 +38,8 @@ public class BungeeConfig implements Config {
   }
 
   @Override
-  public Object getOriginal() {
+  public Configuration getOriginal() {
     return this.configuration;
-  }
-
-  @Override
-  public ConfigOptions options() {
-    if (options == null) {
-      options = new ConfigOptions();
-    }
-    return options;
   }
 
   @Override

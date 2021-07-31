@@ -23,11 +23,6 @@ public class PathableConfig implements Config {
   }
 
   @Override
-  public ConfigOptions options() {
-    return this.config.options();
-  }
-
-  @Override
   public Object get(String path, Object def) {
     return this.config.get(path, def);
   }

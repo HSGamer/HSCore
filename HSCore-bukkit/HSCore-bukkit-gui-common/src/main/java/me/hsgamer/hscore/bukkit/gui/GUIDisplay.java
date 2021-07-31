@@ -98,7 +98,9 @@ public abstract class GUIDisplay<H extends GUIHolder<?>> extends BaseDisplay<H> 
 
   /**
    * Normalize raw size to chest size
+   *
    * @param size raw size
+   *
    * @return chest size
    */
   public int normalizeToChestSize(int size) {

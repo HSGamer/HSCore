@@ -1,7 +1,6 @@
 package me.hsgamer.hscore.bukkit.config;
 
 import me.hsgamer.hscore.config.Config;
-import me.hsgamer.hscore.config.ConfigOptions;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -17,7 +16,6 @@ import java.util.logging.Level;
  * The bukkit configuration
  */
 public class BukkitConfig implements Config {
-  private ConfigOptions options;
   private final File file;
   private YamlConfiguration configuration;
 
@@ -46,16 +44,8 @@ public class BukkitConfig implements Config {
   }
 
   @Override
-  public Object getOriginal() {
+  public YamlConfiguration getOriginal() {
     return this.configuration;
-  }
-
-  @Override
-  public ConfigOptions options() {
-    if (options == null) {
-      options = new ConfigOptions();
-    }
-    return options;
   }
 
   @Override
@@ -122,8 +112,6 @@ public class BukkitConfig implements Config {
     }
     this.configuration = YamlConfiguration.loadConfiguration(this.file);
     this.configuration.options().copyDefaults(true);
-    this.configuration.options().pathSeparator(this.options().getPathSeparator());
-    this.configuration.options().indent(this.options().getIndent());
   }
 
   @Override
