@@ -20,6 +20,13 @@ public interface Config {
   Object getOriginal();
 
   /**
+   * Get the options of the config
+   *
+   * @return the options
+   */
+  ConfigOptions options();
+
+  /**
    * Get the value from the path
    *
    * @param path the path

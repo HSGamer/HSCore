@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.config.simpleconfiguration;
 
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.ConfigOptions;
 import me.hsgamer.hscore.config.comment.CommentType;
 import me.hsgamer.hscore.config.comment.Commentable;
 import org.simpleyaml.configuration.ConfigurationSection;
@@ -18,6 +19,7 @@ import java.util.logging.Level;
  * The {@link Config} implementation for SimpleYAML
  */
 public class SimpleConfig implements Config, Commentable {
+  private ConfigOptions options;
   private final File file;
   private final Function<File, FileConfiguration> loader;
   private FileConfiguration configuration;
@@ -36,6 +38,14 @@ public class SimpleConfig implements Config, Commentable {
   @Override
   public Object getOriginal() {
     return this.configuration;
+  }
+
+  @Override
+  public ConfigOptions options() {
+    if (options == null) {
+      options = new ConfigOptions();
+    }
+    return options;
   }
 
   @Override
@@ -89,6 +99,8 @@ public class SimpleConfig implements Config, Commentable {
     }
     this.configuration = this.loader.apply(this.file);
     this.configuration.options().copyDefaults(true);
+    this.configuration.options().pathSeparator(this.options().getPathSeparator());
+    this.configuration.options().indent(this.options().getIndent());
   }
 
   @Override

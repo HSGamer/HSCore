@@ -2,6 +2,7 @@ package me.hsgamer.hscore.config.simplixstorage;
 
 import de.leonhard.storage.internal.FlatFile;
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.ConfigOptions;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -14,6 +15,7 @@ import java.util.Set;
  * @param <F> the flat file type
  */
 public class LightningConfig<F extends FlatFile> implements Config {
+  private ConfigOptions options;
   private final F flatFile;
 
   /**
@@ -28,6 +30,14 @@ public class LightningConfig<F extends FlatFile> implements Config {
   @Override
   public Object getOriginal() {
     return this.flatFile;
+  }
+
+  @Override
+  public ConfigOptions options() {
+    if (options == null) {
+      options = new ConfigOptions();
+    }
+    return options;
   }
 
   @Override
