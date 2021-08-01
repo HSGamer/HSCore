@@ -6,7 +6,7 @@
   <parent>
     <artifactId>HSCore-bukkit</artifactId>
     <groupId>me.HSGamer</groupId>
-    <version>3.11-SNAPSHOT</version>
+    <version>3.11</version>
   </parent>
   <artifactId>HSCore-bukkit-config-extra</artifactId>
 
