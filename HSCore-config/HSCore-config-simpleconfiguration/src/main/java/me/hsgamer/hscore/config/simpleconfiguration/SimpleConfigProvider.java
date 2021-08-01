@@ -4,25 +4,29 @@ import me.hsgamer.hscore.config.ConfigProvider;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.io.File;
-import java.util.function.Function;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 /**
  * The SimpleYAML config provider
  */
-public class SimpleConfigProvider implements ConfigProvider<SimpleConfig> {
-  private final Function<File, FileConfiguration> loader;
+public class SimpleConfigProvider<T extends FileConfiguration> implements ConfigProvider<SimpleConfig<T>> {
+  private final Supplier<T> supplier;
+  private final BiConsumer<File, T> loader;
 
   /**
    * Create a new provider
    *
-   * @param loader the loader
+   * @param supplier the supplier
+   * @param loader   the loader
    */
-  public SimpleConfigProvider(Function<File, FileConfiguration> loader) {
+  public SimpleConfigProvider(Supplier<T> supplier, BiConsumer<File, T> loader) {
+    this.supplier = supplier;
     this.loader = loader;
   }
 
   @Override
-  public SimpleConfig loadConfiguration(File file) {
-    return new SimpleConfig(file, this.loader);
+  public SimpleConfig<T> loadConfiguration(File file) {
+    return new SimpleConfig<>(file, supplier.get(), loader);
   }
 }

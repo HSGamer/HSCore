@@ -2,14 +2,13 @@ package me.hsgamer.hscore.bukkit.config;
 
 import me.hsgamer.hscore.config.Config;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -17,7 +16,7 @@ import java.util.logging.Level;
  */
 public class BukkitConfig implements Config {
   private final File file;
-  private YamlConfiguration configuration;
+  private final YamlConfiguration configuration = new YamlConfiguration();
 
   /**
    * Create a new config
@@ -110,8 +109,12 @@ public class BukkitConfig implements Config {
         LOGGER.log(Level.WARNING, e, () -> "Something wrong when creating " + this.file.getName());
       }
     }
-    this.configuration = YamlConfiguration.loadConfiguration(this.file);
     this.configuration.options().copyDefaults(true);
+    try {
+      this.configuration.load(this.file);
+    } catch (IOException | InvalidConfigurationException e) {
+      LOGGER.log(Level.WARNING, e, () -> "Something wrong when loading " + this.file.getName());
+    }
   }
 
   @Override
@@ -125,6 +128,8 @@ public class BukkitConfig implements Config {
 
   @Override
   public void reload() {
+    List<String> keys = new ArrayList<>(this.configuration.getKeys(false));
+    keys.forEach(key -> this.configuration.set(key, null));
     setup();
   }
 }

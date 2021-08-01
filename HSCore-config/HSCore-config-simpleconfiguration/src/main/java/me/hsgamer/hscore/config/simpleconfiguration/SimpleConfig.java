@@ -5,33 +5,51 @@ import me.hsgamer.hscore.config.comment.CommentType;
 import me.hsgamer.hscore.config.comment.Commentable;
 import org.simpleyaml.configuration.ConfigurationSection;
 import org.simpleyaml.configuration.file.FileConfiguration;
+import org.simpleyaml.exceptions.InvalidConfigurationException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
+import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.logging.Level;
 
 /**
  * The {@link Config} implementation for SimpleYAML
  */
-public class SimpleConfig implements Config, Commentable {
+public class SimpleConfig<T extends FileConfiguration> implements Config, Commentable {
   private final File file;
-  private final Function<File, FileConfiguration> loader;
-  private FileConfiguration configuration;
+  protected final BiConsumer<File, T> loader;
+  private final T configuration;
 
   /**
    * Create a new config
    *
-   * @param file   the file
-   * @param loader the loader
+   * @param file          the file
+   * @param configuration the configuration
+   * @param loader        the loader
    */
-  public SimpleConfig(File file, Function<File, FileConfiguration> loader) {
+  public SimpleConfig(File file, T configuration, BiConsumer<File, T> loader) {
     this.file = file;
+    this.configuration = configuration;
     this.loader = loader;
   }
+
+  /**
+   * Create a new config
+   *
+   * @param file          the file
+   * @param configuration the configuration
+   */
+  public SimpleConfig(File file, T configuration) {
+    this(file, configuration, (file1, t) -> {
+      try {
+        t.load(file1);
+      } catch (IOException | InvalidConfigurationException e) {
+        LOGGER.log(Level.WARNING, e, () -> "Something wrong when loading " + file1.getName());
+      }
+    });
+  }
+
 
   @Override
   public FileConfiguration getOriginal() {
@@ -87,8 +105,8 @@ public class SimpleConfig implements Config, Commentable {
         LOGGER.log(Level.WARNING, e, () -> "Something wrong when creating " + this.file.getName());
       }
     }
-    this.configuration = this.loader.apply(this.file);
     this.configuration.options().copyDefaults(true);
+    this.loader.accept(file, configuration);
   }
 
   @Override
@@ -102,6 +120,8 @@ public class SimpleConfig implements Config, Commentable {
 
   @Override
   public void reload() {
+    List<String> keys = new ArrayList<>(this.configuration.getKeys(false));
+    keys.forEach(key -> this.configuration.set(key, null));
     setup();
   }
 
