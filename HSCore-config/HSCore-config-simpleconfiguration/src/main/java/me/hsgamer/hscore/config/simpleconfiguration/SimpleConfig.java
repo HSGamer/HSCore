@@ -17,8 +17,8 @@ import java.util.logging.Level;
  * The {@link Config} implementation for SimpleYAML
  */
 public class SimpleConfig<T extends FileConfiguration> implements Config, Commentable {
-  private final File file;
   protected final BiConsumer<File, T> loader;
+  private final File file;
   private final T configuration;
 
   /**

@@ -67,7 +67,7 @@ public class AnimatedMask extends BaseMask implements Updatable {
 
   @Override
   public void stop() {
-    if (!this.task.isCancelled()) {
+    if (this.task != null) {
       this.task.cancel();
     }
     this.masks.forEach(Mask::stop);
