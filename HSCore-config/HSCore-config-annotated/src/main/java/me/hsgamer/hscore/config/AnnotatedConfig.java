@@ -19,6 +19,7 @@ public class AnnotatedConfig extends DecorativeConfig {
   static {
     try {
       MODIFIERS_FIELD = Field.class.getDeclaredField("modifiers");
+      MODIFIERS_FIELD.setAccessible(true);
     } catch (NoSuchFieldException e) {
       throw new IllegalStateException(e);
     }
