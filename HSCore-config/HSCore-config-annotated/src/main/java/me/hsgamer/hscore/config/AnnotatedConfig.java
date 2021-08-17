@@ -14,6 +14,15 @@ import java.util.logging.Level;
  * The annotated config, where any fields can be assigned to the config with the annotation {@link ConfigPath}
  */
 public class AnnotatedConfig extends DecorativeConfig {
+  private static final Field MODIFIERS_FIELD;
+
+  static {
+    try {
+      MODIFIERS_FIELD = Field.class.getDeclaredField("modifiers");
+    } catch (NoSuchFieldException e) {
+      throw new IllegalStateException(e);
+    }
+  }
   private final List<Field> pathFields = new ArrayList<>();
 
   /**
@@ -70,19 +79,11 @@ public class AnnotatedConfig extends DecorativeConfig {
     if (configPath == null) {
       return false;
     }
-
-    int modifiers = field.getModifiers();
-    if (Modifier.isFinal(modifiers)) {
-      LOGGER.warning(() -> field.getName() + " is a final field");
-      return false;
-    }
-
     try {
       createConverterSafe(configPath.converter());
     } catch (Exception e) {
       return false;
     }
-
     return true;
   }
 
@@ -107,7 +108,10 @@ public class AnnotatedConfig extends DecorativeConfig {
       super.set(path, converter.convertToRaw(defaultValue));
     } else {
       try {
+        int modifiers = field.getModifiers();
+        MODIFIERS_FIELD.setInt(field, modifiers & ~Modifier.FINAL);
         field.set(this, converter.convert(this.getNormalized(path)));
+        MODIFIERS_FIELD.setInt(field, modifiers);
       } catch (IllegalAccessException e) {
         LOGGER.log(Level.WARNING, e, () -> "Cannot set the value for " + field.getName());
       }
@@ -122,7 +126,10 @@ public class AnnotatedConfig extends DecorativeConfig {
     boolean accessible = field.isAccessible();
     field.setAccessible(true);
     try {
+      int modifiers = field.getModifiers();
+      MODIFIERS_FIELD.setInt(field, modifiers & ~Modifier.FINAL);
       field.set(this, value);
+      MODIFIERS_FIELD.setInt(field, modifiers);
     } catch (IllegalAccessException e) {
       LOGGER.log(Level.WARNING, e, () -> "Cannot set the value for " + field.getName());
     }
