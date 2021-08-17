@@ -17,6 +17,7 @@
     <module>HSCore-config-simplixstorage</module>
     <module>HSCore-config-simpleconfiguration</module>
     <module>HSCore-config-all</module>
+      <module>HSCore-config-annotated</module>
   </modules>
 
 </project>
