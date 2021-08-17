@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 /**
- * The annotated config, where any fields can be assigned to the config with the annotation {@link ConfigPath}
+ * The annotated {@link Config}, where any fields can be assigned to the config with the annotation {@link ConfigPath}
  */
 public class AnnotatedConfig extends DecorativeConfig {
   private final List<Field> pathFields = new ArrayList<>();
