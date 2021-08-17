@@ -1,12 +1,9 @@
 package me.hsgamer.hscore.config;
 
-import me.hsgamer.hscore.config.comment.CommentType;
-import me.hsgamer.hscore.config.comment.Commentable;
-
 /**
  * A {@link Config} implementation to load {@link ConfigPath} automatically
  */
-public class PathableConfig extends DecorativeConfig implements Commentable {
+public class PathableConfig extends DecorativeConfig {
 
   /**
    * Create a pathable config
@@ -28,20 +25,5 @@ public class PathableConfig extends DecorativeConfig implements Commentable {
   public void reload() {
     super.reload();
     PathLoader.reloadPath(this);
-  }
-
-  @Override
-  public String getComment(String path, CommentType type) {
-    if (config instanceof Commentable) {
-      return ((Commentable) config).getComment(path, type);
-    }
-    return null;
-  }
-
-  @Override
-  public void setComment(String path, String value, CommentType type) {
-    if (config instanceof Commentable) {
-      ((Commentable) config).setComment(path, value, type);
-    }
   }
 }
