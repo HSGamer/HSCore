@@ -8,7 +8,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  * The annotated {@link Config}, where any fields can be assigned to the config with the annotation {@link ConfigPath}
@@ -30,7 +29,7 @@ public class AnnotatedConfig extends DecorativeConfig {
     try {
       return converterClass.newInstance();
     } catch (InstantiationException | IllegalAccessException e) {
-      throw new RuntimeException(e);
+      throw new IllegalStateException(e);
     }
   }
 
@@ -48,12 +47,12 @@ public class AnnotatedConfig extends DecorativeConfig {
 
   @Override
   public void set(String path, Object value) {
-    for (Field field : pathFields) {
+    pathFields.forEach(field -> {
       ConfigPath configPath = field.getAnnotation(ConfigPath.class);
       if (configPath.value().equals(path)) {
         checkAndSetField(field, configPath, value);
       }
-    }
+    });
   }
 
   @Override
@@ -95,9 +94,8 @@ public class AnnotatedConfig extends DecorativeConfig {
     try {
       defaultValue = field.get(this);
     } catch (IllegalAccessException e) {
-      LOGGER.log(Level.WARNING, e, () -> "Cannot get the default value from " + field.getName());
       field.setAccessible(accessible);
-      return;
+      throw new IllegalStateException("Cannot get the default value from " + field.getName(), e);
     }
 
     if (!contains(path)) {
@@ -105,11 +103,12 @@ public class AnnotatedConfig extends DecorativeConfig {
     } else {
       try {
         field.set(this, converter.convert(this.getNormalized(path)));
+        field.setAccessible(accessible);
       } catch (IllegalAccessException e) {
-        LOGGER.log(Level.WARNING, e, () -> "Cannot set the value for " + field.getName());
+        field.setAccessible(accessible);
+        throw new IllegalStateException("Cannot set the value for " + field.getName(), e);
       }
     }
-    field.setAccessible(accessible);
   }
 
   private void checkAndSetField(Field field, ConfigPath configPath, Object value) {
@@ -120,9 +119,10 @@ public class AnnotatedConfig extends DecorativeConfig {
     field.setAccessible(true);
     try {
       field.set(this, value);
+      field.setAccessible(accessible);
     } catch (IllegalAccessException e) {
-      LOGGER.log(Level.WARNING, e, () -> "Cannot set the value for " + field.getName());
+      field.setAccessible(accessible);
+      throw new IllegalStateException("Cannot set the value for " + field.getName(), e);
     }
-    field.setAccessible(accessible);
   }
 }
