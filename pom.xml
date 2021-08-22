@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.HSGamer</groupId>
   <artifactId>HSCore</artifactId>
-  <version>3.14</version>
+  <version>3.15-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>HSCore</name>
