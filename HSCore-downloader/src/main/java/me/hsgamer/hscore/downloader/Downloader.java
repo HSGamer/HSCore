@@ -10,6 +10,8 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -76,31 +78,35 @@ public class Downloader {
   /**
    * Load download infos
    */
-  @SuppressWarnings("unchecked")
-  public void loadDownloadsInfo() {
-    downloadInfoMap.clear();
-    CompletableFuture.supplyAsync(() -> {
+  public CompletableFuture<Map<String, DownloadInfo>> loadDownloadsInfo() {
+    return CompletableFuture.supplyAsync(() -> {
       try {
         return new JSONParser().parse(new InputStreamReader(WebUtils.openConnection(dbUrl, UserAgent.FIREFOX).getInputStream()));
       } catch (IOException | ParseException e) {
         LOGGER.log(Level.WARNING, e, () -> "Something wrong when getting the addon info");
         return null;
       }
-    }).thenAccept(jsonObject -> {
+    }).<Map<String, DownloadInfo>>thenApplyAsync(jsonObject -> {
       if (!(jsonObject instanceof JSONObject)) {
-        return;
+        return Collections.emptyMap();
       }
-
+      Map<String, DownloadInfo> map = new HashMap<>();
+      // noinspection unchecked
       ((JSONObject) jsonObject).forEach((key, raw) -> {
         if (!(raw instanceof JSONObject)) {
           return;
         }
-
         JSONObject value = (JSONObject) raw;
         String name = String.valueOf(key);
-
-        downloadInfoMap.put(name, new DownloadInfo(name, value, this));
+        map.put(name, new DownloadInfo(name, value, this));
       });
+      return map;
+    }).whenCompleteAsync((map, throwable) -> {
+      if (throwable != null) {
+        return;
+      }
+      downloadInfoMap.clear();
+      downloadInfoMap.putAll(map);
     });
   }
 
