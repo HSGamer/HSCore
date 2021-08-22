@@ -132,7 +132,7 @@ public class Downloader {
       });
       return map;
     }).whenCompleteAsync((map, throwable) -> {
-      if (throwable != null) {
+      if (map == null) {
         return;
       }
       downloadInfoMap.clear();
