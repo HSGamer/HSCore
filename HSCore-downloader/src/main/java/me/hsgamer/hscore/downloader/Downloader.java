@@ -16,8 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * The downloader <br>
@@ -43,14 +42,11 @@ import java.util.logging.Logger;
  * </pre>
  */
 public class Downloader {
-  /**
-   * The logger
-   */
-  protected static final Logger LOGGER = Logger.getLogger("Downloader");
 
   protected final Map<String, DownloadInfo> downloadInfoMap = new ConcurrentHashMap<>();
   private final String dbUrl;
   private final File folder;
+  private final AtomicReference<UserAgent> userAgentPreference = new AtomicReference<>(UserAgent.FIREFOX);
 
   /**
    * Create a new downloader
@@ -76,15 +72,49 @@ public class Downloader {
   }
 
   /**
+   * Get the download info
+   *
+   * @param name the name
+   *
+   * @return the download info
+   */
+  public Optional<DownloadInfo> getDownloadInfo(String name) {
+    return Optional.ofNullable(downloadInfoMap.get(name));
+  }
+
+  /**
+   * Get the user agent the downloader is using
+   *
+   * @return the user agent
+   */
+  public UserAgent getUserAgent() {
+    return userAgentPreference.get();
+  }
+
+  /**
+   * Set the user agent
+   *
+   * @param userAgent the user agent
+   */
+  public void setUserAgent(UserAgent userAgent) {
+    userAgentPreference.set(userAgent);
+  }
+
+  /**
    * Load download infos
    */
   public CompletableFuture<Map<String, DownloadInfo>> loadDownloadsInfo() {
     return CompletableFuture.supplyAsync(() -> {
       try {
-        return new JSONParser().parse(new InputStreamReader(WebUtils.openConnection(dbUrl, UserAgent.FIREFOX).getInputStream()));
+        return new InputStreamReader(WebUtils.openConnection(dbUrl, userAgentPreference.get()).getInputStream());
+      } catch (IOException e) {
+        throw new IllegalStateException("Something wrong when getting the info", e);
+      }
+    }).thenApplyAsync(inputStreamReader -> {
+      try {
+        return new JSONParser().parse(inputStreamReader);
       } catch (IOException | ParseException e) {
-        LOGGER.log(Level.WARNING, e, () -> "Something wrong when getting the addon info");
-        return null;
+        throw new IllegalArgumentException("Something wrong when parsing the info", e);
       }
     }).<Map<String, DownloadInfo>>thenApplyAsync(jsonObject -> {
       if (!(jsonObject instanceof JSONObject)) {
@@ -108,16 +138,5 @@ public class Downloader {
       downloadInfoMap.clear();
       downloadInfoMap.putAll(map);
     });
-  }
-
-  /**
-   * Get the download info
-   *
-   * @param name the name
-   *
-   * @return the download info
-   */
-  public Optional<DownloadInfo> getDownloadInfo(String name) {
-    return Optional.ofNullable(downloadInfoMap.get(name));
   }
 }
