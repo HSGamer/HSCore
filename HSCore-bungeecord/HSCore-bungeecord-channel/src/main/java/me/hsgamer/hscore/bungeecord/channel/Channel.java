@@ -2,9 +2,7 @@ package me.hsgamer.hscore.bungeecord.channel;
 
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.event.PluginMessageEvent;
-import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.event.EventHandler;
 
 /**
  * The base channel
@@ -12,14 +10,7 @@ import net.md_5.bungee.event.EventHandler;
 public abstract class Channel {
   private final String name;
   private final Plugin plugin;
-  private final Listener listener = new Listener() {
-    @EventHandler
-    public void onReceive(PluginMessageEvent event) {
-      if (getName().equalsIgnoreCase(event.getTag())) {
-        handleMessage(event);
-      }
-    }
-  };
+  private final ChannelListener listener = new ChannelListener(this);
 
   /**
    * Create a new channel
