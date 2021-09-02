@@ -52,7 +52,20 @@ public abstract class Channel {
    * @param data the data
    */
   public void sendAll(byte[] data) {
-    this.plugin.getProxy().getServers().values().forEach(serverInfo -> send(serverInfo, data));
+    this.sendAll(data, false);
+  }
+
+  /**
+   * Send the data to all servers
+   *
+   * @param data      the data
+   * @param hasPlayer check if the server has players
+   */
+  public void sendAll(byte[] data, boolean hasPlayer) {
+    this.plugin.getProxy().getServers().values()
+      .parallelStream()
+      .filter(serverInfo -> !hasPlayer || !serverInfo.getPlayers().isEmpty())
+      .forEach(serverInfo -> send(serverInfo, data));
   }
 
   /**
