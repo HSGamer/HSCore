@@ -28,7 +28,7 @@ public abstract class Channel implements PluginMessageListener {
    */
   public void register() {
     this.plugin.getServer().getMessenger().registerIncomingPluginChannel(this.plugin, this.name, this);
-    if (this.plugin.getServer().getMessenger().isOutgoingChannelRegistered(this.plugin, this.name)) {
+    if (!this.plugin.getServer().getMessenger().isOutgoingChannelRegistered(this.plugin, this.name)) {
       this.plugin.getServer().getMessenger().registerOutgoingPluginChannel(this.plugin, this.name);
     }
   }
@@ -38,7 +38,7 @@ public abstract class Channel implements PluginMessageListener {
    */
   public void unregister() {
     this.plugin.getServer().getMessenger().unregisterIncomingPluginChannel(this.plugin, this.name, this);
-    if (!this.plugin.getServer().getMessenger().isOutgoingChannelRegistered(this.plugin, this.name)) {
+    if (this.plugin.getServer().getMessenger().isOutgoingChannelRegistered(this.plugin, this.name)) {
       this.plugin.getServer().getMessenger().unregisterOutgoingPluginChannel(this.plugin, this.name);
     }
   }
