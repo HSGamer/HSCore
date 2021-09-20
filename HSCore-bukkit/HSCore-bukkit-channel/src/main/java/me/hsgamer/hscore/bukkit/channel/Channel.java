@@ -75,6 +75,7 @@ public abstract class Channel implements PluginMessageListener {
     dataOutput.writeUTF("Forward");
     dataOutput.writeUTF(toServer);
     dataOutput.writeUTF(this.name);
+    dataOutput.writeShort(data.length);
     dataOutput.write(data);
 
     if (!this.plugin.getServer().getMessenger().isOutgoingChannelRegistered(this.plugin, MAIN_CHANNEL)) {
