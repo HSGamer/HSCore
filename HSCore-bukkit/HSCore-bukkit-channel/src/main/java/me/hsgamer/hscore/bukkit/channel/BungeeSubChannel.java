@@ -20,7 +20,7 @@ public abstract class BungeeSubChannel extends Channel {
    * @param plugin     the plugin
    */
   protected BungeeSubChannel(String subChannel, Plugin plugin) {
-    super(MAIN_CHANNEL, plugin);
+    super("BungeeCord", plugin);
     this.subChannel = subChannel;
   }
 
@@ -31,6 +31,33 @@ public abstract class BungeeSubChannel extends Channel {
    */
   public String getSubChannel() {
     return subChannel;
+  }
+
+  /**
+   * Forward the data to other servers
+   *
+   * @param recipient the recipient
+   * @param toServer  the server to forward
+   * @param data      the data
+   */
+  public void sendForward(PluginMessageRecipient recipient, String toServer, byte[] data) {
+    ByteArrayDataOutput dataOutput = ByteStreams.newDataOutput();
+    dataOutput.writeUTF("Forward");
+    dataOutput.writeUTF(toServer);
+    dataOutput.writeUTF(this.subChannel);
+    dataOutput.writeShort(data.length);
+    dataOutput.write(data);
+    super.send(recipient, dataOutput.toByteArray());
+  }
+
+  /**
+   * Forward the data to other servers
+   *
+   * @param toServer the server to forward
+   * @param data     the data
+   */
+  public void sendForward(String toServer, byte[] data) {
+    sendForward(getPlugin().getServer(), toServer, data);
   }
 
   /**
