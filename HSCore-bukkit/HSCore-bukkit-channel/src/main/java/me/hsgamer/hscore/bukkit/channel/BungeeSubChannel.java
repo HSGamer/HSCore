@@ -20,7 +20,7 @@ public abstract class BungeeSubChannel extends Channel {
    * @param plugin     the plugin
    */
   protected BungeeSubChannel(String subChannel, Plugin plugin) {
-    super("BungeeCord", plugin);
+    super(MAIN_CHANNEL, plugin);
     this.subChannel = subChannel;
   }
 

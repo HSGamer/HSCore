@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.bukkit.channel;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -9,6 +11,7 @@ import org.bukkit.plugin.messaging.PluginMessageRecipient;
  * The base channel
  */
 public abstract class Channel implements PluginMessageListener {
+  protected static final String MAIN_CHANNEL = "BungeeCord";
   private final String name;
   private final Plugin plugin;
 
@@ -58,6 +61,36 @@ public abstract class Channel implements PluginMessageListener {
    */
   public void send(byte[] data) {
     this.send(this.plugin.getServer(), data);
+  }
+
+  /**
+   * Forward the data to other servers
+   *
+   * @param recipient the recipient
+   * @param toServer  the server to forward
+   * @param data      the data
+   */
+  public void sendForward(PluginMessageRecipient recipient, String toServer, byte[] data) {
+    ByteArrayDataOutput dataOutput = ByteStreams.newDataOutput();
+    dataOutput.writeUTF("Forward");
+    dataOutput.writeUTF(toServer);
+    dataOutput.writeUTF(this.name);
+    dataOutput.write(data);
+
+    if (!this.plugin.getServer().getMessenger().isOutgoingChannelRegistered(this.plugin, MAIN_CHANNEL)) {
+      this.plugin.getServer().getMessenger().registerOutgoingPluginChannel(this.plugin, MAIN_CHANNEL);
+    }
+    recipient.sendPluginMessage(this.plugin, MAIN_CHANNEL, dataOutput.toByteArray());
+  }
+
+  /**
+   * Forward the data to other servers
+   *
+   * @param toServer the server to forward
+   * @param data     the data
+   */
+  public void sendForward(String toServer, byte[] data) {
+    sendForward(this.plugin.getServer(), toServer, data);
   }
 
   /**
