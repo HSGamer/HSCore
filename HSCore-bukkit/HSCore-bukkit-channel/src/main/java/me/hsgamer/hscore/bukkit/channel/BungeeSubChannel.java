@@ -15,7 +15,7 @@ public abstract class BungeeSubChannel extends Channel {
   /**
    * The logger for ease
    */
-  protected static final Logger LOGGER = Logger.getLogger(BungeeSubChannel.class.getSimpleName());
+  protected final Logger logger = Logger.getLogger(this.getClass().getSimpleName());
 
   private final String subChannel;
 
@@ -58,7 +58,7 @@ public abstract class BungeeSubChannel extends Channel {
       dataOutputStream.write(data);
       super.send(recipient, byteArrayOutputStream.toByteArray());
     } catch (IOException e) {
-      LOGGER.log(Level.WARNING, "There is an exception when sending data", e);
+      logger.log(Level.WARNING, "There is an exception when sending data", e);
     }
   }
 
@@ -94,7 +94,7 @@ public abstract class BungeeSubChannel extends Channel {
         handleSubChannelMessage(player, subData);
       }
     } catch (Exception e) {
-      LOGGER.log(Level.WARNING, "There is an exception when reading data", e);
+      logger.log(Level.WARNING, "There is an exception when reading data", e);
     }
   }
 
@@ -114,7 +114,7 @@ public abstract class BungeeSubChannel extends Channel {
       dataOutputStream.write(data);
       super.send(recipient, byteArrayOutputStream.toByteArray());
     } catch (IOException e) {
-      LOGGER.log(Level.WARNING, "There is an exception when sending data", e);
+      logger.log(Level.WARNING, "There is an exception when sending data", e);
     }
   }
 }
