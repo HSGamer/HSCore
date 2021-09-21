@@ -15,7 +15,7 @@ public abstract class BungeeSubChannel extends Channel {
   /**
    * The logger for ease
    */
-  protected static final Logger LOGGER = Logger.getLogger(BungeeSubChannel.class.getName());
+  protected static final Logger LOGGER = Logger.getLogger(BungeeSubChannel.class.getSimpleName());
 
   private final String subChannel;
 
