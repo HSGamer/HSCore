@@ -10,7 +10,7 @@ public interface Config {
   /**
    * The logger for ease
    */
-  Logger LOGGER = Logger.getLogger("Config");
+  Logger LOGGER = Logger.getLogger(Config.class.getName());
 
   /**
    * Get the original instance
