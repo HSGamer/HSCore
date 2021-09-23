@@ -127,15 +127,42 @@
     </dependency>
   </dependencies>
 
-  <distributionManagement>
-    <repository>
-      <id>codemc-releases</id>
-      <url>https://repo.codemc.io/repository/maven-releases/</url>
-    </repository>
-    <snapshotRepository>
-      <id>codemc-snapshots</id>
-      <url>https://repo.codemc.io/repository/maven-snapshots/</url>
-    </snapshotRepository>
-  </distributionManagement>
+  <profiles>
+    <profile>
+      <id>jenkins</id>
+      <activation>
+        <property>
+          <name>env.JENKINS_HOME</name>
+        </property>
+      </activation>
+
+      <distributionManagement>
+        <repository>
+          <id>codemc-releases</id>
+          <url>https://repo.codemc.io/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+          <id>codemc-snapshots</id>
+          <url>https://repo.codemc.io/repository/maven-snapshots/</url>
+        </snapshotRepository>
+      </distributionManagement>
+    </profile>
+    <profile>
+      <id>github</id>
+      <activation>
+        <property>
+          <name>env.GITHUB_WORKFLOW</name>
+        </property>
+      </activation>
+
+      <distributionManagement>
+        <repository>
+          <id>github</id>
+          <name>GitHub Packages</name>
+          <url>https://maven.pkg.github.com/HSGamer/HSCore</url>
+        </repository>
+      </distributionManagement>
+    </profile>
+  </profiles>
 
 </project>
