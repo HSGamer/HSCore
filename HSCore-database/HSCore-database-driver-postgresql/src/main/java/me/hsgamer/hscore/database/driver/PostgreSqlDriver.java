@@ -8,8 +8,8 @@ import me.hsgamer.hscore.database.Setting;
  */
 public class PostgreSqlDriver implements Driver {
   @Override
-  public String getClassName() {
-    return "org.postgresql.Driver";
+  public Class<? extends java.sql.Driver> getDriverClass() {
+    return org.postgresql.Driver.class;
   }
 
   @Override

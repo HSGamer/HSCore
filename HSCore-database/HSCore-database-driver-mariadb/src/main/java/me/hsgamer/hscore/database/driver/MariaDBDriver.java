@@ -8,8 +8,8 @@ import me.hsgamer.hscore.database.Setting;
  */
 public class MariaDBDriver implements Driver {
   @Override
-  public String getClassName() {
-    return "org.mariadb.jdbc.Driver";
+  public Class<? extends java.sql.Driver> getDriverClass() {
+    return org.mariadb.jdbc.Driver.class;
   }
 
   @Override

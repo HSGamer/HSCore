@@ -9,8 +9,8 @@ import me.hsgamer.hscore.database.Setting;
 public class MySqlDriver implements Driver {
 
   @Override
-  public String getClassName() {
-    return "com.mysql.cj.jdbc.Driver";
+  public Class<? extends java.sql.Driver> getDriverClass() {
+    return com.mysql.cj.jdbc.Driver.class;
   }
 
   @Override

@@ -28,7 +28,7 @@ public class JavaSqlClient implements SqlClient<Object> {
    */
   public JavaSqlClient(Setting setting, Driver driver) throws ClassNotFoundException {
     this.setting = setting;
-    Class.forName(driver.getClassName());
+    Class.forName(driver.getDriverClass().getName());
     StringBuilder builder = new StringBuilder();
     builder.append(driver.convertURL(setting));
     if (!(driver instanceof LocalDriver)) {

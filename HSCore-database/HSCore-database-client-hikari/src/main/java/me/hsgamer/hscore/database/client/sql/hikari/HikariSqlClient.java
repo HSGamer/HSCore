@@ -27,7 +27,7 @@ public class HikariSqlClient implements SqlClient<HikariDataSource> {
   public HikariSqlClient(Setting setting, Driver driver) {
     this.setting = setting;
     final HikariConfig config = new HikariConfig();
-    config.setDriverClassName(driver.getClassName());
+    config.setDriverClassName(driver.getDriverClass().getName());
     config.setJdbcUrl(driver.convertURL(setting));
     if (driver instanceof LocalDriver) {
       config.setPoolName("LOCALDB-" + setting.getDatabaseName());
