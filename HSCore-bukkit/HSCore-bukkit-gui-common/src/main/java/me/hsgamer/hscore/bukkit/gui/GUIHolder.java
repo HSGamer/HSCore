@@ -23,6 +23,7 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
   protected final Plugin plugin;
   protected boolean removeDisplayOnClose = true;
   protected boolean allowMoveItemOnBottom = true;
+  protected boolean allowDragEvent = false;
   protected InventoryType inventoryType = InventoryType.CHEST;
   protected Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
   protected ToIntFunction<UUID> sizeFunction = uuid -> InventoryType.CHEST.getDefaultSize();
@@ -94,6 +95,24 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
    */
   public void setAllowMoveItemOnBottom(boolean allowMoveItemOnBottom) {
     this.allowMoveItemOnBottom = allowMoveItemOnBottom;
+  }
+
+  /**
+   * Check if the holder allows drag event
+   *
+   * @return true if it does
+   */
+  public boolean isAllowDragEvent() {
+    return allowDragEvent;
+  }
+
+  /**
+   * Set that the holder allows drag event
+   *
+   * @param allowDragEvent whether the holder allows drag event
+   */
+  public void setAllowDragEvent(boolean allowDragEvent) {
+    this.allowDragEvent = allowDragEvent;
   }
 
   /**
@@ -253,6 +272,16 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
         }
       });
     }
+    if (!allowDragEvent) {
+      addEventConsumer(InventoryDragEvent.class, event -> {
+        for (int slot : event.getRawSlots()) {
+          if (slot < event.getInventory().getSize()) {
+            event.setCancelled(true);
+            break;
+          }
+        }
+      });
+    }
 
     addEventConsumer(InventoryOpenEvent.class, this::onOpen);
     addEventConsumer(InventoryClickEvent.class, this::onClick);
@@ -305,11 +334,6 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
    * @param event the event
    */
   protected void onDrag(InventoryDragEvent event) {
-    for (int slot : event.getRawSlots()) {
-      if (slot < event.getInventory().getSize()) {
-        event.setCancelled(true);
-        break;
-      }
-    }
+    // EMPTY
   }
 }
