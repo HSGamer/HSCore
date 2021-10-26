@@ -22,8 +22,6 @@ import java.util.function.ToIntFunction;
 public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
   protected final Plugin plugin;
   protected boolean removeDisplayOnClose = true;
-  protected boolean allowMoveItemOnBottom = true;
-  protected boolean allowDragEvent = false;
   protected InventoryType inventoryType = InventoryType.CHEST;
   protected Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
   protected ToIntFunction<UUID> sizeFunction = uuid -> InventoryType.CHEST.getDefaultSize();
@@ -81,38 +79,45 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
 
   /**
    * Set that the holder should not cancel the click event on bottom inventory
-   *
-   * @return true if it should
    */
-  public boolean isAllowMoveItemOnBottom() {
-    return allowMoveItemOnBottom;
+  public void allowMoveItemOnBottom() {
+    addEventConsumer(InventoryClickEvent.class, event -> {
+      if (event.getClickedInventory() == event.getInventory()) {
+        return;
+      }
+      switch (event.getAction()) {
+        case DROP_ALL_SLOT:
+        case DROP_ONE_SLOT:
+        case PICKUP_ALL:
+        case PICKUP_HALF:
+        case PICKUP_ONE:
+        case PICKUP_SOME:
+        case HOTBAR_MOVE_AND_READD:
+        case PLACE_ALL:
+        case PLACE_ONE:
+        case PLACE_SOME:
+        case HOTBAR_SWAP:
+        case SWAP_WITH_CURSOR:
+          event.setCancelled(false);
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   /**
-   * Check if the holder should not cancel the click event on bottom inventory
-   *
-   * @param allowMoveItemOnBottom whether the holder should not cancel the click event on bottom inventory
+   * Set that the holder cancels drag event on top inventory
    */
-  public void setAllowMoveItemOnBottom(boolean allowMoveItemOnBottom) {
-    this.allowMoveItemOnBottom = allowMoveItemOnBottom;
-  }
-
-  /**
-   * Check if the holder allows drag event
-   *
-   * @return true if it does
-   */
-  public boolean isAllowDragEvent() {
-    return allowDragEvent;
-  }
-
-  /**
-   * Set that the holder allows drag event
-   *
-   * @param allowDragEvent whether the holder allows drag event
-   */
-  public void setAllowDragEvent(boolean allowDragEvent) {
-    this.allowDragEvent = allowDragEvent;
+  public void cancelDragEvent() {
+    addEventConsumer(InventoryDragEvent.class, event -> {
+      for (int slot : event.getRawSlots()) {
+        if (slot < event.getInventory().getSize()) {
+          event.setCancelled(true);
+          break;
+        }
+      }
+    });
   }
 
   /**
@@ -246,42 +251,6 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
         removeDisplay(uuid);
       }
     });
-
-    if (allowMoveItemOnBottom) {
-      addEventConsumer(InventoryClickEvent.class, event -> {
-        if (event.getClickedInventory() == event.getInventory()) {
-          return;
-        }
-        switch (event.getAction()) {
-          case DROP_ALL_SLOT:
-          case DROP_ONE_SLOT:
-          case PICKUP_ALL:
-          case PICKUP_HALF:
-          case PICKUP_ONE:
-          case PICKUP_SOME:
-          case HOTBAR_MOVE_AND_READD:
-          case PLACE_ALL:
-          case PLACE_ONE:
-          case PLACE_SOME:
-          case HOTBAR_SWAP:
-          case SWAP_WITH_CURSOR:
-            event.setCancelled(false);
-            break;
-          default:
-            break;
-        }
-      });
-    }
-    if (!allowDragEvent) {
-      addEventConsumer(InventoryDragEvent.class, event -> {
-        for (int slot : event.getRawSlots()) {
-          if (slot < event.getInventory().getSize()) {
-            event.setCancelled(true);
-            break;
-          }
-        }
-      });
-    }
 
     addEventConsumer(InventoryOpenEvent.class, this::onOpen);
     addEventConsumer(InventoryClickEvent.class, this::onClick);
