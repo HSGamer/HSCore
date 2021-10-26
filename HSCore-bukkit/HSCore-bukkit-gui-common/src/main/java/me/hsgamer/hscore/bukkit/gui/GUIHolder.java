@@ -78,49 +78,6 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
   }
 
   /**
-   * Set that the holder should not cancel the click event on bottom inventory
-   */
-  public void allowMoveItemOnBottom() {
-    addEventConsumer(InventoryClickEvent.class, event -> {
-      if (event.getClickedInventory() == event.getInventory()) {
-        return;
-      }
-      switch (event.getAction()) {
-        case DROP_ALL_SLOT:
-        case DROP_ONE_SLOT:
-        case PICKUP_ALL:
-        case PICKUP_HALF:
-        case PICKUP_ONE:
-        case PICKUP_SOME:
-        case HOTBAR_MOVE_AND_READD:
-        case PLACE_ALL:
-        case PLACE_ONE:
-        case PLACE_SOME:
-        case HOTBAR_SWAP:
-        case SWAP_WITH_CURSOR:
-          event.setCancelled(false);
-          break;
-        default:
-          break;
-      }
-    });
-  }
-
-  /**
-   * Set that the holder cancels drag event on top inventory
-   */
-  public void cancelDragEvent() {
-    addEventConsumer(InventoryDragEvent.class, event -> {
-      for (int slot : event.getRawSlots()) {
-        if (slot < event.getInventory().getSize()) {
-          event.setCancelled(true);
-          break;
-        }
-      }
-    });
-  }
-
-  /**
    * Get the inventory type
    *
    * @return the inventory type
