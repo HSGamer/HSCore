@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class AdvancedGUIHolder extends GUIHolder<AdvancedGUIDisplay> {
   private final List<Mask> masks = new LinkedList<>();
 
+  @Deprecated
   public AdvancedGUIHolder(Plugin plugin, boolean removeDisplayOnClose) {
     super(plugin, removeDisplayOnClose);
   }

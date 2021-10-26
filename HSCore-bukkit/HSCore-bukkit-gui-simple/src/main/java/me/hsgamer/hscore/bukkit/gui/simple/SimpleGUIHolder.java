@@ -16,6 +16,7 @@ public class SimpleGUIHolder extends GUIHolder<SimpleGUIDisplay> {
   private final Map<Button, List<Integer>> buttonSlotMap = new ConcurrentHashMap<>();
   private Button defaultButton = Button.EMPTY;
 
+  @Deprecated
   public SimpleGUIHolder(Plugin plugin, boolean removeDisplayOnClose) {
     super(plugin, removeDisplayOnClose);
   }

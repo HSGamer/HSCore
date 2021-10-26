@@ -4,10 +4,7 @@ import me.hsgamer.hscore.ui.BaseHolder;
 import me.hsgamer.hscore.ui.Display;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
@@ -24,7 +21,8 @@ import java.util.function.ToIntFunction;
  */
 public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
   protected final Plugin plugin;
-  protected final boolean removeDisplayOnClose;
+  protected boolean removeDisplayOnClose = true;
+  protected boolean allowMoveItemOnBottom = true;
   protected InventoryType inventoryType = InventoryType.CHEST;
   protected Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
   protected ToIntFunction<UUID> sizeFunction = uuid -> InventoryType.CHEST.getDefaultSize();
@@ -35,10 +33,13 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
    *
    * @param plugin               the plugin
    * @param removeDisplayOnClose whether the display should be removed on close event
+   *
+   * @deprecated use {@link #setRemoveDisplayOnClose(boolean)} before {@link #init()}
    */
+  @Deprecated
   protected GUIHolder(Plugin plugin, boolean removeDisplayOnClose) {
-    this.plugin = plugin;
-    this.removeDisplayOnClose = removeDisplayOnClose;
+    this(plugin);
+    setRemoveDisplayOnClose(removeDisplayOnClose);
   }
 
   /**
@@ -47,7 +48,7 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
    * @param plugin the plugin
    */
   protected GUIHolder(Plugin plugin) {
-    this(plugin, true);
+    this.plugin = plugin;
   }
 
   /**
@@ -66,6 +67,33 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
    */
   public boolean isRemoveDisplayOnClose() {
     return removeDisplayOnClose;
+  }
+
+  /**
+   * Set that the display should be removed on close event
+   *
+   * @param removeDisplayOnClose whether the display should be removed on close event
+   */
+  public void setRemoveDisplayOnClose(boolean removeDisplayOnClose) {
+    this.removeDisplayOnClose = removeDisplayOnClose;
+  }
+
+  /**
+   * Set that the holder should not cancel the click event on bottom inventory
+   *
+   * @return true if it should
+   */
+  public boolean isAllowMoveItemOnBottom() {
+    return allowMoveItemOnBottom;
+  }
+
+  /**
+   * Check if the holder should not cancel the click event on bottom inventory
+   *
+   * @param allowMoveItemOnBottom whether the holder should not cancel the click event on bottom inventory
+   */
+  public void setAllowMoveItemOnBottom(boolean allowMoveItemOnBottom) {
+    this.allowMoveItemOnBottom = allowMoveItemOnBottom;
   }
 
   /**
@@ -200,9 +228,36 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
       }
     });
 
+    if (allowMoveItemOnBottom) {
+      addEventConsumer(InventoryClickEvent.class, event -> {
+        if (event.getClickedInventory() == event.getInventory()) {
+          return;
+        }
+        switch (event.getAction()) {
+          case DROP_ALL_SLOT:
+          case DROP_ONE_SLOT:
+          case PICKUP_ALL:
+          case PICKUP_HALF:
+          case PICKUP_ONE:
+          case PICKUP_SOME:
+          case HOTBAR_MOVE_AND_READD:
+          case PLACE_ALL:
+          case PLACE_ONE:
+          case PLACE_SOME:
+          case HOTBAR_SWAP:
+          case SWAP_WITH_CURSOR:
+            event.setCancelled(false);
+            break;
+          default:
+            break;
+        }
+      });
+    }
+
     addEventConsumer(InventoryOpenEvent.class, this::onOpen);
     addEventConsumer(InventoryClickEvent.class, this::onClick);
     addEventConsumer(InventoryCloseEvent.class, this::onClose);
+    addEventConsumer(InventoryDragEvent.class, this::onDrag);
 
     addEventConsumer(InventoryClickEvent.class, event -> {
       UUID uuid = event.getWhoClicked().getUniqueId();
@@ -242,5 +297,19 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
    */
   protected void onClose(InventoryCloseEvent event) {
     // EMPTY
+  }
+
+  /**
+   * Handle drag event
+   *
+   * @param event the event
+   */
+  protected void onDrag(InventoryDragEvent event) {
+    for (int slot : event.getRawSlots()) {
+      if (slot < event.getInventory().getSize()) {
+        event.setCancelled(true);
+        break;
+      }
+    }
   }
 }

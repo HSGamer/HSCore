@@ -6,6 +6,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.plugin.Plugin;
 
@@ -21,6 +22,14 @@ public class GUIListener implements Listener {
    */
   public static void init(Plugin plugin) {
     Bukkit.getPluginManager().registerEvents(new GUIListener(), plugin);
+  }
+
+  @EventHandler(priority = EventPriority.LOW)
+  public void onInventoryDrag(InventoryDragEvent e) {
+    if (!(e.getInventory().getHolder() instanceof GUIDisplay)) {
+      return;
+    }
+    ((GUIDisplay<?>) e.getInventory().getHolder()).handleEvent(e);
   }
 
   @EventHandler(priority = EventPriority.LOW)
