@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
@@ -26,12 +27,13 @@ public class InputButton implements Button {
 
   @Override
   public void handleAction(UUID uuid, InventoryClickEvent event) {
-    ItemStack item = event.getCursor();
-    if (item != null && item.getType() != Material.AIR) {
-      return;
-    }
-    ItemStack storeItem = map.remove(uuid);
+    ItemStack cursorItem = Optional.ofNullable(event.getCursor())
+      .filter(itemStack -> itemStack.getType() != Material.AIR)
+      .map(ItemStack::clone)
+      .orElse(null);
+    ItemStack storeItem = map.get(uuid);
     event.getWhoClicked().setItemOnCursor(storeItem);
+    map.compute(uuid, (uuid1, item) -> cursorItem);
   }
 
   @Override
