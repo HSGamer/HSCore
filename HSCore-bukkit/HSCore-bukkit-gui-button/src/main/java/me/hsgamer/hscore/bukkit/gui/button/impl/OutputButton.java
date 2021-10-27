@@ -9,20 +9,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 /**
  * The button that stores the output button for the viewer
  */
 public class OutputButton implements Button {
   private final Map<UUID, ItemStack> map = new IdentityHashMap<>();
-  private Function<@NotNull UUID, @Nullable ItemStack> defaultItemFunction = uuid -> null;
+  private BiFunction<@NotNull UUID, @Nullable ItemStack, @Nullable ItemStack> displayItemFunction = (uuid, item) -> item;
 
   @Override
   public ItemStack getItemStack(UUID uuid) {
-    return Optional.ofNullable(map.get(uuid)).orElseGet(() -> defaultItemFunction.apply(uuid));
+    return displayItemFunction.apply(uuid, map.get(uuid));
   }
 
   @Override
@@ -70,9 +69,9 @@ public class OutputButton implements Button {
   /**
    * Set the function to display the item on the GUI
    *
-   * @param defaultItemFunction the function
+   * @param displayItemFunction the function
    */
-  public void setDefaultItemFunction(@NotNull Function<UUID, ItemStack> defaultItemFunction) {
-    this.defaultItemFunction = defaultItemFunction;
+  public void setDisplayItemFunction(@NotNull BiFunction<UUID, ItemStack, ItemStack> displayItemFunction) {
+    this.displayItemFunction = displayItemFunction;
   }
 }
