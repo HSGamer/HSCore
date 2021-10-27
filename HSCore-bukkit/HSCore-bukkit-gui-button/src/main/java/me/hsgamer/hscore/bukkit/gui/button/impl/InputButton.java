@@ -22,7 +22,7 @@ public class InputButton implements Button {
 
   @Override
   public ItemStack getItemStack(UUID uuid) {
-    return displayItemFunction.apply(uuid, map.get(uuid));
+    return displayItemFunction.apply(uuid, getInputItem(uuid));
   }
 
   @Override
@@ -31,9 +31,9 @@ public class InputButton implements Button {
       .filter(itemStack -> itemStack.getType() != Material.AIR)
       .map(ItemStack::clone)
       .orElse(null);
-    ItemStack storeItem = map.get(uuid);
+    ItemStack storeItem = getInputItem(uuid);
     event.getWhoClicked().setItemOnCursor(storeItem);
-    map.compute(uuid, (uuid1, item) -> cursorItem);
+    setInputItem(uuid, cursorItem);
   }
 
   @Override

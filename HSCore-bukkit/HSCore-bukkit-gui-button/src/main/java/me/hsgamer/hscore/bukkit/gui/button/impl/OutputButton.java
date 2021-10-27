@@ -21,7 +21,7 @@ public class OutputButton implements Button {
 
   @Override
   public ItemStack getItemStack(UUID uuid) {
-    return displayItemFunction.apply(uuid, map.get(uuid));
+    return displayItemFunction.apply(uuid, getOutputItem(uuid));
   }
 
   @Override
@@ -30,8 +30,9 @@ public class OutputButton implements Button {
     if (item != null && item.getType() != Material.AIR) {
       return;
     }
-    ItemStack storeItem = map.remove(uuid);
+    ItemStack storeItem = getOutputItem(uuid);
     event.getWhoClicked().setItemOnCursor(storeItem);
+    setOutputItem(uuid, null);
   }
 
   @Override
