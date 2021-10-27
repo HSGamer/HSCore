@@ -43,11 +43,6 @@ public abstract class MaskPaginatedMask extends PaginatedMask {
   }
 
   @Override
-  public void init() {
-    // EMPTY
-  }
-
-  @Override
   public void stop() {
     this.pageNumberMap.clear();
   }

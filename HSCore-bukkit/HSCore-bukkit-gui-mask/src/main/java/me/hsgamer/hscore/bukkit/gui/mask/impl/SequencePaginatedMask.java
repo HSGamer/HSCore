@@ -69,11 +69,6 @@ public abstract class SequencePaginatedMask extends PaginatedMask {
   }
 
   @Override
-  public void init() {
-    // EMPTY
-  }
-
-  @Override
   public void stop() {
     this.slots.clear();
     this.pageNumberMap.clear();

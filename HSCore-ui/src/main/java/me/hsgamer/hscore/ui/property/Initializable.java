@@ -4,10 +4,14 @@ public interface Initializable {
   /**
    * Initialize some properties for the object
    */
-  void init();
+  default void init() {
+    // EMPTY
+  }
 
   /**
    * Stop the object
    */
-  void stop();
+  default void stop() {
+    // EMPTY
+  }
 }
