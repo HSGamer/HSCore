@@ -63,6 +63,7 @@ public final class AddonClassLoader extends URLClassLoader {
     super(new URL[]{file.toURI().toURL()}, parent);
     this.addonManager = addonManager;
     this.file = file;
+    this.addonDescription = addonDescription;
     final Class<?> clazz = Class.forName(addonDescription.getMainClass(), true, this);
     final Class<? extends Addon> newClass;
     if (Addon.class.isAssignableFrom(clazz)) {
@@ -71,7 +72,6 @@ public final class AddonClassLoader extends URLClassLoader {
       throw new ClassCastException("The main class does not extend Addon");
     }
     this.addon = newClass.getDeclaredConstructor().newInstance();
-    this.addonDescription = addonDescription;
   }
 
   /**
