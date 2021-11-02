@@ -6,6 +6,7 @@ import com.cronutils.model.definition.CronDefinition;
 import com.cronutils.model.definition.CronDefinitionBuilder;
 import com.cronutils.model.time.ExecutionTime;
 import com.cronutils.parser.CronParser;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -27,7 +28,7 @@ public class CronTimeManager {
    *
    * @param cronList the cron list
    */
-  public CronTimeManager(List<Cron> cronList) {
+  public CronTimeManager(@NotNull List<Cron> cronList) {
     this.cronList = cronList;
   }
 
@@ -36,7 +37,7 @@ public class CronTimeManager {
    *
    * @param crons the cron list
    */
-  public CronTimeManager(Cron... crons) {
+  public CronTimeManager(@NotNull Cron... crons) {
     this.cronList = Arrays.asList(crons);
   }
 
@@ -46,7 +47,7 @@ public class CronTimeManager {
    * @param definition  the cron definition
    * @param cronStrings the cron string list
    */
-  public CronTimeManager(CronDefinition definition, List<String> cronStrings) {
+  public CronTimeManager(@NotNull CronDefinition definition, @NotNull List<String> cronStrings) {
     this.cronList = new ArrayList<>();
     CronParser parser = new CronParser(definition);
     cronStrings.forEach(cronTime -> {
@@ -65,7 +66,7 @@ public class CronTimeManager {
    * @param definition  the cron definition
    * @param cronStrings the cron string list
    */
-  public CronTimeManager(CronDefinition definition, String... cronStrings) {
+  public CronTimeManager(@NotNull CronDefinition definition, @NotNull String... cronStrings) {
     this(definition, Arrays.asList(cronStrings));
   }
 
@@ -75,7 +76,7 @@ public class CronTimeManager {
    * @param cronType    the cron type
    * @param cronStrings the cron string list
    */
-  public CronTimeManager(CronType cronType, List<String> cronStrings) {
+  public CronTimeManager(@NotNull CronType cronType, @NotNull List<String> cronStrings) {
     this(CronDefinitionBuilder.instanceDefinitionFor(cronType), cronStrings);
   }
 
@@ -85,7 +86,7 @@ public class CronTimeManager {
    * @param cronType    the cron type
    * @param cronStrings the cron string list
    */
-  public CronTimeManager(CronType cronType, String... cronStrings) {
+  public CronTimeManager(@NotNull CronType cronType, @NotNull String... cronStrings) {
     this(cronType, Arrays.asList(cronStrings));
   }
 
@@ -94,6 +95,7 @@ public class CronTimeManager {
    *
    * @return the next time
    */
+  @NotNull
   public ZonedDateTime getNextTime() {
     return getNextTime(ZonedDateTime.now());
   }
@@ -105,7 +107,8 @@ public class CronTimeManager {
    *
    * @return the next time
    */
-  public ZonedDateTime getNextTime(ZonedDateTime initTime) {
+  @NotNull
+  public ZonedDateTime getNextTime(@NotNull ZonedDateTime initTime) {
     long currentMillis = initTime.toInstant().toEpochMilli();
 
     long minDelayMillis = -1;
@@ -141,7 +144,7 @@ public class CronTimeManager {
    *
    * @return the epoch millis
    */
-  public long getNextEpochMillis(ZonedDateTime initTime) {
+  public long getNextEpochMillis(@NotNull ZonedDateTime initTime) {
     return getNextTime(initTime).toInstant().toEpochMilli();
   }
 
@@ -161,7 +164,7 @@ public class CronTimeManager {
    *
    * @return the millis
    */
-  public long getRemainingMillis(ZonedDateTime initTime) {
+  public long getRemainingMillis(@NotNull ZonedDateTime initTime) {
     return getNextEpochMillis(initTime) - System.currentTimeMillis();
   }
 
@@ -170,6 +173,7 @@ public class CronTimeManager {
    *
    * @return the cron list
    */
+  @NotNull
   public List<Cron> getCronList() {
     return Collections.unmodifiableList(cronList);
   }
