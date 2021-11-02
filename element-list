@@ -39,6 +39,7 @@ me.hsgamer.hscore.config.converter
 me.hsgamer.hscore.config.path
 me.hsgamer.hscore.config.simpleconfiguration
 me.hsgamer.hscore.config.simplixstorage
+me.hsgamer.hscore.crontime
 me.hsgamer.hscore.database
 me.hsgamer.hscore.database.client.sql
 me.hsgamer.hscore.database.client.sql.hikari
