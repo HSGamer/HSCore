@@ -99,19 +99,19 @@ public class CronTimeManager {
   }
 
   /**
-   * Get the next time from the current time
+   * Get the next time from the initial time
    *
-   * @param currentTime the current time
+   * @param initTime the initial time to get the next time
    *
    * @return the next time
    */
-  public ZonedDateTime getNextTime(ZonedDateTime currentTime) {
-    long currentMillis = currentTime.toInstant().toEpochMilli();
+  public ZonedDateTime getNextTime(ZonedDateTime initTime) {
+    long currentMillis = initTime.toInstant().toEpochMilli();
 
     long minDelayMillis = -1;
-    ZonedDateTime nextDateTime = currentTime;
+    ZonedDateTime nextDateTime = initTime;
     for (Cron cron : cronList) {
-      Optional<ZonedDateTime> optionalTime = ExecutionTime.forCron(cron).nextExecution(currentTime);
+      Optional<ZonedDateTime> optionalTime = ExecutionTime.forCron(cron).nextExecution(initTime);
       if (optionalTime.isPresent()) {
         ZonedDateTime time = optionalTime.get();
         long delayMillis = time.toInstant().toEpochMilli() - currentMillis;
@@ -135,14 +135,34 @@ public class CronTimeManager {
   }
 
   /**
-   * Get the next epoch millis from the current time
+   * Get the next epoch millis from the initial time
    *
-   * @param currentTime the current time
+   * @param initTime the initial time to get the next time
    *
    * @return the epoch millis
    */
-  public long getNextEpochMillis(ZonedDateTime currentTime) {
-    return getNextTime(currentTime).toInstant().toEpochMilli();
+  public long getNextEpochMillis(ZonedDateTime initTime) {
+    return getNextTime(initTime).toInstant().toEpochMilli();
+  }
+
+  /**
+   * Get the remaining millis from now to the next time
+   *
+   * @return the millis
+   */
+  public long getRemainingMillis() {
+    return getNextEpochMillis() - System.currentTimeMillis();
+  }
+
+  /**
+   * Get the remaining millis from now to the next time
+   *
+   * @param initTime the initial time to get the next time
+   *
+   * @return the millis
+   */
+  public long getRemainingMillis(ZonedDateTime initTime) {
+    return getNextEpochMillis(initTime) - System.currentTimeMillis();
   }
 
   /**
