@@ -13,6 +13,7 @@
   * **`HSCore-builder`**
   * **`HSCore-common`**
   * **`HSCore-collections`**
+  * **`HSCore-crontime`**
   * **`HSCore-downloader`**
   * **`HSCore-expression`**
   * **`HSCore-request`**

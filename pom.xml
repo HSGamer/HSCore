@@ -47,6 +47,7 @@
     <module>HSCore-database</module>
     <module>HSCore-ui</module>
     <module>HSCore-downloader</module>
+    <module>HSCore-crontime</module>
     <module>HSCore-bukkit</module>
     <module>HSCore-bungeecord</module>
     <module>HSCore-all</module>
