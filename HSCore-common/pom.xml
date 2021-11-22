@@ -6,7 +6,7 @@
   <parent>
     <artifactId>HSCore</artifactId>
     <groupId>me.HSGamer</groupId>
-    <version>3.17</version>
+    <version>3.18-SNAPSHOT</version>
   </parent>
   <artifactId>HSCore-common</artifactId>
 
