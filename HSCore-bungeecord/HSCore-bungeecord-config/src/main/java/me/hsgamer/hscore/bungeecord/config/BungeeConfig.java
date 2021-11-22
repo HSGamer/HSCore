@@ -77,7 +77,7 @@ public class BungeeConfig implements Config {
   public void setup() {
     if (!this.file.exists()) {
       File parentFile = this.file.getAbsoluteFile().getParentFile();
-      if (!parentFile.exists()) {
+      if (parentFile != null && !parentFile.exists()) {
         parentFile.mkdirs();
       }
       try {

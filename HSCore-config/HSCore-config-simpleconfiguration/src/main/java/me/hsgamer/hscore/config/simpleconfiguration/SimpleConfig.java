@@ -96,7 +96,7 @@ public class SimpleConfig<T extends FileConfiguration> implements Config, Commen
   public void setup() {
     if (!this.file.exists()) {
       File parentFile = this.file.getAbsoluteFile().getParentFile();
-      if (!parentFile.exists()) {
+      if (parentFile != null && !parentFile.exists()) {
         parentFile.mkdirs();
       }
       try {
