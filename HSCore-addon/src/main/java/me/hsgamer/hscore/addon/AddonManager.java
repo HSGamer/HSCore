@@ -94,8 +94,7 @@ public abstract class AddonManager {
             return;
           }
           // Try to load the addon
-          final AddonClassLoader loader = new AddonClassLoader(this, file, addonDescription,
-            this.getClass().getClassLoader());
+          final AddonClassLoader loader = new AddonClassLoader(this, file, addonDescription, this.getClass().getClassLoader());
           final Addon addon = loader.getAddon();
           if (this.onAddonLoading(addon)) {
             addonMap.put(addonDescription.getName(), loader.getAddon());
@@ -278,6 +277,25 @@ public abstract class AddonManager {
       .flatMap(entry -> Optional.ofNullable(entry.getValue().findClass(name, false)).map(Stream::of).orElse(Stream.empty()))
       .findAny()
       .orElse(null);
+  }
+
+  /**
+   * Load a class for an addon
+   *
+   * @param addon   the calling addon
+   * @param name    the class name
+   * @param resolve the resolve flag
+   *
+   * @return the class, or null if it's not found
+   */
+  @NotNull
+  public Class<?> loadClass(@NotNull final Addon addon, @NotNull final String name, final boolean resolve) {
+    return this.loaderMap.entrySet()
+      .parallelStream()
+      .filter(entry -> entry.getKey() != addon)
+      .flatMap(entry -> Optional.ofNullable(entry.getValue().loadClass(name, resolve, false)).map(Stream::of).orElse(Stream.empty()))
+      .findAny()
+      .orElseThrow(() -> new IllegalStateException("Class not found: " + name));
   }
 
   /**

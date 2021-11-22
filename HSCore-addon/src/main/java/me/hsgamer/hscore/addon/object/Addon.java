@@ -178,8 +178,7 @@ public abstract class Addon {
       if (jarConfig != null) {
         try (final InputStream in = jar.getInputStream(jarConfig)) {
           if (in == null) {
-            throw new IllegalArgumentException(
-              "The embedded resource '" + newPath + "' cannot be found");
+            throw new IllegalArgumentException("The embedded resource '" + newPath + "' cannot be found");
           }
           final File out = new File(this.getDataFolder(), newPath);
           out.getParentFile().mkdirs();
