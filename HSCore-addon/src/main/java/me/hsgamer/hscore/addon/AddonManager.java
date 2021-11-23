@@ -43,6 +43,8 @@ public abstract class AddonManager {
   @NotNull
   private final Logger logger;
 
+  private final ClassLoader parentClassLoader;
+
   /**
    * Create a new addon manager
    *
@@ -55,6 +57,7 @@ public abstract class AddonManager {
     if (!addonsDir.exists()) {
       addonsDir.mkdirs();
     }
+    this.parentClassLoader = this.getClass().getClassLoader();
   }
 
   /**
@@ -94,7 +97,7 @@ public abstract class AddonManager {
             return;
           }
           // Try to load the addon
-          final AddonClassLoader loader = new AddonClassLoader(this, file, addonDescription, this.getClass().getClassLoader());
+          final AddonClassLoader loader = new AddonClassLoader(this, file, addonDescription, this.parentClassLoader);
           final Addon addon = loader.getAddon();
           if (this.onAddonLoading(addon)) {
             addonMap.put(addonDescription.getName(), loader.getAddon());
