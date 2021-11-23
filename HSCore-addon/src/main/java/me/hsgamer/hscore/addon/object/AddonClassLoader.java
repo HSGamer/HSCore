@@ -106,27 +106,6 @@ public final class AddonClassLoader extends URLClassLoader {
   }
 
   /**
-   * Load class by the name
-   *
-   * @param name    the class name
-   * @param resolve the resolve flag
-   * @param global  whether it'll try to search globally
-   *
-   * @return the class, or null if it's not found
-   */
-  public Class<?> loadClass(@NotNull final String name, final boolean resolve, final boolean global) {
-    Class<?> clazz = null;
-    try {
-      clazz = super.loadClass(name, resolve);
-    } catch (final ClassNotFoundException | NoClassDefFoundError e) {
-      if (global) {
-        clazz = this.addonManager.loadClass(this.addon, name, resolve);
-      }
-    }
-    return clazz;
-  }
-
-  /**
    * Get the addon jar
    *
    * @return the addon jar
@@ -160,17 +139,6 @@ public final class AddonClassLoader extends URLClassLoader {
   @NotNull
   protected Class<?> findClass(@NotNull final String name) throws ClassNotFoundException {
     Class<?> clazz = this.findClass(name, true);
-    if (clazz == null) {
-      throw new ClassNotFoundException(name);
-    } else {
-      return clazz;
-    }
-  }
-
-  @Override
-  @NotNull
-  protected Class<?> loadClass(@NotNull final String name, final boolean resolve) throws ClassNotFoundException {
-    Class<?> clazz = this.loadClass(name, resolve, true);
     if (clazz == null) {
       throw new ClassNotFoundException(name);
     } else {

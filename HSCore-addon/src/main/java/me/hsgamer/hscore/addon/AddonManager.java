@@ -280,25 +280,6 @@ public abstract class AddonManager {
   }
 
   /**
-   * Load a class for an addon
-   *
-   * @param addon   the calling addon
-   * @param name    the class name
-   * @param resolve the resolve flag
-   *
-   * @return the class, or null if it's not found
-   */
-  @NotNull
-  public Class<?> loadClass(@NotNull final Addon addon, @NotNull final String name, final boolean resolve) {
-    return this.loaderMap.entrySet()
-      .parallelStream()
-      .filter(entry -> entry.getKey() != addon)
-      .flatMap(entry -> Optional.ofNullable(entry.getValue().loadClass(name, resolve, false)).map(Stream::of).orElse(Stream.empty()))
-      .findAny()
-      .orElseThrow(() -> new IllegalStateException("Class not found: " + name));
-  }
-
-  /**
    * Filter and sort the order of the addons
    *
    * @param original the original map
