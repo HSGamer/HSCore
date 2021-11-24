@@ -1,99 +1,31 @@
 package me.hsgamer.hscore.bukkit.baseplugin;
 
 import me.hsgamer.hscore.bukkit.command.CommandManager;
+import me.hsgamer.hscore.bukkit.simpleplugin.SimplePlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.JavaPluginLoader;
-
-import java.io.File;
 
 /**
  * A slightly complicated JavaPlugin implementation
  */
-public abstract class BasePlugin extends JavaPlugin {
+public abstract class BasePlugin extends SimplePlugin {
   private final CommandManager commandManager = new CommandManager(this);
-
-  public BasePlugin() {
-    super();
-    preLoad();
-  }
-
-  protected BasePlugin(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
-    super(loader, description, dataFolder, file);
-    preLoad();
-  }
 
   @Override
   public final void onLoad() {
-    load();
+    super.onLoad();
   }
 
   @Override
   public final void onEnable() {
-    enable();
-
-    Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-      postEnable();
-      CommandManager.syncCommand();
-    });
+    super.onLoad();
+    Bukkit.getScheduler().scheduleSyncDelayedTask(this, CommandManager::syncCommand);
   }
 
   @Override
   public final void onDisable() {
-    disable();
-
-    getServer().getScheduler().cancelTasks(this);
-    getServer().getServicesManager().unregisterAll(this);
-    HandlerList.unregisterAll(this);
+    super.onDisable();
     commandManager.unregisterAll();
-
-    postDisable();
-  }
-
-  /**
-   * Execute on the constructor
-   */
-  public void preLoad() {
-    // Preload logic
-  }
-
-  /**
-   * Execute when loading the plugin
-   */
-  public void load() {
-    // Load logic
-  }
-
-  /**
-   * Execute when enabling the plugin
-   */
-  public void enable() {
-    // Enable logic
-  }
-
-  /**
-   * Execute after enabling all plugins
-   */
-  public void postEnable() {
-    // Post Enable logic
-  }
-
-  /**
-   * Execute when disabling the plugin
-   */
-  public void disable() {
-    // Disable logic
-  }
-
-  /**
-   * Execute after disabling all tasks, listeners and commands
-   */
-  public void postDisable() {
-    // Post Disable logic
   }
 
   /**
@@ -103,15 +35,6 @@ public abstract class BasePlugin extends JavaPlugin {
    */
   public void registerCommand(Command command) {
     commandManager.register(command);
-  }
-
-  /**
-   * Register the listener
-   *
-   * @param listener the listener
-   */
-  public void registerListener(Listener listener) {
-    getServer().getPluginManager().registerEvents(listener, this);
   }
 
   /**

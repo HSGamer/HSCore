@@ -84,6 +84,11 @@
     </dependency>
     <dependency>
       <groupId>me.HSGamer</groupId>
+      <artifactId>HSCore-bukkit-simpleplugin</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.HSGamer</groupId>
       <artifactId>HSCore-bukkit-baseplugin</artifactId>
       <version>${project.version}</version>
     </dependency>
