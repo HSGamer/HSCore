@@ -10,7 +10,7 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 import java.io.File;
 
 /**
- * A convenient JavaPlugin implementation
+ * A convenient {@link JavaPlugin} implementation
  */
 public abstract class SimplePlugin extends JavaPlugin {
   public SimplePlugin() {

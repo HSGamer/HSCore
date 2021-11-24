@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 
 /**
- * A slightly complicated JavaPlugin implementation
+ * A slightly complicated {@link SimplePlugin} implementation
  */
 public abstract class BasePlugin extends SimplePlugin {
   private final CommandManager commandManager = new CommandManager(this);
