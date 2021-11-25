@@ -43,6 +43,10 @@ public abstract class AddonManager {
   @NotNull
   private final Logger logger;
 
+  /**
+   * The parent class loader to load all addons
+   */
+  @NotNull
   private final ClassLoader parentClassLoader;
 
   /**
