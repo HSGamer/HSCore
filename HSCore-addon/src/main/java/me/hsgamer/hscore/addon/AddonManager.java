@@ -62,16 +62,17 @@ public abstract class AddonManager {
   /**
    * Create a new addon manager
    *
-   * @param addonsDir the directory to store addon files
-   * @param logger    the logger to use in every addon
+   * @param addonsDir         the directory to store addon files
+   * @param logger            the logger to use in every addon
+   * @param parentClassLoader the parent class loader to load all addons
    */
   protected AddonManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull final ClassLoader parentClassLoader) {
     this.logger = logger;
     this.addonsDir = addonsDir;
+    this.parentClassLoader = parentClassLoader;
     if (!addonsDir.exists()) {
       addonsDir.mkdirs();
     }
-    this.parentClassLoader = parentClassLoader;
   }
 
   /**
