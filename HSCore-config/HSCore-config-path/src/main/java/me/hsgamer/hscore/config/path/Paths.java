@@ -3,6 +3,7 @@ package me.hsgamer.hscore.config.path;
 import me.hsgamer.hscore.config.BaseConfigPath;
 import me.hsgamer.hscore.config.CommentablePath;
 import me.hsgamer.hscore.config.ConfigPath;
+import me.hsgamer.hscore.config.StickyConfigPath;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -24,6 +25,18 @@ public final class Paths {
    */
   public static <T> CommentablePath<T> commented(@NotNull ConfigPath<T> path, @NotNull String... comments) {
     return new CommentablePath<>(path, comments);
+  }
+
+  /**
+   * Create a sticky config path
+   *
+   * @param path the path to the value
+   * @param <T>  the type of the value
+   *
+   * @return the sticky config path
+   */
+  public static <T> StickyConfigPath<T> sticky(@NotNull ConfigPath<T> path) {
+    return new StickyConfigPath<>(path);
   }
 
   /**
