@@ -1,13 +1,12 @@
 package me.hsgamer.hscore.config.path;
 
-import me.hsgamer.hscore.config.BaseConfigPath;
 import me.hsgamer.hscore.config.CommentablePath;
 import me.hsgamer.hscore.config.ConfigPath;
 import me.hsgamer.hscore.config.StickyConfigPath;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Utility to easily create {@link BaseConfigPath}
+ * Utility to easily create {@link ConfigPath}
  */
 public final class Paths {
 
