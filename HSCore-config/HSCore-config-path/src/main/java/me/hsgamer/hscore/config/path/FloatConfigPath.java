@@ -2,7 +2,7 @@ package me.hsgamer.hscore.config.path;
 
 import me.hsgamer.hscore.config.BaseConfigPath;
 
-public final class FloatConfigPath extends BaseConfigPath<Float> {
+public class FloatConfigPath extends BaseConfigPath<Float> {
 
   /**
    * Create a config path

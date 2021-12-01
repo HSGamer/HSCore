@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public final class FireworkEffectConfigPath extends SerializableMapConfigPath<FireworkEffect> {
+public class FireworkEffectConfigPath extends SerializableMapConfigPath<FireworkEffect> {
 
   /**
    * Create a config path

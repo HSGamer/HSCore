@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public final class AttributeModifierConfigPath extends SerializableMapConfigPath<AttributeModifier> {
+public class AttributeModifierConfigPath extends SerializableMapConfigPath<AttributeModifier> {
 
   /**
    * Create a config path

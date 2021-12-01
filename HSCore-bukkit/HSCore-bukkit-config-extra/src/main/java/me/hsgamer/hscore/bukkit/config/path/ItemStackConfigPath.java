@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 import java.util.function.Function;
 
-public final class ItemStackConfigPath extends SerializableMapConfigPath<ItemStack> {
+public class ItemStackConfigPath extends SerializableMapConfigPath<ItemStack> {
   private final Function<Map<String, Object>, ItemStack> deserializer;
   private final Function<ItemStack, Map<String, Object>> serializer;
 

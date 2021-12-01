@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public final class PatternConfigPath extends SerializableMapConfigPath<Pattern> {
+public class PatternConfigPath extends SerializableMapConfigPath<Pattern> {
 
   /**
    * Create a config path

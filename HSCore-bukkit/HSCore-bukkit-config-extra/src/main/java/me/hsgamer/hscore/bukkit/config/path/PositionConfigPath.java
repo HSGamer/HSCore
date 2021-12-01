@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public final class PositionConfigPath extends SerializableMapConfigPath<Position> {
+public class PositionConfigPath extends SerializableMapConfigPath<Position> {
 
   /**
    * Create a config path

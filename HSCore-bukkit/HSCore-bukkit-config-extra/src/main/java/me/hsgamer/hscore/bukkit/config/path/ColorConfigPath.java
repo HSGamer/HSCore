@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public final class ColorConfigPath extends SerializableMapConfigPath<Color> {
+public class ColorConfigPath extends SerializableMapConfigPath<Color> {
 
   /**
    * Create a config path

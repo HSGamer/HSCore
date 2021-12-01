@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public final class PotionEffectConfigPath extends SerializableMapConfigPath<PotionEffect> {
+public class PotionEffectConfigPath extends SerializableMapConfigPath<PotionEffect> {
 
   /**
    * Create a config path

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public final class SoundConfigPath extends SerializableMapConfigPath<PlayableSound> {
+public class SoundConfigPath extends SerializableMapConfigPath<PlayableSound> {
 
   /**
    * Create a config path
