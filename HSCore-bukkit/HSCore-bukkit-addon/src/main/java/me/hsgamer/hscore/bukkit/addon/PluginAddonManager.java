@@ -20,11 +20,21 @@ public abstract class PluginAddonManager extends AddonManager {
   /**
    * Create a new addon manager
    *
+   * @param javaPlugin  the plugin
+   * @param addonFolder the addon folder
+   */
+  protected PluginAddonManager(@NotNull final JavaPlugin javaPlugin, @NotNull final File addonFolder) {
+    super(addonFolder, javaPlugin.getLogger());
+    this.javaPlugin = javaPlugin;
+  }
+
+  /**
+   * Create a new addon manager
+   *
    * @param javaPlugin the plugin
    */
   protected PluginAddonManager(@NotNull final JavaPlugin javaPlugin) {
-    super(new File(javaPlugin.getDataFolder(), "addon"), javaPlugin.getLogger());
-    this.javaPlugin = javaPlugin;
+    this(javaPlugin, new File(javaPlugin.getDataFolder(), "addon"));
   }
 
   /**
