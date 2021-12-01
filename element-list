@@ -20,6 +20,7 @@ me.hsgamer.hscore.bukkit.gui.mask.impl
 me.hsgamer.hscore.bukkit.gui.simple
 me.hsgamer.hscore.bukkit.item
 me.hsgamer.hscore.bukkit.item.modifier
+me.hsgamer.hscore.bukkit.simpleplugin
 me.hsgamer.hscore.bukkit.subcommand
 me.hsgamer.hscore.bukkit.utils
 me.hsgamer.hscore.bungeecord.channel
