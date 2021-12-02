@@ -18,7 +18,7 @@ public abstract class BasePlugin extends SimplePlugin {
 
   @Override
   public final void onEnable() {
-    super.onLoad();
+    super.onEnable();
     Bukkit.getScheduler().scheduleSyncDelayedTask(this, CommandManager::syncCommand);
   }
 
