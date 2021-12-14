@@ -5,6 +5,7 @@ import com.udojava.evalex.Expression.ExpressionException;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -24,6 +25,6 @@ public class Average extends AbstractFunction {
     }
     return parameters.stream()
       .reduce(BigDecimal.ZERO, BigDecimal::add)
-      .divide(new BigDecimal(parameters.size()));
+      .divide(new BigDecimal(parameters.size()), RoundingMode.HALF_EVEN);
   }
 }

@@ -38,11 +38,11 @@ public final class ExpressionUtils {
   }
 
   /**
-   * Check if the expression is an Boolean expression
+   * Check if the expression is a Boolean expression
    *
    * @param input the expression
    *
-   * @return whether it's an Boolean expression
+   * @return whether it's a Boolean expression
    */
   public static boolean isBoolean(@NotNull String input) {
     Expression expression = new Expression(input);
@@ -69,14 +69,26 @@ public final class ExpressionUtils {
       return number.get();
     }
 
-    Expression expression = new Expression(input);
-    applyLazyFunction(expression);
-    applyLazyOperator(expression);
     try {
-      return expression.eval();
+      return createExpression(input).eval();
     } catch (Exception e) {
       return null;
     }
+  }
+
+  /**
+   * Create an expression from a string
+   *
+   * @param input the string
+   *
+   * @return the expression
+   */
+  @NotNull
+  public static Expression createExpression(@NotNull String input) {
+    Expression expression = new Expression(input);
+    applyLazyFunction(expression);
+    applyLazyOperator(expression);
+    return expression;
   }
 
   /**

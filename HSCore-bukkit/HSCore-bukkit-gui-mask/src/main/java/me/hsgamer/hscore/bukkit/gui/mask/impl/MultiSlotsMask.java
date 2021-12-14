@@ -6,7 +6,7 @@ import me.hsgamer.hscore.bukkit.gui.mask.BaseMask;
 import java.util.*;
 
 /**
- * The masks with multiple slots
+ * The masks with multiple slot
  */
 public class MultiSlotsMask extends BaseMask {
   protected final List<Integer> slots = new ArrayList<>();

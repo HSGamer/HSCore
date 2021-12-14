@@ -64,7 +64,7 @@ public interface Config {
   Map<String, Object> getValues(String path, boolean deep);
 
   /**
-   * Setup the configuration
+   * Set up the configuration
    */
   void setup();
 

@@ -25,6 +25,6 @@ public class SqliteDriver extends LocalDriver {
 
   @Override
   public String convertURL(Setting setting) {
-    return "jdbc:sqlite:" + Paths.get(getFolder().getAbsolutePath(), setting.getDatabaseName() + ".db").toString();
+    return "jdbc:sqlite:" + Paths.get(getFolder().getAbsolutePath(), setting.getDatabaseName() + ".db");
   }
 }
