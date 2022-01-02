@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>hscore</artifactId>
+    <groupId>me.hsgamer</groupId>
+    <version>4.0.0-SNAPSHOT</version>
+  </parent>
+  <packaging>pom</packaging>
+  <artifactId>hscore-bukkit</artifactId>
+
+  <modules>
+    <module>hscore-bukkit-addon</module>
+    <module>hscore-bukkit-utils</module>
+    <module>hscore-bukkit-command</module>
+    <module>hscore-bukkit-subcommand</module>
+    <module>hscore-bukkit-command-extra</module>
+    <module>hscore-bukkit-config</module>
+    <module>hscore-bukkit-config-extra</module>
+    <module>hscore-bukkit-clicktype</module>
+    <module>hscore-bukkit-item</module>
+    <module>hscore-bukkit-gui-button</module>
+    <module>hscore-bukkit-gui-mask</module>
+    <module>hscore-bukkit-gui-common</module>
+    <module>hscore-bukkit-gui-simple</module>
+    <module>hscore-bukkit-gui-advanced</module>
+    <module>hscore-bukkit-simpleplugin</module>
+    <module>hscore-bukkit-baseplugin</module>
+    <module>hscore-bukkit-channel</module>
+    <module>hscore-bukkit-all</module>
+  </modules>
+
+  <repositories>
+    <repository>
+      <id>nms-repo</id>
+      <url>https://repo.codemc.org/repository/nms/</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <artifactId>spigot</artifactId>
+      <groupId>org.spigotmc</groupId>
+      <scope>provided</scope>
+      <version>1.12.2-R0.1-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+
+</project>

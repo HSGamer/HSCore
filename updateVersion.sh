@@ -1,12 +1,12 @@
 #!/bin/bash
 mvn -N versions:update-child-modules -DgenerateBackupPoms=false
-cd ./HSCore-bukkit || return
+cd ./hscore-bukkit || return
 mvn -N versions:update-child-modules -DgenerateBackupPoms=false
-cd ../HSCore-config || return
+cd ../hscore-config || return
 mvn -N versions:update-child-modules -DgenerateBackupPoms=false
-cd ../HSCore-database || return
+cd ../hscore-database || return
 mvn -N versions:update-child-modules -DgenerateBackupPoms=false
-cd ../HSCore-checker || return
+cd ../hscore-checker || return
 mvn -N versions:update-child-modules -DgenerateBackupPoms=false
-cd ../HSCore-bungeecord || return
+cd ../hscore-bungeecord || return
 mvn -N versions:update-child-modules -DgenerateBackupPoms=false

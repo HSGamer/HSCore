@@ -3,9 +3,9 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>me.HSGamer</groupId>
-  <artifactId>HSCore</artifactId>
-  <version>3.19</version>
+  <groupId>me.hsgamer</groupId>
+  <artifactId>hscore</artifactId>
+  <version>4.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>HSCore</name>
@@ -34,23 +34,23 @@
   </scm>
 
   <modules>
-    <module>HSCore-common</module>
-    <module>HSCore-variable</module>
-    <module>HSCore-builder</module>
-    <module>HSCore-collections</module>
-    <module>HSCore-expression</module>
-    <module>HSCore-web</module>
-    <module>HSCore-request</module>
-    <module>HSCore-config</module>
-    <module>HSCore-addon</module>
-    <module>HSCore-checker</module>
-    <module>HSCore-database</module>
-    <module>HSCore-ui</module>
-    <module>HSCore-downloader</module>
-    <module>HSCore-crontime</module>
-    <module>HSCore-bukkit</module>
-    <module>HSCore-bungeecord</module>
-    <module>HSCore-all</module>
+    <module>hscore-common</module>
+    <module>hscore-variable</module>
+    <module>hscore-builder</module>
+    <module>hscore-collections</module>
+    <module>hscore-expression</module>
+    <module>hscore-web</module>
+    <module>hscore-request</module>
+    <module>hscore-config</module>
+    <module>hscore-addon</module>
+    <module>hscore-checker</module>
+    <module>hscore-database</module>
+    <module>hscore-ui</module>
+    <module>hscore-downloader</module>
+    <module>hscore-crontime</module>
+    <module>hscore-bukkit</module>
+    <module>hscore-bungeecord</module>
+    <module>hscore-all</module>
   </modules>
 
   <properties>
