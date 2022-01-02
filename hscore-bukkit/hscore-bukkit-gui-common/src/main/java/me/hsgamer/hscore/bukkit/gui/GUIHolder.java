@@ -183,10 +183,20 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
     this.closeFilter = closeFilter;
   }
 
+  /**
+   * Get the button map
+   *
+   * @return the button map
+   */
   public ButtonMap getButtonMap() {
     return buttonMap;
   }
 
+  /**
+   * Set the button map
+   *
+   * @param buttonMap the button map
+   */
   public void setButtonMap(ButtonMap buttonMap) {
     this.buttonMap = buttonMap;
   }
