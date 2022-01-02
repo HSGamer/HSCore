@@ -29,7 +29,7 @@ public class GUIListener implements Listener {
     if (!(e.getInventory().getHolder() instanceof GUIDisplay)) {
       return;
     }
-    ((GUIDisplay<?>) e.getInventory().getHolder()).handleEvent(e);
+    ((GUIDisplay) e.getInventory().getHolder()).handleEvent(e);
   }
 
   @EventHandler(priority = EventPriority.LOW)
@@ -41,7 +41,7 @@ public class GUIListener implements Listener {
     boolean wasCancelled = e.isCancelled();
     e.setCancelled(true);
 
-    ((GUIDisplay<?>) e.getInventory().getHolder()).handleEvent(e);
+    ((GUIDisplay) e.getInventory().getHolder()).handleEvent(e);
 
     if (!wasCancelled && !e.isCancelled()) {
       e.setCancelled(false);
@@ -53,7 +53,7 @@ public class GUIListener implements Listener {
     if (!(e.getInventory().getHolder() instanceof GUIDisplay)) {
       return;
     }
-    ((GUIDisplay<?>) e.getInventory().getHolder()).handleEvent(e);
+    ((GUIDisplay) e.getInventory().getHolder()).handleEvent(e);
   }
 
   @EventHandler
@@ -61,7 +61,7 @@ public class GUIListener implements Listener {
     if (!(e.getInventory().getHolder() instanceof GUIDisplay)) {
       return;
     }
-    ((GUIDisplay<?>) e.getInventory().getHolder()).handleEvent(e);
+    ((GUIDisplay) e.getInventory().getHolder()).handleEvent(e);
   }
 
 }

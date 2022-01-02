@@ -14,7 +14,6 @@ import java.util.function.Predicate;
  * The button with predicates
  */
 public class PredicateButton implements Button {
-
   private final Button button;
   private final Set<UUID> failToViewList = new ConcurrentSkipListSet<>();
 

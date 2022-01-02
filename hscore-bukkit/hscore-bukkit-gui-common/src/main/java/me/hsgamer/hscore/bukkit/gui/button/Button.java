@@ -1,6 +1,5 @@
 package me.hsgamer.hscore.bukkit.gui.button;
 
-import me.hsgamer.hscore.bukkit.gui.button.impl.DummyButton;
 import me.hsgamer.hscore.ui.property.Initializable;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -15,7 +14,17 @@ public interface Button extends Initializable {
   /**
    * The empty button
    */
-  Button EMPTY = new DummyButton(null);
+  Button EMPTY = new Button() {
+    @Override
+    public ItemStack getItemStack(UUID uuid) {
+      return null;
+    }
+
+    @Override
+    public void handleAction(UUID uuid, InventoryClickEvent event) {
+      // EMPTY
+    }
+  };
 
   /**
    * Get the item stack for the unique id

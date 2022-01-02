@@ -6,15 +6,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * The builder for {@link SimpleGUIHolder}
+ * The builder for {@link SimpleButtonMap}
  */
 public class SimpleGUIBuilder {
 
   /**
-   * the holder
+   * the button map
    */
   @NotNull
-  private final SimpleGUIHolder holder;
+  private final SimpleButtonMap simpleButtonMap;
 
   /**
    * current slot
@@ -24,10 +24,10 @@ public class SimpleGUIBuilder {
   /**
    * ctor
    *
-   * @param holder the holder
+   * @param simpleButtonMap the holder
    */
-  private SimpleGUIBuilder(@NotNull final SimpleGUIHolder holder) {
-    this.holder = holder;
+  private SimpleGUIBuilder(@NotNull final SimpleButtonMap simpleButtonMap) {
+    this.simpleButtonMap = simpleButtonMap;
   }
 
   /**
@@ -38,8 +38,18 @@ public class SimpleGUIBuilder {
    * @return a new builder
    */
   @NotNull
-  public static SimpleGUIBuilder create(@NotNull final SimpleGUIHolder holder) {
+  public static SimpleGUIBuilder create(@NotNull final SimpleButtonMap holder) {
     return new SimpleGUIBuilder(holder);
+  }
+
+  /**
+   * Create a new instance of {@code this} with an empty {@link SimpleButtonMap}
+   *
+   * @return a new builder
+   */
+  @NotNull
+  public static SimpleGUIBuilder create() {
+    return create(new SimpleButtonMap());
   }
 
   /**
@@ -51,7 +61,7 @@ public class SimpleGUIBuilder {
    */
   @NotNull
   public SimpleGUIBuilder add(@NotNull final Button button) {
-    this.holder.setButton(this.slot.get(), button);
+    this.simpleButtonMap.setButton(this.slot.get(), button);
     return this.next();
   }
 
@@ -76,5 +86,14 @@ public class SimpleGUIBuilder {
   public SimpleGUIBuilder next(final int slot) {
     this.slot.addAndGet(slot);
     return this;
+  }
+
+  /**
+   * Build the {@link SimpleButtonMap}
+   *
+   * @return the {@link SimpleButtonMap}
+   */
+  public SimpleButtonMap get() {
+    return simpleButtonMap;
   }
 }

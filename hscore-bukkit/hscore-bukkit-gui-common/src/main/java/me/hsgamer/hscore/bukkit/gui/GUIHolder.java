@@ -1,13 +1,14 @@
 package me.hsgamer.hscore.bukkit.gui;
 
+import me.hsgamer.hscore.bukkit.gui.button.ButtonMap;
 import me.hsgamer.hscore.ui.BaseHolder;
-import me.hsgamer.hscore.ui.Display;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.*;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
@@ -16,37 +17,22 @@ import java.util.function.ToIntFunction;
 
 /**
  * The base {@link me.hsgamer.hscore.ui.Holder} for UI in Bukkit
- *
- * @param <D> The type of {@link Display}
  */
-public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
-  protected final Plugin plugin;
-  protected boolean removeDisplayOnClose = true;
-  protected InventoryType inventoryType = InventoryType.CHEST;
-  protected Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
-  protected ToIntFunction<UUID> sizeFunction = uuid -> InventoryType.CHEST.getDefaultSize();
-  protected Predicate<UUID> closeFilter = uuid -> true;
-
-  /**
-   * Create a new holder
-   *
-   * @param plugin               the plugin
-   * @param removeDisplayOnClose whether the display should be removed on close event
-   *
-   * @deprecated use {@link #setRemoveDisplayOnClose(boolean)} before {@link #init()}
-   */
-  @Deprecated
-  protected GUIHolder(Plugin plugin, boolean removeDisplayOnClose) {
-    this(plugin);
-    setRemoveDisplayOnClose(removeDisplayOnClose);
-  }
+public class GUIHolder extends BaseHolder<GUIDisplay> {
+  private final Plugin plugin;
+  private boolean removeDisplayOnClose = true;
+  private InventoryType inventoryType = InventoryType.CHEST;
+  private Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
+  private ToIntFunction<UUID> sizeFunction = uuid -> InventoryType.CHEST.getDefaultSize();
+  private Predicate<UUID> closeFilter = uuid -> true;
+  private ButtonMap buttonMap = uuid -> Collections.emptyMap();
 
   /**
    * Create a new holder
    *
    * @param plugin the plugin
    */
-  protected GUIHolder(Plugin plugin) {
+  public GUIHolder(Plugin plugin) {
     this.plugin = plugin;
   }
 
@@ -197,6 +183,19 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
     this.closeFilter = closeFilter;
   }
 
+  public ButtonMap getButtonMap() {
+    return buttonMap;
+  }
+
+  public void setButtonMap(ButtonMap buttonMap) {
+    this.buttonMap = buttonMap;
+  }
+
+  @Override
+  protected GUIDisplay newDisplay(UUID uuid) {
+    return new GUIDisplay(uuid, this);
+  }
+
   @Override
   public void init() {
     addEventConsumer(InventoryCloseEvent.class, event -> {
@@ -218,13 +217,15 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
       UUID uuid = event.getWhoClicked().getUniqueId();
       getDisplay(uuid).ifPresent(guiDisplay -> guiDisplay.handleClickEvent(uuid, event));
     });
+    buttonMap.init();
   }
 
   @Override
   public void stop() {
-    List<D> list = new ArrayList<>(displayMap.values());
+    List<GUIDisplay> list = new ArrayList<>(displayMap.values());
     super.stop();
     list.forEach(guiDisplay -> new ArrayList<>(guiDisplay.getInventory().getViewers()).forEach(HumanEntity::closeInventory));
+    buttonMap.stop();
   }
 
   /**

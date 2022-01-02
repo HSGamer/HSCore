@@ -1,27 +1,14 @@
 package me.hsgamer.hscore.bukkit.gui.advanced;
 
-import me.hsgamer.hscore.bukkit.gui.GUIHolder;
+import me.hsgamer.hscore.bukkit.gui.button.Button;
+import me.hsgamer.hscore.bukkit.gui.button.ButtonMap;
 import me.hsgamer.hscore.bukkit.gui.mask.Mask;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.plugin.Plugin;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * The advanced UI Holder for Bukkit (Only accepts {@link InventoryType#CHEST}
- */
-public class AdvancedGUIHolder extends GUIHolder<AdvancedGUIDisplay> {
+public class AdvancedButtonMap implements ButtonMap {
   private final List<Mask> masks = new LinkedList<>();
-
-  @Deprecated
-  public AdvancedGUIHolder(Plugin plugin, boolean removeDisplayOnClose) {
-    super(plugin, removeDisplayOnClose);
-  }
-
-  public AdvancedGUIHolder(Plugin plugin) {
-    super(plugin);
-  }
 
   /**
    * Add a mask
@@ -73,18 +60,17 @@ public class AdvancedGUIHolder extends GUIHolder<AdvancedGUIDisplay> {
   }
 
   @Override
-  public void setInventoryType(InventoryType inventoryType) {
-    throw new UnsupportedOperationException("This holder applies CHEST only");
-  }
-
-  @Override
-  protected AdvancedGUIDisplay newDisplay(UUID uuid) {
-    return new AdvancedGUIDisplay(uuid, this);
+  public Map<Button, List<Integer>> getButtons(UUID uuid) {
+    Map<Button, List<Integer>> buttonSlotMap = new LinkedHashMap<>();
+    for (Mask mask : masks) {
+      Map<Integer, Button> buttons = mask.generateButtons(uuid);
+      buttons.forEach((slot, button) -> buttonSlotMap.computeIfAbsent(button, k -> new LinkedList<>()).add(slot));
+    }
+    return buttonSlotMap;
   }
 
   @Override
   public void stop() {
     removeAllMasks().forEach(Mask::stop);
-    super.stop();
   }
 }

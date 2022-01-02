@@ -11,7 +11,6 @@ import java.util.function.BiConsumer;
  * A simple button
  */
 public class SimpleButton implements Button {
-
   private final ItemStack itemStack;
   private final BiConsumer<UUID, InventoryClickEvent> consumer;
 

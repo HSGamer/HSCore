@@ -1,28 +1,27 @@
 package me.hsgamer.hscore.bukkit.gui;
 
+import me.hsgamer.hscore.bukkit.gui.button.Button;
 import me.hsgamer.hscore.ui.BaseDisplay;
-import me.hsgamer.hscore.ui.Holder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
+import java.util.stream.IntStream;
 
 /**
  * The base {@link me.hsgamer.hscore.ui.Display} for UI in Bukkit
- *
- * @param <H> the type of {@link Holder}
  */
-public abstract class GUIDisplay<H extends GUIHolder<?>> extends BaseDisplay<H> implements InventoryHolder {
-  protected final Map<Integer, BiConsumer<UUID, InventoryClickEvent>> viewedButtons = new ConcurrentHashMap<>();
-  protected Inventory inventory;
-  protected boolean forceUpdate = false;
+public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolder {
+  private final Map<Integer, BiConsumer<UUID, InventoryClickEvent>> viewedButtons = new ConcurrentHashMap<>();
+  private Inventory inventory;
+  private boolean forceUpdate = false;
 
   /**
    * Create a new display
@@ -30,8 +29,15 @@ public abstract class GUIDisplay<H extends GUIHolder<?>> extends BaseDisplay<H> 
    * @param uuid   the unique id
    * @param holder the holder
    */
-  protected GUIDisplay(UUID uuid, H holder) {
+  public GUIDisplay(UUID uuid, GUIHolder holder) {
     super(uuid, holder);
+  }
+
+  private static int normalizeToChestSize(int size) {
+    int remain = size % 9;
+    size -= remain;
+    size += remain > 0 ? 9 : 0;
+    return size;
   }
 
   /**
@@ -50,7 +56,7 @@ public abstract class GUIDisplay<H extends GUIHolder<?>> extends BaseDisplay<H> 
    *
    * @return {@code this} for builder chain
    */
-  public GUIDisplay<?> setForceUpdate(boolean forceUpdate) {
+  public GUIDisplay setForceUpdate(boolean forceUpdate) {
     this.forceUpdate = forceUpdate;
     return this;
   }
@@ -65,12 +71,14 @@ public abstract class GUIDisplay<H extends GUIHolder<?>> extends BaseDisplay<H> 
     Optional.ofNullable(viewedButtons.get(event.getRawSlot())).ifPresent(consumer -> consumer.accept(uuid, event));
   }
 
-  /**
-   * Create the inventory
-   *
-   * @return the inventory
-   */
-  protected abstract Inventory createInventory();
+  private Inventory createInventory() {
+    InventoryType type = this.holder.getInventoryType();
+    int size = this.holder.getSize(uuid);
+    String title = this.holder.getTitle(uuid);
+    return type == InventoryType.CHEST && size > 0
+      ? Bukkit.createInventory(this, normalizeToChestSize(size), title)
+      : Bukkit.createInventory(this, type, title);
+  }
 
   @Override
   public void init() {
@@ -96,17 +104,44 @@ public abstract class GUIDisplay<H extends GUIHolder<?>> extends BaseDisplay<H> 
     return inventory;
   }
 
-  /**
-   * Normalize raw size to chest size
-   *
-   * @param size raw size
-   *
-   * @return chest size
-   */
-  public int normalizeToChestSize(int size) {
-    int remain = size % 9;
-    size -= remain;
-    size += remain > 0 ? 9 : 0;
-    return size;
+  @Override
+  public void update() {
+    if (inventory == null) {
+      return;
+    }
+
+    int size = inventory.getSize();
+    List<Integer> emptyItemSlots = IntStream.range(0, size).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+    List<Integer> emptyActionSlots = IntStream.range(0, size).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+    Map<Button, List<Integer>> buttonSlots = holder.getButtonMap().getButtons(uuid);
+    buttonSlots.forEach((button, slots) -> {
+      ItemStack itemStack = button.getItemStack(uuid);
+      if (itemStack == null && !button.forceSetAction(uuid)) {
+        return;
+      }
+      slots.forEach(slot -> {
+        if (slot >= size) {
+          return;
+        }
+        if (itemStack != null) {
+          inventory.setItem(slot, itemStack);
+          emptyItemSlots.remove(slot);
+        }
+        viewedButtons.put(slot, button::handleAction);
+        emptyActionSlots.remove(slot);
+      });
+    });
+
+    Button defaultButton = holder.getButtonMap().getDefaultButton(uuid);
+    ItemStack itemStack = defaultButton.getItemStack(uuid);
+    emptyItemSlots.forEach(slot -> inventory.setItem(slot, itemStack));
+    emptyActionSlots.forEach(slot -> viewedButtons.put(slot, defaultButton::handleAction));
+
+    if (forceUpdate) {
+      new ArrayList<>(inventory.getViewers())
+        .stream()
+        .filter(Player.class::isInstance)
+        .forEach(humanEntity -> ((Player) humanEntity).updateInventory());
+    }
   }
 }

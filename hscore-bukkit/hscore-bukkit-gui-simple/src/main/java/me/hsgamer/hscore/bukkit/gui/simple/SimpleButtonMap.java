@@ -1,29 +1,14 @@
 package me.hsgamer.hscore.bukkit.gui.simple;
 
-import me.hsgamer.hscore.bukkit.gui.GUIHolder;
 import me.hsgamer.hscore.bukkit.gui.button.Button;
-import org.bukkit.plugin.Plugin;
+import me.hsgamer.hscore.bukkit.gui.button.ButtonMap;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-/**
- * The simple UI Holder for Bukkit
- */
-public class SimpleGUIHolder extends GUIHolder<SimpleGUIDisplay> {
-
-  private final Map<Button, List<Integer>> buttonSlotMap = new ConcurrentHashMap<>();
+public class SimpleButtonMap implements ButtonMap {
+  private final Map<Button, List<Integer>> buttonSlotMap = new LinkedHashMap<>();
   private Button defaultButton = Button.EMPTY;
-
-  @Deprecated
-  public SimpleGUIHolder(Plugin plugin, boolean removeDisplayOnClose) {
-    super(plugin, removeDisplayOnClose);
-  }
-
-  public SimpleGUIHolder(Plugin plugin) {
-    super(plugin);
-  }
 
   /**
    * Set the button
@@ -95,13 +80,17 @@ public class SimpleGUIHolder extends GUIHolder<SimpleGUIDisplay> {
   }
 
   @Override
-  protected SimpleGUIDisplay newDisplay(UUID uuid) {
-    return new SimpleGUIDisplay(uuid, this);
+  public void stop() {
+    removeAllButton().forEach(Button::stop);
   }
 
   @Override
-  public void stop() {
-    removeAllButton().forEach(Button::stop);
-    super.stop();
+  public Map<Button, List<Integer>> getButtons(UUID uuid) {
+    return buttonSlotMap;
+  }
+
+  @Override
+  public Button getDefaultButton(UUID uuid) {
+    return defaultButton;
   }
 }

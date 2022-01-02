@@ -16,7 +16,7 @@ public final class GUIUtils {
    *
    * @param holder the gui holder
    */
-  public static void allowMoveItemOnBottom(GUIHolder<?> holder) {
+  public static void allowMoveItemOnBottom(GUIHolder holder) {
     holder.addEventConsumer(InventoryClickEvent.class, event -> {
       if (event.getClickedInventory() == event.getInventory()) {
         return;
@@ -47,7 +47,7 @@ public final class GUIUtils {
    *
    * @param holder the gui holder
    */
-  public static void cancelDragEvent(GUIHolder<?> holder) {
+  public static void cancelDragEvent(GUIHolder holder) {
     holder.addEventConsumer(InventoryDragEvent.class, event -> {
       for (int slot : event.getRawSlots()) {
         if (slot < event.getInventory().getSize()) {
