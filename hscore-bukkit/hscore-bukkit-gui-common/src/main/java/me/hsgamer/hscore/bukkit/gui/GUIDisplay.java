@@ -33,6 +33,13 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
     super(uuid, holder);
   }
 
+  /**
+   * Normalize the size to a valid chest size
+   *
+   * @param size the size
+   *
+   * @return the normalized size
+   */
   private static int normalizeToChestSize(int size) {
     int remain = size % 9;
     size -= remain;
@@ -71,6 +78,11 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
     Optional.ofNullable(viewedButtons.get(event.getRawSlot())).ifPresent(consumer -> consumer.accept(uuid, event));
   }
 
+  /**
+   * Create the inventory for this display
+   *
+   * @return the inventory
+   */
   private Inventory createInventory() {
     InventoryType type = this.holder.getInventoryType();
     int size = this.holder.getSize(uuid);
