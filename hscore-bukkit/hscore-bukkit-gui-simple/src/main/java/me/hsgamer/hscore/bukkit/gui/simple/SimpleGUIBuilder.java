@@ -24,7 +24,7 @@ public class SimpleGUIBuilder {
   /**
    * ctor
    *
-   * @param simpleButtonMap the holder
+   * @param simpleButtonMap the button map
    */
   private SimpleGUIBuilder(@NotNull final SimpleButtonMap simpleButtonMap) {
     this.simpleButtonMap = simpleButtonMap;
@@ -33,13 +33,13 @@ public class SimpleGUIBuilder {
   /**
    * Create a new instance of {@code this}
    *
-   * @param holder the GUI holder
+   * @param simpleButtonMap the button map
    *
    * @return a new builder
    */
   @NotNull
-  public static SimpleGUIBuilder create(@NotNull final SimpleButtonMap holder) {
-    return new SimpleGUIBuilder(holder);
+  public static SimpleGUIBuilder create(@NotNull final SimpleButtonMap simpleButtonMap) {
+    return new SimpleGUIBuilder(simpleButtonMap);
   }
 
   /**
