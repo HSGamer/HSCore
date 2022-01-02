@@ -3,37 +3,37 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <artifactId>HSCore-config</artifactId>
-    <groupId>me.HSGamer</groupId>
-    <version>3.19</version>
+    <artifactId>hscore-config</artifactId>
+    <groupId>me.hsgamer</groupId>
+    <version>4.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>HSCore-config-all</artifactId>
+  <artifactId>hscore-config-all</artifactId>
   <dependencies>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-config-common</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-config-common</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-config-path</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-config-path</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-config-simplixstorage</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-config-simplixstorage</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-config-simpleconfiguration</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-config-simpleconfiguration</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-config-annotated</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-config-annotated</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

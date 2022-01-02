@@ -8,55 +8,55 @@
 
 ## Modules
 
-* **`HSCore-all`**
-  * **`HSCore-addon`**
-  * **`HSCore-builder`**
-  * **`HSCore-common`**
-  * **`HSCore-collections`**
-  * **`HSCore-crontime`**
-  * **`HSCore-downloader`**
-  * **`HSCore-expression`**
-  * **`HSCore-request`**
-  * **`HSCore-web`**
-  * **`HSCore-variable`**
-  * **`HSCore-checker-all`**
-    * **`HSCore-checker-common`**
-    * **`HSCore-checker-spigotmc`**
-  * **`HSCore-database-all`**
-    * **`HSCore-database-common`**
-    * **`HSCore-database-driver-mysql`**
-    * **`HSCore-database-driver-sqlite`**
-    * **`HSCore-database-driver-mariadb`**
-    * **`HSCore-database-driver-postgresql`**
-    * **`HSCore-database-client-sql`**
-    * **`HSCore-database-client-hikari`**
-    * **`HSCore-database-client-java`**
-  * **`HSCore-config-all`**
-    * **`HSCore-config-common`**
-    * **`HSCore-config-path`**
-    * **`HSCore-config-simplixstorage`**
-    * **`HSCore-config-simpleconfiguration`**
-    * **`HSCore-config-annotated`**
-  * **`HSCore-ui`**
-  * **`HSCore-bukkit-all`**
-    * **`HSCore-bukkit-addon`**
-    * **`HSCore-bukkit-command`**
-    * **`HSCore-bukkit-command-extra`**
-    * **`HSCore-bukkit-subcommand`**
-    * **`HSCore-bukkit-config`**
-    * **`HSCore-bukkit-config-extra`**
-    * **`HSCore-bukkit-utils`**
-    * **`HSCore-bukkit-gui-button`**
-    * **`HSCore-bukkit-gui-mask`**
-    * **`HSCore-bukkit-gui-common`**
-    * **`HSCore-bukkit-gui-simple`**
-    * **`HSCore-bukkit-gui-advanced`**
-    * **`HSCore-bukkit-item`**
-    * **`HSCore-bukkit-baseplugin`**
-    * **`HSCore-bukkit-channel`**
-  * **`HSCore-bungeecord-all`**
-    * **`HSCore-bungeecord-channel`**
-    * **`HSCore-bungeecord-config`**
+* **`hscore-all`**
+  * **`hscore-addon`**
+  * **`hscore-builder`**
+  * **`hscore-common`**
+  * **`hscore-collections`**
+  * **`hscore-crontime`**
+  * **`hscore-downloader`**
+  * **`hscore-expression`**
+  * **`hscore-request`**
+  * **`hscore-web`**
+  * **`hscore-variable`**
+  * **`hscore-checker-all`**
+    * **`hscore-checker-common`**
+    * **`hscore-checker-spigotmc`**
+  * **`hscore-database-all`**
+    * **`hscore-database-common`**
+    * **`hscore-database-driver-mysql`**
+    * **`hscore-database-driver-sqlite`**
+    * **`hscore-database-driver-mariadb`**
+    * **`hscore-database-driver-postgresql`**
+    * **`hscore-database-client-sql`**
+    * **`hscore-database-client-hikari`**
+    * **`hscore-database-client-java`**
+  * **`hscore-config-all`**
+    * **`hscore-config-common`**
+    * **`hscore-config-path`**
+    * **`hscore-config-simplixstorage`**
+    * **`hscore-config-simpleconfiguration`**
+    * **`hscore-config-annotated`**
+  * **`hscore-ui`**
+  * **`hscore-bukkit-all`**
+    * **`hscore-bukkit-addon`**
+    * **`hscore-bukkit-command`**
+    * **`hscore-bukkit-command-extra`**
+    * **`hscore-bukkit-subcommand`**
+    * **`hscore-bukkit-config`**
+    * **`hscore-bukkit-config-extra`**
+    * **`hscore-bukkit-utils`**
+    * **`hscore-bukkit-gui-button`**
+    * **`hscore-bukkit-gui-mask`**
+    * **`hscore-bukkit-gui-common`**
+    * **`hscore-bukkit-gui-simple`**
+    * **`hscore-bukkit-gui-advanced`**
+    * **`hscore-bukkit-item`**
+    * **`hscore-bukkit-baseplugin`**
+    * **`hscore-bukkit-channel`**
+  * **`hscore-bungeecord-all`**
+    * **`hscore-bungeecord-channel`**
+    * **`hscore-bungeecord-config`**
 
 ## Add as a dependency (Maven)
 
@@ -74,8 +74,8 @@
 
 <dependencies>
   <dependency>
-    <groupId>me.HSGamer</groupId>
-    <artifactId>HSCore-MODULE</artifactId>
+    <groupId>me.hsgamer</groupId>
+    <artifactId>hscore-MODULE</artifactId>
     <version>VERSION</version>
 
     <!-- Add this line if you want to get the shaded artifact -->

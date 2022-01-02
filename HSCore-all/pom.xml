@@ -3,92 +3,92 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <artifactId>HSCore</artifactId>
-    <groupId>me.HSGamer</groupId>
-    <version>3.19</version>
+    <artifactId>hscore</artifactId>
+    <groupId>me.hsgamer</groupId>
+    <version>4.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>HSCore-all</artifactId>
+  <artifactId>hscore-all</artifactId>
   <dependencies>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-addon</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-addon</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-variable</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-variable</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-builder</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-builder</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-bukkit-all</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-bukkit-all</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-bungeecord-all</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-bungeecord-all</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-checker-all</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-checker-all</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-collections</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-collections</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-common</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-common</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-config-all</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-config-all</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-expression</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-expression</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-request</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-request</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-database-all</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-database-all</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-web</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-web</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-ui</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-ui</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-downloader</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-downloader</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-crontime</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-crontime</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

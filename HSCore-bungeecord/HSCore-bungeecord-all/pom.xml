@@ -3,23 +3,23 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <artifactId>HSCore-bungeecord</artifactId>
-    <groupId>me.HSGamer</groupId>
-    <version>3.19</version>
+    <artifactId>hscore-bungeecord</artifactId>
+    <groupId>me.hsgamer</groupId>
+    <version>4.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>HSCore-bungeecord-all</artifactId>
+  <artifactId>hscore-bungeecord-all</artifactId>
 
   <dependencies>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-bungeecord-channel</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-bungeecord-channel</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-bungeecord-config</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-bungeecord-config</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

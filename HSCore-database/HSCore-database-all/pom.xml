@@ -3,52 +3,52 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <artifactId>HSCore-database</artifactId>
-    <groupId>me.HSGamer</groupId>
-    <version>3.19</version>
+    <artifactId>hscore-database</artifactId>
+    <groupId>me.hsgamer</groupId>
+    <version>4.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>HSCore-database-all</artifactId>
+  <artifactId>hscore-database-all</artifactId>
   <dependencies>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-database-common</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-database-common</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-database-client-sql</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-database-client-sql</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-database-client-hikari</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-database-client-hikari</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-database-client-java</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-database-client-java</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-database-driver-mysql</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-database-driver-mysql</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-database-driver-sqlite</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-database-driver-sqlite</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-database-driver-mariadb</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-database-driver-mariadb</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.HSGamer</groupId>
-      <artifactId>HSCore-database-driver-postgresql</artifactId>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-database-driver-postgresql</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
