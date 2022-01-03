@@ -7,10 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -18,37 +15,8 @@ import java.util.stream.Collectors;
  * Methods on Bukkit
  */
 public final class BukkitUtils {
-  private static final Map<String, CompletableFuture<OfflinePlayer>> offlinePlayersByNameMap = new ConcurrentHashMap<>();
-  private static final Map<UUID, CompletableFuture<OfflinePlayer>> offlinePlayersByIdMap = new ConcurrentHashMap<>();
-
   private BukkitUtils() {
     // EMPTY
-  }
-
-  /**
-   * Get the offline player asynchronously
-   *
-   * @param name the player's name
-   *
-   * @return the offline player
-   */
-  @SuppressWarnings("deprecation")
-  @NotNull
-  public static CompletableFuture<OfflinePlayer> getOfflinePlayerAsync(@NotNull String name) {
-    // noinspection deprecation
-    return offlinePlayersByNameMap.computeIfAbsent(name, s -> CompletableFuture.supplyAsync(() -> Bukkit.getOfflinePlayer(name)));
-  }
-
-  /**
-   * Get the offline player asynchronously
-   *
-   * @param uuid the player's unique id
-   *
-   * @return the offline player
-   */
-  @NotNull
-  public static CompletableFuture<OfflinePlayer> getOfflinePlayerAsync(@NotNull UUID uuid) {
-    return offlinePlayersByIdMap.computeIfAbsent(uuid, s -> CompletableFuture.supplyAsync(() -> Bukkit.getOfflinePlayer(uuid)));
   }
 
   /**
