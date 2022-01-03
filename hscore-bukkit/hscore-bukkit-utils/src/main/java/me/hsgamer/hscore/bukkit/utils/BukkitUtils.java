@@ -94,14 +94,29 @@ public final class BukkitUtils {
    *
    * @return true if it is
    */
-  public static boolean isUsername(@NotNull String string) {
+  public static boolean isUsername(@NotNull String string, List<Character> allowedCharacters) {
     int len = string.length();
     if (len < 3 || len > 16) return false;
 
-    for (char ch : string.toCharArray()) {
-      if (ch != '_' && !Character.isLetterOrDigit(ch))
+    for (int i = 0; i < string.length(); i++) {
+      char ch = string.charAt(i);
+      if (!Character.isLetterOrDigit(ch) && !allowedCharacters.contains(ch)) {
         return false;
+      }
     }
     return true;
+  }
+
+  /**
+   * Check if the string is the username
+   *
+   * @param string the input string
+   *
+   * @return true if it is
+   *
+   * @see #isUsername(String, List)
+   */
+  public static boolean isUsername(@NotNull String string) {
+    return isUsername(string, Arrays.asList('_', '-', '.'));
   }
 }
