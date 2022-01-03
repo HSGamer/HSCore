@@ -106,7 +106,7 @@ public class Downloader {
   public CompletableFuture<Map<String, DownloadInfo>> loadDownloadsInfo() {
     return CompletableFuture.supplyAsync(() -> {
       try {
-        return new InputStreamReader(WebUtils.openConnection(dbUrl, userAgentPreference.get()).getInputStream());
+        return new InputStreamReader(userAgentPreference.get().assignToConnection(WebUtils.createConnection(dbUrl)).getInputStream());
       } catch (IOException e) {
         throw new IllegalStateException("Something wrong when getting the info", e);
       }

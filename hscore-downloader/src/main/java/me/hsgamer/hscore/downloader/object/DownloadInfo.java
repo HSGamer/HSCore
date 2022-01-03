@@ -103,7 +103,7 @@ public final class DownloadInfo {
 
     isDownloading = true;
     try (ReadableByteChannel readableByteChannel = Channels
-      .newChannel(WebUtils.openConnection(directLink, UserAgent.FIREFOX).getInputStream());
+      .newChannel(UserAgent.FIREFOX.assignToConnection(WebUtils.createConnection(directLink)).getInputStream());
          FileOutputStream fileOutputStream = new FileOutputStream(
            new File(downloader.getFolder(), fileName))) {
       fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);

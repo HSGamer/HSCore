@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.web;
 
+import java.net.URLConnection;
+
 /**
  * The user agent
  */
@@ -35,5 +37,18 @@ public final class UserAgent {
    */
   public String getAgent() {
     return agent;
+  }
+
+  /**
+   * Assign the user agent to the connection
+   *
+   * @param <T>        the type of the connection
+   * @param connection the connection
+   *
+   * @return the connection for chaining
+   */
+  public <T extends URLConnection> T assignToConnection(T connection) {
+    connection.setRequestProperty("User-Agent", agent);
+    return connection;
   }
 }

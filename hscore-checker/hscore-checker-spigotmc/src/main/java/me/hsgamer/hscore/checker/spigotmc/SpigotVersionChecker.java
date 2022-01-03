@@ -37,7 +37,11 @@ public final class SpigotVersionChecker implements VersionChecker {
   public CompletableFuture<String> getVersion() {
     return CompletableFuture.supplyAsync(() -> {
       try {
-        JSONObject object = (JSONObject) new JSONParser().parse(new InputStreamReader(WebUtils.openConnection("https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId, UserAgent.FIREFOX).getInputStream()));
+        JSONObject object = (JSONObject) new JSONParser().parse(new InputStreamReader(
+          UserAgent.FIREFOX.assignToConnection(
+            WebUtils.createConnection("https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId)
+          ).getInputStream()
+        ));
         if (!object.containsKey("current_version")) {
           throw new IOException("Cannot get the plugin version");
         }
