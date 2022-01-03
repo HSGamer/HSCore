@@ -14,17 +14,7 @@ public interface Button extends Initializable {
   /**
    * The empty button
    */
-  Button EMPTY = new Button() {
-    @Override
-    public ItemStack getItemStack(UUID uuid) {
-      return null;
-    }
-
-    @Override
-    public void handleAction(UUID uuid, InventoryClickEvent event) {
-      // EMPTY
-    }
-  };
+  Button EMPTY = uuid -> null;
 
   /**
    * Get the item stack for the unique id
@@ -41,7 +31,9 @@ public interface Button extends Initializable {
    * @param uuid  the unique id
    * @param event the click event
    */
-  void handleAction(UUID uuid, InventoryClickEvent event);
+  default void handleAction(UUID uuid, InventoryClickEvent event) {
+    // EMPTY
+  }
 
   /**
    * Check if the action of this button should be set even if the display item is null
