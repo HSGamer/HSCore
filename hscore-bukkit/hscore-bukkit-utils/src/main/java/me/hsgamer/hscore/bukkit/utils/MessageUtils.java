@@ -22,7 +22,7 @@ import static org.bukkit.ChatColor.COLOR_CHAR;
  */
 public final class MessageUtils {
 
-  private static final Pattern hexPattern = Pattern.compile("(?<!\\\\)&#([A-Fa-f0-9]{6})");
+  private static final Pattern hexPattern = Pattern.compile("(?<!\\\\)(\\S)#([A-Fa-f0-9]{3,6})");
   private static final Map<Object, Supplier<String>> objectPrefixMap = new HashMap<>();
   private static Supplier<String> defaultPrefix = () -> "&7[&cHSCore&7] &f";
 
@@ -51,17 +51,84 @@ public final class MessageUtils {
    */
   @NotNull
   public static String colorizeHex(@NotNull final String input) {
+    return colorizeHex('&', input);
+  }
+
+  /**
+   * Convert HEX string to color.
+   * The HEX string format is "?#rrggbb", which "?" is a single character indicates the start of the format
+   *
+   * @param altColorChar the alternative color char
+   * @param input        the string
+   *
+   * @return the colored string
+   */
+  @NotNull
+  public static String colorizeHex(final char altColorChar, @NotNull final String input) {
     Matcher matcher = hexPattern.matcher(input);
     StringBuffer buffer = new StringBuffer(input.length() + 4 * 8);
     while (matcher.find()) {
-      String group = matcher.group(1);
+      String matchedChar = matcher.group(1);
+      if (matchedChar.indexOf(altColorChar) < 0) {
+        continue;
+      }
+      String hex = normalizeHexString(matcher.group(2));
       matcher.appendReplacement(buffer, COLOR_CHAR + "x"
-        + COLOR_CHAR + group.charAt(0) + COLOR_CHAR + group.charAt(1)
-        + COLOR_CHAR + group.charAt(2) + COLOR_CHAR + group.charAt(3)
-        + COLOR_CHAR + group.charAt(4) + COLOR_CHAR + group.charAt(5)
+        + COLOR_CHAR + hex.charAt(0) + COLOR_CHAR + hex.charAt(1)
+        + COLOR_CHAR + hex.charAt(2) + COLOR_CHAR + hex.charAt(3)
+        + COLOR_CHAR + hex.charAt(4) + COLOR_CHAR + hex.charAt(5)
       );
     }
     return matcher.appendTail(buffer).toString();
+  }
+
+  /**
+   * Normalize the raw hex string to the 6-digit hex string
+   *
+   * @param input the raw hex string (range: 3-6)
+   *
+   * @return the 6-digit hex string
+   */
+  private static String normalizeHexString(String input) {
+    switch (input.length()) {
+      case 6:
+        return input;
+      case 5: {
+        char[] chars = new char[]{
+          input.charAt(0),
+          input.charAt(1),
+          input.charAt(2),
+          input.charAt(3),
+          '0',
+          input.charAt(4)
+        };
+        return new String(chars);
+      }
+      case 4: {
+        char[] chars = new char[]{
+          input.charAt(0),
+          input.charAt(1),
+          input.charAt(2),
+          input.charAt(3),
+          '0',
+          '0'
+        };
+        return new String(chars);
+      }
+      case 3: {
+        char[] chars = new char[]{
+          input.charAt(0),
+          input.charAt(0),
+          input.charAt(1),
+          input.charAt(1),
+          input.charAt(2),
+          input.charAt(2)
+        };
+        return new String(chars);
+      }
+      default:
+        throw new IllegalArgumentException("Invalid hex string");
+    }
   }
 
   /**
@@ -78,27 +145,27 @@ public final class MessageUtils {
       return input;
     }
     char[] chars = input.toCharArray();
-    int i = 0;
-    int oi = 0;
-    while (i < chars.length - 1) {
-      if (chars[i] == altColorChar && Character.isLetterOrDigit(chars[i + 1])) {
-        chars[oi++] = COLOR_CHAR;
-        char c = Character.toLowerCase(chars[++i]);
-        chars[oi++] = c == 'u' ? getRandomColor().getChar() : c;
-        if (i + 1 < chars.length && Character.isWhitespace(chars[i + 1])) {
-          i++;
+    int inputIndex = 0;
+    int outputIndex = 0;
+    while (inputIndex < chars.length - 1) {
+      if (chars[inputIndex] == altColorChar && Character.isLetterOrDigit(chars[inputIndex + 1])) {
+        chars[outputIndex++] = COLOR_CHAR;
+        char currentChar = Character.toLowerCase(chars[++inputIndex]);
+        chars[outputIndex++] = currentChar == 'u' ? getRandomColor().getChar() : currentChar;
+        if (inputIndex + 1 < chars.length && Character.isWhitespace(chars[inputIndex + 1])) {
+          inputIndex++;
         }
-      } else if (chars[i] == '\\' && chars[i + 1] == altColorChar) {
-        chars[oi++] = chars[++i];
+      } else if (chars[inputIndex] == '\\' && chars[inputIndex + 1] == altColorChar) {
+        chars[outputIndex++] = chars[++inputIndex];
       } else {
-        chars[oi++] = chars[i];
+        chars[outputIndex++] = chars[inputIndex];
       }
-      i++;
+      inputIndex++;
     }
-    if (i == chars.length - 1) {
-      chars[oi++] = chars[i];
+    if (inputIndex == chars.length - 1) {
+      chars[outputIndex++] = chars[inputIndex];
     }
-    return new String(chars, 0, Math.min(oi, chars.length));
+    return new String(chars, 0, Math.min(outputIndex, chars.length));
   }
 
   /**
