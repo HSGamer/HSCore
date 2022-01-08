@@ -24,6 +24,7 @@ public final class MessageUtils {
 
   private static final Pattern hexPattern = Pattern.compile("(?<!\\\\)(\\S)#([A-Fa-f0-9]{1,6})");
   private static final Map<Object, Supplier<String>> objectPrefixMap = new HashMap<>();
+  private static final ChatColor[] chatColors = ChatColor.values();
   private static Supplier<String> defaultPrefix = () -> "&7[&cHSCore&7] &f";
 
   private MessageUtils() {
@@ -39,19 +40,7 @@ public final class MessageUtils {
    */
   @NotNull
   public static String colorize(@NotNull final String input) {
-    return colorizeHex(colorize('&', input));
-  }
-
-  /**
-   * Convert HEX ("&amp;#rrggbb") string to color
-   *
-   * @param input the string
-   *
-   * @return the colored string
-   */
-  @NotNull
-  public static String colorizeHex(@NotNull final String input) {
-    return colorizeHex('&', input);
+    return colorizeHex('&', colorize('&', input));
   }
 
   /**
@@ -186,17 +175,12 @@ public final class MessageUtils {
    *
    * @return the chat color
    */
+  @NotNull
   public static ChatColor getRandomColor() {
-    ChatColor[] values = ChatColor.values();
     ChatColor color;
     do {
-      color = values[ThreadLocalRandom.current().nextInt(values.length - 1)];
-    } while (color.equals(ChatColor.BOLD)
-      || color.equals(ChatColor.ITALIC)
-      || color.equals(ChatColor.STRIKETHROUGH)
-      || color.equals(ChatColor.RESET)
-      || color.equals(ChatColor.MAGIC)
-      || color.equals(ChatColor.UNDERLINE));
+      color = chatColors[ThreadLocalRandom.current().nextInt(chatColors.length - 1)];
+    } while (!color.isColor());
     return color;
   }
 
