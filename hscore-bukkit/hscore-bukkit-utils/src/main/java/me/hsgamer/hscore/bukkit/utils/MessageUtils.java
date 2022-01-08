@@ -22,7 +22,7 @@ import static org.bukkit.ChatColor.COLOR_CHAR;
  */
 public final class MessageUtils {
 
-  private static final Pattern hexPattern = Pattern.compile("(?<!\\\\)(\\S)#([A-Fa-f0-9]{3,6})");
+  private static final Pattern hexPattern = Pattern.compile("(?<!\\\\)(\\S)#([A-Fa-f0-9]{1,6})");
   private static final Map<Object, Supplier<String>> objectPrefixMap = new HashMap<>();
   private static Supplier<String> defaultPrefix = () -> "&7[&cHSCore&7] &f";
 
