@@ -27,7 +27,7 @@ public final class MessageUtils {
   private static Supplier<String> defaultPrefix = () -> "&7[&cHSCore&7] &f";
 
   private MessageUtils() {
-
+    // EMPTY
   }
 
   /**
@@ -72,11 +72,11 @@ public final class MessageUtils {
       if (matchedChar.indexOf(altColorChar) < 0) {
         continue;
       }
-      String hex = normalizeHexString(matcher.group(2));
+      char[] hex = normalizeHexString(matcher.group(2));
       matcher.appendReplacement(buffer, COLOR_CHAR + "x"
-        + COLOR_CHAR + hex.charAt(0) + COLOR_CHAR + hex.charAt(1)
-        + COLOR_CHAR + hex.charAt(2) + COLOR_CHAR + hex.charAt(3)
-        + COLOR_CHAR + hex.charAt(4) + COLOR_CHAR + hex.charAt(5)
+        + COLOR_CHAR + hex[0] + COLOR_CHAR + hex[1]
+        + COLOR_CHAR + hex[2] + COLOR_CHAR + hex[3]
+        + COLOR_CHAR + hex[4] + COLOR_CHAR + hex[5]
       );
     }
     return matcher.appendTail(buffer).toString();
@@ -85,50 +85,63 @@ public final class MessageUtils {
   /**
    * Normalize the raw hex string to the 6-digit hex string
    *
-   * @param input the raw hex string (range: 3-6)
+   * @param input the raw hex string
    *
    * @return the 6-digit hex string
    */
-  private static String normalizeHexString(String input) {
+  private static char[] normalizeHexString(String input) {
+    char[] chars = new char[6];
     switch (input.length()) {
-      case 6:
-        return input;
-      case 5: {
-        char[] chars = new char[]{
-          input.charAt(0),
-          input.charAt(1),
-          input.charAt(2),
-          input.charAt(3),
-          '0',
-          input.charAt(4)
-        };
-        return new String(chars);
-      }
-      case 4: {
-        char[] chars = new char[]{
-          input.charAt(0),
-          input.charAt(1),
-          input.charAt(2),
-          input.charAt(3),
-          '0',
-          '0'
-        };
-        return new String(chars);
-      }
-      case 3: {
-        char[] chars = new char[]{
-          input.charAt(0),
-          input.charAt(0),
-          input.charAt(1),
-          input.charAt(1),
-          input.charAt(2),
-          input.charAt(2)
-        };
-        return new String(chars);
-      }
+      case 1:
+        chars[0] = input.charAt(0);
+        chars[1] = input.charAt(0);
+        chars[2] = input.charAt(0);
+        chars[3] = input.charAt(0);
+        chars[4] = input.charAt(0);
+        chars[5] = input.charAt(0);
+        break;
+      case 2:
+        chars[0] = input.charAt(0);
+        chars[1] = input.charAt(1);
+        chars[2] = input.charAt(0);
+        chars[3] = input.charAt(1);
+        chars[4] = input.charAt(0);
+        chars[5] = input.charAt(1);
+        break;
+      case 3:
+        chars[0] = input.charAt(0);
+        chars[1] = input.charAt(0);
+        chars[2] = input.charAt(1);
+        chars[3] = input.charAt(1);
+        chars[4] = input.charAt(2);
+        chars[5] = input.charAt(2);
+        break;
+      case 4:
+        chars[0] = input.charAt(0);
+        chars[1] = input.charAt(1);
+        chars[2] = input.charAt(2);
+        chars[3] = input.charAt(3);
+        chars[4] = '0';
+        chars[5] = '0';
+        break;
+      case 5:
+        chars[0] = input.charAt(0);
+        chars[1] = input.charAt(1);
+        chars[2] = input.charAt(2);
+        chars[3] = input.charAt(3);
+        chars[4] = '0';
+        chars[5] = input.charAt(4);
+        break;
       default:
-        throw new IllegalArgumentException("Invalid hex string");
+        chars[0] = input.charAt(0);
+        chars[1] = input.charAt(1);
+        chars[2] = input.charAt(2);
+        chars[3] = input.charAt(3);
+        chars[4] = input.charAt(4);
+        chars[5] = input.charAt(5);
+        break;
     }
+    return chars;
   }
 
   /**
