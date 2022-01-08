@@ -89,7 +89,7 @@ public final class MessageUtils {
    *
    * @return the 6-digit hex string
    */
-  private static char[] normalizeHexString(String input) {
+  private static char[] normalizeHexString(@NotNull final String input) {
     char[] chars = new char[6];
     switch (input.length()) {
       case 1:
