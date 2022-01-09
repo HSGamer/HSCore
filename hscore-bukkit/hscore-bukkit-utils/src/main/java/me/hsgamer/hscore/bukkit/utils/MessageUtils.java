@@ -45,7 +45,7 @@ public final class MessageUtils {
 
   /**
    * Convert HEX string to color.
-   * The HEX string format is "?#rrggbb", which "?" is a single character indicates the start of the format
+   * The HEX string format is "?#rrggbb", which "?" is the alternative color char
    *
    * @param altColorChar the alternative color char
    * @param input        the string
