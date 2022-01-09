@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 /**
  * Methods for String
  */
-public class StringUtils {
+public final class StringUtils {
 
   private static final Pattern hexPattern = Pattern.compile("(?<!\\\\)(\\S)#([A-Fa-f0-9]{1,6})");
 

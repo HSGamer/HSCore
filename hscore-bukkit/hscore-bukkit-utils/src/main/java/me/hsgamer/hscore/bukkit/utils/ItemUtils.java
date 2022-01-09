@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 /**
  * Methods on items
  */
-public class ItemUtils {
+public final class ItemUtils {
   private ItemUtils() {
     // EMPTY
   }

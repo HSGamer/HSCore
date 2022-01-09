@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 /**
  * Methods on Permissions
  */
-public class PermissionUtils {
+public final class PermissionUtils {
 
   private PermissionUtils() {
     // EMPTY

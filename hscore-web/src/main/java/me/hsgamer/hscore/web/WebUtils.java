@@ -11,7 +11,7 @@ import java.net.URLConnection;
 /**
  * Methods on web
  */
-public class WebUtils {
+public final class WebUtils {
 
   private WebUtils() {
 

@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 /**
  * Methods on collections
  */
-public class CollectionUtils {
+public final class CollectionUtils {
 
   private CollectionUtils() {
     // EMPTY

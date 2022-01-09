@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 
-public class BooleanLazyNumber {
+public final class BooleanLazyNumber {
 
   /**
    * The FALSE state for Boolean LazyFunction and LazyOperator
