@@ -3,10 +3,7 @@ package me.hsgamer.hscore.common;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -138,5 +135,19 @@ public class CollectionUtils {
       return null;
     }
     return list.get(ThreadLocalRandom.current().nextInt(list.size()));
+  }
+
+  /**
+   * Pick a random element from the array
+   *
+   * @param array          the array
+   * @param matchCondition the condition of the picked element
+   * @param <T>            the type of the elements
+   *
+   * @return the picked element, or null if the array is empty or there is no element that matches the condition
+   */
+  @Nullable
+  public static <T> T pickRandom(@NotNull final T[] array, @NotNull final Predicate<T> matchCondition) {
+    return pickRandom(Arrays.asList(array), matchCondition);
   }
 }
