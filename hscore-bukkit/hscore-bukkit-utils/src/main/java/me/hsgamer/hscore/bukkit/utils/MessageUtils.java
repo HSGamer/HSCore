@@ -138,6 +138,12 @@ public final class MessageUtils {
         chars[5] = input.charAt(5);
         break;
     }
+    for (int i = 0; i < chars.length; i++) {
+      chars[i] = Character.toLowerCase(chars[i]);
+      if (!((chars[i] >= '0' && chars[i] <= '9') || (chars[i] >= 'a' && chars[i] <= 'f'))) {
+        chars[i] = '0';
+      }
+    }
     return chars;
   }
 
