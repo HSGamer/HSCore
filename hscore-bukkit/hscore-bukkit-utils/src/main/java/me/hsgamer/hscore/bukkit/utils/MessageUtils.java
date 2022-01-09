@@ -115,11 +115,11 @@ public final class MessageUtils {
         break;
       case 4:
         chars[0] = input.charAt(0);
-        chars[1] = input.charAt(1);
-        chars[2] = input.charAt(2);
-        chars[3] = input.charAt(3);
-        chars[4] = '0';
-        chars[5] = '0';
+        chars[1] = input.charAt(0);
+        chars[2] = input.charAt(1);
+        chars[3] = input.charAt(1);
+        chars[4] = input.charAt(2);
+        chars[5] = input.charAt(3);
         break;
       case 5:
         chars[0] = input.charAt(0);
