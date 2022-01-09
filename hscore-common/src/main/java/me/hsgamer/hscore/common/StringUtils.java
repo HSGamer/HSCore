@@ -21,7 +21,7 @@ public class StringUtils {
 
   /**
    * Replace all alternative character format to the final characters.
-   * The format is "?<a-zA-Z0-9>", where ? is the alternative character and <a-zA-Z0-9> is the code.
+   * The format is "?&lt;a-zA-Z0-9&gt;", where ? is the alternative character and &lt;a-zA-Z0-9&gt; is the code.
    *
    * @param altChar   The alternative character
    * @param finalChar The final character
