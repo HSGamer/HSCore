@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.utils;
 
+import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -8,7 +9,6 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 
 import static org.bukkit.ChatColor.COLOR_CHAR;
@@ -19,7 +19,6 @@ import static org.bukkit.ChatColor.COLOR_CHAR;
 public final class MessageUtils {
 
   private static final Map<Object, Supplier<String>> objectPrefixMap = new HashMap<>();
-  private static final ChatColor[] chatColors = ChatColor.values();
   private static final Map<Character, Supplier<Character>> colorMappers = Collections.singletonMap('u', () -> getRandomColor().getChar());
   private static Supplier<String> defaultPrefix = () -> "&7[&cHSCore&7] &f";
 
@@ -78,11 +77,7 @@ public final class MessageUtils {
    */
   @NotNull
   public static ChatColor getRandomColor() {
-    ChatColor color;
-    do {
-      color = chatColors[ThreadLocalRandom.current().nextInt(chatColors.length - 1)];
-    } while (!color.isColor());
-    return color;
+    return Objects.requireNonNull(CollectionUtils.pickRandom(ChatColor.values(), ChatColor::isColor));
   }
 
   /**
