@@ -130,11 +130,19 @@ public class CollectionUtils {
    */
   @Nullable
   public static <T> T pickRandom(@NotNull final Collection<T> collection, @NotNull final Predicate<T> matchCondition) {
-    List<T> list = collection.parallelStream().filter(matchCondition).collect(Collectors.toList());
-    if (list.isEmpty()) {
-      return null;
+    List<T> list = new ArrayList<>(collection);
+    T picked = null;
+    while (!list.isEmpty()) {
+      int index = ThreadLocalRandom.current().nextInt(list.size());
+      T element = list.get(index);
+      if (matchCondition.test(element)) {
+        picked = element;
+        break;
+      } else {
+        list.remove(index);
+      }
     }
-    return list.get(ThreadLocalRandom.current().nextInt(list.size()));
+    return picked;
   }
 
   /**
