@@ -68,7 +68,7 @@ public final class MessageUtils {
         + COLOR_CHAR + hex[4] + COLOR_CHAR + hex[5]
       );
     }
-    return matcher.appendTail(buffer).toString();
+    return matcher.appendTail(buffer).toString().replace("\\" + altColorChar + "#", altColorChar + "#");
   }
 
   /**
