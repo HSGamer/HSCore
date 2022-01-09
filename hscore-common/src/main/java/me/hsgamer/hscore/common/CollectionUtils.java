@@ -1,11 +1,14 @@
 package me.hsgamer.hscore.common;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -28,7 +31,7 @@ public class CollectionUtils {
    * @return the string list
    */
   @NotNull
-  public static List<String> createStringListFromObject(@NotNull Object value, boolean trim) {
+  public static List<String> createStringListFromObject(@NotNull final Object value, final boolean trim) {
     List<String> list = new ArrayList<>();
     if (value instanceof Collection) {
       ((Collection<?>) value).forEach(o -> list.add(String.valueOf(o)));
@@ -50,7 +53,7 @@ public class CollectionUtils {
    * @return the reversed list
    */
   @NotNull
-  public static <T> List<T> reverse(@NotNull Collection<T> original) {
+  public static <T> List<T> reverse(@NotNull final Collection<T> original) {
     List<T> list = new ArrayList<>(original);
     Collections.reverse(list);
     return list;
@@ -65,7 +68,8 @@ public class CollectionUtils {
    *
    * @return the rotated list
    */
-  public static <T> List<T> rotate(Collection<T> original, int distance) {
+  @NotNull
+  public static <T> List<T> rotate(@NotNull final Collection<T> original, final int distance) {
     List<T> list = new ArrayList<>(original);
     Collections.rotate(list, distance);
     return list;
@@ -80,7 +84,8 @@ public class CollectionUtils {
    *
    * @return the repeated list
    */
-  public static <T> List<T> repeatElement(Collection<T> original, int repeat) {
+  @NotNull
+  public static <T> List<T> repeatElement(@NotNull final Collection<T> original, final int repeat) {
     List<T> list = new ArrayList<>();
     for (T element : original) {
       list.addAll(IntStream.range(0, repeat).mapToObj(i -> element).collect(Collectors.toList()));
@@ -97,7 +102,8 @@ public class CollectionUtils {
    *
    * @return the repeated list
    */
-  public static <T> List<T> repeatCollection(Collection<T> original, int repeat) {
+  @NotNull
+  public static <T> List<T> repeatCollection(@NotNull final Collection<T> original, final int repeat) {
     List<T> list = new ArrayList<>();
     IntStream.range(0, repeat).mapToObj(i -> original).forEach(list::addAll);
     return list;
@@ -111,7 +117,26 @@ public class CollectionUtils {
    *
    * @return the split string list
    */
-  public static List<String> splitAll(String regex, Collection<String> strings) {
+  @NotNull
+  public static List<String> splitAll(@NotNull final String regex, @NotNull final Collection<String> strings) {
     return strings.stream().flatMap(s -> Stream.of(s.split(regex))).collect(Collectors.toList());
+  }
+
+  /**
+   * Pick a random element from the collection
+   *
+   * @param collection     the collection
+   * @param matchCondition the condition of the picked element
+   * @param <T>            the type of the elements
+   *
+   * @return the picked element, or null if the collection is empty or there is no element that matches the condition
+   */
+  @Nullable
+  public static <T> T pickRandom(@NotNull final Collection<T> collection, @NotNull final Predicate<T> matchCondition) {
+    List<T> list = collection.parallelStream().filter(matchCondition).collect(Collectors.toList());
+    if (list.isEmpty()) {
+      return null;
+    }
+    return list.get(ThreadLocalRandom.current().nextInt(list.size()));
   }
 }
