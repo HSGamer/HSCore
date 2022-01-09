@@ -81,6 +81,14 @@ public final class MessageUtils {
   private static char[] normalizeHexString(@NotNull final String input) {
     char[] chars = new char[6];
     switch (input.length()) {
+      case 0:
+        chars[0] = '0';
+        chars[1] = '0';
+        chars[2] = '0';
+        chars[3] = '0';
+        chars[4] = '0';
+        chars[5] = '0';
+        break;
       case 1:
         chars[0] = input.charAt(0);
         chars[1] = input.charAt(0);
