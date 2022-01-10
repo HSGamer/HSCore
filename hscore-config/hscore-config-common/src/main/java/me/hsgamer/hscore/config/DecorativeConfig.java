@@ -85,4 +85,14 @@ public abstract class DecorativeConfig implements Config {
   public boolean isNormalizable(Object object) {
     return this.config.isNormalizable(object);
   }
+
+  @Override
+  public String getComment(String path, CommentType type) {
+    return this.config.getComment(path, type);
+  }
+
+  @Override
+  public void setComment(String path, String value, CommentType type) {
+    this.config.setComment(path, value, type);
+  }
 }
