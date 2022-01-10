@@ -1,11 +1,10 @@
 package me.hsgamer.hscore.config;
 
-import me.hsgamer.hscore.config.comment.CommentType;
-import me.hsgamer.hscore.config.comment.Commentable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
+import java.util.Optional;
 
 /**
  * A commentable config path
@@ -15,7 +14,6 @@ import java.util.EnumMap;
 public class CommentablePath<T> implements ConfigPath<T> {
   private final ConfigPath<T> originalPath;
   private final EnumMap<CommentType, String> defaultCommentMap = new EnumMap<>(CommentType.class);
-  private Commentable commentable = null;
 
   /**
    * Create a config path
@@ -33,21 +31,6 @@ public class CommentablePath<T> implements ConfigPath<T> {
     if (defaultComments.length > 1) {
       defaultCommentMap.put(CommentType.SIDE, defaultComments[1]);
     }
-  }
-
-  @Nullable
-  private static Commentable getCommentableConfig(Config config) {
-    Commentable commentable = null;
-    do {
-      if (config instanceof Commentable) {
-        commentable = (Commentable) config;
-      } else if (config instanceof DecorativeConfig) {
-        config = ((DecorativeConfig) config).getOriginalConfig();
-      } else {
-        break;
-      }
-    } while (commentable == null);
-    return commentable;
   }
 
   @Override
@@ -73,14 +56,11 @@ public class CommentablePath<T> implements ConfigPath<T> {
   @Override
   public void setConfig(@NotNull final Config config) {
     originalPath.setConfig(config);
-    this.commentable = getCommentableConfig(config);
-    if (this.commentable != null) {
-      defaultCommentMap.forEach((type, s) -> {
-        if (this.commentable.getComment(getPath(), type) == null) {
-          this.commentable.setComment(getPath(), s, type);
-        }
-      });
-    }
+    defaultCommentMap.forEach((type, s) -> {
+      if (config.getComment(getPath(), type) == null) {
+        config.setComment(getPath(), s, type);
+      }
+    });
   }
 
   @Override
@@ -116,11 +96,9 @@ public class CommentablePath<T> implements ConfigPath<T> {
    */
   @Nullable
   public String getComment(@NotNull final CommentType commentType) {
-    if (commentable == null) {
-      return defaultCommentMap.get(commentType);
-    }
-    String comment = commentable.getComment(getPath(), commentType);
-    return comment == null ? defaultCommentMap.get(commentType) : comment;
+    return Optional.ofNullable(getConfig())
+      .map(config -> config.getComment(getPath(), commentType))
+      .orElseGet(() -> defaultCommentMap.get(commentType));
   }
 
   /**
@@ -130,8 +108,6 @@ public class CommentablePath<T> implements ConfigPath<T> {
    * @param comment     the comment
    */
   public void setComment(@NotNull final CommentType commentType, @Nullable final String comment) {
-    if (commentable != null) {
-      commentable.setComment(getPath(), comment, commentType);
-    }
+    Optional.ofNullable(getConfig()).ifPresent(config -> config.setComment(getPath(), comment, commentType));
   }
 }

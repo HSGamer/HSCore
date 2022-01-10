@@ -283,4 +283,52 @@ public interface Config {
   default void addDefaults(Map<String, Object> map) {
     map.forEach(this::addDefault);
   }
+
+  /**
+   * Get the comment
+   *
+   * @param path the path
+   * @param type the comment type
+   *
+   * @return the comment
+   */
+  default String getComment(String path, CommentType type) {
+    return null;
+  }
+
+  /**
+   * Set the comment
+   *
+   * @param path  the path
+   * @param value the comment
+   * @param type  the comment type
+   */
+  default void setComment(String path, String value, CommentType type) {
+    // EMPTY
+  }
+
+  /**
+   * Get the block comment
+   *
+   * @param path the path
+   *
+   * @return the comment
+   *
+   * @see #getComment(String, CommentType)
+   */
+  default String getComment(String path) {
+    return getComment(path, CommentType.BLOCK);
+  }
+
+  /**
+   * Set the block comment
+   *
+   * @param path  the path
+   * @param value the comment
+   *
+   * @see #setComment(String, String, CommentType)
+   */
+  default void setComment(String path, String value) {
+    setComment(path, value, CommentType.BLOCK);
+  }
 }

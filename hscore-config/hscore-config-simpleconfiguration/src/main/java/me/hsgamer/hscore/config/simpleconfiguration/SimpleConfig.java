@@ -1,8 +1,7 @@
 package me.hsgamer.hscore.config.simpleconfiguration;
 
+import me.hsgamer.hscore.config.CommentType;
 import me.hsgamer.hscore.config.Config;
-import me.hsgamer.hscore.config.comment.CommentType;
-import me.hsgamer.hscore.config.comment.Commentable;
 import org.simpleyaml.configuration.ConfigurationSection;
 import org.simpleyaml.configuration.file.FileConfiguration;
 import org.simpleyaml.exceptions.InvalidConfigurationException;
@@ -16,7 +15,7 @@ import java.util.logging.Level;
 /**
  * The {@link Config} implementation for SimpleYAML
  */
-public class SimpleConfig<T extends FileConfiguration> implements Config, Commentable {
+public class SimpleConfig<T extends FileConfiguration> implements Config {
   protected final BiConsumer<File, T> loader;
   private final File file;
   private final T configuration;
