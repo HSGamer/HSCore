@@ -5,6 +5,7 @@ import me.hsgamer.hscore.config.converter.Converter;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +28,8 @@ public class AnnotatedConfig extends DecorativeConfig {
   @NotNull
   private static Converter createConverterSafe(Class<? extends Converter> converterClass) {
     try {
-      return converterClass.newInstance();
-    } catch (InstantiationException | IllegalAccessException e) {
+      return converterClass.getDeclaredConstructor().newInstance();
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       throw new IllegalStateException(e);
     }
   }
