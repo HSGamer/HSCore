@@ -285,7 +285,8 @@ public interface Config {
   }
 
   /**
-   * Get the comment
+   * Get the comment.
+   * This is a default empty method. The implementation can override this method to support comments.
    *
    * @param path the path
    * @param type the comment type
@@ -298,6 +299,7 @@ public interface Config {
 
   /**
    * Set the comment
+   * This is a default empty method. The implementation can override this method to support comments.
    *
    * @param path  the path
    * @param value the comment
