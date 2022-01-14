@@ -11,5 +11,10 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE, ElementType.FIELD})
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface Comment {
+  /**
+   * Get the comment
+   *
+   * @return the comment
+   */
   String value();
 }

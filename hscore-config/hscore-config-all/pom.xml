@@ -38,11 +38,6 @@
     </dependency>
     <dependency>
       <groupId>me.hsgamer</groupId>
-      <artifactId>hscore-config-annotation</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>me.hsgamer</groupId>
       <artifactId>hscore-config-proxy</artifactId>
       <version>${project.version}</version>
     </dependency>

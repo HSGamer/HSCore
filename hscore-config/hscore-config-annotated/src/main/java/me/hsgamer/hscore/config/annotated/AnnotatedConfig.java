@@ -5,10 +5,8 @@ import me.hsgamer.hscore.config.DecorativeConfig;
 import me.hsgamer.hscore.config.annotation.Comment;
 import me.hsgamer.hscore.config.annotation.ConfigPath;
 import me.hsgamer.hscore.config.annotation.converter.Converter;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +24,6 @@ public class AnnotatedConfig extends DecorativeConfig {
    */
   public AnnotatedConfig(Config config) {
     super(config);
-  }
-
-  @NotNull
-  private static Converter createConverterSafe(Class<? extends Converter> converterClass) {
-    try {
-      return converterClass.getDeclaredConstructor().newInstance();
-    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-      throw new IllegalStateException(e);
-    }
   }
 
   @Override
@@ -86,7 +75,7 @@ public class AnnotatedConfig extends DecorativeConfig {
       return false;
     }
     try {
-      createConverterSafe(configPath.converter());
+      Converter.createConverterSafe(configPath.converter());
     } catch (Exception e) {
       LOGGER.warning(() -> "Cannot create a converter for " + field.getName() + ". Ignored");
       return false;
@@ -97,7 +86,7 @@ public class AnnotatedConfig extends DecorativeConfig {
   private void setupField(Field field) {
     ConfigPath configPath = field.getAnnotation(ConfigPath.class);
     String path = configPath.value();
-    Converter converter = createConverterSafe(configPath.converter());
+    Converter converter = Converter.createConverterSafe(configPath.converter());
 
     boolean accessible = field.isAccessible();
     field.setAccessible(true);
@@ -128,7 +117,7 @@ public class AnnotatedConfig extends DecorativeConfig {
 
   private void checkAndSetField(Field field, ConfigPath configPath, Object value) {
     String path = configPath.value();
-    Converter converter = createConverterSafe(configPath.converter());
+    Converter converter = Converter.createConverterSafe(configPath.converter());
     super.set(path, converter.convertToRaw(value));
     boolean accessible = field.isAccessible();
     field.setAccessible(true);

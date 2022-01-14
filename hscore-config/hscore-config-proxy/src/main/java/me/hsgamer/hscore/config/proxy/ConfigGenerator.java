@@ -9,6 +9,16 @@ public final class ConfigGenerator {
     // EMPTY
   }
 
+  /**
+   * Create a new mapped instance of the class from the config
+   *
+   * @param clazz       The class to create
+   * @param config      The config to use
+   * @param setupConfig Whether to set up the config
+   * @param <T>         The class type
+   *
+   * @return The new instance
+   */
   public static <T> T newInstance(Class<T> clazz, Config config, boolean setupConfig) {
     if (setupConfig) {
       config.setup();
@@ -21,6 +31,15 @@ public final class ConfigGenerator {
     }
   }
 
+  /**
+   * Create a new mapped instance of the class from the config, also set up the config
+   *
+   * @param clazz  The class to create
+   * @param config The config to use
+   * @param <T>    The class type
+   *
+   * @return The new instance
+   */
   public static <T> T newInstance(Class<T> clazz, Config config) {
     return newInstance(clazz, config, true);
   }
