@@ -36,7 +36,9 @@
     * **`hscore-config-path`**
     * **`hscore-config-simplixstorage`**
     * **`hscore-config-simpleconfiguration`**
+    * **`hscore-config-annotation`**
     * **`hscore-config-annotated`**
+    * **`hscore-config-proxy`**
   * **`hscore-ui`**
   * **`hscore-bukkit-all`**
     * **`hscore-bukkit-addon`**
