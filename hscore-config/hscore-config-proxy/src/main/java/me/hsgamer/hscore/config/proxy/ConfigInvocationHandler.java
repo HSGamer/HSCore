@@ -39,13 +39,15 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
       return this.clazz.hashCode();
     } else if (name.equals("equals")) {
       return proxy == args[0];
-    } else if (name.startsWith("get")) {
+    } else if (name.startsWith("get") && method.isDefault() && args.length == 0) {
 
-    } else if (name.startsWith("set")) {
+    } else if (name.startsWith("set") && args.length == 1) {
 
-    } else if (method.isDefault()) {
+      return null;
+    }
+    if (method.isDefault()) {
       return DEFAULT_METHOD_HANDLER.invoke(proxy, method, args);
     }
-    return null;
+    throw new UnsupportedOperationException("Method " + method.getName() + " is not supported");
   }
 }

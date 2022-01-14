@@ -14,6 +14,7 @@
   <modules>
     <module>hscore-config-common</module>
     <module>hscore-config-path</module>
+    <module>hscore-config-annotation</module>
     <module>hscore-config-simplixstorage</module>
     <module>hscore-config-simpleconfiguration</module>
     <module>hscore-config-annotated</module>

@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.config.annotated.converter;
+package me.hsgamer.hscore.config.annotation.converter;
 
 /**
  * The default {@link Converter}, which does nothing, so the raw value and the final value are the same type

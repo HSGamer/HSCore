@@ -5,15 +5,15 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 
 public class NewJavaDefaultMethodHandler implements DefaultMethodHandler {
-    @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        return MethodHandles.lookup()
-                .findSpecial(
-                        method.getDeclaringClass(),
-                        method.getName(),
-                        MethodType.methodType(method.getReturnType(), new Class[0]),
-                        method.getDeclaringClass()
-                ).bindTo(proxy)
-                .invokeWithArguments(args);
-    }
+  @Override
+  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    return MethodHandles.lookup()
+      .findSpecial(
+        method.getDeclaringClass(),
+        method.getName(),
+        MethodType.methodType(method.getReturnType(), new Class[0]),
+        method.getDeclaringClass()
+      ).bindTo(proxy)
+      .invokeWithArguments(args);
+  }
 }

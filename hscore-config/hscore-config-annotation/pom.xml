@@ -9,18 +9,5 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>hscore-config-annotated</artifactId>
-
-  <dependencies>
-    <dependency>
-      <groupId>me.hsgamer</groupId>
-      <artifactId>hscore-config-common</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>me.hsgamer</groupId>
-      <artifactId>hscore-config-annotation</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-  </dependencies>
+  <artifactId>hscore-config-annotation</artifactId>
 </project>

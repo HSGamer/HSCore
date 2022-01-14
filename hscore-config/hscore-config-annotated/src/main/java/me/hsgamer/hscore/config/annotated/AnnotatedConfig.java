@@ -2,8 +2,9 @@ package me.hsgamer.hscore.config.annotated;
 
 import me.hsgamer.hscore.config.Config;
 import me.hsgamer.hscore.config.DecorativeConfig;
-import me.hsgamer.hscore.config.annotated.annotation.ConfigPath;
-import me.hsgamer.hscore.config.annotated.converter.Converter;
+import me.hsgamer.hscore.config.annotation.Comment;
+import me.hsgamer.hscore.config.annotation.ConfigPath;
+import me.hsgamer.hscore.config.annotation.converter.Converter;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
@@ -45,6 +46,7 @@ public class AnnotatedConfig extends DecorativeConfig {
       }
     }
     this.pathFields.forEach(this::setupField);
+    setupClassComment();
     this.save();
   }
 
@@ -64,7 +66,14 @@ public class AnnotatedConfig extends DecorativeConfig {
     for (Field field : this.getClass().getDeclaredFields()) {
       setupField(field);
     }
+    setupClassComment();
     this.save();
+  }
+
+  private void setupClassComment() {
+    if (this.getClass().isAnnotationPresent(Comment.class) && this.getComment("") == null) {
+      this.setComment("", this.getClass().getAnnotation(Comment.class).value());
+    }
   }
 
   private boolean checkPathField(Field field) {
@@ -103,6 +112,9 @@ public class AnnotatedConfig extends DecorativeConfig {
 
     if (!contains(path)) {
       super.set(path, converter.convertToRaw(defaultValue));
+      if (field.isAnnotationPresent(Comment.class)) {
+        super.setComment(path, field.getAnnotation(Comment.class).value());
+      }
     } else {
       try {
         field.set(this, converter.convert(this.getNormalized(path)));
