@@ -4,6 +4,10 @@ import me.hsgamer.hscore.config.Config;
 
 import java.lang.reflect.Proxy;
 
+/**
+ * The main class of the config proxy system.
+ * Use this class to create a proxied interface with a config.
+ */
 public final class ConfigGenerator {
   private ConfigGenerator() {
     // EMPTY

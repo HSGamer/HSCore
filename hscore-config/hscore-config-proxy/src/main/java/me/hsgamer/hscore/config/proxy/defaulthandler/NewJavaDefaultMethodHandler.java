@@ -4,6 +4,9 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 
+/**
+ * The default method handler for Java 9+
+ */
 public class NewJavaDefaultMethodHandler implements DefaultMethodHandler {
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {

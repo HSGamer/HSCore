@@ -11,6 +11,11 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The internal invocation handler to map the interface to the config
+ *
+ * @param <T> The type of the interface
+ */
 public class ConfigInvocationHandler<T> implements InvocationHandler {
   private static final DefaultMethodHandler DEFAULT_METHOD_HANDLER;
 
@@ -27,16 +32,27 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
   private final Class<T> clazz;
   private final Config config;
 
+  /**
+   * Constructor
+   *
+   * @param clazz  The interface
+   * @param config The config
+   */
   ConfigInvocationHandler(Class<T> clazz, Config config) {
     this.clazz = clazz;
     this.config = config;
     for (Method method : clazz.getDeclaredMethods()) {
-      this.setupMethods(method);
+      this.setupMethod(method);
     }
     config.save();
   }
 
-  private void setupMethods(Method method) {
+  /**
+   * Set up the methods
+   *
+   * @param method The method
+   */
+  private void setupMethod(Method method) {
     if (!method.isDefault()) {
       return;
     }
