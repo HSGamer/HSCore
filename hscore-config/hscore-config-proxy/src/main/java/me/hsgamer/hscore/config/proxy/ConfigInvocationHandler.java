@@ -1,15 +1,29 @@
 package me.hsgamer.hscore.config.proxy;
 
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.proxy.defaulthandler.DefaultMethodHandler;
+import me.hsgamer.hscore.config.proxy.defaulthandler.NewJavaDefaultMethodHandler;
+import me.hsgamer.hscore.config.proxy.defaulthandler.OldJavaDefaultMethodHandler;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-public class ConfigInvocationHandler implements InvocationHandler {
-  private final Class<? extends ProxyConfig> clazz;
+public class ConfigInvocationHandler<T> implements InvocationHandler {
+  private static final DefaultMethodHandler DEFAULT_METHOD_HANDLER;
+
+  static {
+    final float version = Float.parseFloat(System.getProperty("java.class.version"));
+    if (version <= 52) {
+      DEFAULT_METHOD_HANDLER = new OldJavaDefaultMethodHandler();
+    } else {
+      DEFAULT_METHOD_HANDLER = new NewJavaDefaultMethodHandler();
+    }
+  }
+
+  private final Class<T> clazz;
   private final Config config;
 
-  public ConfigInvocationHandler(Class<? extends ProxyConfig> clazz, Config config) {
+  ConfigInvocationHandler(Class<T> clazz, Config config) {
     this.clazz = clazz;
     this.config = config;
   }
@@ -17,7 +31,7 @@ public class ConfigInvocationHandler implements InvocationHandler {
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     String name = method.getName();
-    if (name.equals("getConfig")) {
+    if (name.equals("getConfig") && method.getReturnType().isInstance(config)) {
       return config;
     } else if (name.equals("toString")) {
       return this.clazz.toString();
@@ -29,6 +43,8 @@ public class ConfigInvocationHandler implements InvocationHandler {
 
     } else if (name.startsWith("set")) {
 
+    } else if (method.isDefault()) {
+      return DEFAULT_METHOD_HANDLER.invoke(proxy, method, args);
     }
     return null;
   }
