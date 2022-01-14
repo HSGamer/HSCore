@@ -14,7 +14,7 @@ public class ConfigNode {
     this.config = config;
     this.converter = converter;
     this.defaultValue = defaultValue;
-    this.setValue(defaultValue);
+    config.addDefault(path, converter.convertToRaw(defaultValue));
   }
 
   ConfigNode(String path, Config config, Class<? extends Converter> converter, Object defaultValue) {
