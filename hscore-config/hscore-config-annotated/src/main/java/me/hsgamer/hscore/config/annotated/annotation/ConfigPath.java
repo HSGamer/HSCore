@@ -1,7 +1,8 @@
-package me.hsgamer.hscore.config.annotation;
+package me.hsgamer.hscore.config.annotated.annotation;
 
-import me.hsgamer.hscore.config.converter.Converter;
-import me.hsgamer.hscore.config.converter.DefaultConverter;
+import me.hsgamer.hscore.config.annotated.AnnotatedConfig;
+import me.hsgamer.hscore.config.annotated.converter.Converter;
+import me.hsgamer.hscore.config.annotated.converter.DefaultConverter;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.ElementType;
@@ -10,7 +11,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The main annotation to set the config path for the fields in {@link me.hsgamer.hscore.config.AnnotatedConfig}
+ * The main annotation to set the config path for the fields in {@link AnnotatedConfig}
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

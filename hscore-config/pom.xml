@@ -16,8 +16,9 @@
     <module>hscore-config-path</module>
     <module>hscore-config-simplixstorage</module>
     <module>hscore-config-simpleconfiguration</module>
-    <module>hscore-config-all</module>
     <module>hscore-config-annotated</module>
+    <module>hscore-config-proxy</module>
+    <module>hscore-config-all</module>
   </modules>
 
 </project>

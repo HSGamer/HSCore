@@ -1,5 +1,6 @@
-package me.hsgamer.hscore.config;
+package me.hsgamer.hscore.config.path;
 
+import me.hsgamer.hscore.config.Config;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;

@@ -1,8 +1,8 @@
-package me.hsgamer.hscore.config.path;
+package me.hsgamer.hscore.config.path.impl;
 
-import me.hsgamer.hscore.config.CommentablePath;
-import me.hsgamer.hscore.config.ConfigPath;
-import me.hsgamer.hscore.config.StickyConfigPath;
+import me.hsgamer.hscore.config.path.CommentablePath;
+import me.hsgamer.hscore.config.path.ConfigPath;
+import me.hsgamer.hscore.config.path.StickyConfigPath;
 import org.jetbrains.annotations.NotNull;
 
 /**

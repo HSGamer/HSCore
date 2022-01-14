@@ -1,7 +1,9 @@
-package me.hsgamer.hscore.config.converter;
+package me.hsgamer.hscore.config.annotated.converter;
+
+import me.hsgamer.hscore.config.annotated.AnnotatedConfig;
 
 /**
- * The converter for {@link me.hsgamer.hscore.config.annotation.ConfigPath} to match the interaction between the field in {@link me.hsgamer.hscore.config.AnnotatedConfig} amd the config file it's assigned to
+ * The converter for {@link me.hsgamer.hscore.config.annotated.annotation.ConfigPath} to match the interaction between the field in {@link AnnotatedConfig} amd the config file it's assigned to
  */
 public interface Converter {
   /**

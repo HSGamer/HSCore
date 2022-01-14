@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.config;
 
+import me.hsgamer.hscore.config.path.ConfigPath;
+
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;

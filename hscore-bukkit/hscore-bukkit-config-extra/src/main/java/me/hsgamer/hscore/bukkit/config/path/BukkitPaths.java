@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bukkit.config.path;
 
 import me.hsgamer.hscore.bukkit.config.object.PlayableSound;
 import me.hsgamer.hscore.bukkit.config.object.Position;
+import me.hsgamer.hscore.config.path.AdvancedConfigPath;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
@@ -12,7 +13,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 
 /**
- * Utility to easily create Bukkit's {@link me.hsgamer.hscore.config.AdvancedConfigPath}
+ * Utility to easily create Bukkit's {@link AdvancedConfigPath}
  */
 public final class BukkitPaths {
 

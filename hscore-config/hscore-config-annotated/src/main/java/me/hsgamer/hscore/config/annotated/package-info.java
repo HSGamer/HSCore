@@ -1,4 +1,4 @@
 /**
  * Contains the config's base classes
  */
-package me.hsgamer.hscore.config;
+package me.hsgamer.hscore.config.annotated;

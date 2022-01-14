@@ -1,6 +1,6 @@
-package me.hsgamer.hscore.config.path;
+package me.hsgamer.hscore.config.path.impl;
 
-import me.hsgamer.hscore.config.BaseConfigPath;
+import me.hsgamer.hscore.config.path.BaseConfigPath;
 
 public class IntegerConfigPath extends BaseConfigPath<Integer> {
 

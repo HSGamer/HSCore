@@ -1,7 +1,9 @@
-package me.hsgamer.hscore.config;
+package me.hsgamer.hscore.config.annotated;
 
-import me.hsgamer.hscore.config.annotation.ConfigPath;
-import me.hsgamer.hscore.config.converter.Converter;
+import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.DecorativeConfig;
+import me.hsgamer.hscore.config.annotated.annotation.ConfigPath;
+import me.hsgamer.hscore.config.annotated.converter.Converter;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;

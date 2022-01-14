@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.config;
 
+import me.hsgamer.hscore.config.path.ConfigPath;
+
 /**
  * A {@link Config} implementation to load {@link ConfigPath} automatically
  */
