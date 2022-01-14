@@ -48,6 +48,13 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
     config.save();
   }
 
+  private static boolean isPrimitiveOrWrapper(Class<?> clazz) {
+    return clazz.isPrimitive() || clazz.isAssignableFrom(Boolean.class) || clazz.isAssignableFrom(Byte.class)
+      || clazz.isAssignableFrom(Character.class) || clazz.isAssignableFrom(Short.class)
+      || clazz.isAssignableFrom(Integer.class) || clazz.isAssignableFrom(Long.class)
+      || clazz.isAssignableFrom(Float.class) || clazz.isAssignableFrom(Double.class);
+  }
+
   /**
    * Set up the methods
    *
@@ -107,7 +114,7 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
       String methodName = name.substring(3);
       if (!methodName.isEmpty() && nodes.containsKey(methodName)) {
         Object value = nodes.get(methodName).getValue();
-        if (method.getReturnType().isInstance(value)) {
+        if ((isPrimitiveOrWrapper(method.getReturnType()) && isPrimitiveOrWrapper(value.getClass())) || method.getReturnType().isInstance(value)) {
           return value;
         }
       }
