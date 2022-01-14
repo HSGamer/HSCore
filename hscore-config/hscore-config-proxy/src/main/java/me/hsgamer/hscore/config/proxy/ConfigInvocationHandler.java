@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.config.proxy;
 
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.annotation.Comment;
 import me.hsgamer.hscore.config.annotation.ConfigPath;
 import me.hsgamer.hscore.config.proxy.defaulthandler.DefaultMethodHandler;
 import me.hsgamer.hscore.config.proxy.defaulthandler.NewJavaDefaultMethodHandler;
@@ -73,11 +74,16 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
       return;
     }
     ConfigPath configPath = method.getAnnotation(ConfigPath.class);
+    String path = configPath.value();
 
     try {
       Object value = DEFAULT_METHOD_HANDLER.invoke(method);
-      ConfigNode node = new ConfigNode(configPath.value(), config, configPath.converter(), value);
+      ConfigNode node = new ConfigNode(path, config, configPath.converter(), value);
       nodes.put(methodName, node);
+
+      if (method.isAnnotationPresent(Comment.class) && config.getComment(path) == null) {
+        config.setComment(path, method.getAnnotation(Comment.class).value());
+      }
     } catch (Throwable e) {
       throw new IllegalStateException("Failed to setup method " + method.getName(), e);
     }
@@ -86,7 +92,7 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     String name = method.getName();
-    if (name.equals("getConfig") && method.getReturnType().isInstance(config)) {
+    if (name.equals("getConfig") && !method.isDefault() && method.getReturnType().isInstance(config)) {
       return config;
     } else if (name.equals("toString")) {
       return this.clazz.toString();
@@ -94,6 +100,9 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
       return this.clazz.hashCode();
     } else if (name.equals("equals")) {
       return proxy == args[0];
+    } else if (name.equals("reloadConfig") && !method.isDefault() && args.length == 0) {
+      config.reload();
+      return null;
     } else if (name.startsWith("get") && method.isDefault() && method.isAnnotationPresent(ConfigPath.class)) {
       String methodName = name.substring(3);
       if (!methodName.isEmpty() && nodes.containsKey(methodName)) {
