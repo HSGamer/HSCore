@@ -87,17 +87,7 @@ public class AnnotatedConfig extends DecorativeConfig {
     ConfigPath configPath = field.getAnnotation(ConfigPath.class);
     String path = configPath.value();
     Converter converter = Converter.createConverterSafe(configPath.converter());
-
-    boolean accessible = field.isAccessible();
-    field.setAccessible(true);
-
-    Object defaultValue;
-    try {
-      defaultValue = field.get(this);
-    } catch (IllegalAccessException e) {
-      field.setAccessible(accessible);
-      throw new IllegalStateException("Cannot get the default value from " + field.getName(), e);
-    }
+    Object defaultValue = this.getValue(field);
 
     if (!contains(path)) {
       super.set(path, converter.convertToRaw(defaultValue));
@@ -105,13 +95,7 @@ public class AnnotatedConfig extends DecorativeConfig {
         super.setComment(path, field.getAnnotation(Comment.class).value());
       }
     } else {
-      try {
-        field.set(this, converter.convert(this.getNormalized(path)));
-        field.setAccessible(accessible);
-      } catch (IllegalAccessException e) {
-        field.setAccessible(accessible);
-        throw new IllegalStateException("Cannot set the value for " + field.getName(), e);
-      }
+      this.setValue(field, converter.convert(this.getNormalized(path)));
     }
   }
 
@@ -119,14 +103,32 @@ public class AnnotatedConfig extends DecorativeConfig {
     String path = configPath.value();
     Converter converter = Converter.createConverterSafe(configPath.converter());
     super.set(path, converter.convertToRaw(value));
+    this.setValue(field, value);
+  }
+
+  private void setValue(Field field, Object value) {
     boolean accessible = field.isAccessible();
     field.setAccessible(true);
     try {
       field.set(this, value);
-      field.setAccessible(accessible);
     } catch (IllegalAccessException e) {
-      field.setAccessible(accessible);
       throw new IllegalStateException("Cannot set the value for " + field.getName(), e);
+    } finally {
+      field.setAccessible(accessible);
     }
+  }
+
+  private Object getValue(Field field) {
+    boolean accessible = field.isAccessible();
+    field.setAccessible(true);
+    Object value;
+    try {
+      value = field.get(this);
+    } catch (IllegalAccessException e) {
+      throw new IllegalStateException("Cannot get the value for " + field.getName(), e);
+    } finally {
+      field.setAccessible(accessible);
+    }
+    return value;
   }
 }
