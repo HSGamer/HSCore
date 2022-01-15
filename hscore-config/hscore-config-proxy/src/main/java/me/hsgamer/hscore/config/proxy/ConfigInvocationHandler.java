@@ -42,11 +42,12 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
   ConfigInvocationHandler(Class<T> clazz, Config config) {
     this.clazz = clazz;
     this.config = config;
-    for (Method method : clazz.getDeclaredMethods()) {
+
+    for (Method method : this.clazz.getDeclaredMethods()) {
       this.setupMethod(method);
     }
-    setupClassComment();
-    config.save();
+    this.setupClassComment();
+    this.config.save();
   }
 
   /**
