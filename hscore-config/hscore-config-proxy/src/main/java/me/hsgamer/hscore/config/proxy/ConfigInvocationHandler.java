@@ -99,7 +99,7 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     String name = method.getName();
-    if (name.equals("getConfig") && !method.isDefault() && method.getReturnType().isInstance(config)) {
+    if (name.equals("getConfig") && !method.isDefault() && method.getParameterCount() == 0 && method.getReturnType().isInstance(config)) {
       return config;
     } else if (name.equals("toString")) {
       return this.clazz.toString();
@@ -107,10 +107,10 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
       return this.clazz.hashCode();
     } else if (name.equals("equals")) {
       return proxy == args[0];
-    } else if (name.equals("reloadConfig") && !method.isDefault() && args.length == 0) {
+    } else if (name.equals("reloadConfig") && !method.isDefault() && method.getParameterCount() == 0) {
       config.reload();
       return null;
-    } else if (name.startsWith("get") && method.isDefault() && method.isAnnotationPresent(ConfigPath.class)) {
+    } else if (name.startsWith("get") && method.isDefault() && method.getParameterCount() == 0 && method.isAnnotationPresent(ConfigPath.class)) {
       String methodName = name.substring(3);
       if (!methodName.isEmpty() && nodes.containsKey(methodName)) {
         Object value = nodes.get(methodName).getValue();
@@ -118,7 +118,7 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
           return value;
         }
       }
-    } else if (name.startsWith("set") && !method.isDefault() && args.length == 1) {
+    } else if (name.startsWith("set") && !method.isDefault() && method.getParameterCount() == 1) {
       String methodName = name.substring(3);
       if (!methodName.isEmpty() && nodes.containsKey(methodName)) {
         nodes.get(methodName).setValue(args[0]);
