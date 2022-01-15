@@ -45,14 +45,31 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
     for (Method method : clazz.getDeclaredMethods()) {
       this.setupMethod(method);
     }
+    setupClassComment();
     config.save();
   }
 
+  /**
+   * Check if the class is a primitive type
+   *
+   * @param clazz The class
+   *
+   * @return True if the class is a primitive type
+   */
   private static boolean isPrimitiveOrWrapper(Class<?> clazz) {
     return clazz.isPrimitive() || clazz.isAssignableFrom(Boolean.class) || clazz.isAssignableFrom(Byte.class)
       || clazz.isAssignableFrom(Character.class) || clazz.isAssignableFrom(Short.class)
       || clazz.isAssignableFrom(Integer.class) || clazz.isAssignableFrom(Long.class)
       || clazz.isAssignableFrom(Float.class) || clazz.isAssignableFrom(Double.class);
+  }
+
+  /**
+   * Set up the class comment
+   */
+  private void setupClassComment() {
+    if (clazz.isAnnotationPresent(Comment.class) && config.getComment("") == null) {
+      config.setComment("", clazz.getAnnotation(Comment.class).value());
+    }
   }
 
   /**
