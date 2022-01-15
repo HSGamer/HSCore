@@ -61,10 +61,7 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
    * @param method The method
    */
   private void setupMethod(Method method) {
-    if (!method.isDefault()) {
-      return;
-    }
-    if (method.getParameterCount() != 0) {
+    if (!method.isDefault() || method.getParameterCount() != 0) {
       return;
     }
 
