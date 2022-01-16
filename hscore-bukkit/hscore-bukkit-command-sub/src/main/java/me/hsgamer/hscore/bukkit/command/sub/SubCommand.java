@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.bukkit.subcommand;
+package me.hsgamer.hscore.bukkit.command.sub;
 
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.command.CommandSender;

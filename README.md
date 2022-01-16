@@ -44,7 +44,7 @@
     * **`hscore-bukkit-addon`**
     * **`hscore-bukkit-command`**
     * **`hscore-bukkit-command-extra`**
-    * **`hscore-bukkit-subcommand`**
+    * **`hscore-bukkit-command-sub`**
     * **`hscore-bukkit-config`**
     * **`hscore-bukkit-config-extra`**
     * **`hscore-bukkit-utils`**

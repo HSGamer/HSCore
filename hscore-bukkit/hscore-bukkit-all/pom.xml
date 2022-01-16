@@ -39,7 +39,7 @@
     </dependency>
     <dependency>
       <groupId>me.hsgamer</groupId>
-      <artifactId>hscore-bukkit-subcommand</artifactId>
+      <artifactId>hscore-bukkit-command-sub</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
