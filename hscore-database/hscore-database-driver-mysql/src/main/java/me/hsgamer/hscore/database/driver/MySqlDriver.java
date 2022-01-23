@@ -12,7 +12,7 @@ public class MySqlDriver implements Driver {
   public Class<? extends java.sql.Driver> getDriverClass() {
     try {
       return com.mysql.cj.jdbc.Driver.class;
-    } catch (Error e) {
+    } catch (NoClassDefFoundError | ExceptionInInitializerError e) {
       try {
         return Class.forName("com.mysql.jdbc.Driver").asSubclass(java.sql.Driver.class);
       } catch (ClassNotFoundException ex) {
