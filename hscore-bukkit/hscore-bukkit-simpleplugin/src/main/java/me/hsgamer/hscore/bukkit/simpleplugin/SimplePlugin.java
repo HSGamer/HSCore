@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
@@ -95,5 +96,28 @@ public abstract class SimplePlugin extends JavaPlugin {
    */
   public void registerListener(Listener listener) {
     getServer().getPluginManager().registerEvents(listener, this);
+  }
+
+  /**
+   * Register a provider for the service
+   *
+   * @param service  the service
+   * @param provider the provider
+   * @param priority the priority of the provider
+   * @param <T>      the type of the service
+   */
+  public <T> void registerService(Class<T> service, T provider, ServicePriority priority) {
+    getServer().getServicesManager().register(service, provider, this, priority);
+  }
+
+  /**
+   * Register a provider for the service in the normal priority
+   *
+   * @param service  the service
+   * @param provider the provider
+   * @param <T>      the type of the service
+   */
+  public <T> void registerService(Class<T> service, T provider) {
+    registerService(service, provider, ServicePriority.Normal);
   }
 }
