@@ -3,6 +3,7 @@ package me.hsgamer.hscore.bukkit.command.sub;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -139,6 +140,15 @@ public abstract class SubCommand {
    */
   public final void setPermission(@Nullable String permission) {
     this.permission = permission;
+  }
+
+  /**
+   * Set the permission
+   *
+   * @param permission the permission
+   */
+  public final void setPermission(@NotNull Permission permission) {
+    this.permission = permission.getName();
   }
 
   /**
