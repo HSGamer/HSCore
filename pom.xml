@@ -103,7 +103,9 @@
         <configuration>
           <shadedArtifactAttached>true</shadedArtifactAttached>
           <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
-          <keepDependenciesWithProvidedScope>false</keepDependenciesWithProvidedScope>
+          <createDependencyReducedPom>true</createDependencyReducedPom>
+          <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+          <shadeSourcesContent>true</shadeSourcesContent>
         </configuration>
         <executions>
           <execution>
