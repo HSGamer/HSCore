@@ -10,7 +10,15 @@ public class MySqlDriver implements Driver {
 
   @Override
   public Class<? extends java.sql.Driver> getDriverClass() {
-    return com.mysql.cj.jdbc.Driver.class;
+    try {
+      return com.mysql.cj.jdbc.Driver.class;
+    } catch (Error e) {
+      try {
+        return Class.forName("com.mysql.jdbc.Driver").asSubclass(java.sql.Driver.class);
+      } catch (ClassNotFoundException ex) {
+        throw new IllegalStateException("Cannot find the driver class", ex);
+      }
+    }
   }
 
   @Override
