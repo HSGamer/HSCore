@@ -1,12 +1,13 @@
 package me.hsgamer.hscore.bukkit.command.sub;
 
-import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * A sub-command
@@ -18,8 +19,12 @@ public abstract class SubCommand {
   protected final String description;
   protected final boolean consoleAllowed;
   protected final String name;
-  protected String playerOnlyMessage = "&cYou have to be a player to do this";
-  protected String noPermissionMessage = "&cYou don't have the permission to do this";
+  protected Consumer<CommandSender> usageSender = sender -> {
+    String colored = ChatColor.translateAlternateColorCodes('&', getUsage());
+    sender.sendMessage(colored);
+  };
+  protected Consumer<CommandSender> playerOnlyMessageSender = sender -> sender.sendMessage(ChatColor.RED + "You have to be a player to do this");
+  protected Consumer<CommandSender> noPermissionMessageSender = sender -> sender.sendMessage(ChatColor.RED + "You don't have permission to do this");
 
   /**
    * Create new sub-command
@@ -50,17 +55,17 @@ public abstract class SubCommand {
    */
   public final boolean onCommand(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args) {
     if (sender instanceof ConsoleCommandSender && !consoleAllowed) {
-      MessageUtils.sendMessage(sender, playerOnlyMessage);
+      playerOnlyMessageSender.accept(sender);
       return false;
     }
 
     if (permission != null && !sender.hasPermission(permission)) {
-      MessageUtils.sendMessage(sender, noPermissionMessage);
+      noPermissionMessageSender.accept(sender);
       return false;
     }
 
     if (!isProperUsage(sender, label, args)) {
-      MessageUtils.sendMessage(sender, usage);
+      usageSender.accept(sender);
       return false;
     }
 

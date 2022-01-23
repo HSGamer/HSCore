@@ -5,7 +5,6 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * The sub-command manager
@@ -61,8 +60,8 @@ public abstract class SubCommandManager {
    * @param subCommand the sub-command
    */
   public final void registerSubcommand(@NotNull final SubCommand subCommand) {
-    if (subCommand.name.equalsIgnoreCase("help")) {
-      throw new RuntimeException("'help' is a predefined argument");
+    if (subCommand.name.equalsIgnoreCase(HELP)) {
+      throw new IllegalArgumentException("'" + HELP + "' is a predefined argument");
     }
     subcommands.put(subCommand.getName(), subCommand);
   }
@@ -106,18 +105,17 @@ public abstract class SubCommandManager {
    */
   public final List<String> onTabComplete(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args) {
     List<String> list = new ArrayList<>();
-    if (args.length < 1 || args[0].equals("")) {
+    if (args.length < 1 || args[0].isEmpty()) {
       list.add(HELP);
       list.addAll(subcommands.keySet());
     } else if (subcommands.containsKey(args[0])) {
-      list.addAll(subcommands.get(args[0])
-        .onTabComplete(sender, label, Arrays.copyOfRange(args, 1, args.length)));
+      list.addAll(subcommands.get(args[0]).onTabComplete(sender, label, Arrays.copyOfRange(args, 1, args.length)));
     } else {
-      list.addAll(
-        subcommands.keySet().stream()
-          .filter(s -> s.startsWith(args[0]))
-          .collect(Collectors.toList())
-      );
+      for (String subLabel : subcommands.keySet()) {
+        if (subLabel.startsWith(args[0])) {
+          list.add(subLabel);
+        }
+      }
       if (HELP.startsWith(args[0])) {
         list.add(HELP);
       }

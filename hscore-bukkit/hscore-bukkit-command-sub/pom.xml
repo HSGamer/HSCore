@@ -12,11 +12,6 @@
 
   <dependencies>
     <dependency>
-      <artifactId>hscore-bukkit-utils</artifactId>
-      <groupId>me.hsgamer</groupId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
       <artifactId>hscore-collections</artifactId>
       <groupId>me.hsgamer</groupId>
       <version>${project.version}</version>
