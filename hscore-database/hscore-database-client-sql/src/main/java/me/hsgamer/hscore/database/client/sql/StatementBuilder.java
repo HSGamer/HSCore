@@ -62,21 +62,6 @@ public class StatementBuilder {
   }
 
   /**
-   * Build the prepared statement
-   *
-   * @return the prepared statement
-   *
-   * @throws SQLException if there is an SQL error
-   */
-  public PreparedStatement build() throws SQLException {
-    PreparedStatement preparedStatement = connection.prepareStatement(statement.get());
-    for (int i = 0; i < values.size(); i++) {
-      preparedStatement.setObject(i + 1, values.get(i));
-    }
-    return preparedStatement;
-  }
-
-  /**
    * Execute the statement
    *
    * @param sqlExecutor the executor
@@ -87,7 +72,10 @@ public class StatementBuilder {
    * @throws SQLException if there is an SQL error
    */
   public <T> T execute(SqlExecutor<T> sqlExecutor) throws SQLException {
-    try (PreparedStatement preparedStatement = this.build()) {
+    try (PreparedStatement preparedStatement = connection.prepareStatement(statement.get())) {
+      for (int i = 0; i < values.size(); i++) {
+        preparedStatement.setObject(i + 1, values.get(i));
+      }
       return sqlExecutor.apply(preparedStatement);
     }
   }
