@@ -1,7 +1,6 @@
 package me.hsgamer.hscore.database.client.sql;
 
 import me.hsgamer.hscore.database.Client;
-import org.intellij.lang.annotations.Language;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -26,32 +25,26 @@ public interface SqlClient<T> extends Client<T> {
   Connection getConnection() throws SQLException;
 
   /**
-   * Prepare the statement
+   * Create a new statement builder for this client
    *
-   * @param statement the statement
-   * @param values    the values for the designated parameters
-   *
-   * @return the prepared statement container
+   * @return the statement builder
    *
    * @throws SQLException if there is an SQL error
    */
-  default PreparedStatementContainer prepareStatement(@Language("SQL") String statement, Object... values) throws SQLException {
-    return PreparedStatementContainer.of(this.getConnection(), statement, values);
+  default StatementBuilder createStatementBuilder() throws SQLException {
+    return StatementBuilder.create(this.getConnection());
   }
 
   /**
-   * Prepare the statement but ignores exceptions
+   * Create a new statement builder for this client but ignores exceptions
    *
-   * @param statement the statement
-   * @param values    the values for the designated parameters
-   *
-   * @return the prepared statement container
+   * @return the statement builder
    */
-  default Optional<PreparedStatementContainer> prepareStatementSafe(@Language("SQL") String statement, Object... values) {
+  default Optional<StatementBuilder> createStatementBuilderSafe() {
     try {
-      return Optional.of(this.prepareStatement(statement, values));
+      return Optional.of(this.createStatementBuilder());
     } catch (Exception e) {
-      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is an error when preparing the statement", e);
+      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is an error when creating the statement builder", e);
       return Optional.empty();
     }
   }
