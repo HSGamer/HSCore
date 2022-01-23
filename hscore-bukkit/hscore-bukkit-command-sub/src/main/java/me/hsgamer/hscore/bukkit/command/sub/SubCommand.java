@@ -13,12 +13,11 @@ import java.util.function.Consumer;
  * A sub-command
  */
 public abstract class SubCommand {
-
-  protected final String permission;
-  protected final String usage;
-  protected final String description;
-  protected final boolean consoleAllowed;
   protected final String name;
+  protected boolean consoleAllowed;
+  protected String permission;
+  protected String usage;
+  protected String description;
   protected Consumer<CommandSender> usageSender = sender -> {
     String colored = ChatColor.translateAlternateColorCodes('&', getUsage());
     sender.sendMessage(colored);
@@ -29,14 +28,26 @@ public abstract class SubCommand {
   /**
    * Create new sub-command
    *
+   * @param name the name
+   */
+  protected SubCommand(@NotNull String name) {
+    this.name = name;
+    consoleAllowed = true;
+    permission = null;
+    usage = "";
+    description = "";
+  }
+
+  /**
+   * Create new sub-command
+   *
    * @param name           the name
    * @param description    the description
    * @param usage          the usage
    * @param permission     the permission
    * @param consoleAllowed is console allowed to use?
    */
-  public SubCommand(@NotNull final String name, @NotNull final String description, @NotNull final String usage, @Nullable final String permission,
-                    final boolean consoleAllowed) {
+  protected SubCommand(@NotNull final String name, @NotNull final String description, @NotNull final String usage, @Nullable final String permission, final boolean consoleAllowed) {
     this.name = name;
     this.permission = permission;
     this.description = description;
@@ -84,6 +95,15 @@ public abstract class SubCommand {
   }
 
   /**
+   * Set the description
+   *
+   * @param description the description
+   */
+  public final void setDescription(@NotNull String description) {
+    this.description = description;
+  }
+
+  /**
    * Get the usage
    *
    * @return the usage
@@ -91,6 +111,15 @@ public abstract class SubCommand {
   @NotNull
   public final String getUsage() {
     return usage;
+  }
+
+  /**
+   * Set the usage
+   *
+   * @param usage the usage
+   */
+  public final void setUsage(@NotNull String usage) {
+    this.usage = usage;
   }
 
   /**
@@ -104,12 +133,30 @@ public abstract class SubCommand {
   }
 
   /**
+   * Set the permission
+   *
+   * @param permission the permission
+   */
+  public final void setPermission(@Nullable String permission) {
+    this.permission = permission;
+  }
+
+  /**
    * Check if the console is allowed to use
    *
    * @return true if it is
    */
   public final boolean isConsoleAllowed() {
     return consoleAllowed;
+  }
+
+  /**
+   * Set if the console is allowed to use
+   *
+   * @param consoleAllowed true if it is
+   */
+  public final void setConsoleAllowed(boolean consoleAllowed) {
+    this.consoleAllowed = consoleAllowed;
   }
 
   /**
