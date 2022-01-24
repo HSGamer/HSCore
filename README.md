@@ -32,6 +32,7 @@
     * **`hscore-database-client-hikari`**
     * **`hscore-database-client-java`**
     * **`hscore-database-client-hibernate`**
+    * **`hscore-database-client-jpa`**
   * **`hscore-config-all`**
     * **`hscore-config-common`**
     * **`hscore-config-path`**

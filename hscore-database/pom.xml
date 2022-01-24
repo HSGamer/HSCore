@@ -20,8 +20,9 @@
     <module>hscore-database-client-sql</module>
     <module>hscore-database-client-hikari</module>
     <module>hscore-database-client-java</module>
+    <module>hscore-database-client-hibernate</module>
+    <module>hscore-database-client-jpa</module>
     <module>hscore-database-all</module>
-      <module>hscore-database-client-hibernate</module>
   </modules>
 
 </project>
