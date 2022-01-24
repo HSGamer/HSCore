@@ -4,7 +4,6 @@ import me.hsgamer.hscore.database.Driver;
 import me.hsgamer.hscore.database.Setting;
 import me.hsgamer.hscore.database.client.sql.SqlClient;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -29,10 +28,9 @@ public class JavaSqlClient implements SqlClient<Properties> {
     this.setting = setting;
     this.properties = new Properties();
     try {
-      java.sql.Driver javaDriver = driver.getDriverClass().getConstructor().newInstance();
-      DriverManager.registerDriver(javaDriver);
-    } catch (SQLException | InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
-      throw new IllegalStateException("Failed to register the driver", e);
+      Class.forName(driver.getDriverClass().getName());
+    } catch (ClassNotFoundException e) {
+      throw new IllegalStateException("Failed to load the driver", e);
     }
     properties.setProperty("user", setting.getUsername());
     properties.setProperty("password", setting.getPassword());
