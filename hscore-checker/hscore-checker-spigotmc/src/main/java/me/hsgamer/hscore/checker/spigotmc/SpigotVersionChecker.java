@@ -4,12 +4,11 @@ import me.hsgamer.hscore.checker.VersionChecker;
 import me.hsgamer.hscore.web.UserAgent;
 import me.hsgamer.hscore.web.WebUtils;
 import org.jetbrains.annotations.NotNull;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -37,17 +36,16 @@ public final class SpigotVersionChecker implements VersionChecker {
   public CompletableFuture<String> getVersion() {
     return CompletableFuture.supplyAsync(() -> {
       try {
-        JSONObject object = (JSONObject) new JSONParser().parse(new InputStreamReader(
-          UserAgent.FIREFOX.assignToConnection(
-            WebUtils.createConnection("https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId)
-          ).getInputStream()
-        ));
-        if (!object.containsKey("current_version")) {
+        InputStream inputStream = UserAgent.FIREFOX.assignToConnection(
+          WebUtils.createConnection("https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId)
+        ).getInputStream();
+        JSONObject jsonObject = new JSONObject(new JSONTokener(inputStream));
+        if (!jsonObject.has("current_version")) {
           throw new IOException("Cannot get the plugin version");
         }
-        return String.valueOf(object.get("current_version"));
-      } catch (IOException | ParseException exception) {
-        return "Error when getting version: " + exception.getMessage();
+        return jsonObject.getString("current_version");
+      } catch (IOException exception) {
+        throw new IllegalStateException(exception);
       }
     });
   }
