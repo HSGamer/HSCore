@@ -7,6 +7,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.Configuration;
 
+import java.util.function.Consumer;
+
 /**
  * The Hibernate client
  */
@@ -41,12 +43,27 @@ public class HibernateClient implements Client<Configuration> {
   }
 
   /**
+   * Apply the configuration to the client
+   *
+   * @param configConsumer the consumer for the configuration
+   *
+   * @return the client for chaining
+   */
+  public HibernateClient configure(Consumer<Configuration> configConsumer) {
+    configConsumer.accept(configuration);
+    return this;
+  }
+
+  /**
    * Add an entity class to the client
    *
    * @param clazz the entity class
+   *
+   * @return the client for chaining
    */
-  public void addEntityClass(Class<?> clazz) {
+  public HibernateClient addEntityClass(Class<?> clazz) {
     configuration.addAnnotatedClass(clazz);
+    return this;
   }
 
   /**
