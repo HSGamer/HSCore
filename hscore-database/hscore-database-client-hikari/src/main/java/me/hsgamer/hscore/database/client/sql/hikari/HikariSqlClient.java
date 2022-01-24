@@ -47,8 +47,8 @@ public class HikariSqlClient implements SqlClient<HikariDataSource> {
       config.addDataSourceProperty("cacheServerConfiguration", true);
       config.addDataSourceProperty("elideSetAutoCommits", true);
       config.addDataSourceProperty("maintainTimeStats", false);
-      setting.getProperties().forEach(config::addDataSourceProperty);
     }
+    setting.getProperties().forEach(config::addDataSourceProperty);
     this.hikariDataSource = new HikariDataSource(config);
   }
 
