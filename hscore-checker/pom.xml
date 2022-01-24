@@ -14,6 +14,7 @@
   <modules>
     <module>hscore-checker-common</module>
     <module>hscore-checker-spigotmc</module>
+    <module>hscore-checker-github</module>
     <module>hscore-checker-all</module>
   </modules>
 

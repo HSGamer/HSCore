@@ -9,7 +9,8 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>hscore-checker-all</artifactId>
+  <artifactId>hscore-checker-github</artifactId>
+
   <dependencies>
     <dependency>
       <groupId>me.hsgamer</groupId>
@@ -18,13 +19,13 @@
     </dependency>
     <dependency>
       <groupId>me.hsgamer</groupId>
-      <artifactId>hscore-checker-spigotmc</artifactId>
+      <artifactId>hscore-web</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.hsgamer</groupId>
-      <artifactId>hscore-checker-github</artifactId>
-      <version>${project.version}</version>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20211205</version>
     </dependency>
   </dependencies>
 </project>
