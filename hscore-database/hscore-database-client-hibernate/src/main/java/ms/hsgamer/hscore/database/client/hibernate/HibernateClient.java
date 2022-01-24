@@ -6,6 +6,7 @@ import me.hsgamer.hscore.database.Setting;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.dialect.Dialect;
 
 import java.util.function.Consumer;
 
@@ -40,6 +41,30 @@ public class HibernateClient implements Client<Configuration> {
   @Override
   public Setting getSetting() {
     return setting;
+  }
+
+  /**
+   * Set the dialect for the client
+   *
+   * @param dialect the dialect
+   *
+   * @return the client for chaining
+   */
+  public HibernateClient setDialect(String dialect) {
+    configuration.setProperty(AvailableSettings.DIALECT, dialect);
+    return this;
+  }
+
+  /**
+   * Set the dialect for the client
+   *
+   * @param dialect the dialect
+   *
+   * @return the client for chaining
+   */
+  public HibernateClient setDialect(Class<? extends Dialect> dialect) {
+    configuration.setProperty(AvailableSettings.DIALECT, dialect.getName());
+    return this;
   }
 
   /**
