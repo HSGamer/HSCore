@@ -1,21 +1,22 @@
 package me.hsgamer.hscore.database.client.sql.java;
 
 import me.hsgamer.hscore.database.Driver;
-import me.hsgamer.hscore.database.LocalDriver;
 import me.hsgamer.hscore.database.Setting;
 import me.hsgamer.hscore.database.client.sql.SqlClient;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.stream.Collectors;
+import java.util.Properties;
 
 /**
  * The SQL client with the Java's Driver Manager
  */
-public class JavaSqlClient implements SqlClient<Object> {
+public class JavaSqlClient implements SqlClient<Properties> {
 
   private final Setting setting;
+  private final Properties properties;
   private final String dbURL;
 
   /**
@@ -23,34 +24,30 @@ public class JavaSqlClient implements SqlClient<Object> {
    *
    * @param setting the setting
    * @param driver  the driver
-   *
-   * @throws ClassNotFoundException if the driver is not found
    */
-  public JavaSqlClient(Setting setting, Driver driver) throws ClassNotFoundException {
+  public JavaSqlClient(Setting setting, Driver driver) {
     this.setting = setting;
-    Class.forName(driver.getDriverClass().getName());
-    StringBuilder builder = new StringBuilder();
-    builder.append(driver.convertURL(setting));
-    if (!(driver instanceof LocalDriver)) {
-      builder.append("?");
-      builder.append(
-        setting.getProperties().entrySet()
-          .stream()
-          .map(entry -> entry.getKey() + "=" + entry.getValue())
-          .collect(Collectors.joining("&"))
-      );
+    this.properties = new Properties();
+    try {
+      java.sql.Driver javaDriver = driver.getDriverClass().getConstructor().newInstance();
+      DriverManager.registerDriver(javaDriver);
+    } catch (SQLException | InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+      throw new IllegalStateException("Failed to register the driver", e);
     }
-    this.dbURL = builder.toString();
+    properties.setProperty("user", setting.getUsername());
+    properties.setProperty("password", setting.getPassword());
+    setting.getProperties().forEach((k, v) -> properties.setProperty(k, String.valueOf(v)));
+    this.dbURL = driver.convertURL(setting);
   }
 
   @Override
   public Connection getConnection() throws SQLException {
-    return DriverManager.getConnection(dbURL, setting.getUsername(), setting.getPassword());
+    return DriverManager.getConnection(dbURL, properties);
   }
 
   @Override
-  public Object getOriginal() {
-    throw new UnsupportedOperationException("This client is from Java itself");
+  public Properties getOriginal() {
+    return properties;
   }
 
   @Override
