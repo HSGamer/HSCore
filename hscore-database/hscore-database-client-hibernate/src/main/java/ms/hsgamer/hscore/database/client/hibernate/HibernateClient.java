@@ -4,18 +4,21 @@ import me.hsgamer.hscore.database.Client;
 import me.hsgamer.hscore.database.Driver;
 import me.hsgamer.hscore.database.Setting;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.AvailableSettings;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.dialect.Dialect;
+import org.hibernate.service.ServiceRegistry;
 
 import java.util.function.Consumer;
 
 /**
  * The Hibernate client
  */
-public class HibernateClient implements Client<Configuration> {
+public class HibernateClient implements Client<MetadataSources> {
   private final Setting setting;
-  private final Configuration configuration;
+  private final MetadataSources metadataSources;
+  private Metadata metadata;
 
   /**
    * Create new Hibernate client
@@ -25,17 +28,19 @@ public class HibernateClient implements Client<Configuration> {
    */
   public HibernateClient(Setting setting, Driver driver) {
     this.setting = setting;
-    this.configuration = new Configuration();
-    configuration.setProperty(AvailableSettings.DRIVER, driver.getDriverClass().getName());
-    configuration.setProperty(AvailableSettings.URL, driver.convertURL(setting));
-    configuration.setProperty(AvailableSettings.USER, setting.getUsername());
-    configuration.setProperty(AvailableSettings.PASS, setting.getPassword());
-    setting.getProperties().forEach((key, value) -> configuration.setProperty(key, String.valueOf(value)));
+    ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+      .applySetting(AvailableSettings.DRIVER, driver.getDriverClass().getName())
+      .applySetting(AvailableSettings.URL, driver.convertURL(setting))
+      .applySetting(AvailableSettings.USER, setting.getUsername())
+      .applySetting(AvailableSettings.PASS, setting.getPassword())
+      .applySettings(setting.getProperties())
+      .build();
+    this.metadataSources = new MetadataSources(serviceRegistry);
   }
 
   @Override
-  public Configuration getOriginal() {
-    return configuration;
+  public MetadataSources getOriginal() {
+    return metadataSources;
   }
 
   @Override
@@ -44,38 +49,14 @@ public class HibernateClient implements Client<Configuration> {
   }
 
   /**
-   * Set the dialect for the client
+   * Configure the metadata sources
    *
-   * @param dialect the dialect
-   *
-   * @return the client for chaining
-   */
-  public HibernateClient setDialect(String dialect) {
-    configuration.setProperty(AvailableSettings.DIALECT, dialect);
-    return this;
-  }
-
-  /**
-   * Set the dialect for the client
-   *
-   * @param dialect the dialect
+   * @param metadataSourcesConsumer the consumer for the metadata sources
    *
    * @return the client for chaining
    */
-  public HibernateClient setDialect(Class<? extends Dialect> dialect) {
-    configuration.setProperty(AvailableSettings.DIALECT, dialect.getName());
-    return this;
-  }
-
-  /**
-   * Apply the configuration to the client
-   *
-   * @param configConsumer the consumer for the configuration
-   *
-   * @return the client for chaining
-   */
-  public HibernateClient configure(Consumer<Configuration> configConsumer) {
-    configConsumer.accept(configuration);
+  public HibernateClient configure(Consumer<MetadataSources> metadataSourcesConsumer) {
+    metadataSourcesConsumer.accept(metadataSources);
     return this;
   }
 
@@ -87,8 +68,20 @@ public class HibernateClient implements Client<Configuration> {
    * @return the client for chaining
    */
   public HibernateClient addEntityClass(Class<?> clazz) {
-    configuration.addAnnotatedClass(clazz);
+    metadataSources.addAnnotatedClass(clazz);
     return this;
+  }
+
+  /**
+   * Get the metadata of the client
+   *
+   * @return the metadata
+   */
+  public Metadata getMetadata() {
+    if (metadata == null) {
+      metadata = metadataSources.buildMetadata();
+    }
+    return metadata;
   }
 
   /**
@@ -96,7 +89,7 @@ public class HibernateClient implements Client<Configuration> {
    *
    * @return the session factory
    */
-  public SessionFactory buildFactory() {
-    return configuration.buildSessionFactory();
+  public SessionFactory buildSessionFactory() {
+    return getMetadata().buildSessionFactory();
   }
 }
