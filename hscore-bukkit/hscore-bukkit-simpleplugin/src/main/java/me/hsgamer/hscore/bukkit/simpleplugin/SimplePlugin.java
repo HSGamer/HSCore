@@ -120,4 +120,16 @@ public abstract class SimplePlugin extends JavaPlugin {
   public <T> void registerService(Class<T> service, T provider) {
     registerService(service, provider, ServicePriority.Normal);
   }
+
+  /**
+   * Query the provider of the service
+   *
+   * @param service the service
+   * @param <T>     the type of the service
+   *
+   * @return the provider
+   */
+  public <T> T getService(Class<T> service) {
+    return getServer().getServicesManager().load(service);
+  }
 }
