@@ -48,8 +48,8 @@ public final class AddonDescription {
    * @param mainClass the main class of the addon
    * @param config    the configuration of the addon
    */
-  public AddonDescription(@NotNull final String name, @NotNull final String version, @NotNull final String mainClass,
-                          @NotNull final Config config) {
+  private AddonDescription(@NotNull final String name, @NotNull final String version, @NotNull final String mainClass,
+                           @NotNull final Config config) {
     this.name = name;
     this.version = version;
     this.mainClass = mainClass;
