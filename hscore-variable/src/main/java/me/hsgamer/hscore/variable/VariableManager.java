@@ -11,8 +11,9 @@ import java.util.regex.Pattern;
  * The Variable Manager
  */
 public final class VariableManager {
-
-  private static final Pattern PATTERN = Pattern.compile("[{]([^{}]+)[}]");
+  private static final Pattern PATTERN = Pattern.compile("(.)([{]([^{}]+)[}])(.)");
+  private static final String START_IGNORE_CHAR = "\\";
+  private static final String END_IGNORE_CHAR = "\\";
   private static final Map<String, StringReplacer> variables = new HashMap<>();
   private static final List<ExternalStringReplacer> externalReplacers = new ArrayList<>();
   private static BooleanSupplier replaceAll = () -> false;
@@ -144,7 +145,15 @@ public final class VariableManager {
   public static String setSingleVariables(String message, UUID uuid) {
     Matcher matcher = PATTERN.matcher(message);
     while (matcher.find()) {
-      String identifier = matcher.group(1).trim();
+      String startChar = matcher.group(1);
+      String endChar = matcher.group(4);
+      String original = matcher.group(2);
+      if (START_IGNORE_CHAR.equals(startChar) && END_IGNORE_CHAR.equals(endChar)) {
+        message = message.replaceAll(Pattern.quote(matcher.group()), Matcher.quoteReplacement(original));
+        continue;
+      }
+
+      String identifier = matcher.group(3).trim();
       for (Map.Entry<String, ? extends StringReplacer> variable : variables.entrySet()) {
         if (!identifier.startsWith(variable.getKey())) {
           continue;
@@ -156,9 +165,9 @@ public final class VariableManager {
         }
 
         if (replaceAll.getAsBoolean()) {
-          message = message.replaceAll(Pattern.quote(matcher.group()), Matcher.quoteReplacement(replace));
+          message = message.replaceAll(Pattern.quote(original), Matcher.quoteReplacement(replace));
         } else {
-          message = message.replaceFirst(Pattern.quote(matcher.group()), Matcher.quoteReplacement(replace));
+          message = message.replaceFirst(Pattern.quote(original), Matcher.quoteReplacement(replace));
         }
       }
     }
@@ -179,7 +188,7 @@ public final class VariableManager {
     Matcher matcher = PATTERN.matcher(string);
     List<String> found = new ArrayList<>();
     while (matcher.find()) {
-      found.add(matcher.group(1).trim());
+      found.add(matcher.group(3).trim());
     }
 
     if (found.isEmpty()) {
