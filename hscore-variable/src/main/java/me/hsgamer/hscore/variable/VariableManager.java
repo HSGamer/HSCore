@@ -154,12 +154,13 @@ public final class VariableManager {
       }
 
       String identifier = matcher.group(3).trim();
-      for (Map.Entry<String, ? extends StringReplacer> variable : variables.entrySet()) {
+      for (Map.Entry<String, StringReplacer> variable : variables.entrySet()) {
         if (!identifier.startsWith(variable.getKey())) {
           continue;
         }
 
-        String replace = variable.getValue().replace(identifier.substring(variable.getKey().length()), uuid);
+        String parameter = identifier.substring(variable.getKey().length());
+        String replace = variable.getValue().replace(parameter, uuid);
         if (replace == null) {
           continue;
         }
