@@ -1,6 +1,5 @@
 package me.hsgamer.hscore.addon.object;
 
-import me.hsgamer.hscore.addon.exception.RequiredAddonPathException;
 import me.hsgamer.hscore.config.Config;
 import me.hsgamer.hscore.config.ConfigProvider;
 import org.jetbrains.annotations.NotNull;
@@ -85,15 +84,15 @@ public final class AddonDescription {
     final String version = data.getInstance("version", String.class);
     final String mainClass = data.getInstance("main", String.class);
     if (name == null) {
-      throw new RequiredAddonPathException("Addon '" + jar.getName() + "' doesn't have a name on " +
+      throw new IllegalArgumentException("Addon '" + jar.getName() + "' doesn't have a name on " +
         addonConfigFileName);
     }
     if (version == null) {
-      throw new RequiredAddonPathException("Addon '" + jar.getName() + "' doesn't have a version on " +
+      throw new IllegalArgumentException("Addon '" + jar.getName() + "' doesn't have a version on " +
         addonConfigFileName);
     }
     if (mainClass == null) {
-      throw new RequiredAddonPathException("Addon '" + jar.getName() + "' doesn't have a main class on " +
+      throw new IllegalArgumentException("Addon '" + jar.getName() + "' doesn't have a main class on " +
         addonConfigFileName);
     }
     return new AddonDescription(name, version, mainClass, data);
