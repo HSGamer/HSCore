@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  */
 public final class StringUtils {
 
-  private static final Pattern hexPattern = Pattern.compile("(?<!\\\\)(\\S)#([A-Fa-f0-9]{1,6})");
+  private static final Pattern hexPattern = Pattern.compile("(\\\\?)((\\S)#([A-Fa-f0-9]{1,6}))");
 
   private StringUtils() {
     // EMPTY
@@ -23,10 +23,10 @@ public final class StringUtils {
    * Replace all alternative character format to the final characters.
    * The format is "?&lt;a-zA-Z0-9&gt;", where ? is the alternative character and &lt;a-zA-Z0-9&gt; is the code.
    *
-   * @param altChar   The alternative character
-   * @param finalChar The final character
-   * @param input          The input string
-   * @param charMappers    The character mappers to replace some special characters
+   * @param altChar     The alternative character
+   * @param finalChar   The final character
+   * @param input       The input string
+   * @param charMappers The character mappers to replace some special characters
    *
    * @return The converted string
    */
@@ -78,14 +78,19 @@ public final class StringUtils {
     Matcher matcher = hexPattern.matcher(input);
     StringBuffer buffer = new StringBuffer(input.length() + 4 * 8);
     while (matcher.find()) {
-      String matchedChar = matcher.group(1);
+      String matchedChar = matcher.group(3);
       if (matchedChar.indexOf(indicator) < 0) {
         continue;
       }
-      char[] hex = normalizeHex(matcher.group(2));
-      matcher.appendReplacement(buffer, replacer.apply(hex));
+      boolean skip = matcher.group(1).equals("\\");
+      if (skip) {
+        matcher.appendReplacement(buffer, matcher.group(2));
+      } else {
+        char[] hex = normalizeHex(matcher.group(4));
+        matcher.appendReplacement(buffer, replacer.apply(hex));
+      }
     }
-    return matcher.appendTail(buffer).toString().replace("\\" + indicator + "#", indicator + "#");
+    return matcher.appendTail(buffer).toString();
   }
 
   /**
