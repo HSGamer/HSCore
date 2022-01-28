@@ -8,12 +8,33 @@ import java.util.Map;
  * The setting for connection
  */
 public class Setting {
-  private final Map<String, Object> properties = new HashMap<>();
-  private String host = "localhost";
-  private String databaseName = "";
-  private String port = "3306";
-  private String username = "root";
-  private String password = "";
+  private final Map<String, Object> properties;
+  private String host;
+  private String databaseName;
+  private String port;
+  private String username;
+  private String password;
+
+  /**
+   * The constructor
+   */
+  private Setting() {
+    properties = new HashMap<>();
+    host = "localhost";
+    databaseName = "";
+    port = "3306";
+    username = "root";
+    password = "";
+  }
+
+  /**
+   * Create a new setting
+   *
+   * @return the setting
+   */
+  public static Setting create() {
+    return new Setting();
+  }
 
   /**
    * Get the host
