@@ -5,7 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import me.hsgamer.hscore.database.Driver;
 import me.hsgamer.hscore.database.LocalDriver;
 import me.hsgamer.hscore.database.Setting;
-import me.hsgamer.hscore.database.client.sql.SqlClient;
+import me.hsgamer.hscore.database.client.sql.BaseSqlClient;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -13,9 +13,7 @@ import java.sql.SQLException;
 /**
  * The SQL client with HikariCP
  */
-public class HikariSqlClient implements SqlClient<HikariDataSource> {
-
-  private final Setting setting;
+public class HikariSqlClient extends BaseSqlClient<HikariDataSource> {
   private final HikariDataSource hikariDataSource;
 
   /**
@@ -25,7 +23,7 @@ public class HikariSqlClient implements SqlClient<HikariDataSource> {
    * @param driver  the driver
    */
   public HikariSqlClient(Setting setting, Driver driver) {
-    this.setting = setting;
+    super(setting);
     final HikariConfig config = new HikariConfig();
     config.setDriverClassName(driver.getDriverClass().getName());
     config.setJdbcUrl(driver.convertURL(setting));
@@ -55,11 +53,6 @@ public class HikariSqlClient implements SqlClient<HikariDataSource> {
   @Override
   public HikariDataSource getOriginal() {
     return hikariDataSource;
-  }
-
-  @Override
-  public Setting getSetting() {
-    return setting;
   }
 
   @Override

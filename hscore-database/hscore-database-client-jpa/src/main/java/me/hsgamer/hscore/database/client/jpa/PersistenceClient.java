@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.database.client.jpa;
 
-import me.hsgamer.hscore.database.Client;
+import me.hsgamer.hscore.database.BaseClient;
 import me.hsgamer.hscore.database.Driver;
 import me.hsgamer.hscore.database.Setting;
 
@@ -13,8 +13,7 @@ import java.util.Map;
 /**
  * The JPA persistence client
  */
-public class PersistenceClient implements Client<EntityManagerFactory> {
-  private final Setting setting;
+public class PersistenceClient extends BaseClient<EntityManagerFactory> {
   private final EntityManagerFactory entityManagerFactory;
 
   /**
@@ -25,7 +24,7 @@ public class PersistenceClient implements Client<EntityManagerFactory> {
    * @param driver  The driver of the persistence client
    */
   public PersistenceClient(String name, Setting setting, Driver driver) {
-    this.setting = setting;
+    super(setting);
     Map<String, Object> properties = new HashMap<>();
     properties.put("javax.persistence.jdbc.url", driver.convertURL(setting));
     properties.put("javax.persistence.jdbc.user", setting.getUsername());
@@ -38,11 +37,6 @@ public class PersistenceClient implements Client<EntityManagerFactory> {
   @Override
   public EntityManagerFactory getOriginal() {
     return entityManagerFactory;
-  }
-
-  @Override
-  public Setting getSetting() {
-    return setting;
   }
 
   /**

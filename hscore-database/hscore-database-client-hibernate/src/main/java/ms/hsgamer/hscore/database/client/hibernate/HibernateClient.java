@@ -1,6 +1,6 @@
 package ms.hsgamer.hscore.database.client.hibernate;
 
-import me.hsgamer.hscore.database.Client;
+import me.hsgamer.hscore.database.BaseClient;
 import me.hsgamer.hscore.database.Driver;
 import me.hsgamer.hscore.database.Setting;
 import org.hibernate.SessionFactory;
@@ -15,8 +15,7 @@ import java.util.function.Consumer;
 /**
  * The Hibernate client
  */
-public class HibernateClient implements Client<MetadataSources> {
-  private final Setting setting;
+public class HibernateClient extends BaseClient<MetadataSources> {
   private final MetadataSources metadataSources;
   private Metadata metadata;
 
@@ -27,7 +26,7 @@ public class HibernateClient implements Client<MetadataSources> {
    * @param driver  the driver
    */
   public HibernateClient(Setting setting, Driver driver) {
-    this.setting = setting;
+    super(setting);
     ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
       .applySetting(AvailableSettings.DRIVER, driver.getDriverClass().getName())
       .applySetting(AvailableSettings.URL, driver.convertURL(setting))
@@ -41,11 +40,6 @@ public class HibernateClient implements Client<MetadataSources> {
   @Override
   public MetadataSources getOriginal() {
     return metadataSources;
-  }
-
-  @Override
-  public Setting getSetting() {
-    return setting;
   }
 
   /**

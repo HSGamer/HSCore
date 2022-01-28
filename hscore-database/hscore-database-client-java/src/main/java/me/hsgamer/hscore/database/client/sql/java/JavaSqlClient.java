@@ -2,7 +2,7 @@ package me.hsgamer.hscore.database.client.sql.java;
 
 import me.hsgamer.hscore.database.Driver;
 import me.hsgamer.hscore.database.Setting;
-import me.hsgamer.hscore.database.client.sql.SqlClient;
+import me.hsgamer.hscore.database.client.sql.BaseSqlClient;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,9 +12,7 @@ import java.util.Properties;
 /**
  * The SQL client with the Java's Driver Manager
  */
-public class JavaSqlClient implements SqlClient<Properties> {
-
-  private final Setting setting;
+public class JavaSqlClient extends BaseSqlClient<Properties> {
   private final Properties properties;
   private final String dbURL;
 
@@ -25,7 +23,7 @@ public class JavaSqlClient implements SqlClient<Properties> {
    * @param driver  the driver
    */
   public JavaSqlClient(Setting setting, Driver driver) {
-    this.setting = setting;
+    super(setting);
     this.properties = new Properties();
     try {
       Class.forName(driver.getDriverClass().getName());
@@ -46,10 +44,5 @@ public class JavaSqlClient implements SqlClient<Properties> {
   @Override
   public Properties getOriginal() {
     return properties;
-  }
-
-  @Override
-  public Setting getSetting() {
-    return setting;
   }
 }
