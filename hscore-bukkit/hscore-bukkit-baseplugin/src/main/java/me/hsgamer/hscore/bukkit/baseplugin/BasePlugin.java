@@ -4,12 +4,24 @@ import me.hsgamer.hscore.bukkit.command.CommandManager;
 import me.hsgamer.hscore.bukkit.simpleplugin.SimplePlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.java.JavaPluginLoader;
+
+import java.io.File;
 
 /**
  * A slightly complicated {@link SimplePlugin} implementation
  */
-public abstract class BasePlugin extends SimplePlugin {
+public class BasePlugin extends SimplePlugin {
   private final CommandManager commandManager = new CommandManager(this);
+
+  public BasePlugin() {
+    super();
+  }
+
+  protected BasePlugin(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
+    super(loader, description, dataFolder, file);
+  }
 
   @Override
   public final void onLoad() {

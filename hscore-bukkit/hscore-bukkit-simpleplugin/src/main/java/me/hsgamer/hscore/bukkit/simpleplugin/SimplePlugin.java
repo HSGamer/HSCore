@@ -4,16 +4,22 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * A convenient {@link JavaPlugin} implementation
  */
-public abstract class SimplePlugin extends JavaPlugin {
+public class SimplePlugin extends JavaPlugin {
+  private final List<Runnable> disableFunctions = new ArrayList<>();
+
   public SimplePlugin() {
     super();
     preLoad();
@@ -39,6 +45,9 @@ public abstract class SimplePlugin extends JavaPlugin {
   @Override
   public void onDisable() {
     disable();
+
+    disableFunctions.forEach(Runnable::run);
+    disableFunctions.clear();
 
     getServer().getScheduler().cancelTasks(this);
     getServer().getServicesManager().unregisterAll(this);
@@ -106,7 +115,7 @@ public abstract class SimplePlugin extends JavaPlugin {
    * @param priority the priority of the provider
    * @param <T>      the type of the service
    */
-  public <T> void registerService(Class<T> service, T provider, ServicePriority priority) {
+  public <T> void registerProvider(Class<T> service, T provider, ServicePriority priority) {
     getServer().getServicesManager().register(service, provider, this, priority);
   }
 
@@ -117,19 +126,53 @@ public abstract class SimplePlugin extends JavaPlugin {
    * @param provider the provider
    * @param <T>      the type of the service
    */
-  public <T> void registerService(Class<T> service, T provider) {
-    registerService(service, provider, ServicePriority.Normal);
+  public <T> void registerProvider(Class<T> service, T provider) {
+    registerProvider(service, provider, ServicePriority.Normal);
   }
 
   /**
-   * Query the provider of the service
+   * Load the provider of the service
    *
    * @param service the service
    * @param <T>     the type of the service
    *
    * @return the provider
    */
-  public <T> T getService(Class<T> service) {
+  public <T> T loadProvider(Class<T> service) {
     return getServer().getServicesManager().load(service);
+  }
+
+  /**
+   * Get the registered provider of the service
+   *
+   * @param service the service
+   * @param <T>     the type of the service
+   *
+   * @return the provider
+   */
+  public <T> RegisteredServiceProvider<T> getProvider(Class<T> service) {
+    return getServer().getServicesManager().getRegistration(service);
+  }
+
+  /**
+   * Get all providers of the service
+   *
+   * @param service the service
+   * @param <T>     the type of the service
+   *
+   * @return the collection of providers
+   */
+  public <T> Collection<RegisteredServiceProvider<T>> getAllProviders(Class<T> service) {
+    return getServer().getServicesManager().getRegistrations(service);
+  }
+
+  /**
+   * Add a function that will be called when the plugin is disabled.
+   * When the plugin is disabled, the added functions will be called and then removed from the list.
+   *
+   * @param disableFunction the disable function
+   */
+  public void addDisableFunction(Runnable disableFunction) {
+    disableFunctions.add(disableFunction);
   }
 }
