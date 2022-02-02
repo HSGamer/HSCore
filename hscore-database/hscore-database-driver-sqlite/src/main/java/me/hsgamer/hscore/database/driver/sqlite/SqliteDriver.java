@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.database.driver;
+package me.hsgamer.hscore.database.driver.sqlite;
 
 import me.hsgamer.hscore.database.LocalDriver;
 import me.hsgamer.hscore.database.Setting;
