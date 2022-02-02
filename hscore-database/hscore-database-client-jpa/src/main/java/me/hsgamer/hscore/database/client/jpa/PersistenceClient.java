@@ -30,7 +30,7 @@ public class PersistenceClient extends BaseClient<EntityManagerFactory> {
     properties.put("javax.persistence.jdbc.user", setting.getUsername());
     properties.put("javax.persistence.jdbc.password", setting.getPassword());
     properties.put("javax.persistence.jdbc.driver", driver.getDriverClass());
-    properties.putAll(setting.getProperties());
+    properties.putAll(setting.getClientProperties());
     this.entityManagerFactory = Persistence.createEntityManagerFactory(name, properties);
   }
 

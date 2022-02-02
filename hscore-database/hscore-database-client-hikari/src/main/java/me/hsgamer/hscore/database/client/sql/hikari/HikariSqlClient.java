@@ -46,7 +46,7 @@ public class HikariSqlClient extends BaseSqlClient<HikariDataSource> {
       config.addDataSourceProperty("elideSetAutoCommits", true);
       config.addDataSourceProperty("maintainTimeStats", false);
     }
-    setting.getProperties().forEach(config::addDataSourceProperty);
+    setting.getClientProperties().forEach(config::addDataSourceProperty);
     this.hikariDataSource = new HikariDataSource(config);
   }
 

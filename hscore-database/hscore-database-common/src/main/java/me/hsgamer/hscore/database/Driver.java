@@ -6,6 +6,22 @@ package me.hsgamer.hscore.database;
 public interface Driver {
 
   /**
+   * Create the property string for the URL
+   *
+   * @param setting the setting
+   *
+   * @return the property string
+   */
+  static String createPropertyString(Setting setting) {
+    StringBuilder builder = new StringBuilder();
+    if (setting.getDriverProperties() != null) {
+      builder.append("?");
+      setting.getDriverProperties().forEach((key, value) -> builder.append(key).append("=").append(value).append("&"));
+    }
+    return builder.toString();
+  }
+
+  /**
    * Get the driver class
    *
    * @return the driver class

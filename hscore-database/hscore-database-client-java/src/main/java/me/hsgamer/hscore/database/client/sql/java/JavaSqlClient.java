@@ -32,7 +32,7 @@ public class JavaSqlClient extends BaseSqlClient<Properties> {
     }
     properties.setProperty("user", setting.getUsername());
     properties.setProperty("password", setting.getPassword());
-    setting.getProperties().forEach((k, v) -> properties.setProperty(k, String.valueOf(v)));
+    setting.getClientProperties().forEach((k, v) -> properties.setProperty(k, String.valueOf(v)));
     this.dbURL = driver.convertURL(setting);
   }
 

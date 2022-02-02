@@ -8,7 +8,8 @@ import java.util.Map;
  * The setting for connection
  */
 public class Setting {
-  private final Map<String, Object> properties;
+  private final Map<String, Object> clientProperties;
+  private final Map<String, Object> driverProperties;
   private String host;
   private String databaseName;
   private String port;
@@ -19,7 +20,8 @@ public class Setting {
    * The constructor
    */
   private Setting() {
-    properties = new HashMap<>();
+    clientProperties = new HashMap<>();
+    driverProperties = new HashMap<>();
     host = "localhost";
     databaseName = "";
     port = "3306";
@@ -142,44 +144,42 @@ public class Setting {
   }
 
   /**
-   * Set the property
+   * Set the client property
    *
    * @param property the property
    * @param value    the value
    */
-  public Setting setProperty(String property, Object value) {
-    this.properties.put(property, value);
+  public Setting setClientProperty(String property, Object value) {
+    this.clientProperties.put(property, value);
     return this;
   }
 
   /**
-   * Get the property
-   *
-   * @param property the property
-   *
-   * @return the value
-   */
-  public Object getProperty(String property) {
-    return this.properties.get(property);
-  }
-
-  /**
-   * Check if the setting has the property
-   *
-   * @param property the property
-   *
-   * @return true if it does
-   */
-  public boolean hasProperty(String property) {
-    return this.properties.containsKey(property);
-  }
-
-  /**
-   * Get all properties
+   * Get all client properties
    *
    * @return the properties
    */
-  public Map<String, Object> getProperties() {
-    return Collections.unmodifiableMap(properties);
+  public Map<String, Object> getClientProperties() {
+    return Collections.unmodifiableMap(clientProperties);
+  }
+
+  /**
+   * Set the driver property
+   *
+   * @param property the property
+   * @param value    the value
+   */
+  public Setting setDriverProperty(String property, Object value) {
+    this.driverProperties.put(property, value);
+    return this;
+  }
+
+  /**
+   * Get all driver properties
+   *
+   * @return the properties
+   */
+  public Map<String, Object> getDriverProperties() {
+    return Collections.unmodifiableMap(driverProperties);
   }
 }

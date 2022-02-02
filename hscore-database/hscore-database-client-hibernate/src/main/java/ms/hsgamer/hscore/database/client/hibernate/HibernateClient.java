@@ -32,7 +32,7 @@ public class HibernateClient extends BaseClient<MetadataSources> {
       .applySetting(AvailableSettings.URL, driver.convertURL(setting))
       .applySetting(AvailableSettings.USER, setting.getUsername())
       .applySetting(AvailableSettings.PASS, setting.getPassword())
-      .applySettings(setting.getProperties())
+      .applySettings(setting.getClientProperties())
       .build();
     this.metadataSources = new MetadataSources(serviceRegistry);
   }

@@ -19,7 +19,7 @@ public interface H2BaseDriver extends Driver {
     StringBuilder builder = new StringBuilder();
     builder.append("jdbc:h2:");
     builder.append(getConnectionString(setting));
-    Map<String, Object> properties = setting.getProperties();
+    Map<String, Object> properties = setting.getDriverProperties();
     if (!properties.isEmpty()) {
       builder.append(";");
       properties.forEach((key, value) -> {
