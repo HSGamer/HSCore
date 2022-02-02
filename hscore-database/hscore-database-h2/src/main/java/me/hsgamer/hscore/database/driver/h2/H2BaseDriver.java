@@ -3,8 +3,6 @@ package me.hsgamer.hscore.database.driver.h2;
 import me.hsgamer.hscore.database.Driver;
 import me.hsgamer.hscore.database.Setting;
 
-import java.util.Map;
-
 /**
  * A driver for H2
  */
@@ -16,20 +14,9 @@ public interface H2BaseDriver extends Driver {
 
   @Override
   default String convertURL(Setting setting) {
-    StringBuilder builder = new StringBuilder();
-    builder.append("jdbc:h2:");
-    builder.append(getConnectionString(setting));
-    Map<String, Object> properties = setting.getDriverProperties();
-    if (!properties.isEmpty()) {
-      builder.append(";");
-      properties.forEach((key, value) -> {
-        builder.append(key);
-        builder.append("=");
-        builder.append(value);
-        builder.append(";");
-      });
-    }
-    return builder.toString();
+    return "jdbc:h2:" +
+      getConnectionString(setting) +
+      Driver.createPropertyString(setting, ";", ";");
   }
 
   String getConnectionString(Setting setting);

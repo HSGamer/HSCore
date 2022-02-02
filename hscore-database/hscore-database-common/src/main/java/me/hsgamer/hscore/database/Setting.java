@@ -2,7 +2,9 @@ package me.hsgamer.hscore.database;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * The setting for connection
@@ -164,6 +166,15 @@ public class Setting {
   }
 
   /**
+   * Get all driver properties as a list of string
+   *
+   * @return the properties as a list of string
+   */
+  public List<String> getClientPropertyStrings() {
+    return Collections.unmodifiableList(clientProperties.entrySet().stream().map(entry -> entry.getKey() + "=" + entry.getValue()).collect(Collectors.toList()));
+  }
+
+  /**
    * Set the driver property
    *
    * @param property the property
@@ -181,5 +192,14 @@ public class Setting {
    */
   public Map<String, Object> getDriverProperties() {
     return Collections.unmodifiableMap(driverProperties);
+  }
+
+  /**
+   * Get all driver properties as a list of string
+   *
+   * @return the properties as a list of string
+   */
+  public List<String> getDriverPropertyStrings() {
+    return Collections.unmodifiableList(driverProperties.entrySet().stream().map(entry -> entry.getKey() + "=" + entry.getValue()).collect(Collectors.toList()));
   }
 }
