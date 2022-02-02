@@ -2,6 +2,7 @@ package me.hsgamer.hscore.database.driver.sqlite;
 
 import me.hsgamer.hscore.database.Driver;
 import me.hsgamer.hscore.database.Setting;
+import org.sqlite.JDBC;
 
 /**
  * A driver for SQLite
@@ -9,12 +10,12 @@ import me.hsgamer.hscore.database.Setting;
 public interface SqliteBaseDriver extends Driver {
   @Override
   default Class<? extends java.sql.Driver> getDriverClass() {
-    return org.sqlite.JDBC.class;
+    return JDBC.class;
   }
 
   @Override
   default String convertURL(Setting setting) {
-    return "jdbc:sqlite:" + createConnectionString(setting);
+    return JDBC.PREFIX + createConnectionString(setting);
   }
 
   String createConnectionString(Setting setting);
