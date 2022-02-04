@@ -83,44 +83,44 @@ public final class MessageUtils {
   /**
    * Send message
    *
-   * @param sender  the receiver
-   * @param message the message
+   * @param receiver the receiver
+   * @param message  the message
    */
-  public static void sendMessage(@NotNull final CommandSender sender, @NotNull final String message) {
-    sendMessage(sender, message, defaultPrefix);
+  public static void sendMessage(@NotNull final CommandSender receiver, @NotNull final String message) {
+    sendMessage(receiver, message, defaultPrefix);
   }
 
   /**
    * Send message with prefix
    *
-   * @param sender  the receiver
-   * @param message the message
-   * @param prefix  the prefix
+   * @param receiver the receiver
+   * @param message  the message
+   * @param prefix   the prefix
    */
-  public static void sendMessage(@NotNull final CommandSender sender, @NotNull final String message, @NotNull final String prefix) {
-    sender.sendMessage(colorize(prefix + message));
+  public static void sendMessage(@NotNull final CommandSender receiver, @NotNull final String message, @NotNull final String prefix) {
+    receiver.sendMessage(colorize(prefix + message));
   }
 
   /**
    * Send message with prefix
    *
-   * @param sender  the receiver
-   * @param message the message
-   * @param prefix  the prefix
+   * @param receiver the receiver
+   * @param message  the message
+   * @param prefix   the prefix
    */
-  public static void sendMessage(@NotNull final CommandSender sender, @NotNull final String message, @NotNull final Supplier<String> prefix) {
-    sendMessage(sender, message, prefix.get());
+  public static void sendMessage(@NotNull final CommandSender receiver, @NotNull final String message, @NotNull final Supplier<String> prefix) {
+    sendMessage(receiver, message, prefix.get());
   }
 
   /**
-   * Send message with the prefix from the plugin
+   * Send message with the prefix from the object
    *
-   * @param sender  the receiver
-   * @param message the message
-   * @param plugin  the plugin
+   * @param receiver the receiver
+   * @param message  the message
+   * @param object   the object
    */
-  public static void sendMessage(@NotNull final CommandSender sender, @NotNull final String message, @NotNull final Plugin plugin) {
-    sendMessage(sender, message, getPrefix(plugin).orElse(getPrefix()));
+  public static void sendMessage(@NotNull final CommandSender receiver, @NotNull final String message, @NotNull final Object object) {
+    sendMessage(receiver, message, getPrefix(object).orElse(getPrefix()));
   }
 
   /**
