@@ -27,7 +27,7 @@
     <dependency>
       <groupId>me.carleslc.Simple-YAML</groupId>
       <artifactId>Simple-Configuration</artifactId>
-      <version>1.7.2</version>
+      <version>1.7.3</version>
     </dependency>
   </dependencies>
 </project>
