@@ -39,6 +39,16 @@ public class StickyConfigPath<T> extends CachedValue<T> implements ConfigPath<T>
     this.clearCache();
   }
 
+  @Override
+  public T getValue(@NotNull Config config) {
+    return originalPath.getValue(config);
+  }
+
+  @Override
+  public void setValue(@Nullable T value, @NotNull Config config) {
+    originalPath.setValue(value, config);
+  }
+
   @NotNull
   @Override
   public String getPath() {

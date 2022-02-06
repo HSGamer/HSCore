@@ -46,6 +46,16 @@ public class CommentablePath<T> implements ConfigPath<T> {
   }
 
   @Override
+  public T getValue(@NotNull Config config) {
+    return originalPath.getValue(config);
+  }
+
+  @Override
+  public void setValue(@Nullable T value, @NotNull Config config) {
+    originalPath.setValue(value, config);
+  }
+
+  @Override
   public @NotNull String getPath() {
     return originalPath.getPath();
   }

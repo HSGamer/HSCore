@@ -59,10 +59,18 @@ public abstract class AdvancedConfigPath<F, T> implements ConfigPath<T> {
 
   @Override
   public T getValue() {
-    if (config == null) {
-      return def;
-    }
+    return config == null ? def : getValue(config);
+  }
 
+  @Override
+  public void setValue(@Nullable final T value) {
+    if (config != null) {
+      setValue(value, config);
+    }
+  }
+
+  @Override
+  public T getValue(@NotNull Config config) {
     F rawValue = getFromConfig(config);
     if (rawValue == null) {
       return def;
@@ -73,11 +81,7 @@ public abstract class AdvancedConfigPath<F, T> implements ConfigPath<T> {
   }
 
   @Override
-  public void setValue(@Nullable final T value) {
-    if (config == null) {
-      return;
-    }
-
+  public void setValue(@Nullable T value, @NotNull Config config) {
     config.set(path, value != null ? convertToRaw(value) : null);
   }
 

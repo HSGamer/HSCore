@@ -33,24 +33,24 @@ public class BaseConfigPath<T> implements ConfigPath<T> {
 
   @Override
   public T getValue() {
-    if (config == null) {
-      return def;
-    }
-
-    Object rawValue = config.getNormalized(path, def);
-    if (rawValue == null) {
-      return def;
-    }
-
-    return typeConverter.apply(rawValue);
+    return config == null ? def : getValue(config);
   }
 
   @Override
   public void setValue(@Nullable final T value) {
-    if (config == null) {
-      return;
+    if (config != null) {
+      setValue(value, config);
     }
+  }
 
+  @Override
+  public T getValue(@NotNull Config config) {
+    Object rawValue = config.getNormalized(path, def);
+    return rawValue == null ? def : typeConverter.apply(rawValue);
+  }
+
+  @Override
+  public void setValue(@Nullable T value, @NotNull Config config) {
     config.set(path, value);
   }
 

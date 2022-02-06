@@ -26,6 +26,25 @@ public interface ConfigPath<T> {
   void setValue(@Nullable final T value);
 
   /**
+   * Get the value from the config.
+   * This is used to get the value from multiple configs.
+   *
+   * @param config the config
+   *
+   * @return the value
+   */
+  T getValue(@NotNull final Config config);
+
+  /**
+   * Set the value to the config.
+   * This is used to set the value to multiple configs.
+   *
+   * @param value  the value
+   * @param config the config
+   */
+  void setValue(@Nullable final T value, @NotNull final Config config);
+
+  /**
    * Get the path to the value
    *
    * @return the path
