@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.database;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +58,7 @@ public class Setting {
    *
    * @return {@code this} for builder chain
    */
+  @Contract("_ -> this")
   public Setting setHost(String host) {
     this.host = host;
     return this;
@@ -77,6 +80,7 @@ public class Setting {
    *
    * @return {@code this} for builder chain
    */
+  @Contract("_ -> this")
   public Setting setDatabaseName(String databaseName) {
     this.databaseName = databaseName;
     return this;
@@ -98,6 +102,7 @@ public class Setting {
    *
    * @return {@code this} for builder chain
    */
+  @Contract("_ -> this")
   public Setting setPort(String port) {
     this.port = port;
     return this;
@@ -119,6 +124,7 @@ public class Setting {
    *
    * @return {@code this} for builder chain
    */
+  @Contract("_ -> this")
   public Setting setUsername(String username) {
     this.username = username;
     return this;
@@ -140,6 +146,7 @@ public class Setting {
    *
    * @return {@code this} for builder chain
    */
+  @Contract("_ -> this")
   public Setting setPassword(String password) {
     this.password = password;
     return this;
@@ -151,6 +158,7 @@ public class Setting {
    * @param property the property
    * @param value    the value
    */
+  @Contract("_, _ -> this")
   public Setting setClientProperty(String property, Object value) {
     this.clientProperties.put(property, value);
     return this;
@@ -180,6 +188,7 @@ public class Setting {
    * @param property the property
    * @param value    the value
    */
+  @Contract("_, _ -> this")
   public Setting setDriverProperty(String property, Object value) {
     this.driverProperties.put(property, value);
     return this;

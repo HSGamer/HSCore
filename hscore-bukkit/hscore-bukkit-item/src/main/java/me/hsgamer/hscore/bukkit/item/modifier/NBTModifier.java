@@ -5,6 +5,7 @@ import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Contract;
 
 import java.util.Map;
 import java.util.UUID;
@@ -22,6 +23,7 @@ public class NBTModifier implements ItemModifier {
    *
    * @return {@code this} for builder chain
    */
+  @Contract("_ -> this")
   public NBTModifier setNbtData(String nbtData) {
     this.nbtData = nbtData;
     return this;

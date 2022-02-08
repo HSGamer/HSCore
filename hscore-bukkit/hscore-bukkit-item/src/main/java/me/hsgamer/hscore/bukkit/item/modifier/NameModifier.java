@@ -3,6 +3,7 @@ package me.hsgamer.hscore.bukkit.item.modifier;
 import me.hsgamer.hscore.bukkit.item.ItemMetaModifier;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.Contract;
 
 import java.util.Map;
 import java.util.UUID;
@@ -25,6 +26,7 @@ public class NameModifier extends ItemMetaModifier {
    *
    * @return {@code this} for builder chain
    */
+  @Contract("_ -> this")
   public NameModifier setName(String name) {
     this.name = name;
     return this;

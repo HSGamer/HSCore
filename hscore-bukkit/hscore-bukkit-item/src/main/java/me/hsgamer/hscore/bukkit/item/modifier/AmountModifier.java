@@ -4,6 +4,7 @@ import me.hsgamer.hscore.bukkit.item.ItemModifier;
 import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Contract;
 
 import java.util.Map;
 import java.util.UUID;
@@ -56,6 +57,7 @@ public class AmountModifier implements ItemModifier {
    *
    * @return {@code this} for builder chain
    */
+  @Contract("_ -> this")
   public AmountModifier setAmount(String amount) {
     this.amount = amount;
     return this;
@@ -68,6 +70,7 @@ public class AmountModifier implements ItemModifier {
    *
    * @return {@code this} for builder chain
    */
+  @Contract("_ -> this")
   public AmountModifier setAmount(int amount) {
     this.amount = String.valueOf(amount);
     return this;

@@ -4,6 +4,7 @@ import me.hsgamer.hscore.bukkit.item.ItemMetaModifier;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.Contract;
 
 import java.util.*;
 
@@ -62,6 +63,7 @@ public class LoreModifier extends ItemMetaModifier {
    *
    * @return {@code this} for builder chain
    */
+  @Contract("_ -> this")
   public LoreModifier setLore(String... lore) {
     return setLore(Arrays.asList(lore));
   }
@@ -73,6 +75,7 @@ public class LoreModifier extends ItemMetaModifier {
    *
    * @return {@code this} for builder chain
    */
+  @Contract("_ -> this")
   public LoreModifier addLore(String lore) {
     this.lore.addAll(Arrays.asList(lore.split("\\n")));
     return this;
@@ -85,6 +88,7 @@ public class LoreModifier extends ItemMetaModifier {
    *
    * @return {@code this} for builder chain
    */
+  @Contract("_ -> this")
   public LoreModifier setLore(Collection<String> lore) {
     clearLore();
     this.lore.addAll(CollectionUtils.splitAll("\\n", lore));
@@ -96,6 +100,7 @@ public class LoreModifier extends ItemMetaModifier {
    *
    * @return {@code this} for builder chain
    */
+  @Contract(" -> this")
   public LoreModifier clearLore() {
     this.lore.clear();
     return this;

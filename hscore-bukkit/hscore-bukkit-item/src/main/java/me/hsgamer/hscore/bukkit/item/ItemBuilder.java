@@ -5,6 +5,7 @@ import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Contract;
 
 import java.util.*;
 
@@ -23,6 +24,7 @@ public class ItemBuilder {
    *
    * @return {@code this} for builder chain
    */
+  @Contract("_ -> this")
   public ItemBuilder addItemModifier(ItemModifier modifier) {
     itemModifiers.add(modifier);
     return this;
@@ -35,6 +37,7 @@ public class ItemBuilder {
    *
    * @return {@code this} for builder chain
    */
+  @Contract("_ -> this")
   public ItemBuilder removeItemModifier(String name) {
     itemModifiers.removeIf(itemModifier -> itemModifier.getName().equals(name));
     return this;
@@ -77,6 +80,7 @@ public class ItemBuilder {
    *
    * @return {@code this} for builder chain
    */
+  @Contract("_ -> this")
   public ItemBuilder addStringReplacer(String name, StringReplacer replacer) {
     this.stringReplacerMap.put(name, replacer);
     return this;
@@ -89,6 +93,7 @@ public class ItemBuilder {
    *
    * @return {@code this} for builder chain
    */
+  @Contract("_ -> this")
   public ItemBuilder removeStringReplacer(String name) {
     this.stringReplacerMap.remove(name);
     return this;

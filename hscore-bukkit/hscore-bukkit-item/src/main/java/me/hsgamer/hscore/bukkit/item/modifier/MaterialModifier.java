@@ -4,6 +4,7 @@ import me.hsgamer.hscore.bukkit.item.ItemModifier;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Contract;
 
 import java.util.Map;
 import java.util.Optional;
@@ -55,6 +56,7 @@ public class MaterialModifier implements ItemModifier {
    *
    * @return {@code this} for builder chain
    */
+  @Contract("_ -> this")
   public MaterialModifier setMaterial(Material material) {
     this.materialString = material.name();
     return this;
@@ -67,6 +69,7 @@ public class MaterialModifier implements ItemModifier {
    *
    * @return {@code this} for builder chain
    */
+  @Contract("_ -> this")
   public MaterialModifier setMaterial(String material) {
     this.materialString = material;
     return this;
