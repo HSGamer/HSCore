@@ -84,10 +84,12 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
     }
 
     String name = method.getName();
-    if (!name.startsWith("get")) {
-      return;
-    }
-    String methodName = name.substring(3);
+    String methodName;
+    if (name.startsWith("get")) {
+      methodName = name.substring(3);
+    } else if (name.startsWith("is")) {
+      methodName = name.substring(2);
+    } else return;
     if (methodName.isEmpty()) {
       return;
     }
@@ -125,8 +127,13 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
     } else if (name.equals("reloadConfig") && !method.isDefault() && method.getParameterCount() == 0) {
       config.reload();
       return null;
-    } else if (name.startsWith("get") && method.isDefault() && method.getParameterCount() == 0 && method.isAnnotationPresent(ConfigPath.class)) {
-      String methodName = name.substring(3);
+    } else if ((name.startsWith("get") || name.startsWith("is")) && method.isDefault() && method.getParameterCount() == 0 && method.isAnnotationPresent(ConfigPath.class)) {
+      String methodName;
+      if (name.startsWith("get")) {
+        methodName = name.substring(3);
+      } else {
+        methodName = name.substring(2);
+      }
       if (!methodName.isEmpty() && nodes.containsKey(methodName)) {
         Object value = nodes.get(methodName).getValue();
         if ((isPrimitiveOrWrapper(method.getReturnType()) && isPrimitiveOrWrapper(value.getClass())) || method.getReturnType().isInstance(value)) {
