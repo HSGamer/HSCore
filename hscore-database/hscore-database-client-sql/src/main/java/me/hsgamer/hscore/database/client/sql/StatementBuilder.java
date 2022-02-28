@@ -81,14 +81,37 @@ public class StatementBuilder {
   }
 
   /**
-   * Query from the connection
+   * Query from the connection and convert to the final object
    *
-   * @return the result set
+   * @param <T>       the type of the final object
+   * @param converter the converter
+   *
+   * @return the final object
    *
    * @throws SQLException if there is an SQL error
    */
-  public ResultSet query() throws SQLException {
-    return this.execute(PreparedStatement::executeQuery);
+  public <T> T query(ResultSetConverter<T> converter) throws SQLException {
+    return this.execute(preparedStatement -> {
+      try (ResultSet resultSet = preparedStatement.executeQuery()) {
+        return converter.convert(resultSet);
+      }
+    });
+  }
+
+  /**
+   * Query from the connection and consume the result set
+   *
+   * @param consumer the consumer
+   *
+   * @throws SQLException if there is an SQL error
+   */
+  public void consume(ResultSetConsumer consumer) throws SQLException {
+    this.execute(preparedStatement -> {
+      try (ResultSet resultSet = preparedStatement.executeQuery()) {
+        consumer.consume(resultSet);
+      }
+      return null;
+    });
   }
 
   /**
@@ -103,16 +126,32 @@ public class StatementBuilder {
   }
 
   /**
-   * Query from the connection but ignores exceptions
+   * Query from the connection and convert to the final object, but ignores exceptions
    *
-   * @return the result set
+   * @param <T>       the type of the final object
+   * @param converter the converter
+   *
+   * @return the final object
    */
-  public Optional<ResultSet> querySafe() {
+  public <T> Optional<T> querySafe(ResultSetConverter<T> converter) {
     try {
-      return Optional.of(this.query());
+      return Optional.of(this.query(converter));
     } catch (Exception e) {
       Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is a error when querying", e);
       return Optional.empty();
+    }
+  }
+
+  /**
+   * Query from the connection and consume the result set, but ignores exceptions
+   *
+   * @param consumer the consumer
+   */
+  public void consumeSafe(ResultSetConsumer consumer) {
+    try {
+      this.consume(consumer);
+    } catch (Exception e) {
+      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is a error when consuming", e);
     }
   }
 
