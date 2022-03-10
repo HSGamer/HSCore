@@ -7,6 +7,7 @@ import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -197,7 +198,9 @@ public abstract class SubCommand {
    *
    * @return true if the sender is
    */
-  public abstract boolean isProperUsage(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args);
+  public boolean isProperUsage(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args) {
+    return true;
+  }
 
   /**
    * Get the suggested strings when the sender use TAB key to complete the sub-command
@@ -209,5 +212,7 @@ public abstract class SubCommand {
    * @return the suggested strings
    */
   @NotNull
-  public abstract List<String> onTabComplete(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args);
+  public List<String> onTabComplete(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args) {
+    return Collections.emptyList();
+  }
 }
