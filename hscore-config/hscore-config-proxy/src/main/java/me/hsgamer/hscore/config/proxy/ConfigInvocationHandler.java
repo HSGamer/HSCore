@@ -32,16 +32,19 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
   private final Map<String, ConfigNode> nodes = new HashMap<>();
   private final Class<T> clazz;
   private final Config config;
+  private final boolean stickyValue;
 
   /**
    * Constructor
    *
-   * @param clazz  The interface
-   * @param config The config
+   * @param clazz       The interface
+   * @param config      The config
+   * @param stickyValue True if the value should be sticky (store the value in the cache)
    */
-  ConfigInvocationHandler(Class<T> clazz, Config config) {
+  ConfigInvocationHandler(Class<T> clazz, Config config, boolean stickyValue) {
     this.clazz = clazz;
     this.config = config;
+    this.stickyValue = stickyValue;
 
     for (Method method : this.clazz.getDeclaredMethods()) {
       this.setupMethod(method);
@@ -102,7 +105,7 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
 
     try {
       Object value = DEFAULT_METHOD_HANDLER.invoke(method);
-      ConfigNode node = new ConfigNode(path, config, configPath.converter(), value);
+      ConfigNode node = new ConfigNode(path, config, configPath.converter(), value, stickyValue);
       nodes.put(methodName, node);
 
       if (method.isAnnotationPresent(Comment.class) && config.getComment(path) == null) {
@@ -126,6 +129,7 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
       return proxy == args[0];
     } else if (name.equals("reloadConfig") && !method.isDefault() && method.getParameterCount() == 0) {
       config.reload();
+      nodes.values().forEach(ConfigNode::clearCache);
       return null;
     } else if ((name.startsWith("get") || name.startsWith("is")) && method.isDefault() && method.getParameterCount() == 0 && method.isAnnotationPresent(ConfigPath.class)) {
       String methodName;
