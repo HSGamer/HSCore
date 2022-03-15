@@ -146,6 +146,19 @@ public final class CollectionUtils {
   }
 
   /**
+   * Pick a random element from the collection
+   *
+   * @param collection the collection
+   * @param <T>        the type of the elements
+   *
+   * @return the picked element, or null if the collection is empty
+   */
+  @Nullable
+  public static <T> T pickRandom(@NotNull final Collection<T> collection) {
+    return pickRandom(collection, t -> true);
+  }
+
+  /**
    * Pick a random element from the array
    *
    * @param array          the array
@@ -157,5 +170,18 @@ public final class CollectionUtils {
   @Nullable
   public static <T> T pickRandom(@NotNull final T[] array, @NotNull final Predicate<T> matchCondition) {
     return pickRandom(Arrays.asList(array), matchCondition);
+  }
+
+  /**
+   * Pick a random element from the array
+   *
+   * @param array the array
+   * @param <T>   the type of the elements
+   *
+   * @return the picked element, or null if the collection is empty
+   */
+  @Nullable
+  public static <T> T pickRandom(@NotNull final T[] array) {
+    return pickRandom(Arrays.asList(array));
   }
 }

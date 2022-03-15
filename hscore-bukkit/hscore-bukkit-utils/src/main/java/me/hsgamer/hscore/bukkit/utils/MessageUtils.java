@@ -98,7 +98,9 @@ public final class MessageUtils {
    * @param prefix   the prefix
    */
   public static void sendMessage(@NotNull final CommandSender receiver, @NotNull final String message, @NotNull final String prefix) {
-    receiver.sendMessage(colorize(prefix + message));
+    if (!message.isEmpty()) {
+      receiver.sendMessage(colorize(prefix + message));
+    }
   }
 
   /**
