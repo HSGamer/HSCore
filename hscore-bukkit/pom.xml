@@ -11,6 +11,10 @@
   <packaging>pom</packaging>
   <artifactId>hscore-bukkit</artifactId>
 
+  <properties>
+    <spigot.version>1.12.2-R0.1-SNAPSHOT</spigot.version>
+  </properties>
+
   <modules>
     <module>hscore-bukkit-addon</module>
     <module>hscore-bukkit-utils</module>
@@ -29,6 +33,7 @@
     <module>hscore-bukkit-simpleplugin</module>
     <module>hscore-bukkit-baseplugin</module>
     <module>hscore-bukkit-channel</module>
+    <module>hscore-bukkit-key</module>
     <module>hscore-bukkit-all</module>
   </modules>
 
@@ -44,7 +49,7 @@
       <artifactId>spigot</artifactId>
       <groupId>org.spigotmc</groupId>
       <scope>provided</scope>
-      <version>1.12.2-R0.1-SNAPSHOT</version>
+      <version>${spigot.version}</version>
     </dependency>
   </dependencies>
 

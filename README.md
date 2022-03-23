@@ -60,6 +60,7 @@
     * **`hscore-bukkit-item`**
     * **`hscore-bukkit-baseplugin`**
     * **`hscore-bukkit-channel`**
+    * **`hscore-bukkit-key`**
   * **`hscore-bungeecord-all`**
     * **`hscore-bungeecord-channel`**
     * **`hscore-bungeecord-config`**
