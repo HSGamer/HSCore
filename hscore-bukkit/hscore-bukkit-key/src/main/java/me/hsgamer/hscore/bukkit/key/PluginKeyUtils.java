@@ -34,4 +34,26 @@ public final class PluginKeyUtils {
   public static void copy(PersistentDataHolder fromHolder, PersistentDataHolder toHolder, PluginKeyPair<?, ?>... keyPairs) {
     copy(fromHolder.getPersistentDataContainer(), toHolder.getPersistentDataContainer(), keyPairs);
   }
+
+  /**
+   * Remove the {@link PluginKeyPair} from the container
+   *
+   * @param container the container
+   * @param keyPairs  the key pairs
+   */
+  public static void remove(PersistentDataContainer container, PluginKeyPair<?, ?>... keyPairs) {
+    for (PluginKeyPair<?, ?> keyPair : keyPairs) {
+      keyPair.remove(container);
+    }
+  }
+
+  /**
+   * Remove the {@link PluginKeyPair} from the holder
+   *
+   * @param holder   the holder
+   * @param keyPairs the key pairs
+   */
+  public static void remove(PersistentDataHolder holder, PluginKeyPair<?, ?>... keyPairs) {
+    remove(holder.getPersistentDataContainer(), keyPairs);
+  }
 }
