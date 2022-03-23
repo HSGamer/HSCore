@@ -8,12 +8,11 @@ import org.bukkit.persistence.PersistentDataType;
 /**
  * A pair of {@link NamespacedKey} and {@link PersistentDataType}
  *
- * @param <T> the primary object type that is stored in the given key
  * @param <Z> the retrieved object type when applying this data type
  */
-public class PluginKeyPair<T, Z> {
+public class PluginKeyPair<Z> {
   private final NamespacedKey key;
-  private final PersistentDataType<T, Z> dataType;
+  private final PersistentDataType<?, Z> dataType;
   private final Z defaultValue;
 
   /**
@@ -23,7 +22,7 @@ public class PluginKeyPair<T, Z> {
    * @param dataType     the data type
    * @param defaultValue the default value
    */
-  public PluginKeyPair(NamespacedKey key, PersistentDataType<T, Z> dataType, Z defaultValue) {
+  public PluginKeyPair(NamespacedKey key, PersistentDataType<?, Z> dataType, Z defaultValue) {
     this.key = key;
     this.dataType = dataType;
     this.defaultValue = defaultValue;
@@ -43,7 +42,7 @@ public class PluginKeyPair<T, Z> {
    *
    * @return the data type
    */
-  public PersistentDataType<T, Z> getDataType() {
+  public PersistentDataType<?, Z> getDataType() {
     return dataType;
   }
 

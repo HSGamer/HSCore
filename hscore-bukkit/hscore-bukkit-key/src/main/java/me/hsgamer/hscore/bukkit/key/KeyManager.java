@@ -23,12 +23,11 @@ public interface KeyManager {
    * @param key          the key
    * @param dataType     the data type for the value
    * @param defaultValue the default value if not found
-   * @param <T>          the primary object type that is stored in the given key
    * @param <Z>          the retrieved object type when applying this data type
    *
    * @return the new key pair
    */
-  default <T, Z> PluginKeyPair<T, Z> createKeyPair(String key, PersistentDataType<T, Z> dataType, Z defaultValue) {
+  default <Z> PluginKeyPair<Z> createKeyPair(String key, PersistentDataType<?, Z> dataType, Z defaultValue) {
     return new PluginKeyPair<>(createKey(key), dataType, defaultValue);
   }
 
@@ -37,12 +36,11 @@ public interface KeyManager {
    *
    * @param key      the key
    * @param dataType the data type for the value
-   * @param <T>      the primary object type that is stored in the given key
    * @param <Z>      the retrieved object type when applying this data type
    *
    * @return the new key pair
    */
-  default <T, Z> PluginKeyPair<T, Z> createKeyPair(String key, PersistentDataType<T, Z> dataType) {
+  default <Z> PluginKeyPair<Z> createKeyPair(String key, PersistentDataType<?, Z> dataType) {
     return createKeyPair(key, dataType, null);
   }
 }

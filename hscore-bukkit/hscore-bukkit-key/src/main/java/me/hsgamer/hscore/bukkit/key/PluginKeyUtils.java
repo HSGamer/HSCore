@@ -18,8 +18,8 @@ public final class PluginKeyUtils {
    * @param toContainer   the target container
    * @param keyPairs      the key pairs
    */
-  public static void copy(PersistentDataContainer fromContainer, PersistentDataContainer toContainer, PluginKeyPair<?, ?>... keyPairs) {
-    for (PluginKeyPair<?, ?> keyPair : keyPairs) {
+  public static void copy(PersistentDataContainer fromContainer, PersistentDataContainer toContainer, PluginKeyPair<?>... keyPairs) {
+    for (PluginKeyPair<?> keyPair : keyPairs) {
       keyPair.copy(fromContainer, toContainer);
     }
   }
@@ -31,7 +31,7 @@ public final class PluginKeyUtils {
    * @param toHolder   the target holder
    * @param keyPairs   the key pairs
    */
-  public static void copy(PersistentDataHolder fromHolder, PersistentDataHolder toHolder, PluginKeyPair<?, ?>... keyPairs) {
+  public static void copy(PersistentDataHolder fromHolder, PersistentDataHolder toHolder, PluginKeyPair<?>... keyPairs) {
     copy(fromHolder.getPersistentDataContainer(), toHolder.getPersistentDataContainer(), keyPairs);
   }
 
@@ -41,8 +41,8 @@ public final class PluginKeyUtils {
    * @param container the container
    * @param keyPairs  the key pairs
    */
-  public static void remove(PersistentDataContainer container, PluginKeyPair<?, ?>... keyPairs) {
-    for (PluginKeyPair<?, ?> keyPair : keyPairs) {
+  public static void remove(PersistentDataContainer container, PluginKeyPair<?>... keyPairs) {
+    for (PluginKeyPair<?> keyPair : keyPairs) {
       keyPair.remove(container);
     }
   }
@@ -53,7 +53,7 @@ public final class PluginKeyUtils {
    * @param holder   the holder
    * @param keyPairs the key pairs
    */
-  public static void remove(PersistentDataHolder holder, PluginKeyPair<?, ?>... keyPairs) {
+  public static void remove(PersistentDataHolder holder, PluginKeyPair<?>... keyPairs) {
     remove(holder.getPersistentDataContainer(), keyPairs);
   }
 }
