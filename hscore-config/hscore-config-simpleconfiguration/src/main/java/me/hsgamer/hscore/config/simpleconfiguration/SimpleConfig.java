@@ -143,7 +143,7 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
         org.simpleyaml.configuration.comments.CommentType commentType = org.simpleyaml.configuration.comments.CommentType.valueOf(type.name());
         return ((org.simpleyaml.configuration.comments.Commentable) configuration).getComment(path, commentType);
       } catch (Exception e) {
-        // IGNORED
+        LOGGER.log(Level.SEVERE, e, () -> "Something wrong when getting comment of " + path);
       }
     }
     return "";
@@ -156,7 +156,7 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
         org.simpleyaml.configuration.comments.CommentType commentType = org.simpleyaml.configuration.comments.CommentType.valueOf(type.name());
         ((org.simpleyaml.configuration.comments.Commentable) configuration).setComment(path, value, commentType);
       } catch (Exception e) {
-        // IGNORED
+        LOGGER.log(Level.SEVERE, e, () -> "Something wrong when setting comment of " + path);
       }
     }
   }
