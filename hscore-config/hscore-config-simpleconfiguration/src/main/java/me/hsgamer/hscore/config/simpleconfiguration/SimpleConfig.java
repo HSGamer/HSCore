@@ -4,7 +4,6 @@ import me.hsgamer.hscore.config.CommentType;
 import me.hsgamer.hscore.config.Config;
 import org.simpleyaml.configuration.ConfigurationSection;
 import org.simpleyaml.configuration.file.FileConfiguration;
-import org.simpleyaml.exceptions.InvalidConfigurationException;
 
 import java.io.File;
 import java.io.IOException;
