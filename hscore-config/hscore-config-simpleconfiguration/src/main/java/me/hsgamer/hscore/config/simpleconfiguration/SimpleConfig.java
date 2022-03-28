@@ -43,7 +43,7 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
     this(file, configuration, (file1, t) -> {
       try {
         t.load(file1);
-      } catch (IOException | InvalidConfigurationException e) {
+      } catch (IOException e) {
         LOGGER.log(Level.WARNING, e, () -> "Something wrong when loading " + file1.getName());
       }
     });
