@@ -116,7 +116,7 @@
           </execution>
         </executions>
         <groupId>org.apache.maven.plugins</groupId>
-        <version>3.2.4</version>
+        <version>3.3.0</version>
       </plugin>
     </plugins>
   </build>
