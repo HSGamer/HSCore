@@ -1,10 +1,12 @@
 package me.hsgamer.hscore.bukkit.utils;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -91,5 +93,43 @@ public final class ItemUtils {
    */
   public static Predicate<ItemStack> getItemPredicate(ItemStack itemStack) {
     return i -> i.isSimilar(itemStack);
+  }
+
+  /**
+   * Check if the items cannot be added to the inventory
+   *
+   * @param inventory the inventory
+   * @param items     the items
+   *
+   * @return true if the items cannot be added to the inventory
+   */
+  public static boolean isItemFullOnInventory(Inventory inventory, Collection<ItemStack> items) {
+    for (ItemStack item : items) {
+      if (isItemFullOnInventory(inventory, item)) return true;
+    }
+    return false;
+  }
+
+  /**
+   * Check if the item cannot be added to the inventory
+   *
+   * @param inventory the inventory
+   * @param item      the item
+   *
+   * @return true if the item cannot be added to the inventory
+   */
+  public static boolean isItemFullOnInventory(Inventory inventory, ItemStack item) {
+    boolean canAdd = false;
+    for (ItemStack i : inventory.getContents()) {
+      if (i == null || i.getType() == Material.AIR) {
+        canAdd = true;
+      } else if (i.isSimilar(item)) {
+        canAdd = i.getAmount() + item.getAmount() <= i.getMaxStackSize();
+      }
+      if (canAdd) {
+        break;
+      }
+    }
+    return !canAdd;
   }
 }

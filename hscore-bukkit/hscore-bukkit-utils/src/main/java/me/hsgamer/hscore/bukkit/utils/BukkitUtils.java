@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.bukkit.utils;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -118,5 +119,16 @@ public final class BukkitUtils {
    */
   public static boolean isUsername(@NotNull String string) {
     return isUsername(string, Arrays.asList('_', '-', '.'));
+  }
+
+  /**
+   * Center the location
+   *
+   * @param location the location
+   *
+   * @return the centered location
+   */
+  public static Location centerLocation(Location location) {
+    return new Location(location.getWorld(), location.getBlockX() + 0.5, location.getBlockY() + 0.5, location.getBlockZ() + 0.5);
   }
 }
