@@ -64,7 +64,7 @@ public final class ItemUtils {
    * @param inventory the inventory
    * @param items     the items
    */
-  public static void removeItemInInventory(Inventory inventory, List<ItemStack> items) {
+  public static void removeItemInInventory(Inventory inventory, Collection<ItemStack> items) {
     for (ItemStack item : items) {
       inventory.removeItem(item);
     }
