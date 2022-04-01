@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.hsgamer</groupId>
   <artifactId>hscore</artifactId>
-  <version>4.0.0</version>
+  <version>4.0.1</version>
   <packaging>pom</packaging>
 
   <name>HSCore</name>
@@ -67,7 +67,7 @@
           <target>${java.version}</target>
         </configuration>
         <groupId>org.apache.maven.plugins</groupId>
-        <version>3.10.1</version>
+        <version>3.8.1</version>
       </plugin>
       <plugin>
         <artifactId>maven-source-plugin</artifactId>
@@ -96,7 +96,7 @@
           </execution>
         </executions>
         <groupId>org.apache.maven.plugins</groupId>
-        <version>3.3.2</version>
+        <version>3.2.0</version>
       </plugin>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
@@ -113,7 +113,7 @@
           </execution>
         </executions>
         <groupId>org.apache.maven.plugins</groupId>
-        <version>3.3.0</version>
+        <version>3.2.4</version>
       </plugin>
     </plugins>
   </build>
