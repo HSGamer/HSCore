@@ -19,6 +19,11 @@ jobs:
         run: mvn clean install
       - name: Generate Javadocs
         run: mvn javadoc:aggregate-no-fork
+      - name: Deploy Javadocs
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./target/site/apidocs
       - name: "Release"
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
