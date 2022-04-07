@@ -109,7 +109,10 @@ public abstract class SubCommandManager {
       list.add(HELP);
       list.addAll(subcommands.keySet());
     } else if (subcommands.containsKey(args[0])) {
-      list.addAll(subcommands.get(args[0]).onTabComplete(sender, label, Arrays.copyOfRange(args, 1, args.length)));
+      SubCommand subCommand = subcommands.get(args[0]);
+      if (subCommand.isExecutable(sender, false)) {
+        list.addAll(subCommand.onTabComplete(sender, label, Arrays.copyOfRange(args, 1, args.length)));
+      }
     } else {
       for (String subLabel : subcommands.keySet()) {
         if (subLabel.startsWith(args[0])) {

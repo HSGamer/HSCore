@@ -58,6 +58,32 @@ public abstract class SubCommand {
   }
 
   /**
+   * Check the command is executable for the sender
+   *
+   * @param sender             the sender
+   * @param sendMessageIfFalse true if the message should be sent if the command is not executable
+   *
+   * @return true if the command is executable
+   */
+  public final boolean isExecutable(@NotNull final CommandSender sender, boolean sendMessageIfFalse) {
+    if (sender instanceof ConsoleCommandSender && !consoleAllowed) {
+      if (sendMessageIfFalse) {
+        playerOnlyMessageSender.accept(sender);
+      }
+      return false;
+    }
+
+    if (permission != null && !sender.hasPermission(permission)) {
+      if (sendMessageIfFalse) {
+        noPermissionMessageSender.accept(sender);
+      }
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
    * Execute the sub-command
    *
    * @param sender the sender
@@ -67,13 +93,7 @@ public abstract class SubCommand {
    * @return whether the command runs successfully
    */
   public final boolean onCommand(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args) {
-    if (sender instanceof ConsoleCommandSender && !consoleAllowed) {
-      playerOnlyMessageSender.accept(sender);
-      return false;
-    }
-
-    if (permission != null && !sender.hasPermission(permission)) {
-      noPermissionMessageSender.accept(sender);
+    if (!isExecutable(sender, true)) {
       return false;
     }
 
