@@ -82,4 +82,28 @@ public interface ConfigPath<T> {
   default void reload() {
     // EMPTY
   }
+
+  /**
+   * Set the value and save the config
+   *
+   * @param value  the value
+   * @param config the config
+   */
+  default void setAndSave(@Nullable final T value, @NotNull final Config config) {
+    setValue(value);
+    config.save();
+  }
+
+  /**
+   * Set the value and save the config
+   *
+   * @param value the value
+   */
+  default void setAndSave(@Nullable final T value) {
+    setValue(value);
+    Config config = getConfig();
+    if (config != null) {
+      config.save();
+    }
+  }
 }
