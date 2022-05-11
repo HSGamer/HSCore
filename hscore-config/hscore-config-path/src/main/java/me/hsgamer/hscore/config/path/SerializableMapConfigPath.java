@@ -2,6 +2,7 @@ package me.hsgamer.hscore.config.path;
 
 import me.hsgamer.hscore.config.Config;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
@@ -23,7 +24,9 @@ public abstract class SerializableMapConfigPath<T> extends AdvancedConfigPath<Ma
   }
 
   @Override
+  @Nullable
   public final Map<String, Object> getFromConfig(@NotNull final Config config) {
+    if (!config.contains(getPath())) return null;
     final Object mapObj = config.get(getPath());
     if (mapObj instanceof Map<?, ?>) {
       //noinspection unchecked
