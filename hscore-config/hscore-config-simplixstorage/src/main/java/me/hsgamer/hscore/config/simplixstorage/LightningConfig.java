@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.config.simplixstorage;
 
+import de.leonhard.storage.internal.DataStorage;
 import de.leonhard.storage.internal.FlatFile;
 import me.hsgamer.hscore.config.Config;
 
@@ -71,8 +72,16 @@ public class LightningConfig<F extends FlatFile> implements Config {
 
   @Override
   public Map<String, Object> getValues(String path, boolean deep) {
+    DataStorage dataStorage;
+    if (path == null || path.isEmpty()) {
+      dataStorage = this.flatFile;
+    } else if (this.flatFile.contains(path)) {
+      dataStorage = this.flatFile.getSection(path);
+    } else {
+      return Collections.emptyMap();
+    }
     Map<String, Object> values = new LinkedHashMap<>();
-    getKeys(path, deep).forEach(p -> values.put(p, this.flatFile.get(p)));
+    getKeys(path, deep).forEach(p -> values.put(p, dataStorage.get(p)));
     return values;
   }
 
