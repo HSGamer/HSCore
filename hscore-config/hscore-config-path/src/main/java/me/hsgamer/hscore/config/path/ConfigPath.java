@@ -90,7 +90,7 @@ public interface ConfigPath<T> {
    * @param config the config
    */
   default void setAndSave(@Nullable final T value, @NotNull final Config config) {
-    setValue(value);
+    setValue(value, config);
     config.save();
   }
 
