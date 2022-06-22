@@ -80,7 +80,7 @@ public class ItemBuilder {
    *
    * @return {@code this} for builder chain
    */
-  @Contract("_ -> this")
+  @Contract("_, _ -> this")
   public ItemBuilder addStringReplacer(String name, StringReplacer replacer) {
     this.stringReplacerMap.put(name, replacer);
     return this;

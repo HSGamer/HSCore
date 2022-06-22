@@ -34,7 +34,7 @@ public class NBTModifier implements ItemModifier {
     return "nbt";
   }
 
-  @SuppressWarnings("deprecated")
+  @SuppressWarnings("deprecation")
   @Override
   public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
     if (Validate.isNullOrEmpty(nbtData)) {
