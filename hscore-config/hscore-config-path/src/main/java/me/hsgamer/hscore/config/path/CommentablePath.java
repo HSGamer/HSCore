@@ -5,6 +5,7 @@ import me.hsgamer.hscore.config.Config;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Optional;
 
@@ -31,7 +32,8 @@ public class CommentablePath<T> implements ConfigPath<T> {
     }
 
     if (defaultComments.length > 1) {
-      defaultCommentMap.put(CommentType.SIDE, defaultComments[1]);
+      String[] sideComments = Arrays.copyOfRange(defaultComments, 1, defaultComments.length);
+      defaultCommentMap.put(CommentType.SIDE, String.join("\n", sideComments));
     }
   }
 
