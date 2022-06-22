@@ -14,7 +14,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The annotated {@link Config}, where any fields can be assigned to the config with the annotation {@link ConfigPath}
+ * The annotated {@link Config}, where any fields can be assigned to the config with the annotation {@link ConfigPath}.
+ * If the field is a final non-static, don't set default value directly, use constructor instead.
+ * <pre>
+ * public class ExampleConfig extends AnnotatedConfig {
+ *   &#64;ConfigPath("test1.path")
+ *   private final String test1 = "test1"; // If the field is final, Don't do this
+ *   &#64;ConfigPath("test2.path")
+ *   private final String test2; // Do this instead
+ *
+ *   public ExampleConfig(Config config) {
+ *     super(config);
+ *     test2 = "test2"; // Set default value via the constructor
+ *   }
+ * }
+ * </pre>
  */
 public class AnnotatedConfig extends DecorativeConfig {
   private final Map<String, Field> pathFieldMap = new HashMap<>();
