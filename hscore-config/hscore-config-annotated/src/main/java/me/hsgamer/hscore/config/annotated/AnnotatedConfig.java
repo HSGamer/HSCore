@@ -9,13 +9,15 @@ import me.hsgamer.hscore.config.annotation.converter.Converter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The annotated {@link Config}, where any fields can be assigned to the config with the annotation {@link ConfigPath}
  */
 public class AnnotatedConfig extends DecorativeConfig {
-  private final List<Field> pathFields = new ArrayList<>();
+  private final Map<String, Field> pathFieldMap = new HashMap<>();
 
   /**
    * Create an annotated config
@@ -29,30 +31,32 @@ public class AnnotatedConfig extends DecorativeConfig {
   @Override
   public void setup() {
     super.setup();
+    List<Field> validFields = new ArrayList<>();
     for (Field field : this.getClass().getDeclaredFields()) {
-      if (checkPathField(field)) {
-        this.pathFields.add(field);
-      }
+      if (!checkPathField(field)) continue;
+      ConfigPath configPath = field.getAnnotation(ConfigPath.class);
+      pathFieldMap.put(configPath.value(), field);
+      validFields.add(field);
     }
-    this.pathFields.forEach(this::setupField);
+    validFields.forEach(this::setupField);
     setupClassComment();
     this.save();
   }
 
   @Override
   public void set(String path, Object value) {
-    pathFields.forEach(field -> {
-      ConfigPath configPath = field.getAnnotation(ConfigPath.class);
-      if (configPath.value().equals(path)) {
-        checkAndSetField(field, configPath, value);
-      }
-    });
+    Field field = pathFieldMap.get(path);
+    if (field == null) {
+      super.set(path, value);
+      return;
+    }
+    checkAndSetField(field, value);
   }
 
   @Override
   public void reload() {
     super.reload();
-    for (Field field : this.getClass().getDeclaredFields()) {
+    for (Field field : pathFieldMap.values()) {
       setupField(field);
     }
     setupClassComment();
@@ -70,8 +74,8 @@ public class AnnotatedConfig extends DecorativeConfig {
     if (configPath == null) {
       return false;
     }
-    if (Modifier.isFinal(field.getModifiers())) {
-      LOGGER.warning(() -> field.getName() + " is a final field. Ignored");
+    if (Modifier.isFinal(field.getModifiers()) && Modifier.isStatic(field.getModifiers())) {
+      LOGGER.warning(() -> field.getName() + " is a static final field. Ignored");
       return false;
     }
     try {
@@ -99,13 +103,15 @@ public class AnnotatedConfig extends DecorativeConfig {
     }
   }
 
-  private void checkAndSetField(Field field, ConfigPath configPath, Object value) {
+  private void checkAndSetField(Field field, Object value) {
+    ConfigPath configPath = field.getAnnotation(ConfigPath.class);
     String path = configPath.value();
     Converter converter = Converter.createConverterSafe(configPath.converter());
     super.set(path, converter.convertToRaw(value));
     this.setValue(field, value);
   }
 
+  @SuppressWarnings("deprecation")
   private void setValue(Field field, Object value) {
     boolean accessible = field.isAccessible();
     field.setAccessible(true);
@@ -118,6 +124,7 @@ public class AnnotatedConfig extends DecorativeConfig {
     }
   }
 
+  @SuppressWarnings("deprecation")
   private Object getValue(Field field) {
     boolean accessible = field.isAccessible();
     field.setAccessible(true);
