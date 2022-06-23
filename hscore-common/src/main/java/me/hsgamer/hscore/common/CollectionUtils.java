@@ -42,6 +42,18 @@ public final class CollectionUtils {
   }
 
   /**
+   * Create a list of string
+   *
+   * @param value the object
+   *
+   * @return the string list
+   */
+  @NotNull
+  public static List<String> createStringListFromObject(@NotNull final Object value) {
+    return createStringListFromObject(value, false);
+  }
+
+  /**
    * Reverse a collection
    *
    * @param original the original collection
