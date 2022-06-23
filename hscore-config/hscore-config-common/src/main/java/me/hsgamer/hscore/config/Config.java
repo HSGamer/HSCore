@@ -241,11 +241,11 @@ public interface Config {
   default Object normalizeObject(Object object) {
     Object normalizedValue = isNormalizable(object) ? normalize(object) : object;
     if (normalizedValue instanceof Map) {
-      // noinspection unchecked
+      // noinspection unchecked, rawtypes
       ((Map) normalizedValue).replaceAll((k, v) -> normalizeObject(v));
     } else if (normalizedValue instanceof Collection) {
       List<Object> normalizedList = new ArrayList<>();
-      // noinspection unchecked
+      // noinspection unchecked, rawtypes
       ((Collection) normalizedValue).forEach(v -> normalizedList.add(normalizeObject(v)));
       normalizedValue = normalizedList;
     }
