@@ -17,6 +17,18 @@ import java.util.concurrent.CompletableFuture;
  */
 public class GithubReleaseChecker implements VersionChecker {
   private final String url;
+  private final UserAgent userAgent;
+
+  /**
+   * Create a new checker
+   *
+   * @param repo      the repository
+   * @param userAgent the user agent
+   */
+  public GithubReleaseChecker(String repo, UserAgent userAgent) {
+    this.url = "https://api.github.com/repos/" + repo + "/releases?per_page=1";
+    this.userAgent = userAgent;
+  }
 
   /**
    * Create a new checker
@@ -24,13 +36,13 @@ public class GithubReleaseChecker implements VersionChecker {
    * @param repo the repository
    */
   public GithubReleaseChecker(String repo) {
-    this.url = "https://api.github.com/repos/" + repo + "/releases?per_page=1";
+    this(repo, UserAgent.FIREFOX);
   }
 
   @Override
   public @NotNull CompletableFuture<String> getVersion() {
     return CompletableFuture.supplyAsync(() -> {
-      try (InputStream inputStream = UserAgent.FIREFOX.assignToConnection(WebUtils.createConnection(url)).getInputStream()) {
+      try (InputStream inputStream = userAgent.assignToConnection(WebUtils.createConnection(url)).getInputStream()) {
         JSONArray array = new JSONArray(new JSONTokener(inputStream));
         JSONObject object = array.getJSONObject(0);
         return object.getString("tag_name");

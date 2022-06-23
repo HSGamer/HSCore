@@ -16,6 +16,19 @@ import java.util.concurrent.CompletableFuture;
  */
 public class GithubCommitChecker implements VersionChecker {
   private final String url;
+  private final UserAgent userAgent;
+
+  /**
+   * Create a new checker
+   *
+   * @param repo      the repository
+   * @param branch    the branch
+   * @param userAgent the user agent
+   */
+  public GithubCommitChecker(String repo, String branch, UserAgent userAgent) {
+    this.userAgent = userAgent;
+    this.url = "https://api.github.com/repos/" + repo + "/commits/heads/" + branch;
+  }
 
   /**
    * Create a new checker
@@ -24,13 +37,13 @@ public class GithubCommitChecker implements VersionChecker {
    * @param branch the branch
    */
   public GithubCommitChecker(String repo, String branch) {
-    this.url = "https://api.github.com/repos/" + repo + "/commits/heads/" + branch;
+    this(repo, branch, UserAgent.FIREFOX);
   }
 
   @Override
   public @NotNull CompletableFuture<String> getVersion() {
     return CompletableFuture.supplyAsync(() -> {
-      try (InputStream inputStream = UserAgent.FIREFOX.assignToConnection(WebUtils.createConnection(url)).getInputStream()) {
+      try (InputStream inputStream = userAgent.assignToConnection(WebUtils.createConnection(url)).getInputStream()) {
         JSONObject jsonObject = new JSONObject(new JSONTokener(inputStream));
         return jsonObject.getString("sha");
       } catch (IOException e) {

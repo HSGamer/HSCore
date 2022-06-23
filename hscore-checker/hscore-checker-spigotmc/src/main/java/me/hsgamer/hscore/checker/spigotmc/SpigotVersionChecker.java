@@ -17,6 +17,18 @@ import java.util.concurrent.CompletableFuture;
 public final class SpigotVersionChecker implements VersionChecker {
 
   private final int resourceId;
+  private final UserAgent userAgent;
+
+  /**
+   * Create a version checker
+   *
+   * @param resourceId the resource id from SpigotMC
+   * @param userAgent  the user agent
+   */
+  public SpigotVersionChecker(final int resourceId, UserAgent userAgent) {
+    this.resourceId = resourceId;
+    this.userAgent = userAgent;
+  }
 
   /**
    * Create a version checker
@@ -24,7 +36,7 @@ public final class SpigotVersionChecker implements VersionChecker {
    * @param resourceId the resource id from SpigotMC
    */
   public SpigotVersionChecker(final int resourceId) {
-    this.resourceId = resourceId;
+    this(resourceId, UserAgent.FIREFOX);
   }
 
   /**
@@ -36,7 +48,7 @@ public final class SpigotVersionChecker implements VersionChecker {
   public @NotNull CompletableFuture<String> getVersion() {
     return CompletableFuture.supplyAsync(() -> {
       try (
-        InputStream inputStream = UserAgent.FIREFOX.assignToConnection(
+        InputStream inputStream = userAgent.assignToConnection(
           WebUtils.createConnection("https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId)
         ).getInputStream()
       ) {
