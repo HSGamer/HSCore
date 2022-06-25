@@ -161,7 +161,9 @@ public abstract class AddonManager {
   public boolean enableAddon(@NotNull final String name, final boolean closeLoaderOnFailed) {
     final Addon addon = this.addons.get(name);
     try {
+      this.onAddonEnable(addon);
       addon.onEnable();
+      this.onAddonEnabled(addon);
       return true;
     } catch (final Throwable t) {
       this.logger.log(Level.WARNING, t, () -> "Error when enabling " + name);
@@ -183,7 +185,9 @@ public abstract class AddonManager {
   public boolean disableAddon(@NotNull final String name, final boolean closeLoaderOnFailed) {
     final Addon addon = this.addons.get(name);
     try {
+      this.onAddonDisable(addon);
       addon.onDisable();
+      this.onAddonDisabled(addon);
       return true;
     } catch (final Throwable t) {
       this.logger.log(Level.WARNING, t, () -> "Error when disabling " + name);
@@ -326,6 +330,42 @@ public abstract class AddonManager {
    */
   protected boolean onAddonLoading(@NotNull final Addon addon) {
     return true;
+  }
+
+  /**
+   * Called when the addon is on enable
+   *
+   * @param addon the enabling addon
+   */
+  protected void onAddonEnable(@NotNull final Addon addon) {
+    // EMPTY
+  }
+
+  /**
+   * Called when the addon is enabled
+   *
+   * @param addon the enabled addon
+   */
+  protected void onAddonEnabled(@NotNull final Addon addon) {
+    // EMPTY
+  }
+
+  /**
+   * Called when the addon is on disabling
+   *
+   * @param addon the disabling addon
+   */
+  protected void onAddonDisable(@NotNull final Addon addon) {
+    // EMPTY
+  }
+
+  /**
+   * Called when the addon is disabled
+   *
+   * @param addon the disabled addon
+   */
+  protected void onAddonDisabled(@NotNull final Addon addon) {
+    // EMPTY
   }
 
   /**
