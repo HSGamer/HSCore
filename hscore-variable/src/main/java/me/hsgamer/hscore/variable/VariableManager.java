@@ -11,9 +11,9 @@ import java.util.regex.Pattern;
  * The Variable Manager
  */
 public final class VariableManager {
-  private static final Pattern PATTERN = Pattern.compile("(.)([{]([^{}]+)[}])(.)");
-  private static final String START_IGNORE_CHAR = "\\";
-  private static final String END_IGNORE_CHAR = "\\";
+  private static final Pattern PATTERN = Pattern.compile("(.?)([{]([^{}]+)[}])(.?)");
+  private static final char START_IGNORE_CHAR = '\\';
+  private static final char END_IGNORE_CHAR = '\\';
   private static final Map<String, StringReplacer> variables = new HashMap<>();
   private static final List<ExternalStringReplacer> externalReplacers = new ArrayList<>();
   private static BooleanSupplier replaceAll = () -> false;
@@ -145,10 +145,10 @@ public final class VariableManager {
   public static String setSingleVariables(String message, UUID uuid) {
     Matcher matcher = PATTERN.matcher(message);
     while (matcher.find()) {
-      String startChar = matcher.group(1);
-      String endChar = matcher.group(4);
+      char startChar = Optional.ofNullable(matcher.group(1)).filter(s -> !s.isEmpty()).map(s -> s.charAt(0)).orElse(' ');
+      char endChar = Optional.ofNullable(matcher.group(4)).filter(s -> !s.isEmpty()).map(s -> s.charAt(0)).orElse(' ');
       String original = matcher.group(2);
-      if (START_IGNORE_CHAR.equals(startChar) && END_IGNORE_CHAR.equals(endChar)) {
+      if (START_IGNORE_CHAR == startChar && END_IGNORE_CHAR == endChar) {
         message = message.replaceAll(Pattern.quote(matcher.group()), Matcher.quoteReplacement(original));
         continue;
       }
