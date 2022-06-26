@@ -4,7 +4,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.messaging.PluginMessageRecipient;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,19 +48,7 @@ public abstract class BungeeSubChannel extends Channel {
    * @param data      the data
    */
   public void sendForward(PluginMessageRecipient recipient, String toServer, byte[] data) {
-    try (
-      ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-      DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream)
-    ) {
-      dataOutputStream.writeUTF("Forward");
-      dataOutputStream.writeUTF(toServer);
-      dataOutputStream.writeUTF(this.subChannel);
-      dataOutputStream.writeShort(data.length);
-      dataOutputStream.write(data);
-      super.send(recipient, byteArrayOutputStream.toByteArray());
-    } catch (IOException e) {
-      logger.log(Level.WARNING, "There is an exception when sending data", e);
-    }
+    BungeeUtils.forward(getPlugin(), recipient, toServer, subChannel, data);
   }
 
   /**
@@ -106,15 +95,9 @@ public abstract class BungeeSubChannel extends Channel {
    */
   @Override
   public void send(PluginMessageRecipient recipient, byte[] data) {
-    try (
-      ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-      DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream)
-    ) {
-      dataOutputStream.writeUTF(this.subChannel);
-      dataOutputStream.write(data);
-      super.send(recipient, byteArrayOutputStream.toByteArray());
-    } catch (IOException e) {
-      logger.log(Level.WARNING, "There is an exception when sending data", e);
-    }
+    BungeeUtils.sendPluginMessage(getPlugin(), recipient, BungeeUtils.getDataBytes(dataStream -> {
+      dataStream.writeUTF(this.subChannel);
+      dataStream.write(data);
+    }));
   }
 }

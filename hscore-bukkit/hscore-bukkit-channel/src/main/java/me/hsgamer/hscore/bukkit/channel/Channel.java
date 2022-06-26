@@ -28,9 +28,7 @@ public abstract class Channel implements PluginMessageListener {
    */
   public void register() {
     this.plugin.getServer().getMessenger().registerIncomingPluginChannel(this.plugin, this.name, this);
-    if (!this.plugin.getServer().getMessenger().isOutgoingChannelRegistered(this.plugin, this.name)) {
-      this.plugin.getServer().getMessenger().registerOutgoingPluginChannel(this.plugin, this.name);
-    }
+    BungeeUtils.register(this.plugin, this.name);
   }
 
   /**
@@ -38,9 +36,7 @@ public abstract class Channel implements PluginMessageListener {
    */
   public void unregister() {
     this.plugin.getServer().getMessenger().unregisterIncomingPluginChannel(this.plugin, this.name, this);
-    if (this.plugin.getServer().getMessenger().isOutgoingChannelRegistered(this.plugin, this.name)) {
-      this.plugin.getServer().getMessenger().unregisterOutgoingPluginChannel(this.plugin, this.name);
-    }
+    BungeeUtils.unregister(this.plugin, this.name);
   }
 
   /**
@@ -57,7 +53,7 @@ public abstract class Channel implements PluginMessageListener {
    * @param data the data
    */
   public void send(byte[] data) {
-    this.send(this.plugin.getServer(), data);
+    this.send(BungeeUtils.getGlobalRecipient(), data);
   }
 
   /**
@@ -67,7 +63,7 @@ public abstract class Channel implements PluginMessageListener {
    * @param data      the data
    */
   public void send(PluginMessageRecipient recipient, byte[] data) {
-    recipient.sendPluginMessage(this.plugin, this.name, data);
+    BungeeUtils.sendPluginMessage(this.plugin, recipient, this.name, data);
   }
 
   @Override
