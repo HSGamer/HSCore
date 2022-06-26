@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
+import com.google.gson.Gson;
 import me.hsgamer.hscore.bukkit.item.ItemModifier;
 import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
@@ -8,12 +9,14 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
  * The NBT Modifier
  */
 public class NBTModifier implements ItemModifier {
+  private static final Gson GSON = new Gson();
   private String nbtData = "";
 
   /**
@@ -54,7 +57,12 @@ public class NBTModifier implements ItemModifier {
 
   @Override
   public void loadFromObject(Object object) {
-    this.nbtData = String.valueOf(object);
+    if (object instanceof Map) {
+      Map<?, ?> map = (Map<?, ?>) object;
+      this.nbtData = GSON.toJson(map);
+    } else {
+      this.nbtData = Objects.toString(object, "");
+    }
   }
 
   @Override
