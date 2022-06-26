@@ -3,12 +3,16 @@ package me.hsgamer.hscore.bukkit.addon;
 import me.hsgamer.hscore.addon.AddonManager;
 import me.hsgamer.hscore.addon.object.Addon;
 import org.bukkit.Server;
+import org.bukkit.plugin.InvalidDescriptionException;
+import org.bukkit.plugin.InvalidPluginException;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Addon class for Bukkit
  */
 public abstract class PluginAddon extends Addon {
+  private Plugin fakePlugin;
 
   /**
    * Get the plugin that the addon is currently on
@@ -30,5 +34,53 @@ public abstract class PluginAddon extends Addon {
    */
   public final Server getServer() {
     return this.getPlugin().getServer();
+  }
+
+  /**
+   * Check if the addon has a fake plugin
+   *
+   * @return true if the addon has a fake plugin
+   */
+  protected boolean hasFakePlugin() {
+    return false;
+  }
+
+  /**
+   * Load the fake plugin
+   *
+   * @throws InvalidPluginException      if the plugin is invalid
+   * @throws InvalidDescriptionException if the description is invalid
+   */
+  public final void loadFakePlugin() throws InvalidPluginException, InvalidDescriptionException {
+    if (hasFakePlugin()) {
+      this.fakePlugin = this.getPlugin().getServer().getPluginManager().loadPlugin(this.getClassLoader().getFile());
+    }
+  }
+
+  /**
+   * Enable the fake plugin
+   */
+  public final void enableFakePlugin() {
+    if (hasFakePlugin() && this.fakePlugin != null) {
+      this.getPlugin().getServer().getPluginManager().enablePlugin(this.fakePlugin);
+    }
+  }
+
+  /**
+   * Disable the fake plugin
+   */
+  public final void disableFakePlugin() {
+    if (hasFakePlugin() && this.fakePlugin != null) {
+      this.getPlugin().getServer().getPluginManager().disablePlugin(this.fakePlugin);
+    }
+  }
+
+  /**
+   * Get the fake plugin
+   *
+   * @return the fake plugin
+   */
+  public final Plugin getFakePlugin() {
+    return fakePlugin;
   }
 }

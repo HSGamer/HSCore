@@ -1,10 +1,14 @@
 package me.hsgamer.hscore.bukkit.addon;
 
 import me.hsgamer.hscore.addon.AddonManager;
+import me.hsgamer.hscore.addon.object.Addon;
+import org.bukkit.plugin.InvalidDescriptionException;
+import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.logging.Level;
 
 /**
  * Addon manager for Bukkit
@@ -45,5 +49,25 @@ public abstract class PluginAddonManager extends AddonManager {
   @NotNull
   public final JavaPlugin getPlugin() {
     return this.javaPlugin;
+  }
+
+  @Override
+  protected void onAddonEnabled(@NotNull Addon addon) {
+    if (addon instanceof PluginAddon) {
+      PluginAddon pluginAddon = (PluginAddon) addon;
+      try {
+        pluginAddon.loadFakePlugin();
+        pluginAddon.enableFakePlugin();
+      } catch (InvalidPluginException | InvalidDescriptionException e) {
+        getLogger().log(Level.WARNING, e, () -> "Failed to load fake plugin for " + addon.getDescription().getName());
+      }
+    }
+  }
+
+  @Override
+  protected void onAddonDisabled(@NotNull Addon addon) {
+    if (addon instanceof PluginAddon) {
+      ((PluginAddon) addon).disableFakePlugin();
+    }
   }
 }
