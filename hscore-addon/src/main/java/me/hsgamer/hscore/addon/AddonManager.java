@@ -1,10 +1,10 @@
 package me.hsgamer.hscore.addon;
 
+import me.hsgamer.hscore.addon.loader.AddonDescriptionLoader;
 import me.hsgamer.hscore.addon.object.Addon;
 import me.hsgamer.hscore.addon.object.AddonClassLoader;
 import me.hsgamer.hscore.addon.object.AddonDescription;
 import me.hsgamer.hscore.common.CollectionUtils;
-import me.hsgamer.hscore.config.ConfigProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 /**
  * A class that manages all addons in it
  */
-public abstract class AddonManager {
+public class AddonManager {
 
   /**
    * The addon map keyed addon's id, valued addon itself
@@ -50,25 +50,34 @@ public abstract class AddonManager {
   private final ClassLoader parentClassLoader;
 
   /**
+   * The addon description loader
+   */
+  @NotNull
+  private final AddonDescriptionLoader addonDescriptionLoader;
+
+  /**
    * Create a new addon manager
    *
-   * @param addonsDir the directory to store addon files
-   * @param logger    the logger to use in every addon
+   * @param addonsDir              the directory to store addon files
+   * @param logger                 the logger to use in every addon
+   * @param addonDescriptionLoader the loader to load addon description
    */
-  protected AddonManager(@NotNull final File addonsDir, @NotNull final Logger logger) {
-    this(addonsDir, logger, AddonManager.class.getClassLoader());
+  protected AddonManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull AddonDescriptionLoader addonDescriptionLoader) {
+    this(addonsDir, logger, addonDescriptionLoader, AddonManager.class.getClassLoader());
   }
 
   /**
    * Create a new addon manager
    *
-   * @param addonsDir         the directory to store addon files
-   * @param logger            the logger to use in every addon
-   * @param parentClassLoader the parent class loader to load all addons
+   * @param addonsDir              the directory to store addon files
+   * @param logger                 the logger to use in every addon
+   * @param addonDescriptionLoader the loader to load addon description
+   * @param parentClassLoader      the parent class loader to load all addons
    */
-  protected AddonManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull final ClassLoader parentClassLoader) {
+  public AddonManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull AddonDescriptionLoader addonDescriptionLoader, @NotNull final ClassLoader parentClassLoader) {
     this.logger = logger;
     this.addonsDir = addonsDir;
+    this.addonDescriptionLoader = addonDescriptionLoader;
     this.parentClassLoader = parentClassLoader;
     if (!addonsDir.exists()) {
       addonsDir.mkdirs();
@@ -96,6 +105,16 @@ public abstract class AddonManager {
   }
 
   /**
+   * Get the addon description loader
+   *
+   * @return the loader
+   */
+  @NotNull
+  public AddonDescriptionLoader getAddonDescriptionLoader() {
+    return addonDescriptionLoader;
+  }
+
+  /**
    * Load all addons from the addon directory. Also call {@link Addon#onLoad()}
    */
   public void loadAddons() {
@@ -106,7 +125,7 @@ public abstract class AddonManager {
       .forEach(file -> {
         try (final JarFile jar = new JarFile(file)) {
           // Get addon description
-          final AddonDescription addonDescription = AddonDescription.get(jar, this.getAddonConfigFileName(), this.getConfigProvider());
+          final AddonDescription addonDescription = addonDescriptionLoader.load(jar);
           if (addonMap.containsKey(addonDescription.getName())) {
             this.logger.warning("Duplicated addon " + addonDescription.getName());
             return;
@@ -207,8 +226,7 @@ public abstract class AddonManager {
       if (!this.enableAddon(name, true)) {
         failed.add(name);
       } else {
-        this.logger.log(Level.INFO, "Enabled {0}",
-          String.join(" ", name, this.addons.get(name).getDescription().getVersion()));
+        this.logger.log(Level.INFO, "Enabled {0}", String.join(" ", name, this.addons.get(name).getDescription().getVersion()));
       }
     });
     failed.forEach(this.addons::remove);
@@ -276,14 +294,6 @@ public abstract class AddonManager {
   }
 
   /**
-   * Get the name of the addon config file
-   *
-   * @return the file name
-   */
-  @NotNull
-  public abstract String getAddonConfigFileName();
-
-  /**
    * Find a class for an addon
    *
    * @param addon the calling addon
@@ -312,14 +322,6 @@ public abstract class AddonManager {
   protected Map<String, Addon> sortAndFilter(@NotNull final Map<String, Addon> original) {
     return original;
   }
-
-  /**
-   * Get the addon config provider
-   *
-   * @return the provider
-   */
-  @NotNull
-  public abstract ConfigProvider<?> getConfigProvider();
 
   /**
    * Called when the addon is on loading

@@ -25,14 +25,13 @@
 
 package me.hsgamer.hscore.addon;
 
+import me.hsgamer.hscore.addon.loader.AddonDescriptionLoader;
 import me.hsgamer.hscore.addon.object.Addon;
-import me.hsgamer.hscore.config.ConfigProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.logging.Logger;
 
@@ -42,22 +41,10 @@ import java.util.logging.Logger;
 public final class SimpleAddonManager extends AddonManager {
 
   /**
-   * The file name supplier
-   */
-  @NotNull
-  private final Supplier<String> fileName;
-
-  /**
    * The sort and filter function
    */
   @NotNull
   private final UnaryOperator<Map<String, Addon>> sortAndFilter;
-
-  /**
-   * The config provider supplier
-   */
-  @NotNull
-  private final Supplier<ConfigProvider<?>> configProvider;
 
   /**
    * The on addon loading predicate
@@ -68,87 +55,53 @@ public final class SimpleAddonManager extends AddonManager {
   /**
    * Create a simple addon manager
    *
-   * @param addonsDir      the addon directory
-   * @param logger         the logger
-   * @param fileName       the file name
-   * @param sortAndFilter  the sort and filter
-   * @param configProvider the config provider
-   * @param onAddonLoading the on addon loading
+   * @param addonsDir              the addon directory
+   * @param logger                 the logger
+   * @param addonDescriptionLoader the addon description loader
+   * @param sortAndFilter          the sort and filter
+   * @param onAddonLoading         the on addon loading
    */
   public SimpleAddonManager(@NotNull final File addonsDir, @NotNull final Logger logger,
-                            @NotNull final Supplier<String> fileName,
+                            @NotNull final AddonDescriptionLoader addonDescriptionLoader,
                             @NotNull final UnaryOperator<Map<String, Addon>> sortAndFilter,
-                            @NotNull final Supplier<ConfigProvider<?>> configProvider,
                             @NotNull final Predicate<Addon> onAddonLoading) {
-    super(addonsDir, logger);
-    this.fileName = fileName;
+    super(addonsDir, logger, addonDescriptionLoader);
     this.sortAndFilter = sortAndFilter;
-    this.configProvider = configProvider;
     this.onAddonLoading = onAddonLoading;
   }
 
   /**
    * Create a simple addon manager
    *
-   * @param addonsDir      the addon directory
-   * @param logger         the logger
-   * @param fileName       the file name
-   * @param configProvider the config provider
-   * @param onAddonLoading the on addon loading
+   * @param addonsDir              the addon directory
+   * @param logger                 the logger
+   * @param addonDescriptionLoader the addon description loader
+   * @param onAddonLoading         the on addon loading
    */
   public SimpleAddonManager(@NotNull final File addonsDir, @NotNull final Logger logger,
-                            @NotNull final Supplier<String> fileName,
-                            @NotNull final Supplier<ConfigProvider<?>> configProvider,
+                            @NotNull final AddonDescriptionLoader addonDescriptionLoader,
                             @NotNull final Predicate<Addon> onAddonLoading) {
-    this(addonsDir, logger, fileName, map -> map, configProvider, onAddonLoading);
+    this(addonsDir, logger, addonDescriptionLoader, map -> map, onAddonLoading);
   }
 
   /**
    * Create a simple addon manager
    *
-   * @param addonsDir      the addon directory
-   * @param logger         the logger
-   * @param fileName       the file name
-   * @param sortAndFilter  the sort and filter
-   * @param configProvider the config provider
+   * @param addonsDir              the addon directory
+   * @param logger                 the logger
+   * @param addonDescriptionLoader the addon description loader
+   * @param sortAndFilter          the sort and filter
    */
   public SimpleAddonManager(@NotNull final File addonsDir, @NotNull final Logger logger,
-                            @NotNull final Supplier<String> fileName,
-                            @NotNull final UnaryOperator<Map<String, Addon>> sortAndFilter,
-                            @NotNull final Supplier<ConfigProvider<?>> configProvider) {
-    this(addonsDir, logger, fileName, sortAndFilter, configProvider, addon -> true);
-  }
-
-  /**
-   * Create a simple addon manager
-   *
-   * @param addonsDir      the addon directory
-   * @param logger         the logger
-   * @param fileName       the file name
-   * @param configProvider the config provider
-   */
-  public SimpleAddonManager(@NotNull final File addonsDir, @NotNull final Logger logger,
-                            @NotNull final Supplier<String> fileName,
-                            @NotNull final Supplier<ConfigProvider<?>> configProvider) {
-    this(addonsDir, logger, fileName, map -> map, configProvider);
-  }
-
-  @NotNull
-  @Override
-  public String getAddonConfigFileName() {
-    return this.fileName.get();
+                            @NotNull final AddonDescriptionLoader addonDescriptionLoader,
+                            @NotNull final UnaryOperator<Map<String, Addon>> sortAndFilter) {
+    this(addonsDir, logger, addonDescriptionLoader, sortAndFilter, addon -> true);
   }
 
   @NotNull
   @Override
   protected Map<String, Addon> sortAndFilter(@NotNull final Map<String, Addon> original) {
     return this.sortAndFilter.apply(original);
-  }
-
-  @NotNull
-  @Override
-  public ConfigProvider<?> getConfigProvider() {
-    return this.configProvider.get();
   }
 
   @Override

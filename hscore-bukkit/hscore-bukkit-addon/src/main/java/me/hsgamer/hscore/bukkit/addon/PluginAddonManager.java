@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.bukkit.addon;
 
 import me.hsgamer.hscore.addon.AddonManager;
+import me.hsgamer.hscore.addon.loader.AddonDescriptionLoader;
 import me.hsgamer.hscore.addon.object.Addon;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.bukkit.plugin.InvalidPluginException;
@@ -24,21 +25,23 @@ public abstract class PluginAddonManager extends AddonManager {
   /**
    * Create a new addon manager
    *
-   * @param javaPlugin  the plugin
-   * @param addonFolder the addon folder
+   * @param javaPlugin             the plugin
+   * @param addonFolder            the addon folder
+   * @param addonDescriptionLoader the addon description loader
    */
-  protected PluginAddonManager(@NotNull final JavaPlugin javaPlugin, @NotNull final File addonFolder) {
-    super(addonFolder, javaPlugin.getLogger());
+  protected PluginAddonManager(@NotNull final JavaPlugin javaPlugin, @NotNull final File addonFolder, @NotNull final AddonDescriptionLoader addonDescriptionLoader) {
+    super(addonFolder, javaPlugin.getLogger(), addonDescriptionLoader);
     this.javaPlugin = javaPlugin;
   }
 
   /**
    * Create a new addon manager
    *
-   * @param javaPlugin the plugin
+   * @param javaPlugin             the plugin
+   * @param addonDescriptionLoader the addon description loader
    */
-  protected PluginAddonManager(@NotNull final JavaPlugin javaPlugin) {
-    this(javaPlugin, new File(javaPlugin.getDataFolder(), "addon"));
+  protected PluginAddonManager(@NotNull final JavaPlugin javaPlugin, @NotNull final AddonDescriptionLoader addonDescriptionLoader) {
+    this(javaPlugin, new File(javaPlugin.getDataFolder(), "addon"), addonDescriptionLoader);
   }
 
   /**
