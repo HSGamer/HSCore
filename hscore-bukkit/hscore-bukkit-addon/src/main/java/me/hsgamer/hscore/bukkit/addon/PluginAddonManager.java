@@ -14,7 +14,7 @@ import java.util.logging.Level;
 /**
  * Addon manager for Bukkit
  */
-public abstract class PluginAddonManager extends AddonManager {
+public class PluginAddonManager extends AddonManager {
 
   /**
    * The addon's plugin instance
@@ -29,7 +29,7 @@ public abstract class PluginAddonManager extends AddonManager {
    * @param addonFolder            the addon folder
    * @param addonDescriptionLoader the addon description loader
    */
-  protected PluginAddonManager(@NotNull final JavaPlugin javaPlugin, @NotNull final File addonFolder, @NotNull final AddonDescriptionLoader addonDescriptionLoader) {
+  public PluginAddonManager(@NotNull final JavaPlugin javaPlugin, @NotNull final File addonFolder, @NotNull final AddonDescriptionLoader addonDescriptionLoader) {
     super(addonFolder, javaPlugin.getLogger(), addonDescriptionLoader);
     this.javaPlugin = javaPlugin;
   }
@@ -40,8 +40,27 @@ public abstract class PluginAddonManager extends AddonManager {
    * @param javaPlugin             the plugin
    * @param addonDescriptionLoader the addon description loader
    */
-  protected PluginAddonManager(@NotNull final JavaPlugin javaPlugin, @NotNull final AddonDescriptionLoader addonDescriptionLoader) {
+  public PluginAddonManager(@NotNull final JavaPlugin javaPlugin, @NotNull final AddonDescriptionLoader addonDescriptionLoader) {
     this(javaPlugin, new File(javaPlugin.getDataFolder(), "addon"), addonDescriptionLoader);
+  }
+
+  /**
+   * Create a new addon manager
+   *
+   * @param javaPlugin  the plugin
+   * @param addonFolder the addon folder
+   */
+  public PluginAddonManager(@NotNull final JavaPlugin javaPlugin, @NotNull final File addonFolder) {
+    this(javaPlugin, new File(javaPlugin.getDataFolder(), "addon"), new BukkitConfigAddonDescriptionLoader());
+  }
+
+  /**
+   * Create a new addon manager
+   *
+   * @param javaPlugin the plugin
+   */
+  public PluginAddonManager(@NotNull final JavaPlugin javaPlugin) {
+    this(javaPlugin, new BukkitConfigAddonDescriptionLoader());
   }
 
   /**
