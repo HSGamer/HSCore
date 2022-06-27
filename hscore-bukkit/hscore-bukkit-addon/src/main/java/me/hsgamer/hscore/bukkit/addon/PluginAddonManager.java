@@ -51,7 +51,7 @@ public class PluginAddonManager extends AddonManager {
    * @param addonFolder the addon folder
    */
   public PluginAddonManager(@NotNull final JavaPlugin javaPlugin, @NotNull final File addonFolder) {
-    this(javaPlugin, new File(javaPlugin.getDataFolder(), "addon"), new BukkitConfigAddonDescriptionLoader());
+    this(javaPlugin, addonFolder, new BukkitConfigAddonDescriptionLoader());
   }
 
   /**
