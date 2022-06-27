@@ -1,7 +1,6 @@
 package me.hsgamer.hscore.addon.object;
 
 import me.hsgamer.hscore.addon.AddonManager;
-import me.hsgamer.hscore.common.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -115,7 +114,7 @@ public abstract class Addon {
    * @param replace whether it replaces the existed one
    */
   public final void saveResource(@NotNull final String path, final boolean replace) {
-    if (Validate.isNullOrEmpty(path)) {
+    if (path.isEmpty()) {
       throw new IllegalArgumentException("Path cannot be null or empty");
     }
     final String newPath = path.replace('\\', '/');
@@ -149,7 +148,7 @@ public abstract class Addon {
    */
   @Nullable
   public final InputStream getResource(@NotNull final String path) {
-    if (Validate.isNullOrEmpty(path)) {
+    if (path.isEmpty()) {
       throw new IllegalArgumentException("Path cannot be null or empty");
     }
     final String newPath = path.replace('\\', '/');

@@ -4,7 +4,6 @@ import me.hsgamer.hscore.addon.loader.AddonDescriptionLoader;
 import me.hsgamer.hscore.addon.object.Addon;
 import me.hsgamer.hscore.addon.object.AddonClassLoader;
 import me.hsgamer.hscore.addon.object.AddonDescription;
-import me.hsgamer.hscore.common.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -250,12 +249,15 @@ public class AddonManager {
    * Disable all enabled addons
    */
   public void disableAddons() {
-    CollectionUtils.reverse(this.addons.keySet()).forEach(name -> {
+    Deque<String> stack = new LinkedList<>(this.addons.keySet());
+    while (true) {
+      final String name = stack.pollLast();
+      if (name == null) break;
       if (this.disableAddon(name, false)) {
         this.logger.log(Level.INFO, "Disabled {0}",
           String.join(" ", name, this.addons.get(name).getDescription().getVersion()));
       }
-    });
+    }
     this.addons.values().forEach(this::closeClassLoader);
     this.addons.clear();
   }
