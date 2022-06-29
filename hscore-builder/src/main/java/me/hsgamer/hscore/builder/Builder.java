@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * The builder
@@ -60,6 +61,17 @@ public class Builder<R, V> {
    */
   public void register(Function<R, V> function, String name, String... aliases) {
     register((s, r) -> function.apply(r), name, aliases);
+  }
+
+  /**
+   * Register a new supplier
+   *
+   * @param supplier the supplier
+   * @param name     the name of the modifier
+   * @param aliases  the aliases of the modifier
+   */
+  public void register(Supplier<V> supplier, String name, String... aliases) {
+    register((s, r) -> supplier.get(), name, aliases);
   }
 
   /**
