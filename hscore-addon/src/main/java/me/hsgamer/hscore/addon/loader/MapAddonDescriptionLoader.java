@@ -32,13 +32,13 @@ public interface MapAddonDescriptionLoader extends AddonDescriptionLoader {
     final String version = Objects.toString(data.get("version"), null);
     final String mainClass = Objects.toString(data.get("main"), null);
     if (name == null) {
-      throw new InvalidAddonDescription("Addon '" + jarFile.getName() + "' doesn't define a name");
+      throw new InvalidAddonDescription(jarFile.getName() + " doesn't define a name");
     }
     if (version == null) {
-      throw new InvalidAddonDescription("Addon '" + jarFile.getName() + "' doesn't define a version");
+      throw new InvalidAddonDescription(jarFile.getName() + " doesn't define a version");
     }
     if (mainClass == null) {
-      throw new IllegalArgumentException("Addon '" + jarFile.getName() + "' doesn't define a main class");
+      throw new IllegalArgumentException(jarFile.getName() + " doesn't define a main class");
     }
     return new AddonDescription(name, version, mainClass, data);
   }
