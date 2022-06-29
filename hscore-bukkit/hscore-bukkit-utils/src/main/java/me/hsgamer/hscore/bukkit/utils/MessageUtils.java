@@ -5,7 +5,6 @@ import me.hsgamer.hscore.common.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -128,6 +127,49 @@ public final class MessageUtils {
   /**
    * Send message
    *
+   * @param receivers the collection of receivers
+   * @param message   the message
+   */
+  public static void sendMessage(@NotNull final Collection<CommandSender> receivers, @NotNull final String message) {
+    receivers.forEach(player -> sendMessage(player, message));
+  }
+
+  /**
+   * Send message with prefix
+   *
+   * @param receivers the collection of receivers
+   * @param message   the message
+   * @param prefix    the prefix
+   */
+  public static void sendMessage(@NotNull final Collection<CommandSender> receivers, @NotNull final String message, @NotNull final String prefix) {
+    receivers.forEach(player -> sendMessage(player, message, prefix));
+  }
+
+  /**
+   * Send message with prefix
+   *
+   * @param receivers the collection of receivers
+   * @param message   the message
+   * @param prefix    the prefix
+   */
+  public static void sendMessage(@NotNull final Collection<CommandSender> receivers, @NotNull final String message, @NotNull final Supplier<String> prefix) {
+    receivers.forEach(player -> sendMessage(player, message, prefix));
+  }
+
+  /**
+   * Send message with the prefix from the plugin
+   *
+   * @param receivers the collection of receivers
+   * @param message   the message
+   * @param object    the object
+   */
+  public static void sendMessage(@NotNull Collection<CommandSender> receivers, @NotNull final String message, @NotNull final Object object) {
+    receivers.forEach(player -> sendMessage(player, message, object));
+  }
+
+  /**
+   * Send message
+   *
    * @param uuid    the unique id of the receiver
    * @param message the message
    */
@@ -162,10 +204,10 @@ public final class MessageUtils {
    *
    * @param uuid    the unique id of the receiver
    * @param message the message
-   * @param plugin  the plugin
+   * @param object  the object
    */
-  public static void sendMessage(@NotNull final UUID uuid, @NotNull final String message, @NotNull final Plugin plugin) {
-    sendMessage(uuid, message, getPrefix(plugin).orElse(getPrefix()));
+  public static void sendMessage(@NotNull final UUID uuid, @NotNull final String message, @NotNull final Object object) {
+    sendMessage(uuid, message, getPrefix(object).orElse(getPrefix()));
   }
 
   /**
