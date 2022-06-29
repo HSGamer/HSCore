@@ -14,7 +14,7 @@ import java.util.jar.Manifest;
 /**
  * The {@link AddonDescriptionLoader} that loads the {@link AddonDescription} from the manifest of the jar file
  */
-public class ImplementationManifestAddonDescriptionLoader implements AddonDescriptionLoader {
+public class ManifestAddonDescriptionLoader implements AddonDescriptionLoader {
   @Override
   public AddonDescription load(JarFile jarFile) throws IOException, InvalidAddonDescription {
     Manifest manifest = jarFile.getManifest();
