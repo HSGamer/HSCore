@@ -89,7 +89,7 @@ public final class BukkitUtils {
   }
 
   /**
-   * Check if the string is the username (https://github.com/CryptoMorin/XSeries/blob/3ec904a8d85695729ad51e7bbd06a65362357706/src/main/java/com/cryptomorin/xseries/SkullUtils.java#L200-L209)
+   * Check if the string is the username (<a href="https://github.com/CryptoMorin/XSeries/blob/3ec904a8d85695729ad51e7bbd06a65362357706/src/main/java/com/cryptomorin/xseries/SkullUtils.java#L200-L209">XSeries's Code</a>)
    *
    * @param string the input string
    *
@@ -125,10 +125,62 @@ public final class BukkitUtils {
    * Center the location
    *
    * @param location the location
+   * @param centerX  should the x be centered?
+   * @param centerY  should the y be centered?
+   * @param centerZ  should the z be centered?
    *
    * @return the centered location
    */
+  public static Location centerLocation(Location location, boolean centerX, boolean centerY, boolean centerZ) {
+    return new Location(
+      location.getWorld(),
+      location.getBlockX() + (centerX ? 0.5 : 0),
+      location.getBlockY() + (centerY ? 0.5 : 0),
+      location.getBlockZ() + (centerZ ? 0.5 : 0),
+      location.getYaw(),
+      location.getPitch()
+    );
+  }
+
+  /**
+   * Center the location
+   *
+   * @param location the location
+   *
+   * @return the centered location
+   *
+   * @see BukkitUtils#centerLocation(Location, boolean, boolean, boolean)
+   */
   public static Location centerLocation(Location location) {
-    return new Location(location.getWorld(), location.getBlockX() + 0.5, location.getBlockY() + 0.5, location.getBlockZ() + 0.5);
+    return centerLocation(location, true, true, true);
+  }
+
+  /**
+   * Get the normalized degree
+   *
+   * @param degree the degree
+   *
+   * @return the normalized degree
+   */
+  public static float normalizeDegree(float degree) {
+    return (Math.round(degree / 90f) * 90f);
+  }
+
+  /**
+   * Normalize the yaw & pitch of the location
+   *
+   * @param location the location
+   *
+   * @return the normalized location
+   */
+  public static Location normalizeYawPitch(Location location) {
+    return new Location(
+      location.getWorld(),
+      location.getX(),
+      location.getY(),
+      location.getZ(),
+      normalizeDegree(location.getYaw()),
+      normalizeDegree(location.getPitch())
+    );
   }
 }
