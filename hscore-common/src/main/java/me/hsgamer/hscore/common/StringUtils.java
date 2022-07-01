@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  */
 public final class StringUtils {
 
-  private static final Pattern hexPattern = Pattern.compile("(\\\\?)((\\S)#([A-Fa-f0-9]{1,6}))");
+  private static final Pattern hexPattern = Pattern.compile("(\\\\?)((\\S)#([A-Fa-f\\d]{1,6}))");
 
   private StringUtils() {
     // EMPTY
