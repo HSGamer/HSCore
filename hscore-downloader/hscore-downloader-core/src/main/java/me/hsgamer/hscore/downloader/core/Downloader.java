@@ -32,8 +32,8 @@ public class Downloader {
     this.downloadInfoLoader = downloadInfoLoader;
     this.inputStreamLoader = inputStreamLoader;
     this.folder = folder;
-    if (!folder.exists()) {
-      folder.mkdirs();
+    if (!folder.exists() && folder.mkdirs()) {
+      logger.info(() -> "Create folder: " + folder.getAbsolutePath());
     }
   }
 
