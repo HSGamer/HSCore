@@ -83,7 +83,7 @@
     </dependency>
     <dependency>
       <groupId>me.hsgamer</groupId>
-      <artifactId>hscore-downloader</artifactId>
+      <artifactId>hscore-downloader-all</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

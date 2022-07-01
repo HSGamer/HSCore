@@ -14,7 +14,10 @@
   * **`hscore-common`**
   * **`hscore-collections`**
   * **`hscore-crontime`**
-  * **`hscore-downloader`**
+  * **`hscore-downloader-all`**
+    * **`hscore-downloader-core`**
+    * **`hscore-downloader-json`**
+    * **`hscore-downloader-web-stream`**
   * **`hscore-expression`**
   * **`hscore-request`**
   * **`hscore-web`**

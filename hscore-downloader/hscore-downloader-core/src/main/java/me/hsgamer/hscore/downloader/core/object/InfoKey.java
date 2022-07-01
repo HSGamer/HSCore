@@ -1,9 +1,7 @@
-package me.hsgamer.hscore.downloader.object;
+package me.hsgamer.hscore.downloader.core.object;
 
-import me.hsgamer.hscore.downloader.exception.RequiredInfoKeyException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.json.simple.JSONObject;
 
 /**
  * A key to get value from the download info
@@ -19,19 +17,20 @@ public abstract class InfoKey<T> {
   private final String key;
 
   /**
-   * Is the key required or not
+   * The default value
    */
-  private final boolean required;
+  @NotNull
+  private final T defaultValue;
 
   /**
    * Create an info key
    *
-   * @param key      the key to the value
-   * @param required the required to the value
+   * @param key          the key to the value
+   * @param defaultValue the default value
    */
-  public InfoKey(@NotNull final String key, final boolean required) {
+  public InfoKey(@NotNull final String key, @NotNull final T defaultValue) {
     this.key = key;
-    this.required = required;
+    this.defaultValue = defaultValue;
   }
 
   /**
@@ -45,12 +44,13 @@ public abstract class InfoKey<T> {
   }
 
   /**
-   * Check if the key is required to be in the download info
+   * Get the default value
    *
-   * @return is it required to be in the download info
+   * @return the default value
    */
-  public final boolean isRequired() {
-    return this.required;
+  @NotNull
+  public final T getDefaultValue() {
+    return defaultValue;
   }
 
   /**
@@ -70,13 +70,13 @@ public abstract class InfoKey<T> {
    *
    * @return the value
    */
-  @Nullable
+  @NotNull
   public final T get(@NotNull final DownloadInfo downloadInfo) {
-    JSONObject jsonObject = downloadInfo.getJsonObject();
-    if (this.required && !jsonObject.containsKey(key)) {
-      throw new RequiredInfoKeyException(this.key + " is not found in the download info '" + downloadInfo.getName() + "'");
+    final Object value = downloadInfo.getData().get(this.key);
+    if (value == null) {
+      return defaultValue;
     }
-    final Object value = jsonObject.get(key);
-    return value != null ? this.convertType(value) : null;
+    final T convertedValue = convertType(value);
+    return convertedValue == null ? defaultValue : convertedValue;
   }
 }
