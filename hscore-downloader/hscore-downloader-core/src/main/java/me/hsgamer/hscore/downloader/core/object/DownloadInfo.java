@@ -24,7 +24,7 @@ public final class DownloadInfo {
   private final Map<String, Object> data;
   private final Downloader downloader;
   private final AtomicBoolean isDownloading = new AtomicBoolean(false);
-  private CompletableFuture<Void> currentDownloadTask = null;
+  private CompletableFuture<File> currentDownloadTask = null;
 
   /**
    * Create a new download information
@@ -116,18 +116,20 @@ public final class DownloadInfo {
    * Download the file.
    * If the download is running, it will return the current download task.
    */
-  public CompletableFuture<Void> download() {
+  public CompletableFuture<File> download() {
     if (currentDownloadTask != null && !currentDownloadTask.isDone()) {
       return currentDownloadTask;
     }
 
-    currentDownloadTask = CompletableFuture.runAsync(() -> {
+    currentDownloadTask = CompletableFuture.supplyAsync(() -> {
       isDownloading.set(true);
+      File file = new File(downloader.getFolder(), fileName);
       try (
         ReadableByteChannel readableByteChannel = Channels.newChannel(downloader.getInputStreamLoader().load(this));
-        FileOutputStream fileOutputStream = new FileOutputStream(new File(downloader.getFolder(), fileName))
+        FileOutputStream fileOutputStream = new FileOutputStream(file)
       ) {
         fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+        return file;
       } catch (IOException e) {
         throw new CompletionException(e);
       } finally {
