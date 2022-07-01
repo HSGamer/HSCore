@@ -1,8 +1,7 @@
 package me.hsgamer.hscore.common;
 
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * The base class for caching value
@@ -13,8 +12,11 @@ public abstract class CachedValue<T> {
   /**
    * The cached value
    */
-  @Nullable
-  private T cache;
+  private final AtomicReference<T> cache = new AtomicReference<>();
+  /**
+   * The status to check if the value is cached
+   */
+  private final AtomicBoolean isCached = new AtomicBoolean(false);
 
   /**
    * Get the cached value or generate one if the cache is null
@@ -22,17 +24,22 @@ public abstract class CachedValue<T> {
    * @return the value
    */
   public T getValue() {
-    return Optional.ofNullable(this.cache).orElseGet(() -> {
-      this.cache = this.generate();
-      return this.cache;
-    });
+    if (isCached.get()) {
+      return cache.get();
+    } else {
+      T value = generate();
+      cache.set(value);
+      isCached.set(true);
+      return value;
+    }
   }
 
   /**
    * Clear the cached value
    */
   public void clearCache() {
-    this.cache = null;
+    cache.set(null);
+    isCached.set(false);
   }
 
   /**
