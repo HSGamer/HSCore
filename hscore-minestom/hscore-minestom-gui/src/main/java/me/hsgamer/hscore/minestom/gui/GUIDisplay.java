@@ -137,7 +137,7 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> {
     });
 
     Button defaultButton = holder.getButtonMap().getDefaultButton(uuid);
-    ItemStack itemStack = defaultButton.getItemStack(uuid);
+    ItemStack itemStack = Optional.ofNullable(defaultButton.getItemStack(uuid)).orElse(ItemStack.AIR);
     emptyItemSlots.forEach(slot -> inventory.setItemStack(slot, itemStack));
     emptyActionSlots.forEach(slot -> viewedButtons.put(slot, defaultButton));
   }
