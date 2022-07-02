@@ -14,7 +14,7 @@
   <dependencies>
     <dependency>
       <groupId>me.hsgamer</groupId>
-      <artifactId>hscore-bukkit-gui-common</artifactId>
+      <artifactId>hscore-bukkit-gui</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

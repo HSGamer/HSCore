@@ -55,9 +55,9 @@
     * **`hscore-bukkit-config`**
     * **`hscore-bukkit-config-extra`**
     * **`hscore-bukkit-utils`**
+    * **`hscore-bukkit-gui`**
     * **`hscore-bukkit-gui-button`**
     * **`hscore-bukkit-gui-mask`**
-    * **`hscore-bukkit-gui-common`**
     * **`hscore-bukkit-gui-simple`**
     * **`hscore-bukkit-gui-advanced`**
     * **`hscore-bukkit-item`**
@@ -67,6 +67,9 @@
   * **`hscore-bungeecord-all`**
     * **`hscore-bungeecord-channel`**
     * **`hscore-bungeecord-config`**
+  * **`hscore-minestom-all`**
+    * **`hscore-minestom-board`**
+    * **`hscore-minestom-gui`**
 
 ## Add as a dependency (Maven)
 

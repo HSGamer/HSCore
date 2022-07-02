@@ -91,5 +91,10 @@
       <artifactId>hscore-crontime</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-minestom-all</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>

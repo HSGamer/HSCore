@@ -9,7 +9,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>hscore-bukkit-gui-common</artifactId>
+  <artifactId>hscore-bukkit-gui</artifactId>
 
   <dependencies>
     <dependency>

@@ -25,7 +25,7 @@
     <module>hscore-bukkit-config-extra</module>
     <module>hscore-bukkit-clicktype</module>
     <module>hscore-bukkit-item</module>
-    <module>hscore-bukkit-gui-common</module>
+    <module>hscore-bukkit-gui</module>
     <module>hscore-bukkit-gui-button</module>
     <module>hscore-bukkit-gui-mask</module>
     <module>hscore-bukkit-gui-simple</module>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>hscore</artifactId>
+    <groupId>me.hsgamer</groupId>
+    <version>4.1.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>hscore-minestom</artifactId>
+  <packaging>pom</packaging>
+  <modules>
+    <module>hscore-minestom-board</module>
+    <module>hscore-minestom-gui</module>
+    <module>hscore-minestom-all</module>
+  </modules>
+
+  <properties>
+    <java.version>17</java.version>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>jitpack</id>
+      <url>https://jitpack.io</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.github.Minestom</groupId>
+      <artifactId>Minestom</artifactId>
+      <version>ab5734334c</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.jboss.shrinkwrap.resolver</groupId>
+          <artifactId>shrinkwrap-resolver-depchain</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+</project>
