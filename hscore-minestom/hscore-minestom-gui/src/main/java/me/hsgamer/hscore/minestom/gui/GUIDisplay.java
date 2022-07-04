@@ -1,17 +1,12 @@
 package me.hsgamer.hscore.minestom.gui;
 
 import me.hsgamer.hscore.minestom.gui.button.Button;
+import me.hsgamer.hscore.minestom.gui.inventory.DelegatingInventory;
 import me.hsgamer.hscore.ui.BaseDisplay;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.EventFilter;
-import net.minestom.server.event.EventNode;
 import net.minestom.server.event.inventory.InventoryClickEvent;
-import net.minestom.server.event.inventory.InventoryCloseEvent;
-import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
-import net.minestom.server.event.trait.InventoryEvent;
-import net.minestom.server.inventory.Inventory;
 import net.minestom.server.item.ItemStack;
 
 import java.util.*;
@@ -23,8 +18,7 @@ import java.util.stream.IntStream;
  */
 public class GUIDisplay extends BaseDisplay<GUIHolder> {
   private final Map<Integer, Button> viewedButtons = new ConcurrentHashMap<>();
-  private Inventory inventory;
-  private EventNode<InventoryEvent> eventNode;
+  private DelegatingInventory inventory;
 
   /**
    * Create a new display
@@ -66,29 +60,14 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> {
    *
    * @return the inventory
    */
-  public Inventory getInventory() {
+  public DelegatingInventory getInventory() {
     return inventory;
-  }
-
-  /**
-   * Get the event node of the display
-   *
-   * @return the event node
-   */
-  public EventNode<InventoryEvent> getEventNode() {
-    return eventNode;
   }
 
   @Override
   public void init() {
-    this.inventory = new Inventory(holder.getInventoryType(), holder.getTitleFunction().apply(uuid));
-    this.eventNode = EventNode.event("inventory-" + UUID.randomUUID(), EventFilter.INVENTORY, event -> Objects.equals(event.getInventory(), inventory));
-    eventNode.addListener(InventoryOpenEvent.class, this::handleEvent);
-    eventNode.addListener(InventoryPreClickEvent.class, this::handleEvent);
-    eventNode.addListener(InventoryClickEvent.class, this::handleEvent);
-    eventNode.addListener(InventoryCloseEvent.class, this::handleEvent);
-    MinecraftServer.getGlobalEventHandler().addChild(eventNode);
-
+    this.inventory = new DelegatingInventory(holder.getInventoryType(), holder.getTitleFunction().apply(uuid), this);
+    this.inventory.init();
     update();
 
     Player player = MinecraftServer.getConnectionManager().getPlayer(uuid);
@@ -100,10 +79,7 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> {
   @Override
   public void stop() {
     if (inventory != null) {
-      inventory.clear();
-    }
-    if (eventNode != null) {
-      MinecraftServer.getGlobalEventHandler().removeChild(eventNode);
+      inventory.stop();
     }
     viewedButtons.clear();
   }
