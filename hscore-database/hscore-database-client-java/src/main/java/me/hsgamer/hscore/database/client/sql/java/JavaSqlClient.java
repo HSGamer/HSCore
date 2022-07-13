@@ -15,6 +15,7 @@ import java.util.Properties;
 public class JavaSqlClient extends BaseSqlClient<Properties> {
   private final Properties properties;
   private final String dbURL;
+  private final java.sql.Driver sqlDriver;
 
   /**
    * Create new SQL client
@@ -26,8 +27,8 @@ public class JavaSqlClient extends BaseSqlClient<Properties> {
     super(setting);
     this.properties = new Properties();
     try {
-      Class.forName(driver.getDriverClass().getName());
-    } catch (ClassNotFoundException e) {
+      this.sqlDriver = driver.getDriverClass().getConstructor().newInstance();
+    } catch (Exception e) {
       throw new IllegalStateException("Failed to load the driver", e);
     }
     properties.setProperty("user", setting.getUsername());
@@ -38,7 +39,11 @@ public class JavaSqlClient extends BaseSqlClient<Properties> {
 
   @Override
   public Connection getConnection() throws SQLException {
-    return DriverManager.getConnection(dbURL, properties);
+    try {
+      return sqlDriver.connect(dbURL, properties);
+    } catch (SecurityException | IllegalArgumentException ex) {
+      return DriverManager.getConnection(dbURL, properties);
+    }
   }
 
   @Override
