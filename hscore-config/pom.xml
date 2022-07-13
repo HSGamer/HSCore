@@ -19,7 +19,6 @@
     <module>hscore-config-simpleconfiguration</module>
     <module>hscore-config-annotated</module>
     <module>hscore-config-proxy</module>
-    <module>hscore-config-all</module>
   </modules>
 
 </project>

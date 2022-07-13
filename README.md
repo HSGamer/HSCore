@@ -8,13 +8,13 @@
 
 ## Modules
 
-* **`hscore-all`**
+* **`hscore`**
   * **`hscore-addon`**
   * **`hscore-builder`**
   * **`hscore-common`**
   * **`hscore-collections`**
   * **`hscore-crontime`**
-  * **`hscore-downloader-all`**
+  * **`hscore-downloader`**
     * **`hscore-downloader-core`**
     * **`hscore-downloader-json`**
     * **`hscore-downloader-web-stream`**
@@ -22,11 +22,11 @@
   * **`hscore-request`**
   * **`hscore-web`**
   * **`hscore-variable`**
-  * **`hscore-checker-all`**
+  * **`hscore-checker`**
     * **`hscore-checker-common`**
     * **`hscore-checker-spigotmc`**
     * **`hscore-checker-github`**
-  * **`hscore-database-all`**
+  * **`hscore-database`**
     * **`hscore-database-common`**
     * **`hscore-database-driver-mysql`**
     * **`hscore-database-driver-sqlite`**
@@ -39,7 +39,7 @@
     * **`hscore-database-client-hibernate`**
     * **`hscore-database-client-jpa`**
     * **`hscore-database-h2`**
-  * **`hscore-config-all`**
+  * **`hscore-config`**
     * **`hscore-config-common`**
     * **`hscore-config-path`**
     * **`hscore-config-simplixstorage`**
@@ -48,7 +48,7 @@
     * **`hscore-config-annotated`**
     * **`hscore-config-proxy`**
   * **`hscore-ui`**
-  * **`hscore-bukkit-all`**
+  * **`hscore-bukkit`**
     * **`hscore-bukkit-addon`**
     * **`hscore-bukkit-command`**
     * **`hscore-bukkit-command-extra`**
@@ -65,10 +65,10 @@
     * **`hscore-bukkit-baseplugin`**
     * **`hscore-bukkit-channel`**
     * **`hscore-bukkit-key`**
-  * **`hscore-bungeecord-all`**
+  * **`hscore-bungeecord`**
     * **`hscore-bungeecord-channel`**
     * **`hscore-bungeecord-config`**
-  * **`hscore-minestom-all`**
+  * **`hscore-minestom`**
     * **`hscore-minestom-board`**
     * **`hscore-minestom-gui`**
 

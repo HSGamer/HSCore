@@ -15,7 +15,6 @@
   <modules>
     <module>hscore-bungeecord-config</module>
     <module>hscore-bungeecord-channel</module>
-    <module>hscore-bungeecord-all</module>
   </modules>
 
   <repositories>

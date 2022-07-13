@@ -15,6 +15,5 @@
     <module>hscore-downloader-core</module>
     <module>hscore-downloader-json</module>
     <module>hscore-downloader-web-stream</module>
-    <module>hscore-downloader-all</module>
   </modules>
 </project>
