@@ -32,6 +32,7 @@
     * **`hscore-database-driver-sqlite`**
     * **`hscore-database-driver-mariadb`**
     * **`hscore-database-driver-postgresql`**
+    * **`hscore-database-driver-sqlserver`**
     * **`hscore-database-client-sql`**
     * **`hscore-database-client-hikari`**
     * **`hscore-database-client-java`**

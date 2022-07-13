@@ -63,6 +63,11 @@
     </dependency>
     <dependency>
       <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-database-driver-sqlserver</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.hsgamer</groupId>
       <artifactId>hscore-database-h2</artifactId>
       <version>${project.version}</version>
     </dependency>

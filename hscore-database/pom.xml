@@ -24,6 +24,7 @@
     <module>hscore-database-client-jpa</module>
     <module>hscore-database-h2</module>
     <module>hscore-database-all</module>
+      <module>hscore-database-driver-sqlserver</module>
   </modules>
 
 </project>
