@@ -28,7 +28,7 @@ public class Setting {
     driverProperties = new HashMap<>();
     host = "localhost";
     databaseName = "";
-    port = "3306";
+    port = "30";
     username = "root";
     password = "";
   }
@@ -40,6 +40,17 @@ public class Setting {
    */
   public static Setting create() {
     return new Setting();
+  }
+
+  /**
+   * Create a new setting with the default values from the driver
+   *
+   * @param driver the driver
+   *
+   * @return the setting
+   */
+  public static Setting create(Driver driver) {
+    return driver.applyDefaultSetting(create());
   }
 
   /**

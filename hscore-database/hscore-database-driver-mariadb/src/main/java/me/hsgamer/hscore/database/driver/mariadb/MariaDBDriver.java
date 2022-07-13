@@ -16,4 +16,9 @@ public class MariaDBDriver implements Driver {
   public String convertURL(Setting setting) {
     return "jdbc:mariadb://" + setting.getHost() + ':' + setting.getPort() + '/' + setting.getDatabaseName() + Driver.createPropertyString(setting);
   }
+
+  @Override
+  public Setting applyDefaultSetting(Setting setting) {
+    return setting.setPort("3306").setUsername("root");
+  }
 }

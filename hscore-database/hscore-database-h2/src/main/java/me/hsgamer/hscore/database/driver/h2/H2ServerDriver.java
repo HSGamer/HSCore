@@ -28,4 +28,9 @@ public class H2ServerDriver implements H2BaseDriver {
   public String getConnectionString(Setting setting) {
     return (isSSH ? "ssh" : "tcp") + "://" + setting.getHost() + ":" + setting.getPort() + "/" + setting.getDatabaseName();
   }
+
+  @Override
+  public Setting applyDefaultSetting(Setting setting) {
+    return setting.setPort(isSSH ? "9092" : "9091");
+  }
 }

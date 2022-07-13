@@ -16,4 +16,9 @@ public class PostgreSqlDriver implements Driver {
   public String convertURL(Setting setting) {
     return "jdbc:postgresql://" + setting.getHost() + ':' + setting.getPort() + '/' + setting.getDatabaseName() + Driver.createPropertyString(setting);
   }
+
+  @Override
+  public Setting applyDefaultSetting(Setting setting) {
+    return setting.setPort("5432").setUsername("postgres");
+  }
 }

@@ -52,4 +52,15 @@ public interface Driver {
    * @return the JDBC url
    */
   String convertURL(Setting setting);
+
+  /**
+   * Apply the default setting
+   *
+   * @param setting the setting
+   *
+   * @return the applied setting
+   */
+  default Setting applyDefaultSetting(Setting setting) {
+    return setting;
+  }
 }
