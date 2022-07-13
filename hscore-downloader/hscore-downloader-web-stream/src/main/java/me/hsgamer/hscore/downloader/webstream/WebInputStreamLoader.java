@@ -8,13 +8,24 @@ import me.hsgamer.hscore.web.WebUtils;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * A simple {@link InputStreamLoader} that downloads files from a web stream
+ */
 public class WebInputStreamLoader implements InputStreamLoader {
   private final UserAgent userAgent;
 
+  /**
+   * Create a new {@link WebInputStreamLoader}
+   *
+   * @param userAgent the user agent to use
+   */
   public WebInputStreamLoader(UserAgent userAgent) {
     this.userAgent = userAgent;
   }
 
+  /**
+   * Create a new {@link WebInputStreamLoader}
+   */
   public WebInputStreamLoader() {
     this(UserAgent.FIREFOX);
   }
