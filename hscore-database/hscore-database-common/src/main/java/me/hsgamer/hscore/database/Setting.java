@@ -28,7 +28,7 @@ public class Setting {
     driverProperties = new HashMap<>();
     host = "localhost";
     databaseName = "";
-    port = "30";
+    port = "";
     username = "root";
     password = "";
   }
@@ -221,5 +221,14 @@ public class Setting {
    */
   public List<String> getDriverPropertyStrings() {
     return Collections.unmodifiableList(driverProperties.entrySet().stream().map(entry -> entry.getKey() + "=" + entry.getValue()).collect(Collectors.toList()));
+  }
+
+  /**
+   * Get the host and port as a base url
+   *
+   * @return the base url
+   */
+  public String getNormalizedHost() {
+    return host + (port.isEmpty() ? "" : ":" + port);
   }
 }

@@ -17,9 +17,7 @@ public class SqlServerDriver implements Driver {
   public String convertURL(Setting setting) {
     StringBuilder builder = new StringBuilder();
     builder.append("jdbc:sqlserver://");
-    builder.append(setting.getHost());
-    builder.append(":");
-    builder.append(setting.getPort());
+    builder.append(setting.getNormalizedHost());
     if (!setting.getDatabaseName().isEmpty()) {
       builder.append(";databaseName=");
       builder.append(setting.getDatabaseName());
