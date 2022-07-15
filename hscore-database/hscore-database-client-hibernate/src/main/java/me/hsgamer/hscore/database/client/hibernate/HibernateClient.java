@@ -1,4 +1,4 @@
-package ms.hsgamer.hscore.database.client.hibernate;
+package me.hsgamer.hscore.database.client.hibernate;
 
 import me.hsgamer.hscore.database.BaseClient;
 import me.hsgamer.hscore.database.Driver;
