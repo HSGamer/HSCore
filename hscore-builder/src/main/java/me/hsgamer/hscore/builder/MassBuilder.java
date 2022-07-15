@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * The builder
@@ -44,13 +45,10 @@ public class MassBuilder<I, O> {
    * @return the collection of outputs
    */
   public Collection<O> buildAll(I input) {
-    List<O> outputs = new LinkedList<>();
-    for (Element<I, O> element : elements) {
-      if (element.canBuild(input)) {
-        outputs.add(element.build(input));
-      }
-    }
-    return outputs;
+    return elements.parallelStream()
+      .filter(element -> element.canBuild(input))
+      .map(element -> element.build(input))
+      .collect(Collectors.toList());
   }
 
   /**
@@ -63,12 +61,10 @@ public class MassBuilder<I, O> {
    * @return the output
    */
   public Optional<O> build(I input) {
-    for (Element<I, O> element : elements) {
-      if (element.canBuild(input)) {
-        return Optional.of(element.build(input));
-      }
-    }
-    return Optional.empty();
+    return elements.stream()
+      .filter(element -> element.canBuild(input))
+      .findFirst()
+      .map(element -> element.build(input));
   }
 
   /**
