@@ -1,42 +1,17 @@
 package me.hsgamer.hscore.builder;
 
-import me.hsgamer.hscore.collections.map.CaseInsensitiveStringHashMap;
-
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * The builder
+ * The simple builder
  *
  * @param <R> the type of the raw value
  * @param <V> the type of the final value
  */
-public class Builder<R, V> {
-  private final Map<String, BiFunction<String, R, V>> functionMap = new CaseInsensitiveStringHashMap<>();
-  private final Map<String, String> nameMap = new CaseInsensitiveStringHashMap<>();
-
-  /**
-   * Get the function map
-   *
-   * @return the function map
-   */
-  public Map<String, BiFunction<String, R, V>> getFunctionMap() {
-    return Collections.unmodifiableMap(functionMap);
-  }
-
-  /**
-   * Get the name map
-   *
-   * @return the name map
-   */
-  public Map<String, String> getNameMap() {
-    return Collections.unmodifiableMap(nameMap);
-  }
-
+public class Builder<R, V> extends MassBuilder<AbstractMap.SimpleEntry<String, R>, V> {
   /**
    * Register a new function
    *
@@ -45,11 +20,26 @@ public class Builder<R, V> {
    * @param aliases    the aliases of the modifier
    */
   public void register(BiFunction<String, R, V> biFunction, String name, String... aliases) {
-    functionMap.put(name, biFunction);
-    nameMap.put(name, name);
-    for (String alias : aliases) {
-      nameMap.put(alias, name);
-    }
+    register(new Element<AbstractMap.SimpleEntry<String, R>, V>() {
+      @Override
+      public boolean canBuild(AbstractMap.SimpleEntry<String, R> input) {
+        String key = input.getKey();
+        if (key.equalsIgnoreCase(name)) {
+          return true;
+        }
+        for (String alias : aliases) {
+          if (key.equalsIgnoreCase(alias)) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      @Override
+      public V build(AbstractMap.SimpleEntry<String, R> input) {
+        return biFunction.apply(input.getKey(), input.getValue());
+      }
+    });
   }
 
   /**
@@ -75,38 +65,6 @@ public class Builder<R, V> {
   }
 
   /**
-   * Unregister a modifier
-   *
-   * @param name the name of the modifier
-   */
-  public void unregister(String name) {
-    functionMap.remove(name);
-    nameMap.values().removeIf(s -> s.equalsIgnoreCase(name));
-  }
-
-  /**
-   * Remove a name from the name map
-   *
-   * @param name the name
-   *
-   * @throws IllegalArgumentException if the function map contains the name
-   */
-  public void removeName(String name) {
-    if (functionMap.containsKey(name)) {
-      throw new IllegalArgumentException("You can not remove the key name of the function");
-    }
-    nameMap.remove(name);
-  }
-
-  /**
-   * Unregister all modifiers
-   */
-  public void unregisterAll() {
-    functionMap.clear();
-    nameMap.clear();
-  }
-
-  /**
    * Build the final value from a raw value
    *
    * @param name     the name or the alias of the function
@@ -115,7 +73,7 @@ public class Builder<R, V> {
    * @return the final value
    */
   public Optional<V> build(String name, R rawValue) {
-    return Optional.ofNullable(nameMap.get(name)).map(functionMap::get).map(function -> function.apply(name, rawValue));
+    return build(new AbstractMap.SimpleEntry<>(name, rawValue));
   }
 
   /**
@@ -126,8 +84,8 @@ public class Builder<R, V> {
    * @return the map of final values
    */
   public Map<String, V> build(Map<String, R> rawMap) {
-    Map<String, V> map = new CaseInsensitiveStringHashMap<>();
-    rawMap.forEach((name, raw) -> build(name, raw).ifPresent(v -> map.put(name, v)));
+    Map<String, V> map = new HashMap<>();
+    rawMap.forEach((name, raw) -> build(name, raw).ifPresent(v -> map.put(name.toLowerCase(Locale.ROOT), v)));
     return map;
   }
 }

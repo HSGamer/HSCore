@@ -10,12 +10,4 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>hscore-builder</artifactId>
-
-  <dependencies>
-    <dependency>
-      <groupId>me.hsgamer</groupId>
-      <artifactId>hscore-collections</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-  </dependencies>
 </project>
