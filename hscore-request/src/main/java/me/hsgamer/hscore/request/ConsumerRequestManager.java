@@ -12,7 +12,7 @@ import java.util.function.Consumer;
  *
  * @param <T> the type of the argument
  */
-public class ConsumerRequestManager<T> extends RequestManager<UUID, T, Void> {
+public class ConsumerRequestManager<T> extends RequestManager<UUID, T> {
   /**
    * Add a request
    *
