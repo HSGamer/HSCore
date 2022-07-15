@@ -8,6 +8,6 @@
     <groupId>me.hsgamer</groupId>
     <version>4.1.0-SNAPSHOT</version>
   </parent>
-  <artifactId>hscore-request</artifactId>
 
+  <artifactId>hscore-request</artifactId>
 </project>
