@@ -48,6 +48,7 @@ me.hsgamer.hscore.config.simpleconfiguration
 me.hsgamer.hscore.config.simplixstorage
 me.hsgamer.hscore.crontime
 me.hsgamer.hscore.database
+me.hsgamer.hscore.database.client.hibernate
 me.hsgamer.hscore.database.client.jpa
 me.hsgamer.hscore.database.client.sql
 me.hsgamer.hscore.database.client.sql.h2
@@ -76,4 +77,3 @@ me.hsgamer.hscore.ui
 me.hsgamer.hscore.ui.property
 me.hsgamer.hscore.variable
 me.hsgamer.hscore.web
-ms.hsgamer.hscore.database.client.hibernate
