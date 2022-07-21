@@ -73,6 +73,7 @@ me.hsgamer.hscore.minestom.gui
 me.hsgamer.hscore.minestom.gui.button
 me.hsgamer.hscore.minestom.gui.inventory
 me.hsgamer.hscore.request
+me.hsgamer.hscore.task
 me.hsgamer.hscore.ui
 me.hsgamer.hscore.ui.property
 me.hsgamer.hscore.variable
