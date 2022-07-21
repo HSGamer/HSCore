@@ -47,6 +47,7 @@
     * **`hscore-config-annotation`**
     * **`hscore-config-annotated`**
     * **`hscore-config-proxy`**
+  * **`hscore-task`**
   * **`hscore-ui`**
   * **`hscore-bukkit`**
     * **`hscore-bukkit-addon`**
