@@ -6,7 +6,7 @@
   <parent>
     <artifactId>hscore-bukkit</artifactId>
     <groupId>me.hsgamer</groupId>
-    <version>4.1.2</version>
+    <version>${hscore.version}</version>
   </parent>
   <artifactId>hscore-bukkit-utils</artifactId>
 
