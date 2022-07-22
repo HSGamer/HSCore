@@ -104,7 +104,7 @@
         <configuration>
           <shadedArtifactAttached>true</shadedArtifactAttached>
           <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
-          <createDependencyReducedPom>true</createDependencyReducedPom>
+          <createDependencyReducedPom>false</createDependencyReducedPom>
           <shadeSourcesContent>true</shadeSourcesContent>
         </configuration>
         <executions>
