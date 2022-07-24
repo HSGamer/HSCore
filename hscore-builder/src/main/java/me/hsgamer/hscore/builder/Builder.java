@@ -17,17 +17,13 @@ public class Builder<R, V> extends MassBuilder<AbstractMap.SimpleEntry<String, R
    *
    * @param biFunction the function
    * @param name       the name of the modifier
-   * @param aliases    the aliases of the modifier
    */
-  public void register(BiFunction<String, R, V> biFunction, String name, String... aliases) {
+  public void register(BiFunction<String, R, V> biFunction, String... name) {
     register(new Element<AbstractMap.SimpleEntry<String, R>, V>() {
       @Override
       public boolean canBuild(AbstractMap.SimpleEntry<String, R> input) {
         String key = input.getKey();
-        if (key.equalsIgnoreCase(name)) {
-          return true;
-        }
-        for (String alias : aliases) {
+        for (String alias : name) {
           if (key.equalsIgnoreCase(alias)) {
             return true;
           }
@@ -47,10 +43,9 @@ public class Builder<R, V> extends MassBuilder<AbstractMap.SimpleEntry<String, R
    *
    * @param function the function
    * @param name     the name of the modifier
-   * @param aliases  the aliases of the modifier
    */
-  public void register(Function<R, V> function, String name, String... aliases) {
-    register((s, r) -> function.apply(r), name, aliases);
+  public void register(Function<R, V> function, String... name) {
+    register((s, r) -> function.apply(r), name);
   }
 
   /**
@@ -58,10 +53,9 @@ public class Builder<R, V> extends MassBuilder<AbstractMap.SimpleEntry<String, R
    *
    * @param supplier the supplier
    * @param name     the name of the modifier
-   * @param aliases  the aliases of the modifier
    */
-  public void register(Supplier<V> supplier, String name, String... aliases) {
-    register((s, r) -> supplier.get(), name, aliases);
+  public void register(Supplier<V> supplier, String... name) {
+    register((s, r) -> supplier.get(), name);
   }
 
   /**
