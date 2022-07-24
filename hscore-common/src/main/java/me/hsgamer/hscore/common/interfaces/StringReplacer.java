@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.common.interfaces;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -21,12 +22,25 @@ public interface StringReplacer {
    *
    * @return the replaced string
    */
-  static String replace(String original, UUID uuid, Collection<StringReplacer> stringReplacers) {
+  static String replace(String original, UUID uuid, Collection<? extends StringReplacer> stringReplacers) {
     String replaced = original;
     for (StringReplacer replacer : stringReplacers) {
       replaced = replacer.replace(replaced, uuid);
     }
     return replaced;
+  }
+
+  /**
+   * Replace a string based on the unique id
+   *
+   * @param original        the original string
+   * @param uuid            the unique id
+   * @param stringReplacers the list of string replacer
+   *
+   * @return the replaced string
+   */
+  static String replace(String original, UUID uuid, StringReplacer... stringReplacers) {
+    return replace(original, uuid, Arrays.asList(stringReplacers));
   }
 
   /**
