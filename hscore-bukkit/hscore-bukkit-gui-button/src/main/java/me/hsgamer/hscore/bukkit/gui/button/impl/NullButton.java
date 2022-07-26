@@ -15,7 +15,7 @@ public class NullButton extends SimpleButton {
    * @param consumer the consumer
    */
   public NullButton(BiConsumer<UUID, InventoryClickEvent> consumer) {
-    super(null, consumer);
+    super(uuid -> null, consumer);
   }
 
   @Override
