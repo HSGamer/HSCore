@@ -54,8 +54,8 @@ public class BatchRunnable implements Runnable {
 
         @Override
         public void complete() {
-          next();
           isRunning.set(false);
+          next();
         }
 
         @Override
