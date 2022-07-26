@@ -144,4 +144,15 @@ public final class Validate {
       return false;
     }
   }
+
+  /**
+   * Check if the string is a valid {@link java.util.UUID}
+   *
+   * @param string the input string
+   *
+   * @return true if it is
+   */
+  public static boolean isValidUUID(String string) {
+    return string.matches("[\\da-f]{8}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{12}");
+  }
 }
