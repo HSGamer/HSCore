@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
 import me.hsgamer.hscore.bukkit.item.ItemModifier;
+import me.hsgamer.hscore.bukkit.item.helper.VersionHelper;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +17,18 @@ import java.util.UUID;
 public class MaterialModifier implements ItemModifier {
   private String materialString;
 
+  private static Material getMaterial(String materialString) {
+    materialString = materialString.replace(" ", "_");
+    Material material = Material.matchMaterial(materialString);
+    if (material != null) {
+      return material;
+    }
+    if (VersionHelper.isAtLeast(13)) {
+      return Material.getMaterial(materialString, true);
+    }
+    return null;
+  }
+
   @Override
   public String getName() {
     return "material";
@@ -24,7 +37,7 @@ public class MaterialModifier implements ItemModifier {
   @Override
   public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
     Optional
-      .ofNullable(Material.matchMaterial(StringReplacer.replace(materialString, uuid, stringReplacerMap.values())))
+      .ofNullable(getMaterial(StringReplacer.replace(materialString, uuid, stringReplacerMap.values())))
       .ifPresent(original::setType);
     return original;
   }

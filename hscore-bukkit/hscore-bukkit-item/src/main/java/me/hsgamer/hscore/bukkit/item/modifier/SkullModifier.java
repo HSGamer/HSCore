@@ -1,12 +1,17 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
 import me.hsgamer.hscore.bukkit.item.ItemMetaModifier;
+import me.hsgamer.hscore.bukkit.item.helper.VersionHelper;
+import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -15,6 +20,32 @@ import java.util.UUID;
 @SuppressWarnings("deprecation")
 public class SkullModifier extends ItemMetaModifier {
   private String skullString = "";
+
+  private static void setSkull(SkullMeta meta, String skull) {
+    if (Validate.isValidUUID(skull)) {
+      OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(skull));
+      if (VersionHelper.isAtLeast(12)) {
+        meta.setOwningPlayer(player);
+      } else {
+        meta.setOwner(player.getName());
+      }
+    } else {
+      meta.setOwner(skull);
+    }
+  }
+
+  private static String getSkullValue(SkullMeta meta, boolean isUUID) {
+    if (isUUID) {
+      if (VersionHelper.isAtLeast(12)) {
+        OfflinePlayer player = meta.getOwningPlayer();
+        return player == null ? null : player.getUniqueId().toString();
+      } else {
+        return meta.getOwner();
+      }
+    } else {
+      return meta.getOwner();
+    }
+  }
 
   private String getFinalSkull(UUID uuid, Collection<StringReplacer> replacers) {
     return StringReplacer.replace(skullString, uuid, replacers);
@@ -26,7 +57,7 @@ public class SkullModifier extends ItemMetaModifier {
       return meta;
     }
     SkullMeta skullMeta = (SkullMeta) meta;
-    skullMeta.setOwner(getFinalSkull(uuid, stringReplacerMap.values()));
+    setSkull(skullMeta, getFinalSkull(uuid, stringReplacerMap.values()));
     return skullMeta;
   }
 
@@ -45,7 +76,12 @@ public class SkullModifier extends ItemMetaModifier {
 
   @Override
   public boolean compareWithItemMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
-    return meta instanceof SkullMeta && ((SkullMeta) meta).getOwner().equals(getFinalSkull(uuid, stringReplacerMap.values()));
+    if (!(meta instanceof SkullMeta)) {
+      return false;
+    }
+    SkullMeta skullMeta = (SkullMeta) meta;
+    String skullValue = getFinalSkull(uuid, stringReplacerMap.values());
+    return Objects.equals(getSkullValue(skullMeta, Validate.isValidUUID(skullValue)), skullValue);
   }
 
   @Override
