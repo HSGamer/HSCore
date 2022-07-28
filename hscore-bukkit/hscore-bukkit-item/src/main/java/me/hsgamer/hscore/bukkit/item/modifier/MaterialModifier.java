@@ -19,14 +19,16 @@ public class MaterialModifier implements ItemModifier {
 
   private static Material getMaterial(String materialString) {
     materialString = materialString.replace(" ", "_");
-    Material material = Material.matchMaterial(materialString);
-    if (material != null) {
-      return material;
-    }
+    Material material;
     if (VersionHelper.isAtLeast(13)) {
-      return Material.getMaterial(materialString, true);
+      material = Material.matchMaterial(materialString, false);
+      if (material == null) {
+        material = Material.matchMaterial(materialString, true);
+      }
+    } else {
+      material = Material.matchMaterial(materialString);
     }
-    return null;
+    return material;
   }
 
   @Override
