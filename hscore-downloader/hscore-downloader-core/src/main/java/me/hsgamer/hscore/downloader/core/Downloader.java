@@ -5,10 +5,11 @@ import me.hsgamer.hscore.downloader.core.loader.InputStreamLoader;
 import me.hsgamer.hscore.downloader.core.object.DownloadInfo;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,6 +19,7 @@ import java.util.logging.Logger;
 public class Downloader {
   private static final Logger logger = Logger.getLogger(Downloader.class.getSimpleName());
   private final Map<String, DownloadInfo> downloadInfoMap = new ConcurrentHashMap<>();
+  private final AtomicBoolean isLoaded = new AtomicBoolean(false);
   private final DownloadInfoLoader downloadInfoLoader;
   private final InputStreamLoader inputStreamLoader;
   private final File folder;
@@ -76,18 +78,37 @@ public class Downloader {
   }
 
   /**
-   * Load download infos
+   * Get the loaded download infos
+   *
+   * @return the loaded download infos
    */
-  public CompletableFuture<Map<String, DownloadInfo>> loadDownloadsInfo() {
-    return downloadInfoLoader.load(this).whenCompleteAsync((map, throwable) -> {
+  public Map<String, DownloadInfo> getLoadedDownloadInfo() {
+    return Collections.unmodifiableMap(downloadInfoMap);
+  }
+
+  /**
+   * Check if the downloader finished loading the download infos
+   *
+   * @return true if it did
+   */
+  public boolean isLoaded() {
+    return isLoaded.get();
+  }
+
+  /**
+   * Set up the downloader
+   */
+  public void setup() {
+    isLoaded.set(false);
+    downloadInfoMap.clear();
+    downloadInfoLoader.load(this).whenCompleteAsync((map, throwable) -> {
       if (throwable != null) {
         logger.log(Level.WARNING, "A throwable occurred when loading download info", throwable);
       }
-      if (map == null) {
-        return;
+      if (map != null) {
+        downloadInfoMap.putAll(map);
       }
-      downloadInfoMap.clear();
-      downloadInfoMap.putAll(map);
+      isLoaded.set(true);
     });
   }
 }
