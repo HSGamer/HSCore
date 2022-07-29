@@ -4,18 +4,21 @@ import me.hsgamer.hscore.checker.VersionChecker;
 import me.hsgamer.hscore.web.UserAgent;
 import me.hsgamer.hscore.web.WebUtils;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
-import org.json.JSONTokener;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
  * A simple version checker for SpigotMC
  */
 public final class SpigotVersionChecker implements VersionChecker {
-
+  private final JSONParser parser = new JSONParser();
   private final int resourceId;
   private final UserAgent userAgent;
 
@@ -50,14 +53,19 @@ public final class SpigotVersionChecker implements VersionChecker {
       try (
         InputStream inputStream = userAgent.assignToConnection(
           WebUtils.createConnection("https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId)
-        ).getInputStream()
+        ).getInputStream();
+        InputStreamReader reader = new InputStreamReader(inputStream)
       ) {
-        JSONObject jsonObject = new JSONObject(new JSONTokener(inputStream));
-        if (!jsonObject.has("current_version")) {
+        Object object = parser.parse(reader);
+        if (!(object instanceof JSONObject)) {
+          throw new IOException("Invalid JSON");
+        }
+        JSONObject jsonObject = (JSONObject) object;
+        if (!jsonObject.containsKey("current_version")) {
           throw new IOException("Cannot get the plugin version");
         }
-        return jsonObject.getString("current_version");
-      } catch (IOException exception) {
+        return Objects.toString(jsonObject.get("current_version"));
+      } catch (IOException | ParseException exception) {
         throw new IllegalStateException(exception);
       }
     });

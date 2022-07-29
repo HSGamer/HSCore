@@ -4,17 +4,22 @@ import me.hsgamer.hscore.checker.VersionChecker;
 import me.hsgamer.hscore.web.UserAgent;
 import me.hsgamer.hscore.web.WebUtils;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
-import org.json.JSONTokener;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 /**
  * The latest commit checker for the GitHub repository
  */
 public class GithubCommitChecker implements VersionChecker {
+  private final JSONParser parser = new JSONParser();
   private final String url;
   private final UserAgent userAgent;
 
@@ -43,11 +48,18 @@ public class GithubCommitChecker implements VersionChecker {
   @Override
   public @NotNull CompletableFuture<String> getVersion() {
     return CompletableFuture.supplyAsync(() -> {
-      try (InputStream inputStream = userAgent.assignToConnection(WebUtils.createConnection(url)).getInputStream()) {
-        JSONObject jsonObject = new JSONObject(new JSONTokener(inputStream));
-        return jsonObject.getString("sha");
-      } catch (IOException e) {
-        throw new IllegalStateException(e);
+      try (
+        InputStream inputStream = userAgent.assignToConnection(WebUtils.createConnection(url)).getInputStream();
+        InputStreamReader reader = new InputStreamReader(inputStream)
+      ) {
+        Object object = parser.parse(reader);
+        if (!(object instanceof JSONObject)) {
+          throw new IOException("The response is not a JSON object");
+        }
+        JSONObject jsonObject = (JSONObject) object;
+        return Objects.toString(jsonObject.get("sha"));
+      } catch (IOException | ParseException e) {
+        throw new CompletionException(e);
       }
     });
   }
