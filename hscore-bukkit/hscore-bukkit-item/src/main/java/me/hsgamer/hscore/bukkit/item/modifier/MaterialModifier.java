@@ -2,20 +2,19 @@ package me.hsgamer.hscore.bukkit.item.modifier;
 
 import me.hsgamer.hscore.bukkit.item.ItemModifier;
 import me.hsgamer.hscore.bukkit.item.helper.VersionHelper;
+import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * The material modifier
  */
 public class MaterialModifier implements ItemModifier {
-  private String materialString;
+  private List<String> materialList = Collections.emptyList();
 
   private static Material getMaterial(String materialString) {
     materialString = materialString.replace(" ", "_");
@@ -38,30 +37,40 @@ public class MaterialModifier implements ItemModifier {
 
   @Override
   public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
-    Optional
-      .ofNullable(getMaterial(StringReplacer.replace(materialString, uuid, stringReplacerMap.values())))
-      .ifPresent(original::setType);
+    for (String materialString : materialList) {
+      Material material = getMaterial(StringReplacer.replace(materialString, uuid, stringReplacerMap.values()));
+      if (material != null) {
+        original.setType(material);
+        break;
+      }
+    }
     return original;
   }
 
   @Override
   public Object toObject() {
-    return this.materialString;
+    return this.materialList;
   }
 
   @Override
   public void loadFromObject(Object object) {
-    this.materialString = String.valueOf(object);
+    this.materialList = CollectionUtils.createStringListFromObject(object, true);
   }
 
   @Override
   public void loadFromItemStack(ItemStack itemStack) {
-    this.materialString = itemStack.getType().name();
+    this.materialList = Collections.singletonList(itemStack.getType().name());
   }
 
   @Override
   public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
-    return itemStack.getType().name().equalsIgnoreCase(StringReplacer.replace(materialString, uuid, stringReplacerMap.values()));
+    if (materialList.isEmpty()) {
+      return true;
+    }
+    String material = itemStack.getType().name();
+    return materialList.parallelStream()
+      .map(s -> StringReplacer.replace(s, uuid, stringReplacerMap.values()))
+      .anyMatch(s -> s.equalsIgnoreCase(material));
   }
 
   /**
@@ -73,7 +82,7 @@ public class MaterialModifier implements ItemModifier {
    */
   @Contract("_ -> this")
   public MaterialModifier setMaterial(Material material) {
-    this.materialString = material.name();
+    this.materialList = Collections.singletonList(material.name());
     return this;
   }
 
@@ -85,8 +94,8 @@ public class MaterialModifier implements ItemModifier {
    * @return {@code this} for builder chain
    */
   @Contract("_ -> this")
-  public MaterialModifier setMaterial(String material) {
-    this.materialString = material;
+  public MaterialModifier setMaterial(String... material) {
+    this.materialList = Arrays.asList(material);
     return this;
   }
 }
