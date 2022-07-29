@@ -66,9 +66,6 @@ public class InstanceVariableManager {
    * @return the replaced string
    */
   public String setVariables(String message, UUID uuid) {
-    if (!hasVariables(message)) {
-      return message;
-    }
     String old;
     do {
       old = message;
