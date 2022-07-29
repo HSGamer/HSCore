@@ -4,22 +4,35 @@ import me.hsgamer.hscore.common.interfaces.StringReplacer;
 
 import java.util.*;
 import java.util.function.BooleanSupplier;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * The Variable Manager
  */
 public final class VariableManager {
-  private static final Pattern PATTERN = Pattern.compile("(.?)([{]([^{}]+)[}])(.?)");
-  private static final char START_IGNORE_CHAR = '\\';
-  private static final char END_IGNORE_CHAR = '\\';
-  private static final Map<String, StringReplacer> variables = new HashMap<>();
+  private static final InstanceVariableManager globalVariableManager = new InstanceVariableManager();
   private static final List<ExternalStringReplacer> externalReplacers = new ArrayList<>();
   private static BooleanSupplier replaceAll = () -> false;
 
   private VariableManager() {
     // EMPTY
+  }
+
+  /**
+   * Get the global variable manager
+   *
+   * @return the global variable manager
+   */
+  public static InstanceVariableManager getGlobalVariableManager() {
+    return globalVariableManager;
+  }
+
+  /**
+   * Get the status whether the manager should replace all similar variables on single time
+   *
+   * @return true if it should
+   */
+  public static boolean getReplaceAll() {
+    return replaceAll.getAsBoolean();
   }
 
   /**
@@ -76,7 +89,7 @@ public final class VariableManager {
    * @param variable the Variable object
    */
   public static void register(String prefix, StringReplacer variable) {
-    variables.put(prefix, variable);
+    globalVariableManager.register(prefix, variable);
   }
 
   /**
@@ -85,7 +98,7 @@ public final class VariableManager {
    * @param prefix the prefix
    */
   public static void unregister(String prefix) {
-    variables.remove(prefix);
+    globalVariableManager.unregister(prefix);
   }
 
   /**
@@ -94,7 +107,7 @@ public final class VariableManager {
    * @return the variables
    */
   public static Map<String, StringReplacer> getVariables() {
-    return Collections.unmodifiableMap(variables);
+    return globalVariableManager.getVariables();
   }
 
   /**
@@ -105,13 +118,7 @@ public final class VariableManager {
    * @return true if it has, otherwise false
    */
   public static boolean hasVariables(String message) {
-    if (message == null || message.trim().isEmpty()) {
-      return false;
-    }
-    if (isMatch(message)) {
-      return true;
-    }
-    return externalReplacers.parallelStream().anyMatch(replacer -> replacer.canBeReplaced(message));
+    return globalVariableManager.hasVariables(message) || externalReplacers.parallelStream().anyMatch(replacer -> replacer.canBeReplaced(message));
   }
 
   /**
@@ -123,9 +130,6 @@ public final class VariableManager {
    * @return the replaced string
    */
   public static String setVariables(String message, UUID uuid) {
-    if (!hasVariables(message)) {
-      return message;
-    }
     String old;
     do {
       old = message;
@@ -143,66 +147,10 @@ public final class VariableManager {
    * @return the replaced string
    */
   public static String setSingleVariables(String message, UUID uuid) {
-    Matcher matcher = PATTERN.matcher(message);
-    while (matcher.find()) {
-      char startChar = Optional.ofNullable(matcher.group(1)).filter(s -> !s.isEmpty()).map(s -> s.charAt(0)).orElse(' ');
-      char endChar = Optional.ofNullable(matcher.group(4)).filter(s -> !s.isEmpty()).map(s -> s.charAt(0)).orElse(' ');
-      String original = matcher.group(2);
-      if (START_IGNORE_CHAR == startChar && END_IGNORE_CHAR == endChar) {
-        message = message.replaceAll(Pattern.quote(matcher.group()), Matcher.quoteReplacement(original));
-        continue;
-      }
-
-      String identifier = matcher.group(3).trim();
-      for (Map.Entry<String, StringReplacer> variable : variables.entrySet()) {
-        if (!identifier.startsWith(variable.getKey())) {
-          continue;
-        }
-
-        String parameter = identifier.substring(variable.getKey().length());
-        String replace = variable.getValue().replace(parameter, uuid);
-        if (replace == null) {
-          continue;
-        }
-
-        if (replaceAll.getAsBoolean()) {
-          message = message.replaceAll(Pattern.quote(original), Matcher.quoteReplacement(replace));
-        } else {
-          message = message.replaceFirst(Pattern.quote(original), Matcher.quoteReplacement(replace));
-        }
-      }
-    }
+    message = globalVariableManager.setSingleVariables(message, uuid);
     for (ExternalStringReplacer externalStringReplacer : externalReplacers) {
       message = externalStringReplacer.replace(message, uuid);
     }
     return message;
-  }
-
-  /**
-   * Check if the string contains valid variables
-   *
-   * @param string the string
-   *
-   * @return true if it does
-   */
-  private static boolean isMatch(String string) {
-    Matcher matcher = PATTERN.matcher(string);
-    List<String> found = new ArrayList<>();
-    while (matcher.find()) {
-      found.add(matcher.group(3).trim());
-    }
-
-    if (found.isEmpty()) {
-      return false;
-    } else {
-      return found.stream().parallel().anyMatch(s -> {
-        for (String match : variables.keySet()) {
-          if (s.startsWith(match)) {
-            return true;
-          }
-        }
-        return false;
-      });
-    }
   }
 }
