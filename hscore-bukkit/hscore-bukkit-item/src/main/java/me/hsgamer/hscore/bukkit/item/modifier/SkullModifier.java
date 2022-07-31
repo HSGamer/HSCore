@@ -1,5 +1,8 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import me.hsgamer.hscore.bukkit.item.ItemMetaModifier;
@@ -13,16 +16,41 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The skull modifier
  */
 @SuppressWarnings("deprecation")
 public class SkullModifier extends ItemMetaModifier {
+  private static final LoadingCache<String, String> skullCache;
+  private static final ItemStack skullItemStack;
+
+  static {
+    ItemStack itemStack;
+    if (VersionUtils.isAtLeast(13)) {
+      itemStack = new ItemStack(Material.valueOf("PLAYER_HEAD"));
+    } else {
+      itemStack = new ItemStack(Material.valueOf("SKULL_ITEM"));
+      itemStack.setDurability((short) 3);
+    }
+    skullItemStack = itemStack;
+    skullCache = CacheBuilder.newBuilder()
+      .expireAfterAccess(10, TimeUnit.MINUTES)
+      .build(new CacheLoader<String, String>() {
+        @Override
+        public String load(@NotNull String skull) {
+          return getSkullValue(skull);
+        }
+      });
+  }
+
   private String skullString = "";
+  private boolean useCache = true;
 
   private static void setSkullValue(SkullMeta meta, String value) {
     GameProfile profile = new GameProfile(UUID.randomUUID(), null);
@@ -67,14 +95,19 @@ public class SkullModifier extends ItemMetaModifier {
     }
   }
 
-  private static SkullMeta getSkullMeta(String skull) {
-    ItemStack itemStack;
-    if (VersionUtils.isAtLeast(13)) {
-      itemStack = new ItemStack(Material.valueOf("PLAYER_HEAD"));
-    } else {
-      itemStack = new ItemStack(Material.valueOf("SKULL_ITEM"));
-      itemStack.setDurability((short) 3);
+  public static void setCachedSkull(SkullMeta meta, String skull) {
+    try {
+      String cachedSkull = skullCache.get(skull);
+      if (cachedSkull != null) {
+        setSkullValue(meta, cachedSkull);
+      }
+    } catch (Exception e) {
+      // IGNORED
     }
+  }
+
+  private static SkullMeta getSkullMeta(String skull) {
+    ItemStack itemStack = skullItemStack.clone();
     SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
     setSkull(meta, skull);
     return meta;
@@ -118,7 +151,12 @@ public class SkullModifier extends ItemMetaModifier {
       return meta;
     }
     SkullMeta skullMeta = (SkullMeta) meta;
-    setSkull(skullMeta, getFinalSkullString(uuid, stringReplacerMap.values()));
+    String finalSkullString = getFinalSkullString(uuid, stringReplacerMap.values());
+    if (useCache) {
+      setCachedSkull(skullMeta, finalSkullString);
+    } else {
+      setSkull(skullMeta, finalSkullString);
+    }
     return skullMeta;
   }
 
@@ -126,7 +164,7 @@ public class SkullModifier extends ItemMetaModifier {
   public void loadFromItemMeta(ItemMeta meta) {
     if (meta instanceof SkullMeta) {
       SkullMeta skullMeta = (SkullMeta) meta;
-      skullString = skullMeta.getOwner();
+      skullString = getSkullValue(skullMeta);
     }
   }
 
@@ -170,6 +208,18 @@ public class SkullModifier extends ItemMetaModifier {
    */
   public SkullModifier setSkull(String skull) {
     this.skullString = skull;
+    return this;
+  }
+
+  /**
+   * Set whether to use the cache
+   *
+   * @param useCache whether to use the cache
+   *
+   * @return {@code this} for builder chain
+   */
+  public SkullModifier setUseCache(boolean useCache) {
+    this.useCache = useCache;
     return this;
   }
 }
