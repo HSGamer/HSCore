@@ -1,18 +1,20 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import me.hsgamer.hscore.bukkit.item.ItemMetaModifier;
 import me.hsgamer.hscore.bukkit.item.helper.VersionHelper;
 import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * The skull modifier
@@ -21,33 +23,91 @@ import java.util.UUID;
 public class SkullModifier extends ItemMetaModifier {
   private String skullString = "";
 
+  private static void setSkullBase64(SkullMeta meta, byte[] bytes) {
+    GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+    profile.getProperties().put("textures", new Property("textures", new String(bytes)));
+    try {
+      Field profileField = meta.getClass().getDeclaredField("profile");
+      profileField.setAccessible(true);
+      profileField.set(meta, profile);
+    } catch (Exception e) {
+      // IGNORE
+    }
+  }
+
+  private static void setSkullURL(SkullMeta meta, String url) {
+    setSkullBase64(meta, Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes()));
+  }
+
+  private static void setSkull(SkullMeta meta, OfflinePlayer offlinePlayer) {
+    if (offlinePlayer == null) {
+      return;
+    }
+    if (VersionHelper.isAtLeast(12)) {
+      meta.setOwningPlayer(offlinePlayer);
+    } else {
+      meta.setOwner(offlinePlayer.getName());
+    }
+  }
+
   private static void setSkull(SkullMeta meta, String skull) {
-    if (Validate.isValidUUID(skull)) {
-      OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(skull));
-      if (VersionHelper.isAtLeast(12)) {
-        meta.setOwningPlayer(player);
-      } else {
-        meta.setOwner(player.getName());
-      }
+    if (Validate.isValidURL(skull)) {
+      setSkullURL(meta, skull);
+    } else if (skull.length() > 100 && Validate.isValidBase64(skull)) {
+      setSkullBase64(meta, skull.getBytes());
     } else {
-      meta.setOwner(skull);
+      OfflinePlayer player;
+      if (Validate.isValidUUID(skull)) {
+        player = Bukkit.getOfflinePlayer(UUID.fromString(skull));
+      } else {
+        player = Bukkit.getOfflinePlayer(skull);
+      }
+      setSkull(meta, player);
     }
   }
 
-  private static String getSkullValue(SkullMeta meta, boolean isUUID) {
-    if (isUUID) {
-      if (VersionHelper.isAtLeast(12)) {
-        OfflinePlayer player = meta.getOwningPlayer();
-        return player == null ? null : player.getUniqueId().toString();
-      } else {
-        return meta.getOwner();
-      }
+  private static SkullMeta getSkullMeta(String skull) {
+    ItemStack itemStack;
+    if (VersionHelper.isAtLeast(13)) {
+      itemStack = new ItemStack(Material.valueOf("PLAYER_HEAD"));
     } else {
-      return meta.getOwner();
+      itemStack = new ItemStack(Material.valueOf("SKULL_ITEM"));
+      itemStack.setDurability((short) 3);
     }
+    SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
+    setSkull(meta, skull);
+    return meta;
   }
 
-  private String getFinalSkull(UUID uuid, Collection<StringReplacer> replacers) {
+  private static String getSkullValue(SkullMeta meta) {
+    GameProfile profile;
+    try {
+      Field profileField = meta.getClass().getDeclaredField("profile");
+      profileField.setAccessible(true);
+      profile = (GameProfile) profileField.get(meta);
+    } catch (Exception e) {
+      return "";
+    }
+
+    Collection<Property> properties = profile.getProperties().get("textures");
+    if (properties == null || properties.isEmpty()) {
+      return "";
+    }
+
+    for (Property property : properties) {
+      String value = property.getValue();
+      if (!value.isEmpty()) {
+        return value;
+      }
+    }
+    return "";
+  }
+
+  private static String getSkullValue(String rawSkullValue) {
+    return getSkullValue(getSkullMeta(rawSkullValue));
+  }
+
+  private String getFinalSkullValue(UUID uuid, Collection<StringReplacer> replacers) {
     return StringReplacer.replace(skullString, uuid, replacers);
   }
 
@@ -57,7 +117,7 @@ public class SkullModifier extends ItemMetaModifier {
       return meta;
     }
     SkullMeta skullMeta = (SkullMeta) meta;
-    setSkull(skullMeta, getFinalSkull(uuid, stringReplacerMap.values()));
+    setSkull(skullMeta, getFinalSkullValue(uuid, stringReplacerMap.values()));
     return skullMeta;
   }
 
@@ -79,9 +139,10 @@ public class SkullModifier extends ItemMetaModifier {
     if (!(meta instanceof SkullMeta)) {
       return false;
     }
-    SkullMeta skullMeta = (SkullMeta) meta;
-    String skullValue = getFinalSkull(uuid, stringReplacerMap.values());
-    return Objects.equals(getSkullValue(skullMeta, Validate.isValidUUID(skullValue)), skullValue);
+    return Objects.equals(
+      getSkullValue(getFinalSkullValue(uuid, stringReplacerMap.values())),
+      getSkullValue((SkullMeta) meta)
+    );
   }
 
   @Override

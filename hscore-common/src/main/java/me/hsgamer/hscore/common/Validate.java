@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.net.URL;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -154,5 +155,21 @@ public final class Validate {
    */
   public static boolean isValidUUID(String string) {
     return string.matches("[\\da-f]{8}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{12}");
+  }
+
+  /**
+   * Check if the string is a valid Base64 string
+   *
+   * @param string the input string
+   *
+   * @return true if it is
+   */
+  public static boolean isValidBase64(String string) {
+    try {
+      Base64.getDecoder().decode(string);
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
   }
 }
