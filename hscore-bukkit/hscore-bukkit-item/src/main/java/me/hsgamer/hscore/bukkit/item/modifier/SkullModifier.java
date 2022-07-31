@@ -23,9 +23,9 @@ import java.util.*;
 public class SkullModifier extends ItemMetaModifier {
   private String skullString = "";
 
-  private static void setSkullBase64(SkullMeta meta, byte[] bytes) {
+  private static void setSkullValue(SkullMeta meta, String value) {
     GameProfile profile = new GameProfile(UUID.randomUUID(), null);
-    profile.getProperties().put("textures", new Property("textures", new String(bytes)));
+    profile.getProperties().put("textures", new Property("textures", value));
     try {
       Field profileField = meta.getClass().getDeclaredField("profile");
       profileField.setAccessible(true);
@@ -36,7 +36,9 @@ public class SkullModifier extends ItemMetaModifier {
   }
 
   private static void setSkullURL(SkullMeta meta, String url) {
-    setSkullBase64(meta, Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes()));
+    setSkullValue(meta, Base64.getEncoder().encodeToString(
+      String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes()
+    ));
   }
 
   private static void setSkull(SkullMeta meta, OfflinePlayer offlinePlayer) {
@@ -54,7 +56,7 @@ public class SkullModifier extends ItemMetaModifier {
     if (Validate.isValidURL(skull)) {
       setSkullURL(meta, skull);
     } else if (skull.length() > 100 && Validate.isValidBase64(skull)) {
-      setSkullBase64(meta, skull.getBytes());
+      setSkullValue(meta, skull);
     } else {
       OfflinePlayer player;
       if (Validate.isValidUUID(skull)) {
@@ -107,7 +109,7 @@ public class SkullModifier extends ItemMetaModifier {
     return getSkullValue(getSkullMeta(rawSkullValue));
   }
 
-  private String getFinalSkullValue(UUID uuid, Collection<StringReplacer> replacers) {
+  private String getFinalSkullString(UUID uuid, Collection<StringReplacer> replacers) {
     return StringReplacer.replace(skullString, uuid, replacers);
   }
 
@@ -117,7 +119,7 @@ public class SkullModifier extends ItemMetaModifier {
       return meta;
     }
     SkullMeta skullMeta = (SkullMeta) meta;
-    setSkull(skullMeta, getFinalSkullValue(uuid, stringReplacerMap.values()));
+    setSkull(skullMeta, getFinalSkullString(uuid, stringReplacerMap.values()));
     return skullMeta;
   }
 
@@ -140,7 +142,7 @@ public class SkullModifier extends ItemMetaModifier {
       return false;
     }
     return Objects.equals(
-      getSkullValue(getFinalSkullValue(uuid, stringReplacerMap.values())),
+      getSkullValue(getFinalSkullString(uuid, stringReplacerMap.values())),
       getSkullValue((SkullMeta) meta)
     );
   }
