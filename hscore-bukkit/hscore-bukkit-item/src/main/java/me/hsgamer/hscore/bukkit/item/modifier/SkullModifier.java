@@ -3,7 +3,8 @@ package me.hsgamer.hscore.bukkit.item.modifier;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import me.hsgamer.hscore.bukkit.item.ItemMetaModifier;
-import me.hsgamer.hscore.bukkit.item.helper.VersionHelper;
+import me.hsgamer.hscore.bukkit.utils.BukkitUtils;
+import me.hsgamer.hscore.bukkit.utils.VersionUtils;
 import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.Bukkit;
@@ -45,7 +46,7 @@ public class SkullModifier extends ItemMetaModifier {
     if (offlinePlayer == null) {
       return;
     }
-    if (VersionHelper.isAtLeast(12)) {
+    if (VersionUtils.isAtLeast(12)) {
       meta.setOwningPlayer(offlinePlayer);
     } else {
       meta.setOwner(offlinePlayer.getName());
@@ -53,24 +54,22 @@ public class SkullModifier extends ItemMetaModifier {
   }
 
   private static void setSkull(SkullMeta meta, String skull) {
-    if (Validate.isValidURL(skull)) {
+    if (BukkitUtils.isUsername(skull)) {
+      setSkull(meta, Bukkit.getOfflinePlayer(skull));
+    } else if (Validate.isValidUUID(skull)) {
+      setSkull(meta, Bukkit.getOfflinePlayer(UUID.fromString(skull)));
+    } else if (Validate.isValidURL(skull)) {
       setSkullURL(meta, skull);
     } else if (skull.length() > 100 && Validate.isValidBase64(skull)) {
       setSkullValue(meta, skull);
     } else {
-      OfflinePlayer player;
-      if (Validate.isValidUUID(skull)) {
-        player = Bukkit.getOfflinePlayer(UUID.fromString(skull));
-      } else {
-        player = Bukkit.getOfflinePlayer(skull);
-      }
-      setSkull(meta, player);
+      setSkullURL(meta, "https://textures.minecraft.net/texture/" + skull);
     }
   }
 
   private static SkullMeta getSkullMeta(String skull) {
     ItemStack itemStack;
-    if (VersionHelper.isAtLeast(13)) {
+    if (VersionUtils.isAtLeast(13)) {
       itemStack = new ItemStack(Material.valueOf("PLAYER_HEAD"));
     } else {
       itemStack = new ItemStack(Material.valueOf("SKULL_ITEM"));

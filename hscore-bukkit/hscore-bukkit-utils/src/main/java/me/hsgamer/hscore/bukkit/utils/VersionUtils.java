@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.bukkit.item.helper;
+package me.hsgamer.hscore.bukkit.utils;
 
 import org.bukkit.Bukkit;
 
@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 /**
  * The helper class for server versions
  */
-public final class VersionHelper {
+public final class VersionUtils {
   private static final int VERSION;
 
   static {
@@ -20,7 +20,7 @@ public final class VersionHelper {
     }
   }
 
-  private VersionHelper() {
+  private VersionUtils() {
     // EMPTY
   }
 

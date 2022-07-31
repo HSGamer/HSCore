@@ -18,6 +18,11 @@
   <dependencies>
     <dependency>
       <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-bukkit-utils</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.hsgamer</groupId>
       <artifactId>hscore-common</artifactId>
       <version>${project.version}</version>
     </dependency>

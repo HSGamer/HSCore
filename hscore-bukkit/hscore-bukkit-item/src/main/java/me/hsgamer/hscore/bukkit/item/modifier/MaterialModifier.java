@@ -1,7 +1,7 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
 import me.hsgamer.hscore.bukkit.item.ItemModifier;
-import me.hsgamer.hscore.bukkit.item.helper.VersionHelper;
+import me.hsgamer.hscore.bukkit.utils.VersionUtils;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.Material;
@@ -19,7 +19,7 @@ public class MaterialModifier implements ItemModifier {
   private static Material getMaterial(String materialString) {
     materialString = materialString.replace(" ", "_");
     Material material;
-    if (VersionHelper.isAtLeast(13)) {
+    if (VersionUtils.isAtLeast(13)) {
       material = Material.matchMaterial(materialString, false);
       if (material == null) {
         material = Material.matchMaterial(materialString, true);

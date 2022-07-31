@@ -89,12 +89,14 @@ public final class BukkitUtils {
   }
 
   /**
-   * Check if the string is the username (<a href="https://github.com/CryptoMorin/XSeries/blob/3ec904a8d85695729ad51e7bbd06a65362357706/src/main/java/com/cryptomorin/xseries/SkullUtils.java#L200-L209">XSeries's Code</a>)
+   * Check if the string is the username
    *
    * @param string            the input string
    * @param allowedCharacters the allowed characters
    *
    * @return true if it is
+   *
+   * @see <a href="https://github.com/CryptoMorin/XSeries/blob/3ec904a8d85695729ad51e7bbd06a65362357706/src/main/java/com/cryptomorin/xseries/SkullUtils.java#L200-L209">XSeries's Code</a>
    */
   public static boolean isUsername(@NotNull String string, List<Character> allowedCharacters) {
     int len = string.length();
