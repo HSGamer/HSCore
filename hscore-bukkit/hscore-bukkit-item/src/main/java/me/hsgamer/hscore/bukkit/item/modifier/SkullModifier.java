@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("deprecation")
 public class SkullModifier extends ItemMetaModifier {
   private static final LoadingCache<String, String> skullCache;
-  private static final ItemStack skullItemStack;
+  private static final SkullMeta delegateSkullMeta;
 
   static {
     ItemStack itemStack;
@@ -38,7 +38,7 @@ public class SkullModifier extends ItemMetaModifier {
       itemStack = new ItemStack(Material.valueOf("SKULL_ITEM"));
       itemStack.setDurability((short) 3);
     }
-    skullItemStack = itemStack;
+    delegateSkullMeta = (SkullMeta) itemStack.getItemMeta();
     skullCache = CacheBuilder.newBuilder()
       .expireAfterAccess(10, TimeUnit.MINUTES)
       .build(new CacheLoader<String, String>() {
@@ -107,8 +107,7 @@ public class SkullModifier extends ItemMetaModifier {
   }
 
   private static SkullMeta getSkullMeta(String skull) {
-    ItemStack itemStack = skullItemStack.clone();
-    SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
+    SkullMeta meta = delegateSkullMeta.clone();
     setSkull(meta, skull);
     return meta;
   }
