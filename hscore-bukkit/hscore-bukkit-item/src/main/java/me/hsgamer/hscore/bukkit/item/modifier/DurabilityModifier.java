@@ -12,6 +12,7 @@ import java.util.UUID;
 /**
  * The durability modifier
  */
+@SuppressWarnings("deprecation")
 public class DurabilityModifier implements ItemModifier {
   private String durability = "1";
 

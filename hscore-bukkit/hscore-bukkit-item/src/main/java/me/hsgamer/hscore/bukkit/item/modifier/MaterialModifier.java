@@ -13,7 +13,20 @@ import java.util.*;
 /**
  * The material modifier
  */
+@SuppressWarnings("deprecation")
 public class MaterialModifier implements ItemModifier {
+  private static final Map<Integer, Material> ID_MATERIAL_MAP = new HashMap<>();
+
+  static {
+    for (Material material : Material.values()) {
+      try {
+        ID_MATERIAL_MAP.put(material.getId(), material);
+      } catch (Exception ignored) {
+        // IGNORED
+      }
+    }
+  }
+
   private List<String> materialList = Collections.emptyList();
 
   private static Material getMaterial(String materialString) {
@@ -27,7 +40,41 @@ public class MaterialModifier implements ItemModifier {
     } else {
       material = Material.matchMaterial(materialString);
     }
+
+    if (material == null) {
+      try {
+        material = ID_MATERIAL_MAP.get(Integer.parseInt(materialString));
+      } catch (NumberFormatException ignored) {
+        // IGNORED
+      }
+    }
+
     return material;
+  }
+
+  private static boolean setMaterial(ItemStack itemStack, String materialString) {
+    String[] split = materialString.split(":", 2);
+    Material material = getMaterial(split[0].trim());
+    if (material != null) {
+      itemStack.setType(material);
+      if (split.length > 1) {
+        itemStack.setDurability(Short.parseShort(split[1].trim()));
+      }
+      return true;
+    }
+    return false;
+  }
+
+  private static boolean compareMaterial(ItemStack itemStack, String materialString) {
+    String[] split = materialString.split(":", 2);
+    Material material = getMaterial(split[0].trim());
+    if (itemStack.getType() == material) {
+      if (split.length > 1) {
+        return itemStack.getDurability() == Short.parseShort(split[1].trim());
+      }
+      return true;
+    }
+    return false;
   }
 
   @Override
@@ -38,9 +85,7 @@ public class MaterialModifier implements ItemModifier {
   @Override
   public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
     for (String materialString : materialList) {
-      Material material = getMaterial(StringReplacer.replace(materialString, uuid, stringReplacerMap.values()));
-      if (material != null) {
-        original.setType(material);
+      if (setMaterial(original, StringReplacer.replace(materialString, uuid, stringReplacerMap.values()))) {
         break;
       }
     }
@@ -67,10 +112,9 @@ public class MaterialModifier implements ItemModifier {
     if (materialList.isEmpty()) {
       return true;
     }
-    String material = itemStack.getType().name();
     return materialList.parallelStream()
       .map(s -> StringReplacer.replace(s, uuid, stringReplacerMap.values()))
-      .anyMatch(s -> s.equalsIgnoreCase(material));
+      .anyMatch(s -> compareMaterial(itemStack, s));
   }
 
   /**
