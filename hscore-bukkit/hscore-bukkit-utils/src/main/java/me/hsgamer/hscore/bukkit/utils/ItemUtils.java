@@ -24,7 +24,7 @@ public final class ItemUtils {
    * @param player    the player
    * @param itemStack the item
    */
-  public static void giveItem(Player player, ItemStack itemStack) {
+  public static void giveItem(Player player, ItemStack... itemStack) {
     player.getInventory().addItem(itemStack).values()
       .forEach(remainingItemStack -> player.getWorld().dropItem(player.getLocation(), remainingItemStack));
   }
@@ -37,25 +37,11 @@ public final class ItemUtils {
    * @param maxAmount the max amount to get
    *
    * @return the matched items
+   *
+   * @see #createItemCheckSession(Inventory, Predicate, int)
    */
   public static List<ItemStack> getMatchedItemsInInventory(Inventory inventory, Predicate<ItemStack> predicate, int maxAmount) {
-    List<ItemStack> list = new ArrayList<>();
-    int amountToCheck = maxAmount;
-    for (ItemStack i : inventory.getContents()) {
-      if (i == null) continue;
-      if (predicate.test(i)) {
-        if (i.getAmount() >= amountToCheck) {
-          ItemStack item = i.clone();
-          item.setAmount(amountToCheck);
-          list.add(item);
-          break;
-        } else {
-          list.add(i);
-          amountToCheck -= i.getAmount();
-        }
-      }
-    }
-    return list;
+    return createItemCheckSession(inventory, predicate, maxAmount).matchedItems;
   }
 
   /**
@@ -76,10 +62,11 @@ public final class ItemUtils {
    * @param inventory the inventory
    * @param predicate the item predicate
    * @param amount    the amount
+   *
+   * @see #createItemCheckSession(Inventory, Predicate, int)
    */
   public static void removeItemInInventory(Inventory inventory, Predicate<ItemStack> predicate, int amount) {
-    List<ItemStack> list = getMatchedItemsInInventory(inventory, predicate, amount);
-    removeItemInInventory(inventory, list);
+    createItemCheckSession(inventory, predicate, amount).takeRunnable.run();
   }
 
   /**
@@ -131,5 +118,72 @@ public final class ItemUtils {
       }
     }
     return !canAdd;
+  }
+
+  /**
+   * Create a new {@link ItemCheckSession} that check the inventory for the items that match the predicate
+   *
+   * @param inventory the inventory
+   * @param predicate the item predicate
+   * @param maxAmount the max amount to check
+   *
+   * @return the {@link ItemCheckSession}
+   *
+   * @see ItemCheckSession
+   */
+  public static ItemCheckSession createItemCheckSession(Inventory inventory, Predicate<ItemStack> predicate, int maxAmount) {
+    List<ItemStack> list = new ArrayList<>();
+    List<Runnable> takeRunnable = new ArrayList<>();
+    int amountToCheck = maxAmount;
+    ItemStack[] contents = inventory.getContents();
+    for (int slot = 0; slot < contents.length && amountToCheck <= 0; slot++) {
+      ItemStack i = contents[slot];
+      if (i == null || !predicate.test(i)) continue;
+
+      if (i.getAmount() > amountToCheck) {
+        int lastItemRemaining = i.getAmount() - amountToCheck;
+        takeRunnable.add(() -> i.setAmount(lastItemRemaining));
+
+        ItemStack item = i.clone();
+        item.setAmount(amountToCheck);
+        list.add(item);
+      } else {
+        int finalSlot = slot;
+        takeRunnable.add(() -> inventory.setItem(finalSlot, null));
+
+        list.add(i.clone());
+      }
+      amountToCheck -= Math.min(amountToCheck, i.getAmount());
+    }
+
+    return new ItemCheckSession(list, () -> {
+      for (Runnable runnable : takeRunnable) {
+        runnable.run();
+      }
+    }, amountToCheck <= 0);
+  }
+
+  /**
+   * The session of the item check. Used to get the matched items and remove the items from the inventory
+   */
+  public static class ItemCheckSession {
+    /**
+     * The matched items
+     */
+    public final List<ItemStack> matchedItems;
+    /**
+     * The runnable to remove the items from the inventory
+     */
+    public final Runnable takeRunnable;
+    /**
+     * Whether all the items from the inventory are matched
+     */
+    public final boolean isAllMatched;
+
+    private ItemCheckSession(List<ItemStack> matchedItems, Runnable takeRunnable, boolean isAllMatched) {
+      this.matchedItems = matchedItems;
+      this.takeRunnable = takeRunnable;
+      this.isAllMatched = isAllMatched;
+    }
   }
 }
