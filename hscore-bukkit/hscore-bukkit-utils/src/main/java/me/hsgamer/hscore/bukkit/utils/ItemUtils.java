@@ -136,7 +136,7 @@ public final class ItemUtils {
     List<Runnable> takeRunnable = new ArrayList<>();
     int amountToCheck = maxAmount;
     ItemStack[] contents = inventory.getContents();
-    for (int slot = 0; slot < contents.length && amountToCheck <= 0; slot++) {
+    for (int slot = 0; slot < contents.length && amountToCheck > 0; slot++) {
       ItemStack i = contents[slot];
       if (i == null || !predicate.test(i)) continue;
 
