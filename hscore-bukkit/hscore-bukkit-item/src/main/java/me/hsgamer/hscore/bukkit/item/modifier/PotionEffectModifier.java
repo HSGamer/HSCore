@@ -30,10 +30,16 @@ public class PotionEffectModifier extends ItemMetaModifier {
     int duration = 2400;
     int amplifier = 0;
     if (split.length > 1) {
-      duration = Validate.getNumber(split[1].trim()).map(BigDecimal::intValue).orElse(duration);
+      duration = Validate.getNumber(split[1].trim())
+        .map(BigDecimal::intValue)
+        .map(i -> i * 20)
+        .orElse(duration);
     }
     if (split.length > 2) {
-      amplifier = Validate.getNumber(split[2].trim()).map(BigDecimal::intValue).orElse(amplifier);
+      amplifier = Validate
+        .getNumber(split[2].trim())
+        .map(BigDecimal::intValue)
+        .orElse(amplifier);
     }
     return Optional.of(new PotionEffect(potionEffectType, duration, amplifier));
   }
