@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bukkit.item.modifier;
 
 import me.hsgamer.hscore.bukkit.item.ItemMetaModifier;
 import me.hsgamer.hscore.common.CollectionUtils;
+import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -9,6 +10,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Contract;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,30 +22,18 @@ public class PotionEffectModifier extends ItemMetaModifier {
   private List<String> potionEffectList = Collections.emptyList();
 
   private static Optional<PotionEffect> pastePotionEffect(String string) {
-    String[] split = string.replace(" ", "").split(",", 3);
-    if (split.length == 0) {
-      split = string.split("\\s+", 3);
-    }
-    if (split.length == 0) {
-      return Optional.empty();
-    }
-    PotionEffectType potionEffectType = PotionEffectType.getByName(split[0]);
+    String[] split = string.split(",", 3);
+    PotionEffectType potionEffectType = PotionEffectType.getByName(split[0].replace(" ", "_").trim());
     if (potionEffectType == null) {
       return Optional.empty();
     }
     int duration = 2400;
     int amplifier = 0;
     if (split.length > 1) {
-      try {
-        duration = Integer.parseInt(split[1]);
-      } catch (NumberFormatException ignored) {
-      }
+      duration = Validate.getNumber(split[1].trim()).map(BigDecimal::intValue).orElse(duration);
     }
     if (split.length > 2) {
-      try {
-        amplifier = Integer.parseInt(split[2]);
-      } catch (NumberFormatException ignored) {
-      }
+      amplifier = Validate.getNumber(split[2].trim()).map(BigDecimal::intValue).orElse(amplifier);
     }
     return Optional.of(new PotionEffect(potionEffectType, duration, amplifier));
   }
