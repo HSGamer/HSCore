@@ -185,6 +185,17 @@ public class Setting {
   }
 
   /**
+   * Set the client properties
+   *
+   * @param properties the properties
+   */
+  @Contract("_ -> this")
+  public Setting setClientProperties(Map<String, Object> properties) {
+    this.clientProperties.putAll(properties);
+    return this;
+  }
+
+  /**
    * Get all driver properties as a list of string
    *
    * @return the properties as a list of string
@@ -212,6 +223,17 @@ public class Setting {
    */
   public Map<String, Object> getDriverProperties() {
     return Collections.unmodifiableMap(driverProperties);
+  }
+
+  /**
+   * Set the driver properties
+   *
+   * @param properties the properties
+   */
+  @Contract("_ -> this")
+  public Setting setDriverProperties(Map<String, Object> properties) {
+    this.driverProperties.putAll(properties);
+    return this;
   }
 
   /**
