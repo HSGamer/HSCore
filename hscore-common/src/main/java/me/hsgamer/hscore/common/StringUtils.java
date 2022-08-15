@@ -32,7 +32,7 @@ public final class StringUtils {
    */
   @NotNull
   public static String replaceChar(final char altChar, final char finalChar, @NotNull final String input, @NotNull final Map<Character, Supplier<Character>> charMappers) {
-    if (input.isEmpty()) {
+    if (input.indexOf(altChar) < 0) {
       return input;
     }
     char[] chars = input.toCharArray();
@@ -76,8 +76,11 @@ public final class StringUtils {
   @NotNull
   public static String replaceHex(final char indicator, @NotNull final Function<char[], String> replacer, @NotNull final String input) {
     Matcher matcher = hexPattern.matcher(input);
+    if (!matcher.find()) {
+      return input;
+    }
     StringBuffer buffer = new StringBuffer(input.length() + 4 * 8);
-    while (matcher.find()) {
+    do {
       String matchedChar = matcher.group(3);
       if (matchedChar.indexOf(indicator) < 0) {
         continue;
@@ -89,7 +92,7 @@ public final class StringUtils {
         char[] hex = normalizeHex(matcher.group(4));
         matcher.appendReplacement(buffer, replacer.apply(hex));
       }
-    }
+    } while (matcher.find());
     return matcher.appendTail(buffer).toString();
   }
 

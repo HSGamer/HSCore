@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.bukkit.ChatColor.COLOR_CHAR;
 
@@ -16,13 +18,48 @@ import static org.bukkit.ChatColor.COLOR_CHAR;
  * Methods on messages on Bukkit
  */
 public final class MessageUtils {
-
+  private static final Pattern hybridColorPattern = Pattern.compile("(\\\\?)((\\S)\\(#([A-Fa-f\\d]{1,6}),([a-zA-Z\\d])\\))");
   private static final Map<Object, Supplier<String>> objectPrefixMap = new HashMap<>();
   private static final Map<Character, Supplier<Character>> colorMappers = Collections.singletonMap('u', () -> getRandomColor().getChar());
   private static Supplier<String> defaultPrefix = () -> "&7[&cHSCore&7] &f";
 
   private MessageUtils() {
     // EMPTY
+  }
+
+  /**
+   * Replace the hybrid color format to the final color.
+   * The format is "?(#[A-Fa-f\\d]{1,6},[a-zA-Z\\d])", where ? is the indicator character and (#[A-Fa-f\\d]{1,6},[a-zA-Z\\d]) is the code.
+   *
+   * @param indicator the indicator character
+   * @param input     the input string
+   *
+   * @return the converted string
+   */
+  @NotNull
+  public static String replaceHybridColorCode(final char indicator, final String input) {
+    Matcher matcher = hybridColorPattern.matcher(input);
+    if (!matcher.find()) {
+      return input;
+    }
+    StringBuffer buffer = new StringBuffer(input.length());
+    do {
+      String matchedChar = matcher.group(3);
+      if (matchedChar.indexOf(indicator) < 0) {
+        continue;
+      }
+      boolean skip = matcher.group(1).equals("\\");
+      if (skip) {
+        matcher.appendReplacement(buffer, matcher.group(2));
+      } else {
+        if (VersionUtils.isAtLeast(16)) {
+          matcher.appendReplacement(buffer, indicator + "#" + matcher.group(4));
+        } else {
+          matcher.appendReplacement(buffer, indicator + matcher.group(5));
+        }
+      }
+    } while (matcher.find());
+    return matcher.appendTail(buffer).toString();
   }
 
   /**
@@ -34,7 +71,8 @@ public final class MessageUtils {
    */
   @NotNull
   public static String colorize(@NotNull final String input) {
-    return colorize('&', colorizeHex('&', input));
+    char colorChar = '&';
+    return colorize(colorChar, colorizeHex(colorChar, replaceHybridColorCode(colorChar, input)));
   }
 
   /**
