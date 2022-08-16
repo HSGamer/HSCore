@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.common;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -17,6 +18,31 @@ public final class StringUtils {
 
   private StringUtils() {
     // EMPTY
+  }
+
+  /**
+   * Replace the string given the pattern and the replacement function
+   *
+   * @param input               the input string
+   * @param pattern             the pattern
+   * @param replacementFunction the replacement function
+   *
+   * @return the replaced string
+   */
+  public static String replacePattern(@NotNull final String input, @NotNull final Pattern pattern, @NotNull final Function<@NotNull Matcher, @Nullable String> replacementFunction) {
+    Matcher matcher = pattern.matcher(input);
+    if (!matcher.find()) {
+      return input;
+    }
+    StringBuffer buffer = new StringBuffer(input.length() + 4 * 8);
+    do {
+      String replacement = replacementFunction.apply(matcher);
+      if (replacement != null) {
+        matcher.appendReplacement(buffer, replacement);
+      }
+    } while (matcher.find());
+    matcher.appendTail(buffer);
+    return buffer.toString();
   }
 
   /**
@@ -75,25 +101,19 @@ public final class StringUtils {
    */
   @NotNull
   public static String replaceHex(final char indicator, @NotNull final Function<char[], String> replacer, @NotNull final String input) {
-    Matcher matcher = hexPattern.matcher(input);
-    if (!matcher.find()) {
-      return input;
-    }
-    StringBuffer buffer = new StringBuffer(input.length() + 4 * 8);
-    do {
+    return replacePattern(input, hexPattern, matcher -> {
       String matchedChar = matcher.group(3);
       if (matchedChar.indexOf(indicator) < 0) {
-        continue;
+        return null;
       }
       boolean skip = matcher.group(1).equals("\\");
       if (skip) {
-        matcher.appendReplacement(buffer, matcher.group(2));
+        return matcher.group(2);
       } else {
         char[] hex = normalizeHex(matcher.group(4));
-        matcher.appendReplacement(buffer, replacer.apply(hex));
+        return replacer.apply(hex);
       }
-    } while (matcher.find());
-    return matcher.appendTail(buffer).toString();
+    });
   }
 
   /**

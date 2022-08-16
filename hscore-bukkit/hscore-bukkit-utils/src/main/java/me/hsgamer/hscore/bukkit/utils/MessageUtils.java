@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.bukkit.ChatColor.COLOR_CHAR;
@@ -38,28 +37,20 @@ public final class MessageUtils {
    */
   @NotNull
   public static String replaceHybridColorCode(final char indicator, final String input) {
-    Matcher matcher = hybridColorPattern.matcher(input);
-    if (!matcher.find()) {
-      return input;
-    }
-    StringBuffer buffer = new StringBuffer(input.length());
-    do {
+    return StringUtils.replacePattern(input, hybridColorPattern, matcher -> {
       String matchedChar = matcher.group(3);
       if (matchedChar.indexOf(indicator) < 0) {
-        continue;
+        return null;
       }
       boolean skip = matcher.group(1).equals("\\");
       if (skip) {
-        matcher.appendReplacement(buffer, matcher.group(2));
+        return matcher.group(2);
+      } else if (VersionUtils.isAtLeast(16)) {
+        return indicator + "#" + matcher.group(4);
       } else {
-        if (VersionUtils.isAtLeast(16)) {
-          matcher.appendReplacement(buffer, indicator + "#" + matcher.group(4));
-        } else {
-          matcher.appendReplacement(buffer, indicator + matcher.group(5));
-        }
+        return indicator + matcher.group(5);
       }
-    } while (matcher.find());
-    return matcher.appendTail(buffer).toString();
+    });
   }
 
   /**
