@@ -109,6 +109,14 @@ public class Downloader {
         downloadInfoMap.putAll(map);
       }
       isLoaded.set(true);
+      onLoaded();
     });
+  }
+
+  /**
+   * Call when the downloader is finished loading the download infos
+   */
+  public void onLoaded() {
+    // EMPTY
   }
 }
