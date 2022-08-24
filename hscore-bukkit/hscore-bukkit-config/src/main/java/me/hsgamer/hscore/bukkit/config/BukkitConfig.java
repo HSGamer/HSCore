@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.config;
 
+import me.hsgamer.hscore.config.CommentType;
 import me.hsgamer.hscore.config.Config;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -15,6 +16,16 @@ import java.util.logging.Level;
  * The bukkit configuration
  */
 public class BukkitConfig implements Config {
+  private static boolean isCommentSupported;
+
+  static {
+    try {
+      isCommentSupported = ConfigurationSection.class.getDeclaredMethod("getComments", String.class) != null;
+    } catch (NoSuchMethodException e) {
+      isCommentSupported = false;
+    }
+  }
+
   private final File file;
   private final YamlConfiguration configuration = new YamlConfiguration();
 
@@ -131,5 +142,39 @@ public class BukkitConfig implements Config {
     List<String> keys = new ArrayList<>(this.configuration.getKeys(false));
     keys.forEach(key -> this.configuration.set(key, null));
     setup();
+  }
+
+  @Override
+  public String getComment(String path, CommentType type) {
+    if (!isCommentSupported) return null;
+    List<String> comments;
+    switch (type) {
+      case BLOCK:
+        comments = this.configuration.getComments(path);
+        break;
+      case SIDE:
+        comments = this.configuration.getInlineComments(path);
+        break;
+      default:
+        comments = Collections.emptyList();
+        break;
+    }
+    return comments.isEmpty() ? null : String.join("\n", comments);
+  }
+
+  @Override
+  public void setComment(String path, String value, CommentType type) {
+    if (!isCommentSupported) return;
+    List<String> comments = value == null ? null : Arrays.asList(value.split("\n"));
+    switch (type) {
+      case BLOCK:
+        this.configuration.setComments(path, comments);
+        break;
+      case SIDE:
+        this.configuration.setInlineComments(path, comments);
+        break;
+      default:
+        break;
+    }
   }
 }

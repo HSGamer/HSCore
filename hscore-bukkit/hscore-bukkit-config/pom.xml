@@ -11,6 +11,10 @@
 
   <artifactId>hscore-bukkit-config</artifactId>
 
+  <properties>
+    <spigot.version>1.18.2-R0.1-SNAPSHOT</spigot.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>me.hsgamer</groupId>
