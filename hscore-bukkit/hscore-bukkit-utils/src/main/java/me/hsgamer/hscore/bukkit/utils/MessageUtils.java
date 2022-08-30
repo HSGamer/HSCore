@@ -6,8 +6,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.BooleanSupplier;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
@@ -21,6 +24,8 @@ public final class MessageUtils {
   private static final Map<Object, Supplier<String>> objectPrefixMap = new HashMap<>();
   private static final Map<Character, Supplier<Character>> colorMappers = Collections.singletonMap('u', () -> getRandomColor().getChar());
   private static Supplier<String> defaultPrefix = () -> "&7[&cHSCore&7] &f";
+  private static Predicate<CommandSender> hexSupportSenderCheck = sender -> VersionUtils.isAtLeast(16);
+  private static BooleanSupplier hexSupportGlobalCheck = () -> VersionUtils.isAtLeast(16);
 
   private MessageUtils() {
     // EMPTY
@@ -30,13 +35,14 @@ public final class MessageUtils {
    * Replace the hybrid color format to the final color.
    * The format is "?(#[A-Fa-f\\d]{1,6},[a-zA-Z\\d])", where ? is the indicator character and (#[A-Fa-f\\d]{1,6},[a-zA-Z\\d]) is the code.
    *
+   * @param sender    the sender, or null if the sender is unknown
    * @param indicator the indicator character
    * @param input     the input string
    *
    * @return the converted string
    */
   @NotNull
-  public static String replaceHybridColorCode(final char indicator, final String input) {
+  public static String replaceHybridColorCode(@Nullable final CommandSender sender, final char indicator, final String input) {
     return StringUtils.replacePattern(input, hybridColorPattern, matcher -> {
       String matchedChar = matcher.group(3);
       if (matchedChar.indexOf(indicator) < 0) {
@@ -45,12 +51,26 @@ public final class MessageUtils {
       boolean skip = matcher.group(1).equals("\\");
       if (skip) {
         return matcher.group(2);
-      } else if (VersionUtils.isAtLeast(16)) {
+      } else if (sender != null ? hexSupportSenderCheck.test(sender) : hexSupportGlobalCheck.getAsBoolean()) {
         return indicator + "#" + matcher.group(4);
       } else {
         return indicator + matcher.group(5);
       }
     });
+  }
+
+  /**
+   * Convert to colored string
+   *
+   * @param sender the sender, or null if the sender is unknown
+   * @param input  the string
+   *
+   * @return the colored string
+   */
+  @NotNull
+  public static String colorize(@Nullable final CommandSender sender, @NotNull final String input) {
+    char colorChar = '&';
+    return colorize(colorChar, colorizeHex(colorChar, replaceHybridColorCode(sender, colorChar, input)));
   }
 
   /**
@@ -62,8 +82,7 @@ public final class MessageUtils {
    */
   @NotNull
   public static String colorize(@NotNull final String input) {
-    char colorChar = '&';
-    return colorize(colorChar, colorizeHex(colorChar, replaceHybridColorCode(colorChar, input)));
+    return colorize(null, input);
   }
 
   /**
@@ -127,7 +146,7 @@ public final class MessageUtils {
    */
   public static void sendMessage(@NotNull final CommandSender receiver, @NotNull final String message, @NotNull final String prefix) {
     if (!message.isEmpty()) {
-      receiver.sendMessage(colorize(prefix + message));
+      receiver.sendMessage(colorize(receiver, prefix + message));
     }
   }
 
@@ -305,5 +324,23 @@ public final class MessageUtils {
    */
   public static void removePrefix(@NotNull final Object object) {
     objectPrefixMap.remove(object);
+  }
+
+  /**
+   * Set the predicate that checks if the sender supports hex colors
+   *
+   * @param hexSupportSenderCheck the predicate
+   */
+  public static void setHexSupportSenderCheck(Predicate<CommandSender> hexSupportSenderCheck) {
+    MessageUtils.hexSupportSenderCheck = hexSupportSenderCheck;
+  }
+
+  /**
+   * Set the global predicate that checks if the server supports hex colors
+   *
+   * @param hexSupportGlobalCheck the predicate
+   */
+  public static void setHexSupportGlobalCheck(BooleanSupplier hexSupportGlobalCheck) {
+    MessageUtils.hexSupportGlobalCheck = hexSupportGlobalCheck;
   }
 }
