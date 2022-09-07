@@ -12,6 +12,8 @@ import java.util.function.Supplier;
  * @param <V> the type of the final value
  */
 public class Builder<R, V> extends MassBuilder<AbstractMap.SimpleEntry<String, R>, V> {
+  private final Map<String, BiFunction<String, R, V>> registeredMap = new HashMap<>();
+
   /**
    * Register a new function
    *
@@ -19,6 +21,9 @@ public class Builder<R, V> extends MassBuilder<AbstractMap.SimpleEntry<String, R
    * @param name       the name of the modifier
    */
   public void register(BiFunction<String, R, V> biFunction, String... name) {
+    for (String s : name) {
+      registeredMap.put(s, biFunction);
+    }
     register(new Element<AbstractMap.SimpleEntry<String, R>, V>() {
       @Override
       public boolean canBuild(AbstractMap.SimpleEntry<String, R> input) {
@@ -81,5 +86,14 @@ public class Builder<R, V> extends MassBuilder<AbstractMap.SimpleEntry<String, R
     Map<String, V> map = new HashMap<>();
     rawMap.forEach((name, raw) -> build(name, raw).ifPresent(v -> map.put(name.toLowerCase(Locale.ROOT), v)));
     return map;
+  }
+
+  /**
+   * Get the registered map
+   *
+   * @return the registered map
+   */
+  public Map<String, BiFunction<String, R, V>> getRegisteredMap() {
+    return Collections.unmodifiableMap(registeredMap);
   }
 }
