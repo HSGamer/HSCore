@@ -47,14 +47,23 @@ public class InstanceVariableManager {
    * Check if a string contains variables
    *
    * @param message the string
+   * @param deep    whether to check for valid variables
+   *
+   * @return true if it has, otherwise false
+   */
+  public boolean hasVariables(String message, boolean deep) {
+    return message != null && !message.trim().isEmpty() && isMatch(message, deep);
+  }
+
+  /**
+   * Check if a string contains variables
+   *
+   * @param message the string
    *
    * @return true if it has, otherwise false
    */
   public boolean hasVariables(String message) {
-    if (message == null || message.trim().isEmpty()) {
-      return false;
-    }
-    return isMatch(message);
+    return hasVariables(message, false);
   }
 
   /**
@@ -119,27 +128,27 @@ public class InstanceVariableManager {
    * Check if the string contains valid variables
    *
    * @param string the string
+   * @param deep   whether to check for valid variables
    *
    * @return true if it does
    */
-  private boolean isMatch(String string) {
+  private boolean isMatch(String string, boolean deep) {
     Matcher matcher = PATTERN.matcher(string);
-    List<String> found = new ArrayList<>();
-    while (matcher.find()) {
-      found.add(matcher.group(3).trim());
-    }
+    if (!matcher.find()) return false;
+    if (!deep) return true;
 
-    if (found.isEmpty()) {
-      return false;
-    } else {
-      return found.stream().parallel().anyMatch(s -> {
-        for (String match : variables.keySet()) {
-          if (s.startsWith(match)) {
-            return true;
-          }
+    List<String> found = new ArrayList<>();
+    do {
+      found.add(matcher.group(3).trim());
+    } while (matcher.find());
+
+    return found.stream().parallel().anyMatch(s -> {
+      for (String match : variables.keySet()) {
+        if (s.startsWith(match)) {
+          return true;
         }
-        return false;
-      });
-    }
+      }
+      return false;
+    });
   }
 }
