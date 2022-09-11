@@ -92,9 +92,6 @@
     <groupId>me.hsgamer</groupId>
     <artifactId>hscore-MODULE</artifactId>
     <version>VERSION</version>
-
-    <!-- Add this line if you want to get the shaded artifact -->
-    <classifier>jar-with-dependencies</classifier>
   </dependency>
 </dependencies>
 ```
