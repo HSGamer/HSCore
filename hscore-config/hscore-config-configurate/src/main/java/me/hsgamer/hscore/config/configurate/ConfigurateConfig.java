@@ -50,7 +50,11 @@ public class ConfigurateConfig implements Config {
   public Object get(String path, Object def) {
     Object[] splitPath = splitPath(path);
     ConfigurationNode node = this.rootNode.node(splitPath);
-    return node.virtual() ? def : node;
+    if (node.virtual()) {
+      return def;
+    }
+    Object value = node.rawScalar();
+    return value == null ? def : value;
   }
 
   @Override
@@ -89,10 +93,13 @@ public class ConfigurateConfig implements Config {
     Map<String, Object> map = new LinkedHashMap<>();
     for (Map.Entry<Object, ? extends ConfigurationNode> entry : node.childrenMap().entrySet()) {
       String key = Objects.toString(entry.getKey());
-      if (deep) {
-        map.putAll(getValues(path.isEmpty() ? key : path + "." + key, true));
-      } else {
-        map.put(key, entry.getValue());
+      ConfigurationNode value = entry.getValue();
+      map.put(key, value);
+      if (value.isMap() && deep) {
+        Map<String, Object> subMap = getValues(path + "." + key, true);
+        for (Map.Entry<String, Object> subEntry : subMap.entrySet()) {
+          map.put(key + "." + subEntry.getKey(), subEntry.getValue());
+        }
       }
     }
     return map;
@@ -142,7 +149,9 @@ public class ConfigurateConfig implements Config {
       } else if (node.isList()) {
         return node.childrenList();
       } else if (node.isMap()) {
-        return node.childrenMap();
+        Map<String, Object> map = new LinkedHashMap<>();
+        node.childrenMap().forEach((key, value) -> map.put(Objects.toString(key), value));
+        return map;
       } else {
         return node.rawScalar();
       }
