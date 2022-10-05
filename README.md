@@ -44,6 +44,7 @@
     * **`hscore-config-path`**
     * **`hscore-config-simplixstorage`**
     * **`hscore-config-simpleconfiguration`**
+    * **`hscore-config-configurate`**
     * **`hscore-config-annotation`**
     * **`hscore-config-annotated`**
     * **`hscore-config-proxy`**
