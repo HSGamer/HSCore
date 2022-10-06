@@ -1,6 +1,8 @@
 package me.hsgamer.hscore.config.configurate;
 
+import me.hsgamer.hscore.config.CommentType;
 import me.hsgamer.hscore.config.Config;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
@@ -50,10 +52,7 @@ public class ConfigurateConfig implements Config {
   public Object get(String path, Object def) {
     Object[] splitPath = splitPath(path);
     ConfigurationNode node = this.rootNode.node(splitPath);
-    if (node.virtual()) {
-      return def;
-    }
-    Object value = node.rawScalar();
+    Object value = node.raw();
     return value == null ? def : value;
   }
 
@@ -87,7 +86,7 @@ public class ConfigurateConfig implements Config {
     } else {
       node = this.rootNode.node(splitPath);
     }
-    if (node.virtual()) {
+    if (!node.isMap()) {
       return Collections.emptyMap();
     }
     Map<String, Object> map = new LinkedHashMap<>();
@@ -96,7 +95,8 @@ public class ConfigurateConfig implements Config {
       ConfigurationNode value = entry.getValue();
       map.put(key, value);
       if (value.isMap() && deep) {
-        Map<String, Object> subMap = getValues(path + "." + key, true);
+        String newPath = splitPath.length == 0 ? key : path + "." + key;
+        Map<String, Object> subMap = getValues(newPath, true);
         for (Map.Entry<String, Object> subEntry : subMap.entrySet()) {
           map.put(key + "." + subEntry.getKey(), subEntry.getValue());
         }
@@ -144,16 +144,14 @@ public class ConfigurateConfig implements Config {
   public Object normalize(Object object) {
     if (object instanceof ConfigurationNode) {
       ConfigurationNode node = (ConfigurationNode) object;
-      if (node.virtual()) {
-        return null;
-      } else if (node.isList()) {
+      if (node.isList()) {
         return node.childrenList();
       } else if (node.isMap()) {
         Map<String, Object> map = new LinkedHashMap<>();
         node.childrenMap().forEach((key, value) -> map.put(Objects.toString(key), value));
         return map;
       } else {
-        return node.rawScalar();
+        return node.raw();
       }
     }
     return object;
@@ -162,5 +160,25 @@ public class ConfigurateConfig implements Config {
   @Override
   public boolean isNormalizable(Object object) {
     return object instanceof ConfigurationNode;
+  }
+
+  @Override
+  public String getComment(String path, CommentType type) {
+    Object[] splitPath = splitPath(path);
+    ConfigurationNode node = this.rootNode.node(splitPath);
+    if (!(node instanceof CommentedConfigurationNode)) return null;
+    CommentedConfigurationNode commentedNode = (CommentedConfigurationNode) node;
+    if (type != CommentType.BLOCK) return null;
+    return commentedNode.comment();
+  }
+
+  @Override
+  public void setComment(String path, String value, CommentType type) {
+    Object[] splitPath = splitPath(path);
+    ConfigurationNode node = this.rootNode.node(splitPath);
+    if (!(node instanceof CommentedConfigurationNode)) return;
+    CommentedConfigurationNode commentedNode = (CommentedConfigurationNode) node;
+    if (type != CommentType.BLOCK) return;
+    commentedNode.comment(value);
   }
 }
