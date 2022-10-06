@@ -128,6 +128,10 @@ public class ConfigurateConfig implements Config {
 
   @Override
   public void reload() {
+    if (this.file.length() == 0) {
+      this.rootNode = this.loader.createNode();
+      return;
+    }
     try {
       this.rootNode = this.loader.load();
     } catch (IOException e) {
