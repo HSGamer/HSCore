@@ -23,6 +23,7 @@ me.hsgamer.hscore.bukkit.gui.simple
 me.hsgamer.hscore.bukkit.item
 me.hsgamer.hscore.bukkit.item.modifier
 me.hsgamer.hscore.bukkit.key
+me.hsgamer.hscore.bukkit.listener
 me.hsgamer.hscore.bukkit.simpleplugin
 me.hsgamer.hscore.bukkit.utils
 me.hsgamer.hscore.bungeecord.channel
@@ -40,6 +41,7 @@ me.hsgamer.hscore.config
 me.hsgamer.hscore.config.annotated
 me.hsgamer.hscore.config.annotation
 me.hsgamer.hscore.config.annotation.converter
+me.hsgamer.hscore.config.configurate
 me.hsgamer.hscore.config.path
 me.hsgamer.hscore.config.path.impl
 me.hsgamer.hscore.config.proxy
