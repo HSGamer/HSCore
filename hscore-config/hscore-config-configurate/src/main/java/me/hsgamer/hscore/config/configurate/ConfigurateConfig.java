@@ -68,11 +68,6 @@ public class ConfigurateConfig implements Config {
   }
 
   @Override
-  public boolean contains(String path) {
-    return !rootNode.node(splitPath(path)).virtual();
-  }
-
-  @Override
   public String getName() {
     return file.getName();
   }
@@ -93,7 +88,7 @@ public class ConfigurateConfig implements Config {
     for (Map.Entry<Object, ? extends ConfigurationNode> entry : node.childrenMap().entrySet()) {
       String key = Objects.toString(entry.getKey());
       ConfigurationNode value = entry.getValue();
-      map.put(key, value);
+      map.put(key, value.raw());
       if (value.isMap() && deep) {
         String newPath = splitPath.length == 0 ? key : path + "." + key;
         Map<String, Object> subMap = getValues(newPath, true);

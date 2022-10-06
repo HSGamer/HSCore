@@ -44,7 +44,9 @@ public interface Config {
    *
    * @return true if it does
    */
-  boolean contains(String path);
+  default boolean contains(String path) {
+    return get(path, null) != null;
+  }
 
   /**
    * Get the name of the configuration
