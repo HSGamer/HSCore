@@ -41,8 +41,9 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
    * @param clazz       The interface
    * @param config      The config
    * @param stickyValue True if the value should be sticky (store the value in the cache)
+   * @param addDefault  True if the default value should be added to the config
    */
-  ConfigInvocationHandler(Class<T> clazz, Config config, boolean stickyValue) {
+  ConfigInvocationHandler(Class<T> clazz, Config config, boolean stickyValue, boolean addDefault) {
     this.clazz = clazz;
     this.config = config;
     this.stickyValue = stickyValue;
@@ -50,8 +51,12 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
     for (Method method : this.clazz.getDeclaredMethods()) {
       this.setupMethod(method);
     }
-    this.setupClassComment();
-    this.config.save();
+
+    if (addDefault) {
+      nodes.values().forEach(ConfigNode::addDefault);
+      this.setupClassComment();
+      this.config.save();
+    }
   }
 
   /**
@@ -93,7 +98,9 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
       methodName = name.substring(3);
     } else if (name.startsWith("is")) {
       methodName = name.substring(2);
-    } else return;
+    } else {
+      methodName = name;
+    }
     if (methodName.isEmpty()) {
       return;
     }
@@ -108,13 +115,10 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
       Object value = DEFAULT_METHOD_HANDLER.invoke(method);
       ConfigNode node = new ConfigNode(
         path, config, configPath.converter(), value,
+        method.isAnnotationPresent(Comment.class) ? method.getAnnotation(Comment.class).value() : null,
         stickyValue || method.isAnnotationPresent(StickyValue.class)
       );
       nodes.put(methodName, node);
-
-      if (method.isAnnotationPresent(Comment.class) && config.getComment(path) == null) {
-        config.setComment(path, method.getAnnotation(Comment.class).value());
-      }
     } catch (Throwable e) {
       throw new IllegalStateException("Failed to setup method " + method.getName(), e);
     }
@@ -123,7 +127,7 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     String name = method.getName();
-    if (name.equals("getConfig") && !method.isDefault() && method.getParameterCount() == 0 && method.getReturnType().isInstance(config)) {
+    if ((name.equals("getConfig") || name.equals("config")) && !method.isDefault() && method.getParameterCount() == 0 && method.getReturnType().isInstance(config)) {
       return config;
     } else if (name.equals("toString")) {
       return this.clazz.toString();
@@ -131,26 +135,33 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
       return this.clazz.hashCode();
     } else if (name.equals("equals")) {
       return proxy == args[0];
-    } else if (name.equals("reloadConfig") && !method.isDefault() && method.getParameterCount() == 0) {
+    } else if ((name.equals("reloadConfig") || name.equals("reload")) && !method.isDefault() && method.getParameterCount() == 0) {
       config.reload();
       nodes.values().forEach(ConfigNode::clearCache);
       return null;
-    } else if ((name.startsWith("get") || name.startsWith("is")) && method.isDefault() && method.getParameterCount() == 0 && method.isAnnotationPresent(ConfigPath.class)) {
+    } else if (method.getReturnType() != Void.class && method.isDefault() && method.getParameterCount() == 0 && method.isAnnotationPresent(ConfigPath.class)) {
       String methodName;
       if (name.startsWith("get")) {
         methodName = name.substring(3);
-      } else {
+      } else if (name.startsWith("is")) {
         methodName = name.substring(2);
+      } else {
+        methodName = name;
       }
-      if (!methodName.isEmpty() && nodes.containsKey(methodName)) {
+      if (nodes.containsKey(methodName)) {
         Object value = nodes.get(methodName).getValue();
         if ((isPrimitiveOrWrapper(method.getReturnType()) && isPrimitiveOrWrapper(value.getClass())) || method.getReturnType().isInstance(value)) {
           return value;
         }
       }
-    } else if (name.startsWith("set") && !method.isDefault() && method.getParameterCount() == 1) {
-      String methodName = name.substring(3);
-      if (!methodName.isEmpty() && nodes.containsKey(methodName)) {
+    } else if (method.getReturnType() == Void.class && !method.isDefault() && method.getParameterCount() == 1) {
+      String methodName;
+      if (name.startsWith("set")) {
+        methodName = name.substring(3);
+      } else {
+        methodName = name;
+      }
+      if (nodes.containsKey(methodName)) {
         nodes.get(methodName).setValue(args[0]);
         config.save();
         return null;

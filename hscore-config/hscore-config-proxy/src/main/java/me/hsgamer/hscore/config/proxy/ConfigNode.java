@@ -13,6 +13,7 @@ public class ConfigNode {
   private final Config config;
   private final Converter converter;
   private final Object defaultValue;
+  private final String comment;
   private final boolean stickyValue;
   private final AtomicReference<Object> cachedValue = new AtomicReference<>();
 
@@ -23,15 +24,16 @@ public class ConfigNode {
    * @param config       the config
    * @param converter    the converter
    * @param defaultValue the default value
+   * @param comment      the comment
    * @param stickyValue  true if the value should be sticky
    */
-  private ConfigNode(String path, Config config, Converter converter, Object defaultValue, boolean stickyValue) {
+  private ConfigNode(String path, Config config, Converter converter, Object defaultValue, String comment, boolean stickyValue) {
     this.path = path;
     this.config = config;
     this.converter = converter;
     this.defaultValue = defaultValue;
+    this.comment = comment;
     this.stickyValue = stickyValue;
-    config.addDefault(path, converter.convertToRaw(defaultValue));
   }
 
   /**
@@ -41,10 +43,11 @@ public class ConfigNode {
    * @param config       the config
    * @param converter    the converter
    * @param defaultValue the default value
+   * @param comment      the comment
    * @param stickyValue  true if the value should be sticky
    */
-  ConfigNode(String path, Config config, Class<? extends Converter> converter, Object defaultValue, boolean stickyValue) {
-    this(path, config, Converter.createConverterSafe(converter), defaultValue, stickyValue);
+  ConfigNode(String path, Config config, Class<? extends Converter> converter, Object defaultValue, String comment, boolean stickyValue) {
+    this(path, config, Converter.createConverterSafe(converter), defaultValue, comment, stickyValue);
   }
 
   /**
@@ -54,6 +57,16 @@ public class ConfigNode {
    */
   public String getPath() {
     return path;
+  }
+
+  /**
+   * Add the default value to the config
+   */
+  public void addDefault() {
+    config.addDefault(path, converter.convertToRaw(defaultValue));
+    if (comment != null && config.getComment(path) == null) {
+      config.setComment(path, comment);
+    }
   }
 
   /**

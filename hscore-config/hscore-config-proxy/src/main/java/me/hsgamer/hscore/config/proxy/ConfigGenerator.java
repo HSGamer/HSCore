@@ -21,19 +21,36 @@ public final class ConfigGenerator {
    * @param setupConfig Whether to set up the config
    * @param stickyValue True if the value should be sticky (keep the value in the cache)
    * @param <T>         The class type
+   * @param addDefault  True if the default value should be added to the config
    *
    * @return The new instance
    */
-  public static <T> T newInstance(Class<T> clazz, Config config, boolean setupConfig, boolean stickyValue) {
+  public static <T> T newInstance(Class<T> clazz, Config config, boolean setupConfig, boolean stickyValue, boolean addDefault) {
     if (setupConfig) {
       config.setup();
     }
-    Object object = Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new ConfigInvocationHandler<>(clazz, config, stickyValue));
+    Object object = Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new ConfigInvocationHandler<>(clazz, config, stickyValue, addDefault));
     if (clazz.isInstance(object)) {
       return clazz.cast(object);
     } else {
       throw new IllegalArgumentException("The class " + clazz.getName() + " is not an instance of " + object.getClass().getName());
     }
+  }
+
+
+  /**
+   * Create a new mapped instance of the class from the config
+   *
+   * @param clazz       The class to create
+   * @param config      The config to use
+   * @param setupConfig Whether to set up the config
+   * @param stickyValue True if the value should be sticky (keep the value in the cache)
+   * @param <T>         The class type
+   *
+   * @return The new instance
+   */
+  public static <T> T newInstance(Class<T> clazz, Config config, boolean setupConfig, boolean stickyValue) {
+    return newInstance(clazz, config, setupConfig, stickyValue, true);
   }
 
   /**
