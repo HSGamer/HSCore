@@ -68,6 +68,9 @@ me.hsgamer.hscore.downloader.core.object
 me.hsgamer.hscore.downloader.json
 me.hsgamer.hscore.downloader.webstream
 me.hsgamer.hscore.expression
+me.hsgamer.hscore.expression.ezylang
+me.hsgamer.hscore.expression.ezylang.number
+me.hsgamer.hscore.expression.ezylang.string
 me.hsgamer.hscore.expression.number
 me.hsgamer.hscore.expression.string
 me.hsgamer.hscore.minestom.board
