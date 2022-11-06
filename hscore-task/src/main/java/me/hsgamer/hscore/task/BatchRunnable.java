@@ -33,41 +33,44 @@ public class BatchRunnable implements Runnable {
   @Override
   public void run() {
     AtomicBoolean isRunning = new AtomicBoolean(true);
+    AtomicReference<TaskPool> currentTaskPool = new AtomicReference<>();
+    AtomicReference<CompletableFuture<Void>> nextLock = new AtomicReference<>();
+    Process process = new Process() {
+      @Override
+      public Map<String, Object> getData() {
+        return data;
+      }
+
+      @Override
+      public void next() {
+        Optional.ofNullable(nextLock.get()).ifPresent(future -> future.complete(null));
+      }
+
+      @Override
+      public void complete() {
+        isRunning.set(false);
+        next();
+      }
+
+      @Override
+      public TaskPool getCurrentTaskPool() {
+        return currentTaskPool.get();
+      }
+
+      @Override
+      public TaskPool getTaskPool(int stage) {
+        return BatchRunnable.this.getTaskPool(stage);
+      }
+    };
+
     while (isRunning.get()) {
       TaskPool taskPool = tasks.poll();
       if (taskPool == null) {
         isRunning.set(false);
         break;
       }
+      currentTaskPool.set(taskPool);
 
-      AtomicReference<CompletableFuture<Void>> nextLock = new AtomicReference<>();
-      Process process = new Process() {
-        @Override
-        public Map<String, Object> getData() {
-          return data;
-        }
-
-        @Override
-        public void next() {
-          Optional.ofNullable(nextLock.get()).ifPresent(future -> future.complete(null));
-        }
-
-        @Override
-        public void complete() {
-          isRunning.set(false);
-          next();
-        }
-
-        @Override
-        public TaskPool getCurrentTaskPool() {
-          return taskPool;
-        }
-
-        @Override
-        public TaskPool getTaskPool(int stage) {
-          return BatchRunnable.this.getTaskPool(stage);
-        }
-      };
       do {
         Consumer<Process> task = taskPool.pollTask();
         if (task == null) {
