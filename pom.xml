@@ -84,7 +84,6 @@
           <execution>
             <goals>
               <goal>jar</goal>
-              <goal>aggregate</goal>
             </goals>
             <id>attach-sources</id>
           </execution>
@@ -101,7 +100,6 @@
           <execution>
             <goals>
               <goal>jar</goal>
-              <goal>aggregate-jar</goal>
             </goals>
             <id>attach-javadocs</id>
           </execution>
