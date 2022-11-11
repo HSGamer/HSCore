@@ -76,20 +76,11 @@
     * **`hscore-minestom-board`**
     * **`hscore-minestom-gui`**
 
-## Add as a dependency (Maven)
+## Add as a dependency
+
+### Maven
 
 ```xml
-
-<repositories>
-  <repository>
-    <id>codemc-repo</id>
-    <url>https://repo.codemc.io/repository/maven-public/</url>
-  </repository>
-</repositories>
-```
-
-```xml
-
 <dependencies>
   <dependency>
     <groupId>me.hsgamer</groupId>
@@ -97,4 +88,12 @@
     <version>VERSION</version>
   </dependency>
 </dependencies>
+```
+
+### Gradle
+
+```groovy
+dependencies {
+  implementation 'me.hsgamer:hscore-MODULE:VERSION'
+}
 ```
