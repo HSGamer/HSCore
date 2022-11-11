@@ -20,4 +20,4 @@ jobs:
       - name: Unshallow
         run: git fetch --unshallow --quiet
       - name: Build
-        run: mvn clean install
+        run: mvn clean package

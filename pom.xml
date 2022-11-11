@@ -27,6 +27,11 @@
     </developer>
   </developers>
 
+  <issueManagement>
+    <system>github</system>
+    <url>https://github.com/HSGamer/HSCore/issues</url>
+  </issueManagement>
+
   <scm>
     <connection>scm:git:https://github.com/HSGamer/HSCore.git</connection>
     <developerConnection>scm:git:git@github.com:HSGamer/HSCore.git</developerConnection>
@@ -79,6 +84,7 @@
           <execution>
             <goals>
               <goal>jar</goal>
+              <goal>aggregate</goal>
             </goals>
             <id>attach-sources</id>
           </execution>
@@ -95,6 +101,7 @@
           <execution>
             <goals>
               <goal>jar</goal>
+              <goal>aggregate-jar</goal>
             </goals>
             <id>attach-javadocs</id>
           </execution>
@@ -112,6 +119,60 @@
     </dependency>
   </dependencies>
 
+  <profiles>
+    <profile>
+      <id>sonatype</id>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>3.0.1</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+                <configuration>
+                  <!-- Prevent `gpg` from using pinentry programs -->
+                  <gpgArguments>
+                    <arg>--pinentry-mode</arg>
+                    <arg>loopback</arg>
+                  </gpgArguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.7</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>true</autoReleaseAfterClose>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+
+      <distributionManagement>
+        <snapshotRepository>
+          <id>ossrh</id>
+          <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+          <id>ossrh</id>
+          <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+      </distributionManagement>
+    </profile>
+  </profiles>
+
   <distributionManagement>
     <repository>
       <id>codemc-releases</id>
@@ -122,5 +183,4 @@
       <url>https://repo.codemc.io/repository/maven-snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
-
 </project>
