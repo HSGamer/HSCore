@@ -6,7 +6,9 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
@@ -16,9 +18,11 @@ import java.util.function.Predicate;
 public class PredicateButton implements Button {
   private final Button button;
   private final Set<UUID> failToViewList = new ConcurrentSkipListSet<>();
+  private final Set<UUID> clickCheckList = new ConcurrentSkipListSet<>();
 
   private Predicate<UUID> viewPredicate = uuid -> true;
-  private BiPredicate<UUID, InventoryClickEvent> clickPredicate = (uuid, inventoryClickEvent) -> true;
+  private BiFunction<UUID, InventoryClickEvent, CompletableFuture<Boolean>> clickFuturePredicate = (uuid, inventoryClickEvent) -> CompletableFuture.completedFuture(true);
+  private boolean preventSpamClick = false;
   private Button fallbackButton = EMPTY;
 
   /**
@@ -50,7 +54,31 @@ public class PredicateButton implements Button {
    * @return {@code this} for builder chain
    */
   public PredicateButton setClickPredicate(BiPredicate<UUID, InventoryClickEvent> clickPredicate) {
-    this.clickPredicate = clickPredicate;
+    this.clickFuturePredicate = (uuid, inventoryClickEvent) -> CompletableFuture.completedFuture(clickPredicate.test(uuid, inventoryClickEvent));
+    return this;
+  }
+
+  /**
+   * Set the click future predicate
+   *
+   * @param clickFuturePredicate the click future predicate
+   *
+   * @return {@code this} for builder chain
+   */
+  public PredicateButton setClickFuturePredicate(BiFunction<UUID, InventoryClickEvent, CompletableFuture<Boolean>> clickFuturePredicate) {
+    this.clickFuturePredicate = clickFuturePredicate;
+    return this;
+  }
+
+  /**
+   * Set whether to prevent spam click when checking click predicate
+   *
+   * @param preventSpamClick true if it should
+   *
+   * @return {@code this} for builder chain
+   */
+  public PredicateButton setPreventSpamClick(boolean preventSpamClick) {
+    this.preventSpamClick = preventSpamClick;
     return this;
   }
 
@@ -102,9 +130,16 @@ public class PredicateButton implements Button {
       return;
     }
 
-    if (clickPredicate.test(uuid, event)) {
-      button.handleAction(uuid, event);
+    if (preventSpamClick && clickCheckList.contains(uuid)) {
+      return;
     }
+    clickCheckList.add(uuid);
+    clickFuturePredicate.apply(uuid, event).thenAccept(result -> {
+      clickCheckList.remove(uuid);
+      if (Boolean.TRUE.equals(result)) {
+        button.handleAction(uuid, event);
+      }
+    });
   }
 
   @Override
