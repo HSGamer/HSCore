@@ -5,12 +5,11 @@ import me.hsgamer.hscore.ui.BaseHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
@@ -206,14 +205,43 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
     return new GUIDisplay(uuid, this);
   }
 
+  /**
+   * Get the open display of the player
+   *
+   * @param player the player
+   *
+   * @return the display
+   */
+  private Optional<GUIDisplay> getOpenDisplay(HumanEntity player) {
+    return Optional.ofNullable(player.getOpenInventory())
+      .map(InventoryView::getTopInventory)
+      .map(Inventory::getHolder)
+      .filter(GUIDisplay.class::isInstance)
+      .map(GUIDisplay.class::cast);
+  }
+
   @Override
   public void init() {
     addEventConsumer(InventoryCloseEvent.class, event -> {
       HumanEntity player = event.getPlayer();
       UUID uuid = player.getUniqueId();
+
+      Optional<GUIDisplay> optionalDisplay = getOpenDisplay(player);
+      if (!optionalDisplay.isPresent()) {
+        return;
+      }
+      GUIDisplay display = optionalDisplay.get();
+
       if (!closeFilter.test(uuid)) {
-        getDisplay(uuid).ifPresent(guiDisplay -> Bukkit.getScheduler().runTask(plugin, () -> player.openInventory(guiDisplay.getInventory())));
-      } else if (removeDisplayOnClose) {
+        Bukkit.getScheduler().runTask(plugin, () -> player.openInventory(display.getInventory()));
+      } else if (removeDisplayOnClose && display.getUniqueId() == uuid) {
+        onOwnerRemoveDisplay(uuid, display, event);
+
+        display.getInventory().getViewers()
+          .stream()
+          .filter(viewer -> viewer.getUniqueId() != uuid)
+          .forEach(HumanEntity::closeInventory);
+
         removeDisplay(uuid);
       }
     });
@@ -224,8 +252,9 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
     addEventConsumer(InventoryDragEvent.class, this::onDrag);
 
     addEventConsumer(InventoryClickEvent.class, event -> {
-      UUID uuid = event.getWhoClicked().getUniqueId();
-      getDisplay(uuid).ifPresent(guiDisplay -> guiDisplay.handleClickEvent(uuid, event));
+      HumanEntity player = event.getWhoClicked();
+      UUID uuid = player.getUniqueId();
+      getOpenDisplay(player).ifPresent(guiDisplay -> guiDisplay.handleClickEvent(uuid, event));
     });
     buttonMap.init();
   }
@@ -262,6 +291,18 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    * @param event the event
    */
   protected void onClose(InventoryCloseEvent event) {
+    // EMPTY
+  }
+
+  /**
+   * Handle close event when the owner closes the inventory.
+   * Mainly used to clear custom close filters for the viewers of the display.
+   *
+   * @param uuid    the unique id of the owner
+   * @param display the display
+   * @param event   the event
+   */
+  protected void onOwnerRemoveDisplay(UUID uuid, GUIDisplay display, InventoryCloseEvent event) {
     // EMPTY
   }
 

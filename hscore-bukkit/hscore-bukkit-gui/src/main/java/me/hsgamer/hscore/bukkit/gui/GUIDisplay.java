@@ -91,15 +91,29 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
       : Bukkit.createInventory(this, type, title);
   }
 
+  /**
+   * Open the display for the player
+   *
+   * @param player the player
+   */
+  public void open(Player player) {
+    player.openInventory(inventory);
+  }
+
+  /**
+   * Open the display for the owner of this display
+   */
+  public void open() {
+    Player player = Bukkit.getPlayer(uuid);
+    if (player != null) {
+      open(player);
+    }
+  }
+
   @Override
   public void init() {
     this.inventory = createInventory();
     update();
-
-    Player player = Bukkit.getPlayer(this.uuid);
-    if (player != null) {
-      player.openInventory(this.inventory);
-    }
   }
 
   @Override
