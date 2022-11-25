@@ -22,7 +22,12 @@ public class PotionEffectModifier extends ItemMetaModifier {
   private List<String> potionEffectList = Collections.emptyList();
 
   private static Optional<PotionEffect> pastePotionEffect(String string) {
-    String[] split = string.split(",", 3);
+    String[] split;
+    if (string.indexOf(',') != -1) {
+      split = string.split(",", 3);
+    } else {
+      split = string.split(" ", 3);
+    }
     PotionEffectType potionEffectType = PotionEffectType.getByName(split[0].replace(" ", "_").trim());
     if (potionEffectType == null) {
       return Optional.empty();

@@ -39,7 +39,13 @@ public class EnchantmentModifier extends ItemMetaModifier {
   private Map<Enchantment, Integer> getParsed(UUID uuid, Collection<StringReplacer> stringReplacers) {
     Map<Enchantment, Integer> enchantments = new LinkedHashMap<>();
     for (String string : enchantmentList) {
-      String[] split = StringReplacer.replace(string, uuid, stringReplacers).split(",", 2);
+      String replaced = StringReplacer.replace(string, uuid, stringReplacers);
+      String[] split;
+      if (replaced.indexOf(',') != -1) {
+        split = replaced.split(",", 2);
+      } else {
+        split = replaced.split(" ", 2);
+      }
       Optional<Enchantment> enchantment = Optional.of(split[0].trim()).map(EnchantmentModifier::normalizeEnchantmentName).map(ENCHANTMENT_MAP::get);
       int level = 1;
       if (split.length > 1) {
