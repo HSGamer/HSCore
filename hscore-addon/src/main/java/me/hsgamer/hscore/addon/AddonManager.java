@@ -26,11 +26,6 @@ public class AddonManager {
   protected final Map<String, Addon> addons = new LinkedHashMap<>();
 
   /**
-   * The addon map keyed addon itself, valued addon's class loader
-   */
-  protected final Map<Addon, AddonClassLoader> loaderMap = new HashMap<>();
-
-  /**
    * The file that contains all addons
    */
   @NotNull
@@ -134,7 +129,6 @@ public class AddonManager {
           final Addon addon = loader.getAddon();
           if (this.onAddonLoading(addon)) {
             addonMap.put(addonDescription.getName(), loader.getAddon());
-            this.loaderMap.put(addon, loader);
           } else {
             loader.close();
           }
@@ -305,10 +299,10 @@ public class AddonManager {
    */
   @Nullable
   public Class<?> findClass(@NotNull final Addon addon, @NotNull final String name) {
-    return this.loaderMap.entrySet()
+    return this.addons.entrySet()
       .parallelStream()
-      .filter(entry -> entry.getKey() != addon)
-      .flatMap(entry -> Optional.ofNullable(entry.getValue().findClass(name, false)).map(Stream::of).orElse(Stream.empty()))
+      .filter(entry -> entry.getValue() != addon)
+      .flatMap(entry -> Optional.ofNullable(entry.getValue().getClassLoader().findClass(name, false)).map(Stream::of).orElse(Stream.empty()))
       .findAny()
       .orElse(null);
   }
@@ -378,13 +372,10 @@ public class AddonManager {
    * @param addon the addon
    */
   private void closeClassLoader(@NotNull final Addon addon) {
-    if (this.loaderMap.containsKey(addon)) {
-      final AddonClassLoader loader = this.loaderMap.remove(addon);
-      try {
-        loader.close();
-      } catch (final IOException e) {
-        this.logger.log(Level.WARNING, "Error when closing ClassLoader", e);
-      }
+    try {
+      addon.getClassLoader().close();
+    } catch (final IOException e) {
+      this.logger.log(Level.WARNING, "Error when closing ClassLoader", e);
     }
   }
 }

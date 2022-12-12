@@ -31,7 +31,12 @@ public abstract class Addon {
    * Create an addon
    */
   public Addon() {
-    this.addonClassLoader = (AddonClassLoader) this.getClass().getClassLoader();
+    ClassLoader classLoader = getClass().getClassLoader();
+    if (classLoader instanceof AddonClassLoader) {
+      this.addonClassLoader = (AddonClassLoader) classLoader;
+    } else {
+      throw new IllegalStateException("Cannot create an addon without AddonClassLoader");
+    }
   }
 
   /**
@@ -171,7 +176,7 @@ public abstract class Addon {
    * @return the class loader
    */
   @NotNull
-  protected final AddonClassLoader getClassLoader() {
+  public final AddonClassLoader getClassLoader() {
     return this.addonClassLoader;
   }
 }
