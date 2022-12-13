@@ -41,8 +41,7 @@ public abstract class InputStreamAddonDescriptionLoader implements MapAddonDescr
     if (jarEntry == null) {
       throw new IOException("The file " + jarFile.getName() + " does not contain the file " + addonFileName);
     }
-    InputStream inputStream = jarFile.getInputStream(jarEntry);
-    try {
+    try (InputStream inputStream = jarFile.getInputStream(jarEntry)) {
       return loadAsMap(inputStream);
     } catch (IOException e) {
       throw new IOException("There is an I/O error when loading configuration of " + jarFile.getName(), e);
