@@ -73,6 +73,7 @@ me.hsgamer.hscore.expression.ezylang.number
 me.hsgamer.hscore.expression.ezylang.string
 me.hsgamer.hscore.expression.number
 me.hsgamer.hscore.expression.string
+me.hsgamer.hscore.logging.log4j
 me.hsgamer.hscore.minestom.board
 me.hsgamer.hscore.minestom.gui
 me.hsgamer.hscore.minestom.gui.button
