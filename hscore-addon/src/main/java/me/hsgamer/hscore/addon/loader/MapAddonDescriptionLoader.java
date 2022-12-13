@@ -9,7 +9,13 @@ import java.util.Objects;
 import java.util.jar.JarFile;
 
 /**
- * The simplified {@link AddonDescriptionLoader} that loads the {@link AddonDescription} from the information map of the jar file
+ * The simplified {@link AddonDescriptionLoader} that loads the {@link AddonDescription} from the information map of the jar file.
+ * The map should have:
+ * <ul>
+ *   <li>name: the name of the addon</li>
+ *   <li>version: the version of the addon</li>
+ *   <li>main: the main class of the addon</li>
+ * </ul>
  */
 public interface MapAddonDescriptionLoader extends AddonDescriptionLoader {
   /**
