@@ -58,6 +58,7 @@
     <module>hscore-bukkit</module>
     <module>hscore-bungeecord</module>
     <module>hscore-minestom</module>
+      <module>hscore-logging</module>
   </modules>
 
   <properties>

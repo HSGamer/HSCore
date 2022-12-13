@@ -75,12 +75,15 @@
   * **`hscore-minestom`**
     * **`hscore-minestom-board`**
     * **`hscore-minestom-gui`**
+  * **`hscore-logging`**
+    * **`hscore-logging-log4j`**
 
 ## Add as a dependency
 
 ### Maven
 
 ```xml
+
 <dependencies>
   <dependency>
     <groupId>me.hsgamer</groupId>

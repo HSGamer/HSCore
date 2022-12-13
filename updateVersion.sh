@@ -7,6 +7,7 @@ hscore-checker
 hscore-bungeecord
 hscore-minestom
 hscore-downloader
+hscore-logging
 "
 
 BASE_DIR="$(pwd)"
