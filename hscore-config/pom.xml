@@ -19,7 +19,7 @@
     <module>hscore-config-simpleconfiguration</module>
     <module>hscore-config-annotated</module>
     <module>hscore-config-proxy</module>
-      <module>hscore-config-configurate</module>
+    <module>hscore-config-configurate</module>
   </modules>
 
 </project>

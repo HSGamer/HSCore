@@ -55,10 +55,10 @@
     <module>hscore-downloader</module>
     <module>hscore-crontime</module>
     <module>hscore-task</module>
+    <module>hscore-logging</module>
     <module>hscore-bukkit</module>
     <module>hscore-bungeecord</module>
     <module>hscore-minestom</module>
-      <module>hscore-logging</module>
   </modules>
 
   <properties>
