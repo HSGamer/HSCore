@@ -5,6 +5,10 @@ me.hsgamer.hscore.addon.object
 me.hsgamer.hscore.builder
 me.hsgamer.hscore.bukkit.addon
 me.hsgamer.hscore.bukkit.baseplugin
+me.hsgamer.hscore.bukkit.block
+me.hsgamer.hscore.bukkit.block.box
+me.hsgamer.hscore.bukkit.block.iterator
+me.hsgamer.hscore.bukkit.block.iterator.impl
 me.hsgamer.hscore.bukkit.channel
 me.hsgamer.hscore.bukkit.clicktype
 me.hsgamer.hscore.bukkit.command
