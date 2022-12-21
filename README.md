@@ -69,6 +69,7 @@
     * **`hscore-bukkit-channel`**
     * **`hscore-bukkit-key`**
     * **`hscore-bukkit-listener`**
+    * **`hscore-bukkit-block`**
   * **`hscore-bungeecord`**
     * **`hscore-bungeecord-channel`**
     * **`hscore-bungeecord-config`**
