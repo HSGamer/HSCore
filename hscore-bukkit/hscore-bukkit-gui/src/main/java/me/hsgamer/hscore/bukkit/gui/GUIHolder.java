@@ -205,6 +205,14 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
     return new GUIDisplay(uuid, this);
   }
 
+  @Override
+  protected void onRemoveDisplay(GUIDisplay display) {
+    display.getInventory().getViewers()
+      .stream()
+      .filter(viewer -> viewer.getUniqueId() != display.getUniqueId())
+      .forEach(HumanEntity::closeInventory);
+  }
+
   /**
    * Get the open display of the player
    *
@@ -236,12 +244,6 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
         Bukkit.getScheduler().runTask(plugin, () -> player.openInventory(display.getInventory()));
       } else if (removeDisplayOnClose && display.getUniqueId() == uuid) {
         onOwnerRemoveDisplay(uuid, display, event);
-
-        display.getInventory().getViewers()
-          .stream()
-          .filter(viewer -> viewer.getUniqueId() != uuid)
-          .forEach(HumanEntity::closeInventory);
-
         removeDisplay(uuid);
       }
     });

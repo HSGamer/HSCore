@@ -22,6 +22,15 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
    */
   protected abstract D newDisplay(UUID uuid);
 
+  /**
+   * Called when the display is removed
+   *
+   * @param display the display
+   */
+  protected void onRemoveDisplay(D display) {
+    // EMPTY
+  }
+
   @Override
   public D createDisplay(UUID uuid) {
     return displayMap.computeIfAbsent(uuid, uuid1 -> {
@@ -33,12 +42,18 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
 
   @Override
   public void removeDisplay(UUID uuid) {
-    Optional.ofNullable(displayMap.remove(uuid)).ifPresent(D::stop);
+    Optional.ofNullable(displayMap.remove(uuid)).ifPresent(display -> {
+      onRemoveDisplay(display);
+      display.stop();
+    });
   }
 
   @Override
   public void removeAllDisplay() {
-    displayMap.values().forEach(D::stop);
+    displayMap.values().forEach(display -> {
+      onRemoveDisplay(display);
+      display.stop();
+    });
     displayMap.clear();
   }
 
