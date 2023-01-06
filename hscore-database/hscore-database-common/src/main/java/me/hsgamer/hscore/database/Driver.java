@@ -63,4 +63,13 @@ public interface Driver {
   default Setting applyDefaultSetting(Setting setting) {
     return setting;
   }
+
+  /**
+   * Create a setting with the default values
+   *
+   * @return the setting
+   */
+  default Setting createSetting() {
+    return applyDefaultSetting(Setting.create());
+  }
 }

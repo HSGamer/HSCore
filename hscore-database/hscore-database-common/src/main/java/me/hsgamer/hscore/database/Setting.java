@@ -50,7 +50,45 @@ public class Setting {
    * @return the setting
    */
   public static Setting create(Driver driver) {
-    return driver.applyDefaultSetting(create());
+    return driver.createSetting();
+  }
+
+  /**
+   * Deserialize the setting from the map
+   *
+   * @param map the map
+   *
+   * @return the setting
+   */
+  public static Setting deserialize(Map<String, Object> map) {
+    Setting setting = new Setting();
+    setting.host = (String) map.get("host");
+    setting.databaseName = (String) map.get("databaseName");
+    setting.port = (String) map.get("port");
+    setting.username = (String) map.get("username");
+    setting.password = (String) map.get("password");
+    //noinspection unchecked
+    setting.clientProperties.putAll((Map<String, Object>) map.get("clientProperties"));
+    //noinspection unchecked
+    setting.driverProperties.putAll((Map<String, Object>) map.get("driverProperties"));
+    return setting;
+  }
+
+  /**
+   * Serialize the setting to the map
+   *
+   * @return the map
+   */
+  public Map<String, Object> serialize() {
+    Map<String, Object> map = new HashMap<>();
+    map.put("host", host);
+    map.put("databaseName", databaseName);
+    map.put("port", port);
+    map.put("username", username);
+    map.put("password", password);
+    map.put("clientProperties", clientProperties);
+    map.put("driverProperties", driverProperties);
+    return map;
   }
 
   /**
