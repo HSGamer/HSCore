@@ -3,6 +3,8 @@ package me.hsgamer.hscore.task;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
@@ -13,6 +15,8 @@ import java.util.function.Consumer;
 public class BatchRunnable implements Runnable {
   private final Queue<TaskPool> tasks = new PriorityQueue<>(Comparator.comparingInt(TaskPool::getStage));
   private final Map<String, Object> data;
+  private long timeout = 0;
+  private TimeUnit timeoutUnit = TimeUnit.MILLISECONDS;
 
   /**
    * Create a new batch runnable
@@ -80,15 +84,17 @@ public class BatchRunnable implements Runnable {
         nextLock.set(next);
         task.accept(process);
         try {
-          next.get();
+          if (timeout > 0) {
+            next.get(timeout, timeoutUnit);
+          } else {
+            next.get();
+          }
         } catch (InterruptedException e) {
           Thread.currentThread().interrupt();
           isRunning.set(false);
           break;
-        } catch (ExecutionException e) {
-          e.printStackTrace();
-          isRunning.set(false);
-          break;
+        } catch (ExecutionException | TimeoutException e) {
+          throw new BatchRunnableException(e);
         }
       } while (isRunning.get());
     }
@@ -124,6 +130,17 @@ public class BatchRunnable implements Runnable {
    */
   public void addTaskPool(int stage, Consumer<TaskPool> taskPoolConsumer) {
     taskPoolConsumer.accept(getTaskPool(stage));
+  }
+
+  /**
+   * Set the timeout for each task
+   *
+   * @param timeout the timeout
+   * @param unit    the unit of the timeout
+   */
+  public void setTimeout(long timeout, TimeUnit unit) {
+    this.timeout = timeout;
+    this.timeoutUnit = unit;
   }
 
   /**
@@ -283,6 +300,15 @@ public class BatchRunnable implements Runnable {
      */
     int getStage() {
       return stage;
+    }
+  }
+
+  /**
+   * The exception thrown when the {@link BatchRunnable} is unexpectedly stopped
+   */
+  public static class BatchRunnableException extends RuntimeException {
+    private BatchRunnableException(Throwable cause) {
+      super(cause);
     }
   }
 }
