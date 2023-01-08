@@ -5,7 +5,6 @@ import me.hsgamer.hscore.ui.BaseDisplay;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -30,20 +29,6 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
    */
   public GUIDisplay(UUID uuid, GUIHolder holder) {
     super(uuid, holder);
-  }
-
-  /**
-   * Normalize the size to a valid chest size
-   *
-   * @param size the size
-   *
-   * @return the normalized size
-   */
-  private static int normalizeToChestSize(int size) {
-    int remain = size % 9;
-    size -= remain;
-    size += remain > 0 ? 9 : 0;
-    return size;
   }
 
   /**
@@ -78,20 +63,6 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
   }
 
   /**
-   * Create the inventory for this display
-   *
-   * @return the inventory
-   */
-  private Inventory createInventory() {
-    InventoryType type = this.holder.getInventoryType();
-    int size = this.holder.getSize(uuid);
-    String title = this.holder.getTitle(uuid);
-    return type == InventoryType.CHEST && size > 0
-      ? Bukkit.createInventory(this, normalizeToChestSize(size), title)
-      : Bukkit.createInventory(this, type, title);
-  }
-
-  /**
    * Open the display for the player
    *
    * @param player the player
@@ -112,7 +83,7 @@ public class GUIDisplay extends BaseDisplay<GUIHolder> implements InventoryHolde
 
   @Override
   public void init() {
-    this.inventory = createInventory();
+    this.inventory = holder.getInventoryFunction().apply(this, uuid);
     update();
   }
 

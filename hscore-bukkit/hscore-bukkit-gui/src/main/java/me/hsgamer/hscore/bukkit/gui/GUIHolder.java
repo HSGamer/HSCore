@@ -10,6 +10,7 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.plugin.Plugin;
 
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
@@ -23,6 +24,15 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
   private InventoryType inventoryType = InventoryType.CHEST;
   private Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
   private ToIntFunction<UUID> sizeFunction = uuid -> InventoryType.CHEST.getDefaultSize();
+  private BiFunction<GUIDisplay, UUID, Inventory> inventoryFunction = (display, uuid) -> {
+    GUIHolder holder = display.getHolder();
+    InventoryType type = holder.getInventoryType();
+    int size = holder.getSize(uuid);
+    String title = holder.getTitle(uuid);
+    return type == InventoryType.CHEST && size > 0
+      ? Bukkit.createInventory(display, normalizeToChestSize(size), title)
+      : Bukkit.createInventory(display, type, title);
+  };
   private Predicate<UUID> closeFilter = uuid -> true;
   private ButtonMap buttonMap = uuid -> Collections.emptyMap();
 
@@ -33,6 +43,20 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    */
   public GUIHolder(Plugin plugin) {
     this.plugin = plugin;
+  }
+
+  /**
+   * Normalize the size to a valid chest size
+   *
+   * @param size the size
+   *
+   * @return the normalized size
+   */
+  public static int normalizeToChestSize(int size) {
+    int remain = size % 9;
+    size -= remain;
+    size += remain > 0 ? 9 : 0;
+    return size;
   }
 
   /**
@@ -198,6 +222,24 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    */
   public void setButtonMap(ButtonMap buttonMap) {
     this.buttonMap = buttonMap;
+  }
+
+  /**
+   * Get the inventory function
+   *
+   * @return the inventory function
+   */
+  public BiFunction<GUIDisplay, UUID, Inventory> getInventoryFunction() {
+    return inventoryFunction;
+  }
+
+  /**
+   * Set the inventory function
+   *
+   * @param inventoryFunction the inventory function
+   */
+  public void setInventoryFunction(BiFunction<GUIDisplay, UUID, Inventory> inventoryFunction) {
+    this.inventoryFunction = inventoryFunction;
   }
 
   @Override
