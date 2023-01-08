@@ -57,4 +57,18 @@ public final class GUIUtils {
       }
     });
   }
+
+  /**
+   * Normalize the size to a valid chest size
+   *
+   * @param size the size
+   *
+   * @return the normalized size
+   */
+  public static int normalizeToChestSize(int size) {
+    int remain = size % 9;
+    size -= remain;
+    size += remain > 0 ? 9 : 0;
+    return size;
+  }
 }

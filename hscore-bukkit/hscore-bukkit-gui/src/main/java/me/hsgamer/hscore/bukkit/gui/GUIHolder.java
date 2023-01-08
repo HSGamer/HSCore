@@ -23,16 +23,16 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
   private boolean removeDisplayOnClose = true;
   private InventoryType inventoryType = InventoryType.CHEST;
   private Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
-  private ToIntFunction<UUID> sizeFunction = uuid -> InventoryType.CHEST.getDefaultSize();
   private BiFunction<GUIDisplay, UUID, Inventory> inventoryFunction = (display, uuid) -> {
     GUIHolder holder = display.getHolder();
     InventoryType type = holder.getInventoryType();
     int size = holder.getSize(uuid);
     String title = holder.getTitle(uuid);
     return type == InventoryType.CHEST && size > 0
-      ? Bukkit.createInventory(display, normalizeToChestSize(size), title)
+      ? Bukkit.createInventory(display, GUIUtils.normalizeToChestSize(size), title)
       : Bukkit.createInventory(display, type, title);
   };
+  private ToIntFunction<UUID> sizeFunction = uuid -> InventoryType.CHEST.getDefaultSize();
   private Predicate<UUID> closeFilter = uuid -> true;
   private ButtonMap buttonMap = uuid -> Collections.emptyMap();
 
@@ -43,20 +43,6 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
    */
   public GUIHolder(Plugin plugin) {
     this.plugin = plugin;
-  }
-
-  /**
-   * Normalize the size to a valid chest size
-   *
-   * @param size the size
-   *
-   * @return the normalized size
-   */
-  public static int normalizeToChestSize(int size) {
-    int remain = size % 9;
-    size -= remain;
-    size += remain > 0 ? 9 : 0;
-    return size;
   }
 
   /**
