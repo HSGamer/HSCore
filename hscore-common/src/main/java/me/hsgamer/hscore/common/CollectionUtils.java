@@ -28,7 +28,10 @@ public final class CollectionUtils {
    * @return the string list
    */
   @NotNull
-  public static List<String> createStringListFromObject(@NotNull final Object value, final boolean trim) {
+  public static List<String> createStringListFromObject(@Nullable final Object value, final boolean trim) {
+    if (value == null) {
+      return new ArrayList<>();
+    }
     List<String> list = new ArrayList<>();
     if (value instanceof Collection) {
       ((Collection<?>) value).forEach(o -> list.add(String.valueOf(o)));
@@ -49,7 +52,7 @@ public final class CollectionUtils {
    * @return the string list
    */
   @NotNull
-  public static List<String> createStringListFromObject(@NotNull final Object value) {
+  public static List<String> createStringListFromObject(@Nullable final Object value) {
     return createStringListFromObject(value, false);
   }
 
