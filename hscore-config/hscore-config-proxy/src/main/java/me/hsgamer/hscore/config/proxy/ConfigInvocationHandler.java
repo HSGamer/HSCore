@@ -75,6 +75,17 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
   }
 
   /**
+   * Check if the method is a void method
+   *
+   * @param method The method
+   *
+   * @return True if the method is a void method
+   */
+  private static boolean isVoidMethod(Method method) {
+    return method.getReturnType() == void.class || method.getReturnType() == Void.class;
+  }
+
+  /**
    * Set up the class comment
    */
   private void setupClassComment() {
@@ -140,7 +151,7 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
       config.reload();
       nodes.values().forEach(ConfigNode::clearCache);
       return null;
-    } else if (method.getReturnType() != Void.class && method.isDefault() && method.getParameterCount() == 0 && method.isAnnotationPresent(ConfigPath.class)) {
+    } else if (!isVoidMethod(method) && method.isDefault() && method.getParameterCount() == 0 && method.isAnnotationPresent(ConfigPath.class)) {
       String methodName;
       if (name.startsWith("get")) {
         methodName = name.substring(3);
@@ -155,7 +166,7 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
           return value;
         }
       }
-    } else if (method.getReturnType() == Void.class && !method.isDefault() && method.getParameterCount() == 1) {
+    } else if (isVoidMethod(method) && !method.isDefault() && method.getParameterCount() == 1) {
       String methodName;
       if (name.startsWith("set")) {
         methodName = name.substring(3);
