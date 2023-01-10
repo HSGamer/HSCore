@@ -11,7 +11,7 @@ public class PrimitiveConverter implements Converter {
 
   public PrimitiveConverter(Class<?> clazz) {
     this.isPrimitive = clazz.isPrimitive();
-    this.boxedClass = getBoxedClass(clazz);
+    this.boxedClass = isPrimitive ? getBoxedClass(clazz) : clazz;
     if (this.boxedClass == null) {
       throw new IllegalArgumentException("Not a primitive class: " + clazz);
     }
