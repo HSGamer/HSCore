@@ -27,27 +27,13 @@ public class ConfigNode {
    * @param comment      the comment
    * @param stickyValue  true if the value should be sticky
    */
-  private ConfigNode(String path, Config config, Converter converter, Object defaultValue, String comment, boolean stickyValue) {
+  ConfigNode(String path, Config config, Converter converter, Object defaultValue, String comment, boolean stickyValue) {
     this.path = path;
     this.config = config;
     this.converter = converter;
     this.defaultValue = defaultValue;
     this.comment = comment;
     this.stickyValue = stickyValue;
-  }
-
-  /**
-   * Constructor
-   *
-   * @param path         the path
-   * @param config       the config
-   * @param converter    the converter
-   * @param defaultValue the default value
-   * @param comment      the comment
-   * @param stickyValue  true if the value should be sticky
-   */
-  ConfigNode(String path, Config config, Class<? extends Converter> converter, Object defaultValue, String comment, boolean stickyValue) {
-    this(path, config, Converter.createConverterSafe(converter), defaultValue, comment, stickyValue);
   }
 
   /**

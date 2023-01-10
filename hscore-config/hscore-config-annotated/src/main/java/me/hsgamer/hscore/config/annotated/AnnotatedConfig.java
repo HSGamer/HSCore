@@ -5,6 +5,7 @@ import me.hsgamer.hscore.config.DecorativeConfig;
 import me.hsgamer.hscore.config.annotation.Comment;
 import me.hsgamer.hscore.config.annotation.ConfigPath;
 import me.hsgamer.hscore.config.annotation.converter.Converter;
+import me.hsgamer.hscore.config.annotation.converter.manager.DefaultConverterManager;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -92,19 +93,13 @@ public class AnnotatedConfig extends DecorativeConfig {
       LOGGER.warning(() -> field.getName() + " is a static final field. Ignored");
       return false;
     }
-    try {
-      Converter.createConverterSafe(configPath.converter());
-    } catch (Exception e) {
-      LOGGER.warning(() -> "Cannot create a converter for " + field.getName() + ". Ignored");
-      return false;
-    }
     return true;
   }
 
   private void setupField(Field field) {
     ConfigPath configPath = field.getAnnotation(ConfigPath.class);
     String path = configPath.value();
-    Converter converter = Converter.createConverterSafe(configPath.converter());
+    Converter converter = DefaultConverterManager.getConverterIfDefault(field.getType(), configPath.converter());
     Object defaultValue = this.getValue(field);
 
     if (!contains(path)) {
@@ -120,7 +115,7 @@ public class AnnotatedConfig extends DecorativeConfig {
   private void checkAndSetField(Field field, Object value) {
     ConfigPath configPath = field.getAnnotation(ConfigPath.class);
     String path = configPath.value();
-    Converter converter = Converter.createConverterSafe(configPath.converter());
+    Converter converter = DefaultConverterManager.getConverterIfDefault(field.getType(), configPath.converter());
     super.set(path, converter.convertToRaw(value));
     this.setValue(field, value);
   }

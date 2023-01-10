@@ -4,6 +4,7 @@ import me.hsgamer.hscore.config.Config;
 import me.hsgamer.hscore.config.annotation.Comment;
 import me.hsgamer.hscore.config.annotation.ConfigPath;
 import me.hsgamer.hscore.config.annotation.StickyValue;
+import me.hsgamer.hscore.config.annotation.converter.manager.DefaultConverterManager;
 import me.hsgamer.hscore.config.proxy.defaulthandler.DefaultMethodHandler;
 import me.hsgamer.hscore.config.proxy.defaulthandler.NewJavaDefaultMethodHandler;
 import me.hsgamer.hscore.config.proxy.defaulthandler.OldJavaDefaultMethodHandler;
@@ -114,7 +115,7 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
     try {
       Object value = DEFAULT_METHOD_HANDLER.invoke(method);
       ConfigNode node = new ConfigNode(
-        path, config, configPath.converter(), value,
+        path, config, DefaultConverterManager.getConverterIfDefault(method.getReturnType(), configPath.converter()), value,
         method.isAnnotationPresent(Comment.class) ? method.getAnnotation(Comment.class).value() : null,
         stickyValue || method.isAnnotationPresent(StickyValue.class)
       );
