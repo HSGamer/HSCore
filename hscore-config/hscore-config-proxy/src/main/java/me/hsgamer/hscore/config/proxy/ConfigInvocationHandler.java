@@ -126,7 +126,7 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
     try {
       Object value = DEFAULT_METHOD_HANDLER.invoke(method);
       ConfigNode node = new ConfigNode(
-        path, config, DefaultConverterManager.getConverterIfDefault(method.getReturnType(), configPath.converter()), value,
+        path, config, DefaultConverterManager.getConverterIfDefault(method.getGenericReturnType(), configPath.converter()), value,
         method.isAnnotationPresent(Comment.class) ? method.getAnnotation(Comment.class).value() : null,
         stickyValue || method.isAnnotationPresent(StickyValue.class)
       );

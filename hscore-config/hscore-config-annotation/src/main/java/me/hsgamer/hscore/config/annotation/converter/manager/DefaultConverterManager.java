@@ -5,6 +5,7 @@ import me.hsgamer.hscore.config.annotation.converter.DefaultConverter;
 import me.hsgamer.hscore.config.annotation.converter.PrimitiveConverter;
 import me.hsgamer.hscore.config.annotation.converter.SimpleConverter;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URI;
@@ -15,10 +16,10 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * A manager to specify a default {@link Converter} for a type class
+ * A manager to specify a default {@link Converter} for a type
  */
 public final class DefaultConverterManager {
-  private static final Map<Class<?>, Converter> CONVERTER_MAP = new HashMap<>();
+  private static final Map<Type, Converter> CONVERTER_MAP = new HashMap<>();
 
   static {
     registerConverter(String.class, new SimpleConverter(Objects::toString));
@@ -131,59 +132,59 @@ public final class DefaultConverterManager {
   }
 
   /**
-   * Register the converter for the type class
+   * Register the converter for the type
    *
-   * @param clazz     the type class
+   * @param type      the type class
    * @param converter the converter
    */
-  public static void registerConverter(Class<?> clazz, Converter converter) {
-    CONVERTER_MAP.put(clazz, converter);
+  public static void registerConverter(Type type, Converter converter) {
+    CONVERTER_MAP.put(type, converter);
   }
 
   /**
-   * Unregister the converter for the type class
+   * Unregister the converter for the type
    *
-   * @param clazz the type class
+   * @param type the type
    */
-  public static void unregisterConverter(Class<?> clazz) {
-    CONVERTER_MAP.remove(clazz);
+  public static void unregisterConverter(Type type) {
+    CONVERTER_MAP.remove(type);
   }
 
   /**
-   * Get the converter for the type class if the given converter is the default one
+   * Get the converter for the type if the given converter is the default one
    *
-   * @param clazz     the type class
+   * @param type      the type
    * @param converter the converter
    *
    * @return the converter
    */
-  public static Converter getConverterIfDefault(Class<?> clazz, Converter converter) {
+  public static Converter getConverterIfDefault(Type type, Converter converter) {
     if (converter instanceof DefaultConverter) {
-      return CONVERTER_MAP.getOrDefault(clazz, converter);
+      return CONVERTER_MAP.getOrDefault(type, converter);
     }
     return converter;
   }
 
   /**
-   * Get the converter for the type class if the given converter is the default one
+   * Get the converter for the type if the given converter is the default one
    *
-   * @param clazz          the type class
+   * @param type           the type
    * @param converterClass the class of the converter
    *
    * @return the converter
    */
-  public static Converter getConverterIfDefault(Class<?> clazz, Class<? extends Converter> converterClass) {
-    return getConverterIfDefault(clazz, Converter.createConverterSafe(converterClass));
+  public static Converter getConverterIfDefault(Type type, Class<? extends Converter> converterClass) {
+    return getConverterIfDefault(type, Converter.createConverterSafe(converterClass));
   }
 
   /**
-   * Get the converter for the type class
+   * Get the converter for the type
    *
-   * @param clazz the type class
+   * @param type the type
    *
    * @return the converter
    */
-  public static Converter getConverter(Class<?> clazz) {
-    return getConverterIfDefault(clazz, new DefaultConverter());
+  public static Converter getConverter(Type type) {
+    return getConverterIfDefault(type, new DefaultConverter());
   }
 }

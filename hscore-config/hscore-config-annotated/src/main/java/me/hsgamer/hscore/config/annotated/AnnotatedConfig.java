@@ -99,7 +99,7 @@ public class AnnotatedConfig extends DecorativeConfig {
   private void setupField(Field field) {
     ConfigPath configPath = field.getAnnotation(ConfigPath.class);
     String path = configPath.value();
-    Converter converter = DefaultConverterManager.getConverterIfDefault(field.getType(), configPath.converter());
+    Converter converter = DefaultConverterManager.getConverterIfDefault(field.getGenericType(), configPath.converter());
     Object defaultValue = this.getValue(field);
 
     if (!contains(path)) {
@@ -115,7 +115,7 @@ public class AnnotatedConfig extends DecorativeConfig {
   private void checkAndSetField(Field field, Object value) {
     ConfigPath configPath = field.getAnnotation(ConfigPath.class);
     String path = configPath.value();
-    Converter converter = DefaultConverterManager.getConverterIfDefault(field.getType(), configPath.converter());
+    Converter converter = DefaultConverterManager.getConverterIfDefault(field.getGenericType(), configPath.converter());
     super.set(path, converter.convertToRaw(value));
     this.setValue(field, value);
   }
