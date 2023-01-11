@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.bukkit.command.sub;
 
 import me.hsgamer.hscore.collections.map.CaseInsensitiveStringHashMap;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +10,7 @@ import java.util.*;
 /**
  * The sub-command manager
  */
-public abstract class SubCommandManager {
+public class SubCommandManager {
 
   protected static final String HELP = "help";
   protected final Map<String, SubCommand> subcommands = new CaseInsensitiveStringHashMap<>();
@@ -31,8 +32,7 @@ public abstract class SubCommandManager {
       sendArgNotFoundMessage(sender, label, args);
       return false;
     } else {
-      return subcommands.get(args[0])
-        .onCommand(sender, label, Arrays.copyOfRange(args, 1, args.length));
+      return subcommands.get(args[0]).onCommand(sender, label, Arrays.copyOfRange(args, 1, args.length));
     }
   }
 
@@ -43,7 +43,12 @@ public abstract class SubCommandManager {
    * @param label  the label
    * @param args   the arguments
    */
-  public abstract void sendHelpMessage(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args);
+  public void sendHelpMessage(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args) {
+    for (SubCommand subcommand : subcommands.values()) {
+      sender.sendMessage(ChatColor.YELLOW + subcommand.usage.replace("<label>", label));
+      sender.sendMessage(ChatColor.WHITE + "  " + subcommand.description);
+    }
+  }
 
   /**
    * Send "Argument Not Found" message
@@ -52,7 +57,9 @@ public abstract class SubCommandManager {
    * @param label  the label
    * @param args   the arguments
    */
-  public abstract void sendArgNotFoundMessage(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args);
+  public void sendArgNotFoundMessage(@NotNull final CommandSender sender, @NotNull final String label, @NotNull final String... args) {
+    sender.sendMessage(ChatColor.RED + "Argument not found");
+  }
 
   /**
    * Register a sub-command

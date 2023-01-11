@@ -20,10 +20,7 @@ public abstract class SubCommand {
   protected String permission;
   protected String usage;
   protected String description;
-  protected Consumer<CommandSender> usageSender = sender -> {
-    String colored = ChatColor.translateAlternateColorCodes('&', getUsage());
-    sender.sendMessage(colored);
-  };
+  protected Consumer<CommandSender> usageSender = sender -> sender.sendMessage(getUsage());
   protected Consumer<CommandSender> playerOnlyMessageSender = sender -> sender.sendMessage(ChatColor.RED + "You have to be a player to do this");
   protected Consumer<CommandSender> noPermissionMessageSender = sender -> sender.sendMessage(ChatColor.RED + "You don't have permission to do this");
 
