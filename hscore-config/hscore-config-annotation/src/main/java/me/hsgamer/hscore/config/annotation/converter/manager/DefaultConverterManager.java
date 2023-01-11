@@ -5,6 +5,11 @@ import me.hsgamer.hscore.config.annotation.converter.DefaultConverter;
 import me.hsgamer.hscore.config.annotation.converter.PrimitiveConverter;
 import me.hsgamer.hscore.config.annotation.converter.SimpleConverter;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.net.URI;
+import java.net.URL;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -16,7 +21,7 @@ public final class DefaultConverterManager {
   private static final Map<Class<?>, Converter> CONVERTER_MAP = new HashMap<>();
 
   static {
-    registerConverter(String.class, new SimpleConverter(o -> Objects.toString(o, null)));
+    registerConverter(String.class, new SimpleConverter(Objects::toString));
     registerConverter(boolean.class, new PrimitiveConverter(boolean.class));
     registerConverter(Boolean.class, new PrimitiveConverter(Boolean.class));
     registerConverter(byte.class, new PrimitiveConverter(byte.class));
@@ -33,6 +38,92 @@ public final class DefaultConverterManager {
     registerConverter(Double.class, new PrimitiveConverter(Double.class));
     registerConverter(char.class, new PrimitiveConverter(char.class));
     registerConverter(Character.class, new PrimitiveConverter(Character.class));
+    registerConverter(URI.class, new Converter() {
+      @Override
+      public Object convert(Object raw) {
+        if (raw == null) {
+          return null;
+        }
+        return URI.create(Objects.toString(raw));
+      }
+
+      @Override
+      public Object convertToRaw(Object value) {
+        return value == null ? null : value.toString();
+      }
+    });
+    registerConverter(URL.class, new Converter() {
+      @Override
+      public Object convert(Object raw) {
+        if (raw == null) {
+          return null;
+        }
+        try {
+          return new URL(Objects.toString(raw));
+        } catch (Exception e) {
+          return null;
+        }
+      }
+
+      @Override
+      public Object convertToRaw(Object value) {
+        return value == null ? null : value.toString();
+      }
+    });
+    registerConverter(BigInteger.class, new Converter() {
+      @Override
+      public Object convert(Object raw) {
+        if (raw == null) {
+          return null;
+        }
+        try {
+          return new BigInteger(Objects.toString(raw));
+        } catch (Exception e) {
+          return null;
+        }
+      }
+
+      @Override
+      public Object convertToRaw(Object value) {
+        return value == null ? null : value.toString();
+      }
+    });
+    registerConverter(BigDecimal.class, new Converter() {
+      @Override
+      public Object convert(Object raw) {
+        if (raw == null) {
+          return null;
+        }
+        try {
+          return new BigDecimal(Objects.toString(raw));
+        } catch (Exception e) {
+          return null;
+        }
+      }
+
+      @Override
+      public Object convertToRaw(Object value) {
+        return value == null ? null : value.toString();
+      }
+    });
+    registerConverter(Instant.class, new Converter() {
+      @Override
+      public Object convert(Object raw) {
+        if (raw == null) {
+          return null;
+        }
+        try {
+          return Instant.parse(Objects.toString(raw));
+        } catch (Exception e) {
+          return null;
+        }
+      }
+
+      @Override
+      public Object convertToRaw(Object value) {
+        return value == null ? null : value.toString();
+      }
+    });
   }
 
   private DefaultConverterManager() {
