@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bukkit.gui.mask;
 
 import me.hsgamer.hscore.ui.Position2D;
 
+import java.util.Collections;
 import java.util.stream.IntStream;
 
 /**
@@ -90,13 +91,11 @@ public class MaskUtils {
   public static IntStream generateOutlineSlots(int x1, int y1, int x2, int y2) {
     Position2D max = Position2D.maxPosition(x1, y1, x2, y2);
     Position2D min = Position2D.minPosition(x1, y1, x2, y2);
-    return IntStream
-      .rangeClosed(min.getY(), max.getY())
-      .flatMap(y ->
-        y > min.getY() && y < max.getY()
-          ? IntStream.of(toSlot(min.getX(), y), toSlot(max.getX(), y))
-          : IntStream.rangeClosed(toSlot(min.getX(), y), toSlot(max.getX(), y))
-      );
+    IntStream top = IntStream.rangeClosed(toSlot(min.getX(), min.getY()), toSlot(max.getX(), min.getY()));
+    IntStream right = IntStream.rangeClosed(min.getY(), max.getY()).map(y -> toSlot(max.getX(), y));
+    IntStream bottom = IntStream.rangeClosed(toSlot(min.getX(), max.getY()), toSlot(max.getX(), max.getY())).boxed().sorted(Collections.reverseOrder()).mapToInt(Integer::intValue);
+    IntStream left = IntStream.rangeClosed(min.getY(), max.getY()).map(y -> toSlot(min.getX(), y)).boxed().sorted(Collections.reverseOrder()).mapToInt(Integer::intValue);
+    return IntStream.concat(top, IntStream.concat(right, IntStream.concat(bottom, left))).distinct();
   }
 
   /**
