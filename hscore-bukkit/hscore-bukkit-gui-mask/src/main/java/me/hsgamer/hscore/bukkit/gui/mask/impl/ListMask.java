@@ -62,4 +62,13 @@ public class ListMask extends BaseMask {
   public void stop() {
     masks.forEach(Mask::stop);
   }
+
+  /**
+   * Get the list of masks
+   *
+   * @return the masks
+   */
+  public List<Mask> getMasks() {
+    return masks;
+  }
 }
