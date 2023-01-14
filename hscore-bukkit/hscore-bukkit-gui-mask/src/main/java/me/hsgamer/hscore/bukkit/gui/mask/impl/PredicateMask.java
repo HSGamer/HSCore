@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.function.Predicate;
 
 /**
- * A mask with predicate
+ * The mask with predicate
  */
 public class PredicateMask extends BaseMask {
   private final Set<UUID> failToViewList = new ConcurrentSkipListSet<>();
