@@ -26,7 +26,7 @@ public abstract class PaginatedMask extends BaseMask {
    *
    * @return the amount of pages
    */
-  protected abstract int getPageAmount(UUID uuid);
+  public abstract int getPageAmount(UUID uuid);
 
   /**
    * Set the page for the unique id

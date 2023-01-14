@@ -69,7 +69,7 @@ public abstract class ButtonPaginatedMask extends PaginatedMask {
   }
 
   @Override
-  protected int getPageAmount(UUID uuid) {
+  public int getPageAmount(UUID uuid) {
     return this.slots.isEmpty() ? 0 : (int) Math.ceil((double) getButtons(uuid).size() / this.slots.size());
   }
 }
