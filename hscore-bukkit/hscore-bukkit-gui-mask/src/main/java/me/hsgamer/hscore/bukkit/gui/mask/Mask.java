@@ -10,6 +10,16 @@ import java.util.UUID;
  * The interface for all masks
  */
 public interface Mask extends Initializable {
+  /**
+   * Check if the target can view the mask
+   *
+   * @param uuid the unique id of the target
+   *
+   * @return true if the target can view the mask
+   */
+  default boolean canView(UUID uuid) {
+    return true;
+  }
 
   /**
    * Generate the buttons for the unique id

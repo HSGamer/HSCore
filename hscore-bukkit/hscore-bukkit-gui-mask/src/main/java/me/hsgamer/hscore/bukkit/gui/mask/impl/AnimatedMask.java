@@ -53,6 +53,11 @@ public class AnimatedMask extends BaseMask implements Updatable {
   }
 
   @Override
+  public boolean canView(UUID uuid) {
+    return this.masks.get(currentIndex).canView(uuid);
+  }
+
+  @Override
   public void init() {
     if (this.masks.isEmpty()) {
       throw new IllegalArgumentException("There is no child mask for this animated mask");

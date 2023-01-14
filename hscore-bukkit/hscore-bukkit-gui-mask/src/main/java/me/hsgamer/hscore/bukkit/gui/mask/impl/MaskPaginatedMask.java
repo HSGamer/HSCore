@@ -38,6 +38,12 @@ public abstract class MaskPaginatedMask extends PaginatedMask {
   }
 
   @Override
+  public boolean canView(UUID uuid) {
+    List<Mask> masks = getMasks(uuid);
+    return !masks.isEmpty() && masks.get(this.getPage(uuid)).canView(uuid);
+  }
+
+  @Override
   protected int getPageAmount(UUID uuid) {
     return getMasks(uuid).size();
   }

@@ -63,8 +63,9 @@ public class AdvancedButtonMap implements ButtonMap {
   public Map<Button, List<Integer>> getButtons(UUID uuid) {
     Map<Button, List<Integer>> buttonSlotMap = new LinkedHashMap<>();
     for (Mask mask : masks) {
+      if (!mask.canView(uuid)) continue;
       Map<Integer, Button> buttons = mask.generateButtons(uuid);
-      buttons.forEach((slot, button) -> buttonSlotMap.computeIfAbsent(button, k -> new LinkedList<>()).add(slot));
+      buttons.forEach((slot, button) -> buttonSlotMap.computeIfAbsent(button, k -> new ArrayList<>()).add(slot));
     }
     return buttonSlotMap;
   }
