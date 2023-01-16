@@ -82,14 +82,13 @@ public class AdvancedButtonMap implements ButtonMap {
 
   @Override
   public Map<Button, List<Integer>> getButtons(UUID uuid) {
+    Map<Button, List<Integer>> buttonSlotMap = new LinkedHashMap<>();
     if (allowSlotDuplication) {
-      Map<Button, List<Integer>> buttonSlotMap = new LinkedHashMap<>();
       for (Mask mask : masks) {
         if (!mask.canView(uuid)) continue;
         Map<Integer, Button> buttons = mask.generateButtons(uuid);
         buttons.forEach((slot, button) -> buttonSlotMap.computeIfAbsent(button, k -> new ArrayList<>()).add(slot));
       }
-      return buttonSlotMap;
     } else {
       Map<Integer, Button> slotMap = new LinkedHashMap<>();
       for (Mask mask : masks) {
@@ -97,8 +96,9 @@ public class AdvancedButtonMap implements ButtonMap {
         Map<Integer, Button> buttons = mask.generateButtons(uuid);
         slotMap.putAll(buttons);
       }
-      return slotMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, e -> Collections.singletonList(e.getKey())));
+      slotMap.forEach((slot, button) -> buttonSlotMap.computeIfAbsent(button, k -> new ArrayList<>()).add(slot));
     }
+    return buttonSlotMap;
   }
 
   @Override
