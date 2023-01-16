@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 public class AdvancedButtonMap implements ButtonMap {
   private final List<Mask> masks = new LinkedList<>();
+  private boolean allowSlotDuplication = false;
 
   /**
    * Add a mask
@@ -59,15 +60,45 @@ public class AdvancedButtonMap implements ButtonMap {
     return Collections.unmodifiableList(masks);
   }
 
+  /**
+   * Get whether to allow slot duplication
+   *
+   * @return whether to allow slot duplication
+   */
+  public boolean isAllowSlotDuplication() {
+    return allowSlotDuplication;
+  }
+
+  /**
+   * Set whether to allow slot duplication when generating buttons from masks.
+   * If it's true, the button will be added to the slot even if there is already a button in the slot.
+   * If it's false, the button will override the button in the slot.
+   *
+   * @param allowSlotDuplication whether to allow slot duplication
+   */
+  public void setAllowSlotDuplication(boolean allowSlotDuplication) {
+    this.allowSlotDuplication = allowSlotDuplication;
+  }
+
   @Override
   public Map<Button, List<Integer>> getButtons(UUID uuid) {
-    Map<Button, List<Integer>> buttonSlotMap = new LinkedHashMap<>();
-    for (Mask mask : masks) {
-      if (!mask.canView(uuid)) continue;
-      Map<Integer, Button> buttons = mask.generateButtons(uuid);
-      buttons.forEach((slot, button) -> buttonSlotMap.computeIfAbsent(button, k -> new ArrayList<>()).add(slot));
+    if (allowSlotDuplication) {
+      Map<Button, List<Integer>> buttonSlotMap = new LinkedHashMap<>();
+      for (Mask mask : masks) {
+        if (!mask.canView(uuid)) continue;
+        Map<Integer, Button> buttons = mask.generateButtons(uuid);
+        buttons.forEach((slot, button) -> buttonSlotMap.computeIfAbsent(button, k -> new ArrayList<>()).add(slot));
+      }
+      return buttonSlotMap;
+    } else {
+      Map<Integer, Button> slotMap = new LinkedHashMap<>();
+      for (Mask mask : masks) {
+        if (!mask.canView(uuid)) continue;
+        Map<Integer, Button> buttons = mask.generateButtons(uuid);
+        slotMap.putAll(buttons);
+      }
+      return slotMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, e -> Collections.singletonList(e.getKey())));
     }
-    return buttonSlotMap;
   }
 
   @Override
