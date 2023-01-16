@@ -6,7 +6,7 @@
   <parent>
     <artifactId>hscore</artifactId>
     <groupId>me.hsgamer</groupId>
-    <version>4.1.43</version>
+    <version>4.1.44-SNAPSHOT</version>
   </parent>
   <packaging>pom</packaging>
   <artifactId>hscore-bukkit</artifactId>
