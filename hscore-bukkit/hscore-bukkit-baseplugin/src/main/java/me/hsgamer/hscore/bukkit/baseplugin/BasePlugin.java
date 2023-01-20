@@ -11,7 +11,9 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static java.util.logging.Level.WARNING;
@@ -51,8 +53,7 @@ public class BasePlugin extends SimplePlugin {
   }
 
   private void registerPermissions() {
-    Class<?> clazz = getPermissionClass();
-    if (clazz != null) {
+    for (Class<?> clazz : getPermissionClasses()) {
       for (Field field : clazz.getDeclaredFields()) {
         int modifiers = field.getModifiers();
         if (!field.getType().equals(Permission.class) || !Modifier.isStatic(modifiers) || !Modifier.isPublic(modifiers))
@@ -69,13 +70,13 @@ public class BasePlugin extends SimplePlugin {
   }
 
   /**
-   * Get the class containing all the {@link Permission}s.
+   * Get the list of classes containing all the {@link Permission}s.
    * The permissions must be static, public, and {@link Permission} type.
    *
    * @return the class
    */
-  protected Class<?> getPermissionClass() {
-    return getClass();
+  protected List<Class<?>> getPermissionClasses() {
+    return Collections.singletonList(getClass());
   }
 
   /**
