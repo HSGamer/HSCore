@@ -8,6 +8,7 @@ hscore-bungeecord
 hscore-minestom
 hscore-downloader
 hscore-logging
+hscore-minecraft
 "
 
 BASE_DIR="$(pwd)"

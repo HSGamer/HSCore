@@ -8,5 +8,7 @@ public interface Updatable {
   /**
    * Update the updatable object
    */
-  void update();
+  default void update() {
+    // EMPTY
+  }
 }

@@ -65,10 +65,15 @@ public interface Holder<D extends Display> extends Initializable, Updatable {
    */
   void removeAllDisplay();
 
+  <E> void handleEvent(Class<E> eventClass, E event);
+
   /**
    * Handle the event
    *
    * @param event the event
    */
-  void handleEvent(Object event);
+  default void handleEvent(Object event) {
+    //noinspection unchecked
+    handleEvent((Class<Object>) event.getClass(), event);
+  }
 }

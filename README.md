@@ -51,6 +51,9 @@
     * **`hscore-config-proxy`**
   * **`hscore-task`**
   * **`hscore-ui`**
+  * **`hscore-minecraft`**
+    * **`hscore-minecraft-gui`**
+    * **`hscore-minecraft-button`**
   * **`hscore-bukkit`**
     * **`hscore-bukkit-addon`**
     * **`hscore-bukkit-command`**

@@ -91,9 +91,9 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
   }
 
   @Override
-  public void handleEvent(Object event) {
+  public <E> void handleEvent(Class<E> eventClass, E event) {
     Optional
-      .ofNullable(classListMap.get(event.getClass()))
+      .ofNullable(classListMap.get(eventClass))
       .ifPresent(list -> list.forEach(consumer -> consumer.accept(event)));
   }
 }
