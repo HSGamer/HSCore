@@ -12,33 +12,66 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
+/**
+ * The base {@link me.hsgamer.hscore.ui.Holder} for UI in Minecraft
+ */
 public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
   private boolean removeDisplayOnClose = true;
   private @NotNull Predicate<UUID> closeFilter = uuid -> true;
   private @NotNull ButtonMap buttonMap = uuid -> Collections.emptyMap();
 
+  /**
+   * Check if the holder should remove the display on its close
+   *
+   * @return true if it should
+   */
   public boolean isRemoveDisplayOnClose() {
     return removeDisplayOnClose;
   }
 
+  /**
+   * Set that the display should be removed on close event
+   *
+   * @param removeDisplayOnClose whether the display should be removed on close event
+   */
   public void setRemoveDisplayOnClose(boolean removeDisplayOnClose) {
     this.removeDisplayOnClose = removeDisplayOnClose;
   }
 
+  /**
+   * Get the close filter
+   *
+   * @return the close filter
+   */
   @NotNull
   public Predicate<UUID> getCloseFilter() {
     return closeFilter;
   }
 
+  /**
+   * Set the close filter
+   *
+   * @param closeFilter the close filter
+   */
   public void setCloseFilter(@NotNull final Predicate<UUID> closeFilter) {
     this.closeFilter = closeFilter;
   }
 
+  /**
+   * Get the button map
+   *
+   * @return the button map
+   */
   @NotNull
   public ButtonMap getButtonMap() {
     return buttonMap;
   }
 
+  /**
+   * Set the button map
+   *
+   * @param buttonMap the button map
+   */
   public void setButtonMap(@NotNull final ButtonMap buttonMap) {
     this.buttonMap = buttonMap;
   }
@@ -75,14 +108,29 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
     buttonMap.stop();
   }
 
+  /**
+   * Handle open event
+   *
+   * @param event the event
+   */
   protected void onOpen(@NotNull final OpenEvent event) {
     // EMPTY
   }
 
+  /**
+   * Handle click event
+   *
+   * @param event the event
+   */
   protected void onClick(@NotNull final ClickEvent event) {
     // EMPTY
   }
 
+  /**
+   * Handle close event
+   *
+   * @param event the event
+   */
   protected void onClose(@NotNull final CloseEvent event) {
     // EMPTY
   }

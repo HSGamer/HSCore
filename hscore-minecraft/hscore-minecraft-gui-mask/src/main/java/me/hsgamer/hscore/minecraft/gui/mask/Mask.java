@@ -12,6 +12,13 @@ import java.util.UUID;
  * The interface for all masks
  */
 public interface Mask extends Initializable {
+  /**
+   * Create an empty mask
+   *
+   * @param name the name of the mask
+   *
+   * @return the mask
+   */
   static Mask empty(String name) {
     return new Mask() {
       @Override

@@ -24,7 +24,6 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
   private boolean removeDisplayOnClose = true;
   private InventoryType inventoryType = InventoryType.CHEST;
   private Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
-  private ToIntFunction<UUID> sizeFunction = uuid -> InventoryType.CHEST.getDefaultSize();
   private BiFunction<GUIDisplay, UUID, Inventory> inventoryFunction = (display, uuid) -> {
     GUIHolder holder = display.getHolder();
     InventoryType type = holder.getInventoryType();
@@ -34,6 +33,7 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
       ? Bukkit.createInventory(display, GUIUtils.normalizeToChestSize(size), title)
       : Bukkit.createInventory(display, type, title);
   };
+  private ToIntFunction<UUID> sizeFunction = uuid -> InventoryType.CHEST.getDefaultSize();
   private Predicate<UUID> closeFilter = uuid -> true;
   private ButtonMap buttonMap = uuid -> Collections.emptyMap();
 

@@ -12,48 +12,121 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * The button with predicates
+ */
 public class PredicateButton implements Button {
-  private final Button button;
   private final Set<UUID> failToViewList = new ConcurrentSkipListSet<>();
   private final Set<UUID> clickCheckList = new ConcurrentSkipListSet<>();
 
+  private Button button;
+  private Button fallbackButton;
   private Predicate<UUID> viewPredicate = uuid -> true;
   private Function<ClickEvent, CompletableFuture<Boolean>> clickFuturePredicate = clickEvent -> CompletableFuture.completedFuture(true);
   private boolean preventSpamClick = false;
-  private Button fallbackButton = EMPTY;
 
-  public PredicateButton(Button button) {
+  /**
+   * Create a predicate button
+   *
+   * @param button         the original button
+   * @param fallbackButton the fallback button
+   */
+  public PredicateButton(Button button, Button fallbackButton) {
     this.button = button;
+    this.fallbackButton = fallbackButton;
   }
 
+  /**
+   * Create a predicate button
+   *
+   * @param button the original button
+   */
+  public PredicateButton(Button button) {
+    this(button, EMPTY);
+  }
+
+  /**
+   * Set the view predicate
+   *
+   * @param viewPredicate the view predicate
+   *
+   * @return {@code this} for builder chain
+   */
   public PredicateButton setViewPredicate(Predicate<UUID> viewPredicate) {
     this.viewPredicate = viewPredicate;
     return this;
   }
 
+  /**
+   * Set the click predicate
+   *
+   * @param clickPredicate the click predicate
+   *
+   * @return {@code this} for builder chain
+   */
   public PredicateButton setClickPredicate(Predicate<ClickEvent> clickPredicate) {
     this.clickFuturePredicate = clickEvent -> CompletableFuture.completedFuture(clickPredicate.test(clickEvent));
     return this;
   }
 
+  /**
+   * Set the click future predicate
+   *
+   * @param clickFuturePredicate the click future predicate
+   *
+   * @return {@code this} for builder chain
+   */
   public PredicateButton setClickFuturePredicate(Function<ClickEvent, CompletableFuture<Boolean>> clickFuturePredicate) {
     this.clickFuturePredicate = clickFuturePredicate;
     return this;
   }
 
+  /**
+   * Set whether to prevent spam click when checking click predicate
+   *
+   * @param preventSpamClick true if it should
+   *
+   * @return {@code this} for builder chain
+   */
   public PredicateButton setPreventSpamClick(boolean preventSpamClick) {
     this.preventSpamClick = preventSpamClick;
     return this;
   }
 
+  /**
+   * Get the button
+   *
+   * @return the button
+   */
   public Button getButton() {
     return button;
   }
 
+  /**
+   * Set the button
+   *
+   * @param button the button
+   */
+  public void setButton(Button button) {
+    this.button = button;
+  }
+
+  /**
+   * Get the fallback button
+   *
+   * @return the fallback button
+   */
   public Button getFallbackButton() {
     return fallbackButton;
   }
 
+  /**
+   * Set the fallback button
+   *
+   * @param fallbackButton the fallback button
+   *
+   * @return {@code this} for builder chain
+   */
   public PredicateButton setFallbackButton(Button fallbackButton) {
     this.fallbackButton = fallbackButton;
     return this;

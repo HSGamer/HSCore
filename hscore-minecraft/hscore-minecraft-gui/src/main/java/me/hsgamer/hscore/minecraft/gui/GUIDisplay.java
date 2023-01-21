@@ -11,17 +11,44 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * The base {@link me.hsgamer.hscore.ui.Display} for UI in Minecraft
+ *
+ * @param <H> the type of the holder
+ */
 public abstract class GUIDisplay<H extends GUIHolder<?>> extends BaseDisplay<H> {
+  /**
+   * The viewed buttons
+   */
   protected final Map<@NotNull Integer, @NotNull Button> viewedButtons = new ConcurrentHashMap<>();
 
+  /**
+   * Create a new display
+   *
+   * @param uuid   the unique id
+   * @param holder the holder
+   */
   protected GUIDisplay(@NotNull final UUID uuid, @NotNull final H holder) {
     super(uuid, holder);
   }
 
+  /**
+   * Schedule a task to re-open the display
+   *
+   * @param event the close event
+   */
   public abstract void scheduleReopen(CloseEvent event);
 
+  /**
+   * Open the display
+   */
   public abstract void open();
 
+  /**
+   * Handle the click event
+   *
+   * @param event the click event
+   */
   public void handleClickEvent(@NotNull final ClickEvent event) {
     Optional.ofNullable(viewedButtons.get(event.getSlot())).ifPresent(button -> button.handleAction(event));
   }

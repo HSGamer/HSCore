@@ -9,26 +9,46 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * The animated button with child buttons as frames
+ */
 public class AnimatedButton implements Button, IdentifiedUpdatable {
   private final List<Button> buttons = new ArrayList<>();
   private final Map<UUID, Integer> currentIndexMap = new ConcurrentHashMap<>();
   private final Map<UUID, Long> lastUpdateMap = new ConcurrentHashMap<>();
   private final long periodMillis;
 
-  public AnimatedButton(long periodMillis) {
+  /**
+   * Create a new button
+   *
+   * @param periodMillis the delay between each frame
+   *                     (in milliseconds)
+   * @param buttons      the child buttons (or frames)
+   */
+  public AnimatedButton(long periodMillis, @NotNull Button... buttons) {
     if (periodMillis <= 0) {
       throw new IllegalArgumentException("Period must be positive");
     }
     this.periodMillis = periodMillis;
-  }
-
-  public AnimatedButton(long periodMillis, @NotNull Button... buttons) {
-    this(periodMillis);
     this.buttons.addAll(Arrays.asList(buttons));
   }
 
+  /**
+   * Add child buttons
+   *
+   * @param childButton the child button (or frame)
+   */
   public void addChildButtons(Button... childButton) {
     this.buttons.addAll(Arrays.asList(childButton));
+  }
+
+  /**
+   * Get the list of buttons
+   *
+   * @return the buttons
+   */
+  public List<Button> getButtons() {
+    return buttons;
   }
 
   private int getCurrentIndex(UUID uuid) {
@@ -73,9 +93,5 @@ public class AnimatedButton implements Button, IdentifiedUpdatable {
     int currentIndex = getCurrentIndex(uuid);
     currentIndexMap.put(uuid, (currentIndex + skip) % buttons.size());
     lastUpdateMap.put(uuid, currentTimeMillis);
-  }
-
-  public List<Button> getButtons() {
-    return buttons;
   }
 }

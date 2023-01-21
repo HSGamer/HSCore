@@ -8,17 +8,45 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.IntStream;
 
+/**
+ * An implementation of {@link GUIDisplay} for Inventory-based GUI
+ *
+ * @param <H> the type of the holder
+ */
 public abstract class InventoryGUIDisplay<H extends GUIHolder<?>> extends GUIDisplay<H> {
-  protected InventoryGUIDisplay(@NotNull final UUID uuid, @NotNull final H holder) {
+  /**
+   * Create a new display
+   *
+   * @param uuid   the unique id
+   * @param holder the holder
+   */
+  protected InventoryGUIDisplay(@NotNull UUID uuid, @NotNull H holder) {
     super(uuid, holder);
   }
 
+  /**
+   * Initialize the inventory
+   */
   protected abstract void initInventory();
 
+  /**
+   * Clear the inventory
+   */
   protected abstract void clearInventory();
 
+  /**
+   * Get the size of the inventory
+   *
+   * @return the size
+   */
   protected abstract int getInventorySize();
 
+  /**
+   * Get the title of the inventory
+   *
+   * @param slot the slot
+   * @param item the item
+   */
   protected abstract void setButton(int slot, @Nullable Item item);
 
   @Override

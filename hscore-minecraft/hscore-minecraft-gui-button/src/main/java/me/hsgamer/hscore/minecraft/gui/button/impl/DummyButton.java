@@ -8,13 +8,26 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 import java.util.function.Function;
 
+/**
+ * The dummy button with only the item
+ */
 public class DummyButton implements Button {
   private final Function<UUID, Item> itemFunction;
 
+  /**
+   * Create a new button
+   *
+   * @param itemFunction the item function
+   */
   public DummyButton(Function<@NotNull UUID, @Nullable Item> itemFunction) {
     this.itemFunction = itemFunction;
   }
 
+  /**
+   * Create a new button
+   *
+   * @param itemStack the item
+   */
   public DummyButton(@Nullable Item itemStack) {
     this(uuid -> itemStack);
   }

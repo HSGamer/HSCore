@@ -8,6 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * An advanced {@link ButtonMap} that uses {@link Mask}
+ */
 public class AdvancedButtonMap implements ButtonMap {
   private final List<Mask> masks = new LinkedList<>();
   private boolean allowSlotDuplication = false;

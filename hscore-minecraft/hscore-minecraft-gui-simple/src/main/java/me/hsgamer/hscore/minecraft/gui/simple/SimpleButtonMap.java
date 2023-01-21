@@ -7,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * A simple {@link ButtonMap} with a list of {@link Button}s
+ */
 public class SimpleButtonMap implements ButtonMap {
   private final Map<Button, Collection<Integer>> buttonSlotMap = new LinkedHashMap<>();
   private Button defaultButton = Button.EMPTY;

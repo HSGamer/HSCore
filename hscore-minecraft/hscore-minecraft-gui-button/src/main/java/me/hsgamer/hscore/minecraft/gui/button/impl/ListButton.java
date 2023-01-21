@@ -8,15 +8,28 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * The button with a list of child buttons
+ */
 public class ListButton implements Button {
   private final List<Button> buttons = new ArrayList<>();
   private final Map<UUID, Integer> currentIndexMap = new ConcurrentHashMap<>();
   private boolean keepCurrentIndex = false;
 
+  /**
+   * Create a new button
+   *
+   * @param buttons the child buttons
+   */
   public ListButton(@NotNull List<@NotNull Button> buttons) {
     this.buttons.addAll(buttons);
   }
 
+  /**
+   * Create a new button
+   *
+   * @param buttons the child buttons
+   */
   public ListButton(@NotNull Button... buttons) {
     this(Arrays.asList(buttons));
   }
@@ -64,18 +77,38 @@ public class ListButton implements Button {
     this.buttons.forEach(Button::stop);
   }
 
+  /**
+   * Remove the current index for the unique id
+   *
+   * @param uuid the unique id
+   */
   public void removeCurrentIndex(UUID uuid) {
     this.currentIndexMap.remove(uuid);
   }
 
+  /**
+   * Should the button keep the current index for the unique id on every {@link #getItem(UUID)} times?
+   *
+   * @return true if it should
+   */
   public boolean isKeepCurrentIndex() {
     return keepCurrentIndex;
   }
 
+  /**
+   * Should the button keep the current index for the unique id on every {@link #getItem(UUID)} times?
+   *
+   * @param keepCurrentIndex true if it should
+   */
   public void setKeepCurrentIndex(boolean keepCurrentIndex) {
     this.keepCurrentIndex = keepCurrentIndex;
   }
 
+  /**
+   * Get the list of buttons
+   *
+   * @return the buttons
+   */
   public List<Button> getButtons() {
     return buttons;
   }
