@@ -15,5 +15,6 @@
     <module>hscore-minecraft-gui</module>
     <module>hscore-minecraft-gui-button</module>
     <module>hscore-minecraft-gui-simple</module>
+    <module>hscore-minecraft-gui-mask</module>
   </modules>
 </project>
