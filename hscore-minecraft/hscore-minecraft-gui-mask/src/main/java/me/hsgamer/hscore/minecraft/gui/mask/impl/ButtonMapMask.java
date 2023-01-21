@@ -2,6 +2,7 @@ package me.hsgamer.hscore.minecraft.gui.mask.impl;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.BaseMask;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -23,25 +24,18 @@ public class ButtonMapMask extends BaseMask {
   }
 
   /**
-   * Create a new mask
-   *
-   * @param name      the name of the mask
-   * @param buttonMap the map of slot and button
-   */
-  public ButtonMapMask(@NotNull String name, @NotNull Map<@NotNull Button, @NotNull List<@NotNull Integer>> buttonMap) {
-    super(name);
-    buttonMap.forEach(this::addButton);
-  }
-
-  /**
    * Add a button to the mask
    *
    * @param button the button
    * @param slots  the slots
+   *
+   * @return this instance
    */
-  public void addButton(@NotNull Button button, @NotNull List<@NotNull Integer> slots) {
+  @Contract("_, _ -> this")
+  public ButtonMapMask addButton(@NotNull Button button, @NotNull List<@NotNull Integer> slots) {
     buttons.add(button);
     slots.forEach(slot -> buttonMap.put(slot, button));
+    return this;
   }
 
   /**
@@ -49,9 +43,16 @@ public class ButtonMapMask extends BaseMask {
    *
    * @param button the button
    * @param slots  the slots
+   *
+   * @return this instance
    */
-  public void addButton(@NotNull Button button, @NotNull Integer... slots) {
-    addButton(button, Arrays.asList(slots));
+  @Contract("_, _ -> this")
+  public ButtonMapMask addButton(@NotNull Button button, int... slots) {
+    buttons.add(button);
+    for (int slot : slots) {
+      buttonMap.put(slot, button);
+    }
+    return this;
   }
 
   /**

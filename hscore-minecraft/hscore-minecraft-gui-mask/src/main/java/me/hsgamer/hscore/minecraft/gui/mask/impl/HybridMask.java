@@ -3,6 +3,7 @@ package me.hsgamer.hscore.minecraft.gui.mask.impl;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.BaseMask;
 import me.hsgamer.hscore.minecraft.gui.mask.Mask;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -17,30 +18,36 @@ public class HybridMask extends BaseMask {
   /**
    * Create a new hybrid mask
    *
-   * @param name  the name
-   * @param masks the masks
+   * @param name the name
    */
-  public HybridMask(@NotNull String name, Mask... masks) {
+  public HybridMask(@NotNull String name) {
     super(name);
-    this.addMasks(masks);
   }
 
   /**
-   * Add masks to the masks
+   * Add mask(s)
    *
-   * @param masks the masks
-   */
-  public void addMasks(@NotNull Mask... masks) {
-    this.addMasks(Arrays.asList(masks));
-  }
-
-  /**
-   * Add masks to the masks
+   * @param masks the mask
+   * @param <T>   the type of the mask
    *
-   * @param masks the masks
+   * @return this instance
    */
-  public void addMasks(@NotNull List<@NotNull Mask> masks) {
+  @Contract("_ -> this")
+  public <T extends Mask> HybridMask addMask(@NotNull Collection<T> masks) {
     masks.forEach(mask -> maskMap.put(mask, new ConcurrentSkipListSet<>()));
+    return this;
+  }
+
+  /**
+   * Add mask(s)
+   *
+   * @param mask the mask
+   *
+   * @return this instance
+   */
+  @Contract("_ -> this")
+  public HybridMask addMask(@NotNull Mask... mask) {
+    return addMask(Arrays.asList(mask));
   }
 
   /**

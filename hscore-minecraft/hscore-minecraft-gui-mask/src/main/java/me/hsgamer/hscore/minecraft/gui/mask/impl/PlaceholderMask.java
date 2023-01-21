@@ -3,6 +3,7 @@ package me.hsgamer.hscore.minecraft.gui.mask.impl;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.BaseMask;
 import me.hsgamer.hscore.minecraft.gui.mask.Mask;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,18 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class PlaceholderMask extends BaseMask {
   protected final Map<UUID, Mask> userMasks = new ConcurrentHashMap<>();
-  protected final Mask defaultMask;
-
-  /**
-   * Create a new mask
-   *
-   * @param name        the name of the mask
-   * @param defaultMask the default mask
-   */
-  public PlaceholderMask(@NotNull String name, @NotNull Mask defaultMask) {
-    super(name);
-    this.defaultMask = defaultMask;
-  }
+  protected Mask defaultMask;
 
   /**
    * Create a new mask
@@ -35,7 +25,8 @@ public class PlaceholderMask extends BaseMask {
    * @param name the name of the mask
    */
   public PlaceholderMask(@NotNull String name) {
-    this(name, Mask.empty(name + "_empty"));
+    super(name);
+    this.defaultMask = Mask.empty(name + "_empty");
   }
 
   @Override
@@ -88,6 +79,19 @@ public class PlaceholderMask extends BaseMask {
   @NotNull
   public Mask getDefaultMask() {
     return defaultMask;
+  }
+
+  /**
+   * Set the default mask
+   *
+   * @param defaultMask the default mask
+   *
+   * @return this instance
+   */
+  @Contract("_ -> this")
+  public PlaceholderMask setDefaultMask(@NotNull Mask defaultMask) {
+    this.defaultMask = defaultMask;
+    return this;
   }
 
   /**

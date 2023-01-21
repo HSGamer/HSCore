@@ -3,6 +3,7 @@ package me.hsgamer.hscore.minecraft.gui.mask.impl;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.BaseMask;
 import me.hsgamer.hscore.minecraft.gui.mask.Mask;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -24,34 +25,25 @@ public class PredicateMask extends BaseMask {
   /**
    * Create a new mask
    *
-   * @param name          the name of the mask
-   * @param viewPredicate the view predicate
-   * @param mask          the mask
-   * @param fallbackMask  the fallback mask
-   */
-  public PredicateMask(@NotNull String name, @NotNull Predicate<@NotNull UUID> viewPredicate, @NotNull Mask mask, @NotNull Mask fallbackMask) {
-    super(name);
-    this.viewPredicate = viewPredicate;
-    this.mask = mask;
-    this.fallbackMask = fallbackMask;
-  }
-
-  /**
-   * Create a new mask
-   *
    * @param name the name of the mask
    */
   public PredicateMask(@NotNull String name) {
-    this(name, uuid -> true, Mask.empty(name + "_empty"), Mask.empty(name + "_empty_fallback"));
+    super(name);
+    this.mask = Mask.empty(name + "_empty");
+    this.fallbackMask = Mask.empty(name + "_empty_fallback");
   }
 
   /**
    * Set the view predicate
    *
    * @param viewPredicate the view predicate
+   *
+   * @return this instance
    */
-  public void setViewPredicate(@NotNull Predicate<@NotNull UUID> viewPredicate) {
+  @Contract("_ -> this")
+  public PredicateMask setViewPredicate(@NotNull Predicate<@NotNull UUID> viewPredicate) {
     this.viewPredicate = viewPredicate;
+    return this;
   }
 
   /**
@@ -68,9 +60,13 @@ public class PredicateMask extends BaseMask {
    * Set the mask
    *
    * @param mask the mask
+   *
+   * @return this instance
    */
-  public void setMask(@NotNull Mask mask) {
+  @Contract("_ -> this")
+  public PredicateMask setMask(@NotNull Mask mask) {
     this.mask = mask;
+    return this;
   }
 
   /**
@@ -87,9 +83,13 @@ public class PredicateMask extends BaseMask {
    * Set the fallback mask
    *
    * @param fallbackMask the fallback mask
+   *
+   * @return this instance
    */
-  public void setFallbackMask(@NotNull Mask fallbackMask) {
+  @Contract("_ -> this")
+  public PredicateMask setFallbackMask(@NotNull Mask fallbackMask) {
     this.fallbackMask = fallbackMask;
+    return this;
   }
 
   @Override

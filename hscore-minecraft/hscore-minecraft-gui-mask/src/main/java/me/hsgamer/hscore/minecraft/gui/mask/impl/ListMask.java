@@ -3,6 +3,7 @@ package me.hsgamer.hscore.minecraft.gui.mask.impl;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.BaseMask;
 import me.hsgamer.hscore.minecraft.gui.mask.Mask;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -20,18 +21,44 @@ public class ListMask extends BaseMask {
    *
    * @param name the name of the mask
    */
-  public ListMask(@NotNull String name, @NotNull Mask... childMask) {
+  public ListMask(@NotNull String name) {
     super(name);
-    addChildMasks(childMask);
   }
 
   /**
-   * Add child masks
+   * Add mask(s)
    *
-   * @param childMask the child mask (or frame)
+   * @param masks the mask
+   * @param <T>   the type of the mask
+   *
+   * @return this instance
    */
-  public void addChildMasks(@NotNull Mask... childMask) {
-    this.masks.addAll(Arrays.asList(childMask));
+  @Contract("_ -> this")
+  public <T extends Mask> ListMask addMask(@NotNull Collection<@NotNull T> masks) {
+    this.masks.addAll(masks);
+    return this;
+  }
+
+  /**
+   * Add mask(s)
+   *
+   * @param mask the mask
+   *
+   * @return this instance
+   */
+  @Contract("_ -> this")
+  public ListMask addMask(@NotNull Mask... mask) {
+    return addMask(Arrays.asList(mask));
+  }
+
+  /**
+   * Get the list of masks
+   *
+   * @return the masks
+   */
+  @NotNull
+  public List<@NotNull Mask> getMasks() {
+    return masks;
   }
 
   @Override
@@ -62,15 +89,5 @@ public class ListMask extends BaseMask {
   @Override
   public void stop() {
     masks.forEach(Mask::stop);
-  }
-
-  /**
-   * Get the list of masks
-   *
-   * @return the masks
-   */
-  @NotNull
-  public List<@NotNull Mask> getMasks() {
-    return masks;
   }
 }
