@@ -9,6 +9,16 @@ import java.util.UUID;
  * The display
  */
 public interface Display extends Initializable, Updatable {
+  /**
+   * Handler the event
+   *
+   * @param eventClass the event class
+   * @param event      the event
+   * @param <E>        the event type
+   */
+  default <E> void handleEvent(Class<E> eventClass, E event) {
+    getHolder().handleEvent(eventClass, event);
+  }
 
   /**
    * Handle the event

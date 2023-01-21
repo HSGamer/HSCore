@@ -1,12 +1,17 @@
 package me.hsgamer.hscore.minestom.gui.inventory;
 
-import me.hsgamer.hscore.minestom.gui.GUIDisplay;
+import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
+import me.hsgamer.hscore.minecraft.gui.event.CloseEvent;
+import me.hsgamer.hscore.minecraft.gui.event.OpenEvent;
+import me.hsgamer.hscore.minestom.gui.MinestomGUIDisplay;
+import me.hsgamer.hscore.minestom.gui.event.MinestomClickEvent;
+import me.hsgamer.hscore.minestom.gui.event.MinestomCloseEvent;
+import me.hsgamer.hscore.minestom.gui.event.MinestomOpenEvent;
 import me.hsgamer.hscore.ui.property.Initializable;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
-import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
@@ -19,11 +24,11 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * A custom inventory used by {@link me.hsgamer.hscore.minestom.gui.GUIDisplay}
+ * A custom inventory used by {@link MinestomGUIDisplay}
  */
 public class DelegatingInventory extends Inventory implements Initializable {
   private final EventNode<InventoryEvent> eventNode;
-  private final GUIDisplay display;
+  private final MinestomGUIDisplay display;
 
   /**
    * Create a new inventory
@@ -32,7 +37,7 @@ public class DelegatingInventory extends Inventory implements Initializable {
    * @param title         the title
    * @param display       the display
    */
-  public DelegatingInventory(@NotNull InventoryType inventoryType, @NotNull Component title, @NotNull GUIDisplay display) {
+  public DelegatingInventory(@NotNull InventoryType inventoryType, @NotNull Component title, @NotNull MinestomGUIDisplay display) {
     super(inventoryType, title);
     this.display = display;
     eventNode = EventNode.event("inventory-" + UUID.randomUUID(), EventFilter.INVENTORY, event -> Objects.equals(event.getInventory(), this));
@@ -40,10 +45,9 @@ public class DelegatingInventory extends Inventory implements Initializable {
 
   @Override
   public void init() {
-    eventNode.addListener(InventoryOpenEvent.class, display::handleEvent);
-    eventNode.addListener(InventoryPreClickEvent.class, display::handleEvent);
-    eventNode.addListener(InventoryClickEvent.class, display::handleEvent);
-    eventNode.addListener(InventoryCloseEvent.class, display::handleEvent);
+    eventNode.addListener(InventoryOpenEvent.class, event -> display.handleEvent(OpenEvent.class, new MinestomOpenEvent(event)));
+    eventNode.addListener(InventoryPreClickEvent.class, event -> display.handleEvent(ClickEvent.class, new MinestomClickEvent(event)));
+    eventNode.addListener(InventoryCloseEvent.class, event -> display.handleEvent(CloseEvent.class, new MinestomCloseEvent(event)));
     MinecraftServer.getGlobalEventHandler().addChild(eventNode);
   }
 
@@ -67,7 +71,7 @@ public class DelegatingInventory extends Inventory implements Initializable {
    *
    * @return the display
    */
-  public GUIDisplay getDisplay() {
+  public MinestomGUIDisplay getDisplay() {
     return display;
   }
 }

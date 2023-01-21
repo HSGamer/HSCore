@@ -2,6 +2,7 @@ package me.hsgamer.hscore.minecraft.gui;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
+import me.hsgamer.hscore.minecraft.gui.event.CloseEvent;
 import me.hsgamer.hscore.ui.BaseDisplay;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +18,7 @@ public abstract class GUIDisplay<H extends GUIHolder<?>> extends BaseDisplay<H> 
     super(uuid, holder);
   }
 
-  public abstract void scheduleReopen();
+  public abstract void scheduleReopen(CloseEvent event);
 
   public abstract void open();
 

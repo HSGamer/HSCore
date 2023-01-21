@@ -55,7 +55,7 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
       D display = optionalDisplay.get();
 
       if (!closeFilter.test(uuid)) {
-        display.scheduleReopen();
+        display.scheduleReopen(event);
       } else if (removeDisplayOnClose) {
         removeDisplay(uuid);
       }
