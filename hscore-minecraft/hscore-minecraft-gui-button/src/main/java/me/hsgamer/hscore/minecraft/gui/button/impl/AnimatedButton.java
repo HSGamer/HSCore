@@ -44,7 +44,7 @@ public class AnimatedButton implements Button, IdentifiedUpdatable {
    */
   @Contract("_ -> this")
   public AnimatedButton setPeriodTicks(long periodTicks) {
-    return setPeriodMillis(Math.min(periodTicks, 1) * 50L);
+    return setPeriodMillis(Math.max(periodTicks, 1) * 50L);
   }
 
   /**
