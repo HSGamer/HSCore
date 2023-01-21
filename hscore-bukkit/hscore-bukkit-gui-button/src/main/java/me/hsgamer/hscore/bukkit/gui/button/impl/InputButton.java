@@ -1,6 +1,9 @@
 package me.hsgamer.hscore.bukkit.gui.button.impl;
 
-import me.hsgamer.hscore.bukkit.gui.button.Button;
+import me.hsgamer.hscore.bukkit.gui.event.BukkitClickEvent;
+import me.hsgamer.hscore.bukkit.gui.object.BukkitItem;
+import me.hsgamer.hscore.minecraft.gui.button.Button;
+import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -21,12 +24,15 @@ public class InputButton implements Button {
   private BiFunction<@NotNull UUID, @Nullable ItemStack, @Nullable ItemStack> displayItemFunction = (uuid, item) -> item;
 
   @Override
-  public ItemStack getItemStack(UUID uuid) {
-    return displayItemFunction.apply(uuid, getInputItem(uuid));
+  public BukkitItem getItem(@NotNull UUID uuid) {
+    return new BukkitItem(displayItemFunction.apply(uuid, getInputItem(uuid)));
   }
 
   @Override
-  public void handleAction(UUID uuid, InventoryClickEvent event) {
+  public void handleAction(@NotNull ClickEvent wrappedEvent) {
+    if (!(wrappedEvent instanceof BukkitClickEvent)) return;
+    UUID uuid = wrappedEvent.getViewerID();
+    InventoryClickEvent event = ((BukkitClickEvent) wrappedEvent).getEvent();
     ItemStack cursorItem = Optional.ofNullable(event.getCursor())
       .filter(itemStack -> itemStack.getType() != Material.AIR)
       .map(ItemStack::clone)
@@ -37,7 +43,7 @@ public class InputButton implements Button {
   }
 
   @Override
-  public boolean forceSetAction(UUID uuid) {
+  public boolean forceSetAction(@NotNull UUID uuid) {
     return true;
   }
 

@@ -1,6 +1,9 @@
 package me.hsgamer.hscore.bukkit.gui.button.impl;
 
-import me.hsgamer.hscore.bukkit.gui.button.Button;
+import me.hsgamer.hscore.bukkit.gui.event.BukkitClickEvent;
+import me.hsgamer.hscore.bukkit.gui.object.BukkitItem;
+import me.hsgamer.hscore.minecraft.gui.button.Button;
+import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -20,12 +23,15 @@ public class OutputButton implements Button {
   private BiFunction<@NotNull UUID, @Nullable ItemStack, @Nullable ItemStack> displayItemFunction = (uuid, item) -> item;
 
   @Override
-  public ItemStack getItemStack(UUID uuid) {
-    return displayItemFunction.apply(uuid, getOutputItem(uuid));
+  public BukkitItem getItem(@NotNull UUID uuid) {
+    return new BukkitItem(displayItemFunction.apply(uuid, getOutputItem(uuid)));
   }
 
   @Override
-  public void handleAction(UUID uuid, InventoryClickEvent event) {
+  public void handleAction(@NotNull ClickEvent wrappedEvent) {
+    if (!(wrappedEvent instanceof BukkitClickEvent)) return;
+    UUID uuid = wrappedEvent.getViewerID();
+    InventoryClickEvent event = ((BukkitClickEvent) wrappedEvent).getEvent();
     ItemStack item = event.getCursor();
     if (item != null && item.getType() != Material.AIR) {
       return;
@@ -36,7 +42,7 @@ public class OutputButton implements Button {
   }
 
   @Override
-  public boolean forceSetAction(UUID uuid) {
+  public boolean forceSetAction(@NotNull UUID uuid) {
     return true;
   }
 

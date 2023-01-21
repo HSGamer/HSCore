@@ -27,9 +27,6 @@
     <module>hscore-bukkit-item</module>
     <module>hscore-bukkit-gui</module>
     <module>hscore-bukkit-gui-button</module>
-    <module>hscore-bukkit-gui-mask</module>
-    <module>hscore-bukkit-gui-simple</module>
-    <module>hscore-bukkit-gui-advanced</module>
     <module>hscore-bukkit-simpleplugin</module>
     <module>hscore-bukkit-baseplugin</module>
     <module>hscore-bukkit-channel</module>

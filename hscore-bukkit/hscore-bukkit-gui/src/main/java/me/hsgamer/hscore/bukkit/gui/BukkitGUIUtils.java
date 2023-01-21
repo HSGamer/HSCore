@@ -1,13 +1,14 @@
 package me.hsgamer.hscore.bukkit.gui;
 
+import me.hsgamer.hscore.bukkit.gui.event.BukkitClickEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 
 /**
- * The utility class for {@link GUIHolder}
+ * The utility class for {@link BukkitGUIHolder}
  */
-public final class GUIUtils {
-  private GUIUtils() {
+public final class BukkitGUIUtils {
+  private BukkitGUIUtils() {
     // EMPTY
   }
 
@@ -16,8 +17,9 @@ public final class GUIUtils {
    *
    * @param holder the gui holder
    */
-  public static void allowMoveItemOnBottom(GUIHolder holder) {
-    holder.addEventConsumer(InventoryClickEvent.class, event -> {
+  public static void allowMoveItemOnBottom(BukkitGUIHolder holder) {
+    holder.addEventConsumer(BukkitClickEvent.class, wrappedEvent -> {
+      InventoryClickEvent event = wrappedEvent.getEvent();
       if (event.getClickedInventory() == event.getInventory()) {
         return;
       }
@@ -47,7 +49,7 @@ public final class GUIUtils {
    *
    * @param holder the gui holder
    */
-  public static void cancelDragEvent(GUIHolder holder) {
+  public static void cancelDragEvent(BukkitGUIHolder holder) {
     holder.addEventConsumer(InventoryDragEvent.class, event -> {
       for (int slot : event.getRawSlots()) {
         if (slot < event.getInventory().getSize()) {

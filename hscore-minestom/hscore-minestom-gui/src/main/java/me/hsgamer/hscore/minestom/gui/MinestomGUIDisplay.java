@@ -50,7 +50,6 @@ public class MinestomGUIDisplay extends InventoryGUIDisplay<MinestomGUIHolder> {
 
   @Override
   protected void setButton(int slot, @Nullable Item item) {
-    if (inventory == null) return;
     if (item == null) {
       inventory.setItemStack(slot, ItemStack.AIR);
     } else if (item instanceof MinestomItem minestomItem) {

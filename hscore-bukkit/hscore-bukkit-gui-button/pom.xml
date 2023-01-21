@@ -14,6 +14,11 @@
   <dependencies>
     <dependency>
       <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-minecraft-gui-button</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.hsgamer</groupId>
       <artifactId>hscore-bukkit-gui</artifactId>
       <version>${project.version}</version>
     </dependency>
