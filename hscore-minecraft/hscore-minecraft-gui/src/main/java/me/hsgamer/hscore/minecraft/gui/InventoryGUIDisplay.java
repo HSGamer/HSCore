@@ -8,8 +8,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.IntStream;
 
-public abstract class SimpleGUIDisplay extends GUIDisplay {
-  protected SimpleGUIDisplay(@NotNull final UUID uuid, @NotNull final GUIHolder holder) {
+public abstract class InventoryGUIDisplay extends GUIDisplay {
+  protected InventoryGUIDisplay(@NotNull final UUID uuid, @NotNull final GUIHolder holder) {
     super(uuid, holder);
   }
 

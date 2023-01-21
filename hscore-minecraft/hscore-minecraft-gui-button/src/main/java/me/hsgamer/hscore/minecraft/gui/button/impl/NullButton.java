@@ -1,4 +1,4 @@
-package me.hsgamer.minecraft.gui.button.impl;
+package me.hsgamer.hscore.minecraft.gui.button.impl;
 
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
 import org.jetbrains.annotations.NotNull;
