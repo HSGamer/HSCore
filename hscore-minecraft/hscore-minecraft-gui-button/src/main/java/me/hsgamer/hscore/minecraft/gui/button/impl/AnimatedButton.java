@@ -36,6 +36,18 @@ public class AnimatedButton implements Button, IdentifiedUpdatable {
   }
 
   /**
+   * Set the period of the animation
+   *
+   * @param periodTicks the period in ticks
+   *
+   * @return this instance
+   */
+  @Contract("_ -> this")
+  public AnimatedButton setPeriodTicks(long periodTicks) {
+    return setPeriodMillis(Math.min(periodTicks, 1) * 50L);
+  }
+
+  /**
    * Add button(s)
    *
    * @param buttons the buttons (or frames)
