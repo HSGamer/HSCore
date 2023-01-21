@@ -10,10 +10,10 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class GUIDisplay extends BaseDisplay<GUIHolder> {
+public abstract class GUIDisplay<H extends GUIHolder<?>> extends BaseDisplay<H> {
   protected final Map<@NotNull Integer, @NotNull Button> viewedButtons = new ConcurrentHashMap<>();
 
-  protected GUIDisplay(@NotNull final UUID uuid, @NotNull final GUIHolder holder) {
+  protected GUIDisplay(@NotNull final UUID uuid, @NotNull final H holder) {
     super(uuid, holder);
   }
 

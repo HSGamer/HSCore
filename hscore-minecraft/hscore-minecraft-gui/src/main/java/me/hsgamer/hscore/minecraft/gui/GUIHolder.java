@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-public abstract class GUIHolder extends BaseHolder<GUIDisplay> {
+public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
   private boolean removeDisplayOnClose = true;
   private @NotNull Predicate<UUID> closeFilter = uuid -> true;
   private @NotNull ButtonMap buttonMap = uuid -> Collections.emptyMap();
@@ -48,11 +48,11 @@ public abstract class GUIHolder extends BaseHolder<GUIDisplay> {
     addEventConsumer(CloseEvent.class, event -> {
       UUID uuid = event.getViewerID();
 
-      Optional<GUIDisplay> optionalDisplay = getDisplay(uuid);
+      Optional<D> optionalDisplay = getDisplay(uuid);
       if (!optionalDisplay.isPresent()) {
         return;
       }
-      GUIDisplay display = optionalDisplay.get();
+      D display = optionalDisplay.get();
 
       if (!closeFilter.test(uuid)) {
         display.scheduleReopen();
