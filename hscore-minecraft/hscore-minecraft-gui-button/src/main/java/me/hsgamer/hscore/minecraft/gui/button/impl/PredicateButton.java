@@ -3,6 +3,7 @@ package me.hsgamer.hscore.minecraft.gui.button.impl;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -19,40 +20,21 @@ public class PredicateButton implements Button {
   private final Set<UUID> failToViewList = new ConcurrentSkipListSet<>();
   private final Set<UUID> clickCheckList = new ConcurrentSkipListSet<>();
 
-  private Button button;
-  private Button fallbackButton;
+  private Button button = EMPTY;
+  private Button fallbackButton = EMPTY;
   private Predicate<UUID> viewPredicate = uuid -> true;
   private Function<ClickEvent, CompletableFuture<Boolean>> clickFuturePredicate = clickEvent -> CompletableFuture.completedFuture(true);
   private boolean preventSpamClick = false;
-
-  /**
-   * Create a predicate button
-   *
-   * @param button         the original button
-   * @param fallbackButton the fallback button
-   */
-  public PredicateButton(Button button, Button fallbackButton) {
-    this.button = button;
-    this.fallbackButton = fallbackButton;
-  }
-
-  /**
-   * Create a predicate button
-   *
-   * @param button the original button
-   */
-  public PredicateButton(Button button) {
-    this(button, EMPTY);
-  }
 
   /**
    * Set the view predicate
    *
    * @param viewPredicate the view predicate
    *
-   * @return {@code this} for builder chain
+   * @return this instance
    */
-  public PredicateButton setViewPredicate(Predicate<UUID> viewPredicate) {
+  @Contract("_ -> this")
+  public PredicateButton setViewPredicate(@NotNull Predicate<@NotNull UUID> viewPredicate) {
     this.viewPredicate = viewPredicate;
     return this;
   }
@@ -62,9 +44,10 @@ public class PredicateButton implements Button {
    *
    * @param clickPredicate the click predicate
    *
-   * @return {@code this} for builder chain
+   * @return this instance
    */
-  public PredicateButton setClickPredicate(Predicate<ClickEvent> clickPredicate) {
+  @Contract("_ -> this")
+  public PredicateButton setClickPredicate(@NotNull Predicate<@NotNull ClickEvent> clickPredicate) {
     this.clickFuturePredicate = clickEvent -> CompletableFuture.completedFuture(clickPredicate.test(clickEvent));
     return this;
   }
@@ -74,9 +57,10 @@ public class PredicateButton implements Button {
    *
    * @param clickFuturePredicate the click future predicate
    *
-   * @return {@code this} for builder chain
+   * @return this instance
    */
-  public PredicateButton setClickFuturePredicate(Function<ClickEvent, CompletableFuture<Boolean>> clickFuturePredicate) {
+  @Contract("_ -> this")
+  public PredicateButton setClickFuturePredicate(@NotNull Function<@NotNull ClickEvent, @NotNull CompletableFuture<@NotNull Boolean>> clickFuturePredicate) {
     this.clickFuturePredicate = clickFuturePredicate;
     return this;
   }
@@ -86,8 +70,9 @@ public class PredicateButton implements Button {
    *
    * @param preventSpamClick true if it should
    *
-   * @return {@code this} for builder chain
+   * @return this instance
    */
+  @Contract("_ -> this")
   public PredicateButton setPreventSpamClick(boolean preventSpamClick) {
     this.preventSpamClick = preventSpamClick;
     return this;
@@ -106,9 +91,13 @@ public class PredicateButton implements Button {
    * Set the button
    *
    * @param button the button
+   *
+   * @return this instance
    */
-  public void setButton(Button button) {
+  @Contract("_ -> this")
+  public PredicateButton setButton(@NotNull Button button) {
     this.button = button;
+    return this;
   }
 
   /**
@@ -125,9 +114,10 @@ public class PredicateButton implements Button {
    *
    * @param fallbackButton the fallback button
    *
-   * @return {@code this} for builder chain
+   * @return this instance
    */
-  public PredicateButton setFallbackButton(Button fallbackButton) {
+  @Contract("_ -> this")
+  public PredicateButton setFallbackButton(@NotNull Button fallbackButton) {
     this.fallbackButton = fallbackButton;
     return this;
   }

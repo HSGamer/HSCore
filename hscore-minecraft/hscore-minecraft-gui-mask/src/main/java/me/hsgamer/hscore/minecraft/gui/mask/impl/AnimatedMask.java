@@ -56,6 +56,10 @@ public class AnimatedMask extends BaseMask implements IdentifiedUpdatable {
 
   /**
    * Set the period of the animation
+   *
+   * @param periodMillis the period in milliseconds
+   *
+   * @return this instance
    */
   @Contract("_ -> this")
   public AnimatedMask setPeriodMillis(long periodMillis) {

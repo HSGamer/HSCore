@@ -4,6 +4,7 @@ import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
 import me.hsgamer.hscore.ui.property.IdentifiedUpdatable;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -16,30 +17,48 @@ public class AnimatedButton implements Button, IdentifiedUpdatable {
   private final List<Button> buttons = new ArrayList<>();
   private final Map<UUID, Integer> currentIndexMap = new ConcurrentHashMap<>();
   private final Map<UUID, Long> lastUpdateMap = new ConcurrentHashMap<>();
-  private final long periodMillis;
+  private long periodMillis = 50L;
 
   /**
-   * Create a new button
+   * Set the period of the animation
    *
-   * @param periodMillis the delay between each frame
-   *                     (in milliseconds)
-   * @param buttons      the child buttons (or frames)
+   * @param periodMillis the period in milliseconds
+   *
+   * @return this instance
    */
-  public AnimatedButton(long periodMillis, @NotNull Button... buttons) {
+  @Contract("_ -> this")
+  public AnimatedButton setPeriodMillis(long periodMillis) {
     if (periodMillis <= 0) {
       throw new IllegalArgumentException("Period must be positive");
     }
     this.periodMillis = periodMillis;
-    this.buttons.addAll(Arrays.asList(buttons));
+    return this;
   }
 
   /**
-   * Add child buttons
+   * Add button(s)
    *
-   * @param childButton the child button (or frame)
+   * @param buttons the buttons (or frames)
+   * @param <T>     the type of the button
+   *
+   * @return this instance
    */
-  public void addChildButtons(Button... childButton) {
-    this.buttons.addAll(Arrays.asList(childButton));
+  @Contract("_ -> this")
+  public <T extends Button> AnimatedButton addButton(@NotNull Collection<@NotNull T> buttons) {
+    this.buttons.addAll(buttons);
+    return this;
+  }
+
+  /**
+   * Add button(s)
+   *
+   * @param button the button (or frame)
+   *
+   * @return this instance
+   */
+  @Contract("_ -> this")
+  public AnimatedButton addButton(@NotNull Button... button) {
+    return addButton(Arrays.asList(button));
   }
 
   /**

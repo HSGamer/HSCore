@@ -3,6 +3,7 @@ package me.hsgamer.hscore.minecraft.gui.button.impl;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -17,21 +18,69 @@ public class ListButton implements Button {
   private boolean keepCurrentIndex = false;
 
   /**
-   * Create a new button
+   * Add button(s)
    *
-   * @param buttons the child buttons
+   * @param buttons the buttons
+   * @param <T>     the type of the button
+   *
+   * @return this instance
    */
-  public ListButton(@NotNull List<@NotNull Button> buttons) {
+  @Contract("_ -> this")
+  public <T extends Button> ListButton addButton(@NotNull Collection<@NotNull T> buttons) {
     this.buttons.addAll(buttons);
+    return this;
   }
 
   /**
-   * Create a new button
+   * Add button(s)
    *
-   * @param buttons the child buttons
+   * @param button the button
+   *
+   * @return this instance
    */
-  public ListButton(@NotNull Button... buttons) {
-    this(Arrays.asList(buttons));
+  @Contract("_ -> this")
+  public ListButton addButton(@NotNull Button... button) {
+    return addButton(Arrays.asList(button));
+  }
+
+  /**
+   * Should the button keep the current index for the unique id on every {@link #getItem(UUID)} times?
+   *
+   * @return true if it should
+   */
+  public boolean isKeepCurrentIndex() {
+    return keepCurrentIndex;
+  }
+
+  /**
+   * Should the button keep the current index for the unique id on every {@link #getItem(UUID)} times?
+   *
+   * @param keepCurrentIndex true if it should
+   *
+   * @return this instance
+   */
+  @Contract("_ -> this")
+  public ListButton setKeepCurrentIndex(boolean keepCurrentIndex) {
+    this.keepCurrentIndex = keepCurrentIndex;
+    return this;
+  }
+
+  /**
+   * Remove the current index for the unique id
+   *
+   * @param uuid the unique id
+   */
+  public void removeCurrentIndex(UUID uuid) {
+    this.currentIndexMap.remove(uuid);
+  }
+
+  /**
+   * Get the list of buttons
+   *
+   * @return the buttons
+   */
+  public List<Button> getButtons() {
+    return buttons;
   }
 
   @Override
@@ -75,41 +124,5 @@ public class ListButton implements Button {
   @Override
   public void stop() {
     this.buttons.forEach(Button::stop);
-  }
-
-  /**
-   * Remove the current index for the unique id
-   *
-   * @param uuid the unique id
-   */
-  public void removeCurrentIndex(UUID uuid) {
-    this.currentIndexMap.remove(uuid);
-  }
-
-  /**
-   * Should the button keep the current index for the unique id on every {@link #getItem(UUID)} times?
-   *
-   * @return true if it should
-   */
-  public boolean isKeepCurrentIndex() {
-    return keepCurrentIndex;
-  }
-
-  /**
-   * Should the button keep the current index for the unique id on every {@link #getItem(UUID)} times?
-   *
-   * @param keepCurrentIndex true if it should
-   */
-  public void setKeepCurrentIndex(boolean keepCurrentIndex) {
-    this.keepCurrentIndex = keepCurrentIndex;
-  }
-
-  /**
-   * Get the list of buttons
-   *
-   * @return the buttons
-   */
-  public List<Button> getButtons() {
-    return buttons;
   }
 }
