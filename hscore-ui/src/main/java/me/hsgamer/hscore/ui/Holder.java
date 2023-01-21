@@ -4,8 +4,7 @@ import me.hsgamer.hscore.ui.property.Initializable;
 import me.hsgamer.hscore.ui.property.Updatable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -67,7 +66,13 @@ public interface Holder<D extends Display> extends Initializable, Updatable {
    */
   void removeAllDisplay();
 
-  <E> void handleEvent(@NotNull Class<E> eventClass, @NotNull E event);
+  /**
+   * Handle the event
+   *
+   * @param eventClass the event class
+   * @param event      the event
+   */
+  void handleEvent(@NotNull Class<?> eventClass, @NotNull Object event);
 
   /**
    * Handle the event
@@ -75,7 +80,22 @@ public interface Holder<D extends Display> extends Initializable, Updatable {
    * @param event the event
    */
   default <E> void handleEvent(@NotNull E event) {
-    //noinspection unchecked
-    handleEvent((Class<E>) event.getClass(), event);
+    Class<?> eventClass = event.getClass();
+    Set<Class<?>> eventClassSet = new HashSet<>();
+    Queue<Class<?>> eventClassQueue = new LinkedList<>();
+    while (eventClass != null && !Object.class.equals(eventClass)) {
+      eventClassSet.add(eventClass);
+      handleEvent(eventClass, event);
+      eventClassQueue.addAll(Arrays.asList(eventClass.getInterfaces()));
+      while (true) {
+        Class<?> currentClass = eventClassQueue.poll();
+        if (currentClass == null || !eventClassSet.add(currentClass)) {
+          break;
+        }
+        handleEvent(currentClass, event);
+        eventClassQueue.addAll(Arrays.asList(currentClass.getInterfaces()));
+      }
+      eventClass = eventClass.getSuperclass();
+    }
   }
 }

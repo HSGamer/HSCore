@@ -95,9 +95,11 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
   }
 
   @Override
-  public <E> void handleEvent(@NotNull Class<E> eventClass, @NotNull E event) {
-    Optional
-      .ofNullable(classListMap.get(eventClass))
-      .ifPresent(list -> list.forEach(consumer -> consumer.accept(event)));
+  public void handleEvent(@NotNull Class<?> eventClass, @NotNull Object event) {
+    if (!classListMap.containsKey(eventClass)) return;
+    if (!eventClass.isInstance(event)) {
+      throw new IllegalArgumentException("The event is not an instance of " + eventClass.getName());
+    }
+    classListMap.get(eventClass).forEach(consumer -> consumer.accept(event));
   }
 }

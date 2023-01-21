@@ -1,8 +1,5 @@
 package me.hsgamer.hscore.minestom.gui.inventory;
 
-import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
-import me.hsgamer.hscore.minecraft.gui.event.CloseEvent;
-import me.hsgamer.hscore.minecraft.gui.event.OpenEvent;
 import me.hsgamer.hscore.minestom.gui.MinestomGUIDisplay;
 import me.hsgamer.hscore.minestom.gui.event.MinestomClickEvent;
 import me.hsgamer.hscore.minestom.gui.event.MinestomCloseEvent;
@@ -45,9 +42,9 @@ public class DelegatingInventory extends Inventory implements Initializable {
 
   @Override
   public void init() {
-    eventNode.addListener(InventoryOpenEvent.class, event -> display.handleEvent(OpenEvent.class, new MinestomOpenEvent(event)));
-    eventNode.addListener(InventoryPreClickEvent.class, event -> display.handleEvent(ClickEvent.class, new MinestomClickEvent(event)));
-    eventNode.addListener(InventoryCloseEvent.class, event -> display.handleEvent(CloseEvent.class, new MinestomCloseEvent(event)));
+    eventNode.addListener(InventoryOpenEvent.class, event -> display.handleEvent(new MinestomOpenEvent(event)));
+    eventNode.addListener(InventoryPreClickEvent.class, event -> display.handleEvent(new MinestomClickEvent(event)));
+    eventNode.addListener(InventoryCloseEvent.class, event -> display.handleEvent(new MinestomCloseEvent(event)));
     MinecraftServer.getGlobalEventHandler().addChild(eventNode);
   }
 
