@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.ui;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.UUID;
 
 /**
@@ -17,18 +19,18 @@ public abstract class BaseDisplay<H extends Holder<?>> implements Display {
    * @param uuid   the unique id
    * @param holder the holder
    */
-  protected BaseDisplay(UUID uuid, H holder) {
+  protected BaseDisplay(@NotNull UUID uuid, @NotNull H holder) {
     this.uuid = uuid;
     this.holder = holder;
   }
 
   @Override
-  public H getHolder() {
+  public @NotNull H getHolder() {
     return this.holder;
   }
 
   @Override
-  public UUID getUniqueId() {
+  public @NotNull UUID getUniqueId() {
     return this.uuid;
   }
 }

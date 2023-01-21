@@ -79,7 +79,7 @@ public class MinestomGUIHolder extends GUIHolder<MinestomGUIDisplay> {
   }
 
   @Override
-  protected MinestomGUIDisplay newDisplay(UUID uuid) {
+  protected @NotNull MinestomGUIDisplay newDisplay(UUID uuid) {
     return new MinestomGUIDisplay(uuid, this);
   }
 }

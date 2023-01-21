@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.ui.property;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.UUID;
 
 /**
@@ -11,7 +13,7 @@ public interface IdentifiedUpdatable {
    *
    * @param uuid the identifier
    */
-  default void update(UUID uuid) {
+  default void update(@NotNull UUID uuid) {
     // EMPTY
   }
 }

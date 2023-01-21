@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.ui;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
@@ -20,6 +22,7 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
    *
    * @return the display
    */
+  @NotNull
   protected abstract D newDisplay(UUID uuid);
 
   /**
@@ -27,12 +30,13 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
    *
    * @param display the display
    */
-  protected void onRemoveDisplay(D display) {
+  protected void onRemoveDisplay(@NotNull D display) {
     // EMPTY
   }
 
   @Override
-  public D createDisplay(UUID uuid) {
+  @NotNull
+  public D createDisplay(@NotNull UUID uuid) {
     return displayMap.computeIfAbsent(uuid, uuid1 -> {
       D display = newDisplay(uuid1);
       display.init();
@@ -41,7 +45,7 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
   }
 
   @Override
-  public void removeDisplay(UUID uuid) {
+  public void removeDisplay(@NotNull UUID uuid) {
     Optional.ofNullable(displayMap.remove(uuid)).ifPresent(display -> {
       onRemoveDisplay(display);
       display.stop();
@@ -58,7 +62,7 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
   }
 
   @Override
-  public Optional<D> getDisplay(UUID uuid) {
+  public Optional<@NotNull D> getDisplay(@NotNull UUID uuid) {
     return Optional.ofNullable(displayMap.get(uuid));
   }
 
@@ -68,7 +72,7 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
   }
 
   @Override
-  public <T> void addEventConsumer(Class<T> eventClass, Consumer<T> eventConsumer) {
+  public <T> void addEventConsumer(@NotNull Class<T> eventClass, @NotNull Consumer<T> eventConsumer) {
     classListMap
       .computeIfAbsent(eventClass, clazz -> new LinkedList<>())
       .add(o -> eventConsumer.accept(eventClass.cast(o)));
@@ -81,7 +85,7 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
   }
 
   @Override
-  public void clearEventConsumer(Class<?> eventClass) {
+  public void clearEventConsumer(@NotNull Class<?> eventClass) {
     classListMap.remove(eventClass);
   }
 
@@ -91,7 +95,7 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
   }
 
   @Override
-  public <E> void handleEvent(Class<E> eventClass, E event) {
+  public <E> void handleEvent(@NotNull Class<E> eventClass, @NotNull E event) {
     Optional
       .ofNullable(classListMap.get(eventClass))
       .ifPresent(list -> list.forEach(consumer -> consumer.accept(event)));

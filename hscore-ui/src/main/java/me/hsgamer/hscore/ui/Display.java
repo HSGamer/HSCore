@@ -2,6 +2,7 @@ package me.hsgamer.hscore.ui;
 
 import me.hsgamer.hscore.ui.property.Initializable;
 import me.hsgamer.hscore.ui.property.Updatable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ public interface Display extends Initializable, Updatable {
    * @param event      the event
    * @param <E>        the event type
    */
-  default <E> void handleEvent(Class<E> eventClass, E event) {
+  default <E> void handleEvent(@NotNull Class<E> eventClass, @NotNull E event) {
     getHolder().handleEvent(eventClass, event);
   }
 
@@ -25,7 +26,7 @@ public interface Display extends Initializable, Updatable {
    *
    * @param event the event
    */
-  default void handleEvent(Object event) {
+  default void handleEvent(@NotNull Object event) {
     getHolder().handleEvent(event);
   }
 
@@ -34,6 +35,7 @@ public interface Display extends Initializable, Updatable {
    *
    * @return the holder
    */
+  @NotNull
   Holder<?> getHolder();
 
   /**
@@ -41,5 +43,6 @@ public interface Display extends Initializable, Updatable {
    *
    * @return the unique id
    */
+  @NotNull
   UUID getUniqueId();
 }

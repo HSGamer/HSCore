@@ -8,6 +8,7 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -229,12 +230,12 @@ public class GUIHolder extends BaseHolder<GUIDisplay> {
   }
 
   @Override
-  protected GUIDisplay newDisplay(UUID uuid) {
+  protected @NotNull GUIDisplay newDisplay(UUID uuid) {
     return new GUIDisplay(uuid, this);
   }
 
   @Override
-  protected void onRemoveDisplay(GUIDisplay display) {
+  protected void onRemoveDisplay(@NotNull GUIDisplay display) {
     display.getInventory().getViewers()
       .stream()
       .filter(viewer -> viewer.getUniqueId() != display.getUniqueId())

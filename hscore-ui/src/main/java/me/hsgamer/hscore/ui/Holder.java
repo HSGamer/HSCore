@@ -2,6 +2,7 @@ package me.hsgamer.hscore.ui;
 
 import me.hsgamer.hscore.ui.property.Initializable;
 import me.hsgamer.hscore.ui.property.Updatable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -21,14 +22,15 @@ public interface Holder<D extends Display> extends Initializable, Updatable {
    *
    * @return the display
    */
-  D createDisplay(UUID uuid);
+  @NotNull
+  D createDisplay(@NotNull UUID uuid);
 
   /**
    * Remove a display with the unique id
    *
    * @param uuid the unique id
    */
-  void removeDisplay(UUID uuid);
+  void removeDisplay(@NotNull UUID uuid);
 
   /**
    * Get the display for the unique id
@@ -37,7 +39,7 @@ public interface Holder<D extends Display> extends Initializable, Updatable {
    *
    * @return the display
    */
-  Optional<D> getDisplay(UUID uuid);
+  Optional<@NotNull D> getDisplay(@NotNull UUID uuid);
 
   /**
    * Add an event consumer
@@ -46,14 +48,14 @@ public interface Holder<D extends Display> extends Initializable, Updatable {
    * @param eventConsumer the event consumer
    * @param <T>           the type of the event
    */
-  <T> void addEventConsumer(Class<T> eventClass, Consumer<T> eventConsumer);
+  <T> void addEventConsumer(@NotNull Class<T> eventClass, @NotNull Consumer<T> eventConsumer);
 
   /**
    * Clear all event consumers
    *
    * @param eventClass the event class
    */
-  void clearEventConsumer(Class<?> eventClass);
+  void clearEventConsumer(@NotNull Class<?> eventClass);
 
   /**
    * Clear all event consumers of all events
@@ -65,15 +67,15 @@ public interface Holder<D extends Display> extends Initializable, Updatable {
    */
   void removeAllDisplay();
 
-  <E> void handleEvent(Class<E> eventClass, E event);
+  <E> void handleEvent(@NotNull Class<E> eventClass, @NotNull E event);
 
   /**
    * Handle the event
    *
    * @param event the event
    */
-  default void handleEvent(Object event) {
+  default <E> void handleEvent(@NotNull E event) {
     //noinspection unchecked
-    handleEvent((Class<Object>) event.getClass(), event);
+    handleEvent((Class<E>) event.getClass(), event);
   }
 }

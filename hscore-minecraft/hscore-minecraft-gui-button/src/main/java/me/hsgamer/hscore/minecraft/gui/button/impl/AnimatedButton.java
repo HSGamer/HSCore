@@ -65,7 +65,7 @@ public class AnimatedButton implements Button, IdentifiedUpdatable {
   }
 
   @Override
-  public void update(UUID uuid) {
+  public void update(@NotNull UUID uuid) {
     long currentTimeMillis = System.currentTimeMillis();
     long lastUpdate = lastUpdateMap.computeIfAbsent(uuid, k -> currentTimeMillis);
     if (currentTimeMillis - lastUpdate < periodMillis) return;
