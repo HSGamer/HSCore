@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.minecraft.gui.button.impl;
 
+import me.hsgamer.hscore.minecraft.gui.GUIProperties;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
@@ -44,7 +45,7 @@ public class AnimatedButton implements Button, IdentifiedUpdatable {
    */
   @Contract("_ -> this")
   public AnimatedButton setPeriodTicks(long periodTicks) {
-    return setPeriodMillis(Math.max(periodTicks, 1) * 50L);
+    return setPeriodMillis(Math.max(periodTicks, 1) * GUIProperties.getMillisPerTick());
   }
 
   /**

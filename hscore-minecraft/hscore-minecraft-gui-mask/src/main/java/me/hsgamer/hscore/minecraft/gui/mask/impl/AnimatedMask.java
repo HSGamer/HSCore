@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.minecraft.gui.mask.impl;
 
+import me.hsgamer.hscore.minecraft.gui.GUIProperties;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.BaseMask;
 import me.hsgamer.hscore.minecraft.gui.mask.Mask;
@@ -79,7 +80,7 @@ public class AnimatedMask extends BaseMask implements IdentifiedUpdatable {
    */
   @Contract("_ -> this")
   public AnimatedMask setPeriodTicks(long periodTicks) {
-    return setPeriodMillis(Math.max(periodTicks, 1) * 50L);
+    return setPeriodMillis(Math.max(periodTicks, 1) * GUIProperties.getMillisPerTick());
   }
 
   /**

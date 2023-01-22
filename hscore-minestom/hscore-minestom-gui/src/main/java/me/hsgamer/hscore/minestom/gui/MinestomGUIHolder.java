@@ -1,7 +1,9 @@
 package me.hsgamer.hscore.minestom.gui;
 
 import me.hsgamer.hscore.minecraft.gui.GUIHolder;
+import me.hsgamer.hscore.minecraft.gui.GUIProperties;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.inventory.InventoryType;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,6 +14,10 @@ import java.util.function.Function;
  * The {@link GUIHolder} for Minestom
  */
 public class MinestomGUIHolder extends GUIHolder<MinestomGUIDisplay> {
+  static {
+    GUIProperties.setMillisPerTick(MinecraftServer.TICK_MS);
+  }
+
   private InventoryType inventoryType = InventoryType.CHEST_3_ROW;
   private Function<UUID, Component> titleFunction = uuid -> Component.empty();
 
