@@ -7,6 +7,7 @@ import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -77,8 +78,12 @@ public class OutputButton implements Button {
    * Set the function to display the item on the GUI
    *
    * @param displayItemFunction the function
+   *
+   * @return this instance
    */
-  public void setDisplayItemFunction(@NotNull BiFunction<UUID, ItemStack, ItemStack> displayItemFunction) {
+  @Contract("_ -> this")
+  public OutputButton setDisplayItemFunction(@NotNull BiFunction<UUID, ItemStack, ItemStack> displayItemFunction) {
     this.displayItemFunction = displayItemFunction;
+    return this;
   }
 }
