@@ -43,7 +43,7 @@ public class PolymartVersionChecker implements VersionChecker {
     return CompletableFuture.supplyAsync(() -> {
       try (
         InputStream inputStream = userAgent.assignToConnection(
-          WebUtils.createHttpsConnection("https://api.polymart.org/v1/getResourceInfoSimple/?key=version&resource_id=" + resourceId)
+          WebUtils.createConnection("https://api.polymart.org/v1/getResourceInfoSimple/?key=version&resource_id=" + resourceId)
         ).getInputStream();
         ByteArrayOutputStream result = new ByteArrayOutputStream()
       ) {
