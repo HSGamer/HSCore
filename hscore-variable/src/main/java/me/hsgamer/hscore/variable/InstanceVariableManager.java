@@ -3,6 +3,7 @@ package me.hsgamer.hscore.variable;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 
 import java.util.*;
+import java.util.function.BooleanSupplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,6 +15,7 @@ public class InstanceVariableManager {
   private static final char START_IGNORE_CHAR = '\\';
   private static final char END_IGNORE_CHAR = '\\';
   private final Map<String, StringReplacer> variables = new HashMap<>();
+  private BooleanSupplier replaceAll = () -> false;
 
   /**
    * Register new variable
@@ -44,29 +46,6 @@ public class InstanceVariableManager {
   }
 
   /**
-   * Check if a string contains variables
-   *
-   * @param message the string
-   * @param deep    whether to check for valid variables
-   *
-   * @return true if it has, otherwise false
-   */
-  public boolean hasVariables(String message, boolean deep) {
-    return message != null && !message.trim().isEmpty() && isMatch(message, deep);
-  }
-
-  /**
-   * Check if a string contains variables
-   *
-   * @param message the string
-   *
-   * @return true if it has, otherwise false
-   */
-  public boolean hasVariables(String message) {
-    return hasVariables(message, false);
-  }
-
-  /**
    * Replace the variables of the string until it cannot be replaced anymore
    *
    * @param message the string
@@ -79,7 +58,7 @@ public class InstanceVariableManager {
     do {
       old = message;
       message = setSingleVariables(message, uuid);
-    } while (hasVariables(message) && !old.equals(message));
+    } while (!old.equals(message));
     return message;
   }
 
@@ -114,7 +93,7 @@ public class InstanceVariableManager {
           continue;
         }
 
-        if (VariableManager.getReplaceAll()) {
+        if (this.getReplaceAll()) {
           message = message.replaceAll(Pattern.quote(original), Matcher.quoteReplacement(replace));
         } else {
           message = message.replaceFirst(Pattern.quote(original), Matcher.quoteReplacement(replace));
@@ -125,30 +104,35 @@ public class InstanceVariableManager {
   }
 
   /**
-   * Check if the string contains valid variables
+   * Get the status whether the manager should replace all similar variables on single time
    *
-   * @param string the string
-   * @param deep   whether to check for valid variables
+   * @return true if it should
    *
-   * @return true if it does
+   * @see #setSingleVariables(String, UUID)
    */
-  private boolean isMatch(String string, boolean deep) {
-    Matcher matcher = PATTERN.matcher(string);
-    if (!matcher.find()) return false;
-    if (!deep) return true;
+  public boolean getReplaceAll() {
+    return replaceAll.getAsBoolean();
+  }
 
-    List<String> found = new ArrayList<>();
-    do {
-      found.add(matcher.group(3).trim());
-    } while (matcher.find());
+  /**
+   * Whether the manager should replace all similar variables on single time
+   *
+   * @param replaceAll true if it should
+   *
+   * @see #setSingleVariables(String, UUID)
+   */
+  public void setReplaceAll(boolean replaceAll) {
+    setReplaceAll(() -> replaceAll);
+  }
 
-    return found.stream().parallel().anyMatch(s -> {
-      for (String match : variables.keySet()) {
-        if (s.startsWith(match)) {
-          return true;
-        }
-      }
-      return false;
-    });
+  /**
+   * Whether the manager should replace all similar variables on single time
+   *
+   * @param replaceAll the boolean supplier (true if it should)
+   *
+   * @see #setSingleVariables(String, UUID)
+   */
+  public void setReplaceAll(BooleanSupplier replaceAll) {
+    this.replaceAll = replaceAll;
   }
 }

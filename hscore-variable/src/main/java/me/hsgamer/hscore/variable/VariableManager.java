@@ -3,15 +3,13 @@ package me.hsgamer.hscore.variable;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 
 import java.util.*;
-import java.util.function.BooleanSupplier;
 
 /**
  * The Variable Manager
  */
 public final class VariableManager {
   private static final InstanceVariableManager globalVariableManager = new InstanceVariableManager();
-  private static final List<ExternalStringReplacer> externalReplacers = new ArrayList<>();
-  private static BooleanSupplier replaceAll = () -> false;
+  private static final List<StringReplacer> externalReplacers = new ArrayList<>();
 
   private VariableManager() {
     // EMPTY
@@ -27,42 +25,11 @@ public final class VariableManager {
   }
 
   /**
-   * Get the status whether the manager should replace all similar variables on single time
-   *
-   * @return true if it should
-   */
-  public static boolean getReplaceAll() {
-    return replaceAll.getAsBoolean();
-  }
-
-  /**
-   * Whether the manager should replace all similar variables on single time
-   *
-   * @param replaceAll true if it should
-   *
-   * @see #setSingleVariables(String, UUID)
-   */
-  public static void setReplaceAll(boolean replaceAll) {
-    setReplaceAll(() -> replaceAll);
-  }
-
-  /**
-   * Whether the manager should replace all similar variables on single time
-   *
-   * @param replaceAll the boolean supplier (true if it should)
-   *
-   * @see #setSingleVariables(String, UUID)
-   */
-  public static void setReplaceAll(BooleanSupplier replaceAll) {
-    VariableManager.replaceAll = replaceAll;
-  }
-
-  /**
    * Add an external replacer
    *
    * @param replacer the external string replacer
    */
-  public static void addExternalReplacer(ExternalStringReplacer replacer) {
+  public static void addExternalReplacer(StringReplacer replacer) {
     externalReplacers.add(replacer);
   }
 
@@ -78,7 +45,7 @@ public final class VariableManager {
    *
    * @return the external replacers
    */
-  public static List<ExternalStringReplacer> getExternalReplacers() {
+  public static List<StringReplacer> getExternalReplacers() {
     return Collections.unmodifiableList(externalReplacers);
   }
 
@@ -111,17 +78,6 @@ public final class VariableManager {
   }
 
   /**
-   * Check if a string contains variables
-   *
-   * @param message the string
-   *
-   * @return true if it has, otherwise false
-   */
-  public static boolean hasVariables(String message) {
-    return globalVariableManager.hasVariables(message) || externalReplacers.parallelStream().anyMatch(replacer -> replacer.canBeReplaced(message));
-  }
-
-  /**
    * Replace the variables of the string until it cannot be replaced anymore
    *
    * @param message the string
@@ -133,24 +89,11 @@ public final class VariableManager {
     String old;
     do {
       old = message;
-      message = setSingleVariables(message, uuid);
-    } while (hasVariables(message) && !old.equals(message));
-    return message;
-  }
-
-  /**
-   * Replace the variables of the string (single time)
-   *
-   * @param message the string
-   * @param uuid    the unique id
-   *
-   * @return the replaced string
-   */
-  public static String setSingleVariables(String message, UUID uuid) {
-    message = globalVariableManager.setSingleVariables(message, uuid);
-    for (ExternalStringReplacer externalStringReplacer : externalReplacers) {
-      message = externalStringReplacer.replace(message, uuid);
-    }
+      message = globalVariableManager.setSingleVariables(message, uuid);
+      for (StringReplacer externalStringReplacer : externalReplacers) {
+        message = externalStringReplacer.replace(message, uuid);
+      }
+    } while (!old.equals(message));
     return message;
   }
 }
