@@ -49,7 +49,7 @@ public class GithubCommitChecker implements VersionChecker {
   public @NotNull CompletableFuture<String> getVersion() {
     return CompletableFuture.supplyAsync(() -> {
       try (
-        InputStream inputStream = userAgent.assignToConnection(WebUtils.createConnection(url)).getInputStream();
+        InputStream inputStream = WebUtils.createConnection(url, userAgent::assignToConnection).getInputStream();
         InputStreamReader reader = new InputStreamReader(inputStream)
       ) {
         Object object = parser.parse(reader);

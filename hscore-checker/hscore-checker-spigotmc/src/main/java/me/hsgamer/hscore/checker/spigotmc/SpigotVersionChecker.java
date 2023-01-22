@@ -51,9 +51,7 @@ public final class SpigotVersionChecker implements VersionChecker {
   public @NotNull CompletableFuture<String> getVersion() {
     return CompletableFuture.supplyAsync(() -> {
       try (
-        InputStream inputStream = userAgent.assignToConnection(
-          WebUtils.createConnection("https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId)
-        ).getInputStream();
+        InputStream inputStream = WebUtils.createConnection("https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId, userAgent::assignToConnection).getInputStream();
         InputStreamReader reader = new InputStreamReader(inputStream)
       ) {
         Object object = parser.parse(reader);

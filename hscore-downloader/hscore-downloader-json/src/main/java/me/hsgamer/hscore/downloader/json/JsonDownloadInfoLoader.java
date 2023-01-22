@@ -48,7 +48,7 @@ public class JsonDownloadInfoLoader extends MapDownloadInfoLoader {
   protected CompletableFuture<Map<String, Map<String, Object>>> loadMap(Downloader downloader) {
     return CompletableFuture.supplyAsync(() -> {
       try {
-        return new InputStreamReader(userAgent.assignToConnection(WebUtils.createConnection(dbUrl)).getInputStream());
+        return new InputStreamReader(WebUtils.createConnection(dbUrl, userAgent::assignToConnection).getInputStream());
       } catch (IOException e) {
         throw new CompletionException("Something wrong when getting the info", e);
       }

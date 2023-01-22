@@ -32,6 +32,6 @@ public class WebInputStreamLoader implements InputStreamLoader {
 
   @Override
   public InputStream load(DownloadInfo downloadInfo) throws IOException {
-    return userAgent.assignToConnection(WebUtils.createConnection(downloadInfo.getDirectLink())).getInputStream();
+    return WebUtils.createConnection(downloadInfo.getDirectLink(), userAgent::assignToConnection).getInputStream();
   }
 }
