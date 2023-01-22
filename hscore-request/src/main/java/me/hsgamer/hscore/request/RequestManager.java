@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 
 /**
  * The generic request manager
@@ -27,19 +26,6 @@ public class RequestManager<I, D> {
     CompletableFuture<D> dataFuture = new CompletableFuture<>();
     requests.computeIfAbsent(identifier, k -> new ArrayDeque<>()).add(dataFuture);
     return dataFuture;
-  }
-
-  /**
-   * Add a request
-   *
-   * @param identifier the identifier
-   * @param function   the data converter
-   * @param <O>        the type of the output
-   *
-   * @return the output future
-   */
-  public <O> CompletableFuture<O> addRequest(I identifier, Function<D, O> function) {
-    return addRequest(identifier).thenApply(function);
   }
 
   /**
@@ -91,7 +77,8 @@ public class RequestManager<I, D> {
   }
 
   /**
-   * Complete the request of the identifier. This method will handle only one request.
+   * Complete the request of the identifier.
+   * This method will handle only one request.
    *
    * @param identifier the identifier
    * @param data       the data
