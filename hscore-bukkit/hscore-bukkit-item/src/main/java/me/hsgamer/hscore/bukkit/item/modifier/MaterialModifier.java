@@ -32,13 +32,17 @@ public class MaterialModifier implements ItemModifier {
   private static Material getMaterial(String materialString) {
     materialString = materialString.replace(" ", "_");
     Material material;
-    if (VersionUtils.isAtLeast(13)) {
-      material = Material.matchMaterial(materialString, false);
-      if (material == null) {
-        material = Material.matchMaterial(materialString, true);
+    try {
+      if (VersionUtils.isAtLeast(13)) {
+        material = Material.matchMaterial(materialString, false);
+        if (material == null) {
+          material = Material.matchMaterial(materialString, true);
+        }
+      } else {
+        material = Material.matchMaterial(materialString);
       }
-    } else {
-      material = Material.matchMaterial(materialString);
+    } catch (Exception ignored) {
+      material = null;
     }
 
     if (material == null) {
