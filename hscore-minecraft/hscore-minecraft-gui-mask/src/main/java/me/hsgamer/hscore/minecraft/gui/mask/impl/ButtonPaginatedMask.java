@@ -51,9 +51,9 @@ public abstract class ButtonPaginatedMask extends PaginatedMask {
 
     Map<Integer, Button> map = new HashMap<>();
     int pageNumber = this.getPage(uuid);
-    int offset = pageNumber * this.slots.size();
-    int buttonsSize = buttons.size();
     int slotsSize = this.slots.size();
+    int offset = pageNumber * slotsSize;
+    int buttonsSize = buttons.size();
 
     for (int i = 0; i < slotsSize; i++) {
       int index = i + offset;
