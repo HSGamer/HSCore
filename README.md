@@ -26,6 +26,7 @@
     * **`hscore-checker-common`**
     * **`hscore-checker-spigotmc`**
     * **`hscore-checker-github`**
+    * **`hscore-checker-polymart`**
   * **`hscore-database`**
     * **`hscore-database-common`**
     * **`hscore-database-driver-mysql`**
