@@ -1,30 +1,25 @@
 package me.hsgamer.hscore.expression.number;
 
-import com.udojava.evalex.AbstractFunction;
-import com.udojava.evalex.Expression.ExpressionException;
-import org.jetbrains.annotations.NotNull;
+import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.functions.AbstractFunction;
+import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.parser.Token;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.List;
+import java.util.Arrays;
 
 /**
  * Calculate the average number <br> Ex: AVG(1, 2, 3, 4, 5)
  */
+@FunctionParameter(name = "value", isVarArg = true)
 public class Average extends AbstractFunction {
-
-  public Average() {
-    super("AVG", -1);
-  }
-
   @Override
-  @NotNull
-  public BigDecimal eval(@NotNull List<BigDecimal> parameters) {
-    if (parameters.isEmpty()) {
-      throw new ExpressionException("average requires at least one parameter");
-    }
-    return parameters.stream()
+  public EvaluationValue evaluate(Expression expression, Token token, EvaluationValue... evaluationValues) {
+    BigDecimal averageNumber = Arrays.stream(evaluationValues)
+      .map(EvaluationValue::getNumberValue)
       .reduce(BigDecimal.ZERO, BigDecimal::add)
-      .divide(new BigDecimal(parameters.size()), RoundingMode.HALF_EVEN);
+      .divide(new BigDecimal(evaluationValues.length), expression.getConfiguration().getMathContext().getRoundingMode());
+    return new EvaluationValue(averageNumber);
   }
 }

@@ -44,7 +44,6 @@
     <module>hscore-builder</module>
     <module>hscore-collections</module>
     <module>hscore-expression</module>
-    <module>hscore-expression-ezylang</module>
     <module>hscore-web</module>
     <module>hscore-request</module>
     <module>hscore-config</module>

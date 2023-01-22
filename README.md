@@ -19,7 +19,6 @@
     * **`hscore-downloader-json`**
     * **`hscore-downloader-web-stream`**
   * **`hscore-expression`**
-  * **`hscore-expression-ezylang`**
   * **`hscore-request`**
   * **`hscore-web`**
   * **`hscore-variable`**

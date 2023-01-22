@@ -1,25 +1,15 @@
 package me.hsgamer.hscore.expression;
 
-import com.udojava.evalex.AbstractLazyFunction;
-import com.udojava.evalex.Expression.LazyNumber;
+import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.functions.AbstractFunction;
+import com.ezylang.evalex.parser.Token;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * The String Comparator
  */
-public abstract class StringComparator extends AbstractLazyFunction {
-
-  /**
-   * Create new comparator
-   *
-   * @param name the prefix of the comparator
-   */
-  public StringComparator(@NotNull String name) {
-    super(name, 2, true);
-  }
-
+public abstract class StringComparator extends AbstractFunction {
   /**
    * Compare the two strings
    *
@@ -31,9 +21,7 @@ public abstract class StringComparator extends AbstractLazyFunction {
   public abstract boolean compare(@NotNull String s1, @NotNull String s2);
 
   @Override
-  @NotNull
-  public LazyNumber lazyEval(@NotNull List<LazyNumber> lazyParams) {
-    return BooleanLazyNumber
-      .convert(compare(lazyParams.get(0).getString(), lazyParams.get(1).getString()));
+  public EvaluationValue evaluate(Expression expression, Token token, EvaluationValue... evaluationValues) {
+    return new EvaluationValue(compare(evaluationValues[0].getStringValue(), evaluationValues[1].getStringValue()));
   }
 }

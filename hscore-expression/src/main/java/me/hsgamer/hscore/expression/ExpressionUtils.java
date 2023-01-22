@@ -1,36 +1,36 @@
 package me.hsgamer.hscore.expression;
 
-import com.udojava.evalex.Expression;
-import com.udojava.evalex.LazyFunction;
-import com.udojava.evalex.LazyOperator;
+import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.config.ExpressionConfiguration;
+import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.functions.FunctionIfc;
+import com.ezylang.evalex.operators.OperatorIfc;
+import com.ezylang.evalex.parser.ParseException;
 import me.hsgamer.hscore.expression.number.Average;
 import me.hsgamer.hscore.expression.string.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.math.BigDecimal;
-import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * The expression manager
  */
 public final class ExpressionUtils {
-
-  private static final Set<LazyFunction> lazyFunctionSet = new HashSet<>();
-  private static final Set<LazyOperator> lazyOperatorSet = new HashSet<>();
+  private static ExpressionConfiguration expressionConfiguration;
 
   static {
-    lazyFunctionSet.add(new Equals());
-    lazyFunctionSet.add(new EqualsIgnoreCase());
-    lazyFunctionSet.add(new Contains());
-    lazyFunctionSet.add(new StartsWith());
-    lazyFunctionSet.add(new EndsWith());
-    lazyFunctionSet.add(new Length());
-    lazyFunctionSet.add(new MatchPattern());
-
-    lazyFunctionSet.add(new Average());
+    expressionConfiguration = ExpressionConfiguration.defaultConfiguration()
+      .withAdditionalFunctions(
+        Map.entry("AVG", new Average()),
+        Map.entry("STRCT", new Contains()),
+        Map.entry("STREDW", new EndsWith()),
+        Map.entry("STREQ", new Equals()),
+        Map.entry("STREQIC", new EqualsIgnoreCase()),
+        Map.entry("STRLEN", new Length()),
+        Map.entry("STRMP", new MatchPattern()),
+        Map.entry("STRSTW", new StartsWith())
+      );
   }
 
   private ExpressionUtils() {
@@ -38,118 +38,101 @@ public final class ExpressionUtils {
   }
 
   /**
-   * Check if the expression is a Boolean expression
+   * Register a function
    *
-   * @param input the expression
-   *
-   * @return whether it's a Boolean expression
+   * @param name     the name of the function
+   * @param function the function
    */
-  public static boolean isBoolean(@NotNull String input) {
-    Expression expression = new Expression(input);
-    applyLazyFunction(expression);
-    applyLazyOperator(expression);
-    try {
-      return expression.isBoolean();
-    } catch (Exception e) {
-      return false;
-    }
+  public static void registerFunction(String name, FunctionIfc function) {
+    expressionConfiguration = expressionConfiguration.withAdditionalFunctions(Map.entry(name, function));
   }
 
   /**
-   * Get the result of the expression
+   * Register an operator
    *
-   * @param input the expression
-   *
-   * @return the result
+   * @param name     the name of the operator
+   * @param operator the operator
    */
-  @Nullable
-  public static BigDecimal getResult(@NotNull String input) {
-    Optional<BigDecimal> number = getNumber(input);
-    if (number.isPresent()) {
-      return number.get();
-    }
-
-    try {
-      return createExpression(input).eval();
-    } catch (Exception e) {
-      return null;
-    }
+  public static void registerOperator(String name, OperatorIfc operator) {
+    expressionConfiguration = expressionConfiguration.withAdditionalOperators(Map.entry(name, operator));
   }
 
   /**
-   * Create an expression from a string
+   * Get the expression configuration
    *
-   * @param input the string
+   * @return the expression configuration
+   */
+  public static ExpressionConfiguration getExpressionConfiguration() {
+    return expressionConfiguration;
+  }
+
+  /**
+   * Create an expression
+   *
+   * @param expression the expression
    *
    * @return the expression
    */
-  @NotNull
-  public static Expression createExpression(@NotNull String input) {
-    Expression expression = new Expression(input);
-    applyLazyFunction(expression);
-    applyLazyOperator(expression);
-    return expression;
+  public static Expression createExpression(String expression) {
+    return new Expression(expression, expressionConfiguration);
   }
 
   /**
-   * Check if it's a valid expression
-   *
-   * @param input the expression
-   *
-   * @return whether it's valid
-   */
-  public static boolean isValidExpression(@NotNull String input) {
-    return getResult(input) != null;
-  }
-
-  /**
-   * Apply functions to the expression
+   * Evaluate the expression
    *
    * @param expression the expression
-   */
-  public static void applyLazyFunction(@NotNull Expression expression) {
-    lazyFunctionSet.forEach(expression::addLazyFunction);
-  }
-
-  /**
-   * Register a function to the expression system
    *
-   * @param lazyFunction the function
+   * @return the result
+   *
+   * @throws EvaluationException occurred when evaluating
+   * @throws ParseException      if the expression is invalid
    */
-  public static void registerLazyFunction(@NotNull LazyFunction lazyFunction) {
-    lazyFunctionSet.add(lazyFunction);
+  public static EvaluationValue evaluate(String expression) throws EvaluationException, ParseException {
+    return createExpression(expression).evaluate();
   }
 
   /**
-   * Apply operators to the expression
+   * Evaluate the expression
    *
    * @param expression the expression
-   */
-  public static void applyLazyOperator(@NotNull Expression expression) {
-    lazyOperatorSet.forEach(expression::addOperator);
-  }
-
-  /**
-   * Register an operator to the expression system
    *
-   * @param lazyOperator the function
+   * @return the result
    */
-  public static void registerLazyOperator(@NotNull LazyOperator lazyOperator) {
-    lazyOperatorSet.add(lazyOperator);
-  }
-
-  /**
-   * Convert to number
-   *
-   * @param input the string
-   *
-   * @return the number
-   */
-  @NotNull
-  private static Optional<BigDecimal> getNumber(@NotNull String input) {
+  public static Optional<EvaluationValue> evaluateSafe(String expression) {
     try {
-      return Optional.of(new BigDecimal(input));
-    } catch (NumberFormatException ex) {
+      return Optional.of(evaluate(expression));
+    } catch (EvaluationException | ParseException e) {
+      return Optional.empty();
+    }
+  }
+
+  /**
+   * Evaluate the expression
+   *
+   * @param expression the expression
+   * @param values     the values
+   *
+   * @return the result
+   *
+   * @throws EvaluationException occurred when evaluating
+   * @throws ParseException      if the expression is invalid
+   */
+  public static EvaluationValue evaluate(String expression, Map<String, Object> values) throws EvaluationException, ParseException {
+    return createExpression(expression).withValues(values).evaluate();
+  }
+
+  /**
+   * Evaluate the expression
+   *
+   * @param expression the expression
+   * @param values     the values
+   *
+   * @return the result
+   */
+  public static Optional<EvaluationValue> evaluateSafe(String expression, Map<String, Object> values) {
+    try {
+      return Optional.of(evaluate(expression, values));
+    } catch (EvaluationException | ParseException e) {
       return Optional.empty();
     }
   }
