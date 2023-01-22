@@ -53,10 +53,10 @@
   * **`hscore-ui`**
   * **`hscore-minecraft`**
     * **`hscore-minecraft-gui`**
-    * **`hscore-minecraft-button`**
-    * **`hscore-minecraft-mask`**
-    * **`hscore-minecraft-simple`**
-    * **`hscore-minecraft-advanced`**
+    * **`hscore-minecraft-gui-button`**
+    * **`hscore-minecraft-gui-mask`**
+    * **`hscore-minecraft-gui-simple`**
+    * **`hscore-minecraft-gui-advanced`**
   * **`hscore-bukkit`**
     * **`hscore-bukkit-addon`**
     * **`hscore-bukkit-command`**
