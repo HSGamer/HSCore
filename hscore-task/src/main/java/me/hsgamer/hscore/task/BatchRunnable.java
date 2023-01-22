@@ -1,5 +1,9 @@
 package me.hsgamer.hscore.task;
 
+import me.hsgamer.hscore.task.element.TaskPool;
+import me.hsgamer.hscore.task.element.TaskProcess;
+import me.hsgamer.hscore.task.exception.BatchRunnableException;
+
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -39,7 +43,7 @@ public class BatchRunnable implements Runnable {
     AtomicBoolean isRunning = new AtomicBoolean(true);
     AtomicReference<TaskPool> currentTaskPool = new AtomicReference<>();
     AtomicReference<CompletableFuture<Void>> nextLock = new AtomicReference<>();
-    Process process = new Process() {
+    TaskProcess process = new TaskProcess() {
       @Override
       public Map<String, Object> getData() {
         return data;
@@ -76,7 +80,7 @@ public class BatchRunnable implements Runnable {
       currentTaskPool.set(taskPool);
 
       do {
-        Consumer<Process> task = taskPool.pollTask();
+        Consumer<TaskProcess> task = taskPool.pollTask();
         if (task == null) {
           break;
         }
@@ -150,165 +154,5 @@ public class BatchRunnable implements Runnable {
    */
   public Map<String, Object> getData() {
     return data;
-  }
-
-  /**
-   * The task process.
-   * Used by the task to work with the running {@link BatchRunnable}
-   */
-  public interface Process {
-    /**
-     * Get the data of the running {@link BatchRunnable}
-     *
-     * @return the data
-     */
-    Map<String, Object> getData();
-
-    /**
-     * Notify the next task
-     */
-    void next();
-
-    /**
-     * Notify the {@link BatchRunnable} to stop
-     */
-    void complete();
-
-    /**
-     * Get the current task pool
-     *
-     * @return the current task pool
-     */
-    TaskPool getCurrentTaskPool();
-
-    /**
-     * Get the task pool
-     *
-     * @param stage the stage of the task pool
-     *
-     * @return the task pool
-     */
-    TaskPool getTaskPool(int stage);
-
-    /**
-     * Execute the consumer for the task pool
-     *
-     * @param stage            the stage of the task pool
-     * @param taskPoolConsumer the consumer
-     */
-    default void addTaskPool(int stage, Consumer<TaskPool> taskPoolConsumer) {
-      taskPoolConsumer.accept(getTaskPool(stage));
-    }
-
-    /**
-     * Execute the consumer for the current task pool
-     *
-     * @param taskPoolConsumer the consumer
-     */
-    default void addCurrentTaskPool(Consumer<TaskPool> taskPoolConsumer) {
-      taskPoolConsumer.accept(getCurrentTaskPool());
-    }
-  }
-
-  /**
-   * The task pool of the {@link BatchRunnable}
-   */
-  public static final class TaskPool {
-    private final int stage;
-    private final Deque<Consumer<Process>> tasks = new ArrayDeque<>();
-
-    /**
-     * Create a new task pool
-     *
-     * @param stage the stage of the task pool
-     */
-    private TaskPool(int stage) {
-      this.stage = stage;
-    }
-
-    /**
-     * Add the task to the head of the task pool
-     *
-     * @param task the task
-     *
-     * @return the current task pool, for chaining
-     */
-    public TaskPool addFirst(Consumer<Process> task) {
-      tasks.addFirst(task);
-      return this;
-    }
-
-    /**
-     * Add the task to the tail of the task pool
-     *
-     * @param task the task
-     *
-     * @return the current task pool, for chaining
-     */
-    public TaskPool addLast(Consumer<Process> task) {
-      tasks.addLast(task);
-      return this;
-    }
-
-    /**
-     * Add the task to the head of the task pool
-     *
-     * @param task the task
-     *
-     * @return the current task pool, for chaining
-     */
-    public TaskPool addFirst(Runnable... task) {
-      for (Runnable t : task) {
-        tasks.addFirst(process -> {
-          t.run();
-          process.next();
-        });
-      }
-      return this;
-    }
-
-    /**
-     * Add the task to the tail of the task pool
-     *
-     * @param task the task
-     *
-     * @return the current task pool, for chaining
-     */
-    public TaskPool addLast(Runnable... task) {
-      for (Runnable t : task) {
-        tasks.addLast(process -> {
-          t.run();
-          process.next();
-        });
-      }
-      return this;
-    }
-
-    /**
-     * Poll the task
-     *
-     * @return the task or null if there is no task
-     */
-    Consumer<Process> pollTask() {
-      return tasks.poll();
-    }
-
-    /**
-     * Get the stage of the task pool
-     *
-     * @return the stage
-     */
-    int getStage() {
-      return stage;
-    }
-  }
-
-  /**
-   * The exception thrown when the {@link BatchRunnable} is unexpectedly stopped
-   */
-  public static class BatchRunnableException extends RuntimeException {
-    private BatchRunnableException(Throwable cause) {
-      super(cause);
-    }
   }
 }
