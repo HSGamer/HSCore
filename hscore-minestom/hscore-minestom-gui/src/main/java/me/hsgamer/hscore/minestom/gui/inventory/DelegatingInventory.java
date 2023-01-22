@@ -43,7 +43,14 @@ public class DelegatingInventory extends Inventory implements Initializable {
   @Override
   public void init() {
     eventNode.addListener(InventoryOpenEvent.class, event -> display.handleEvent(new MinestomOpenEvent(event)));
-    eventNode.addListener(InventoryPreClickEvent.class, event -> display.handleEvent(new MinestomClickEvent(event)));
+    eventNode.addListener(InventoryPreClickEvent.class, event -> {
+      boolean wasCancelled = event.isCancelled();
+      event.setCancelled(true);
+      display.handleEvent(new MinestomClickEvent(event));
+      if (!wasCancelled && !event.isCancelled()) {
+        event.setCancelled(false);
+      }
+    });
     eventNode.addListener(InventoryCloseEvent.class, event -> display.handleEvent(new MinestomCloseEvent(event)));
     MinecraftServer.getGlobalEventHandler().addChild(eventNode);
   }
