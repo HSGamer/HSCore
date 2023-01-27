@@ -126,9 +126,11 @@ public class AnimatedMask extends BaseMask implements IdentifiedUpdatable {
     long currentTimeMillis = System.currentTimeMillis();
     long lastUpdate = lastUpdateMap.computeIfAbsent(uuid, k -> currentTimeMillis);
     if (currentTimeMillis - lastUpdate < periodMillis) return;
-    int skip = (int) Math.floor((currentTimeMillis - lastUpdate) / (double) periodMillis);
+    long diff = currentTimeMillis - lastUpdate;
+    long remainder = diff % periodMillis;
+    int skip = (int) (diff / periodMillis);
     int currentIndex = getCurrentIndex(uuid);
     currentIndexMap.put(uuid, (currentIndex + skip) % masks.size());
-    lastUpdateMap.put(uuid, currentTimeMillis);
+    lastUpdateMap.put(uuid, currentTimeMillis - remainder);
   }
 }
