@@ -6,9 +6,6 @@ me.hsgamer.hscore.builder
 me.hsgamer.hscore.bukkit.addon
 me.hsgamer.hscore.bukkit.baseplugin
 me.hsgamer.hscore.bukkit.block
-me.hsgamer.hscore.bukkit.block.box
-me.hsgamer.hscore.bukkit.block.iterator
-me.hsgamer.hscore.bukkit.block.iterator.impl
 me.hsgamer.hscore.bukkit.channel
 me.hsgamer.hscore.bukkit.clicktype
 me.hsgamer.hscore.bukkit.command
@@ -74,6 +71,13 @@ me.hsgamer.hscore.expression
 me.hsgamer.hscore.expression.number
 me.hsgamer.hscore.expression.string
 me.hsgamer.hscore.logging.log4j
+me.hsgamer.hscore.minecraft.block
+me.hsgamer.hscore.minecraft.block.adapt
+me.hsgamer.hscore.minecraft.block.box
+me.hsgamer.hscore.minecraft.block.impl
+me.hsgamer.hscore.minecraft.block.impl.iterator
+me.hsgamer.hscore.minecraft.block.iterator
+me.hsgamer.hscore.minecraft.block.util
 me.hsgamer.hscore.minecraft.gui
 me.hsgamer.hscore.minecraft.gui.advanced
 me.hsgamer.hscore.minecraft.gui.button
