@@ -14,12 +14,7 @@
   <dependencies>
     <dependency>
       <groupId>me.hsgamer</groupId>
-      <artifactId>hscore-collections</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>me.hsgamer</groupId>
-      <artifactId>hscore-common</artifactId>
+      <artifactId>hscore-minecraft-block</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
