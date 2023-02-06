@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PlaceholderMask extends BaseMask {
   protected final Map<UUID, Mask> userMasks = new ConcurrentHashMap<>();
   protected Mask defaultMask;
+  protected boolean initDefaultMask = true;
 
   /**
    * Create a new mask
@@ -36,12 +37,16 @@ public class PlaceholderMask extends BaseMask {
 
   @Override
   public void init() {
-    this.defaultMask.init();
+    if (initDefaultMask) {
+      this.defaultMask.init();
+    }
   }
 
   @Override
   public void stop() {
-    this.defaultMask.stop();
+    if (initDefaultMask) {
+      this.defaultMask.stop();
+    }
     this.userMasks.clear();
   }
 
@@ -91,6 +96,19 @@ public class PlaceholderMask extends BaseMask {
   @Contract("_ -> this")
   public PlaceholderMask setDefaultMask(@NotNull Mask defaultMask) {
     this.defaultMask = defaultMask;
+    return this;
+  }
+
+  /**
+   * Should the default mask be initialized?
+   *
+   * @param initDefaultMask true if yes
+   *
+   * @return this instance
+   */
+  @Contract("_ -> this")
+  public PlaceholderMask setInitDefaultMask(boolean initDefaultMask) {
+    this.initDefaultMask = initDefaultMask;
     return this;
   }
 
