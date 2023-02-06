@@ -36,6 +36,11 @@ public class PlaceholderMask extends BaseMask {
   }
 
   @Override
+  public boolean canView(@NotNull UUID uuid) {
+    return this.userMasks.getOrDefault(uuid, this.defaultMask).canView(uuid);
+  }
+
+  @Override
   public void init() {
     if (initDefaultMask) {
       this.defaultMask.init();
