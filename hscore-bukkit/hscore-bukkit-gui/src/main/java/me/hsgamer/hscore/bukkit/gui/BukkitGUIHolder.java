@@ -9,6 +9,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -21,6 +23,7 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
   private final Plugin plugin;
   private InventoryType inventoryType = InventoryType.CHEST;
   private Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
+  private ToIntFunction<UUID> sizeFunction = uuid -> InventoryType.CHEST.getDefaultSize();
   private BiFunction<BukkitGUIDisplay, UUID, Inventory> inventoryFunction = (display, uuid) -> {
     BukkitGUIHolder holder = display.getHolder();
     InventoryType type = holder.getInventoryType();
@@ -30,7 +33,6 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
       ? Bukkit.createInventory(display, BukkitGUIUtils.normalizeToChestSize(size), title)
       : Bukkit.createInventory(display, type, title);
   };
-  private ToIntFunction<UUID> sizeFunction = uuid -> InventoryType.CHEST.getDefaultSize();
 
   /**
    * Create a new holder
@@ -187,6 +189,11 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
   public void init() {
     super.init();
     addEventConsumer(InventoryDragEvent.class, this::onDrag);
+  }
+
+  @Override
+  protected void closeAll(List<BukkitGUIDisplay> displays) {
+    displays.forEach(display -> new ArrayList<>(display.getInventory().getViewers()).forEach(HumanEntity::closeInventory));
   }
 
   /**

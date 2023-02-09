@@ -7,9 +7,7 @@ import me.hsgamer.hscore.minecraft.gui.event.OpenEvent;
 import me.hsgamer.hscore.ui.BaseHolder;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -104,7 +102,9 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
 
   @Override
   public void stop() {
+    List<D> displays = new ArrayList<>(displayMap.values());
     super.stop();
+    closeAll(displays);
     buttonMap.stop();
   }
 
@@ -132,6 +132,15 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
    * @param event the event
    */
   protected void onClose(@NotNull final CloseEvent event) {
+    // EMPTY
+  }
+
+  /**
+   * Close all displays
+   *
+   * @param displays the list of closed displays to be closed
+   */
+  protected void closeAll(List<D> displays) {
     // EMPTY
   }
 }

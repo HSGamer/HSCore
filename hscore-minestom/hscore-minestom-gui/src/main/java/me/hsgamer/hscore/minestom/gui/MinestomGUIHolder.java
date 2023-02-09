@@ -4,9 +4,12 @@ import me.hsgamer.hscore.minecraft.gui.GUIHolder;
 import me.hsgamer.hscore.minecraft.gui.GUIProperties;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.InventoryType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -87,5 +90,13 @@ public class MinestomGUIHolder extends GUIHolder<MinestomGUIDisplay> {
   @Override
   protected @NotNull MinestomGUIDisplay newDisplay(UUID uuid) {
     return new MinestomGUIDisplay(uuid, this);
+  }
+
+  @Override
+  protected void closeAll(List<MinestomGUIDisplay> displays) {
+    displays.stream()
+      .map(MinestomGUIDisplay::getInventory)
+      .filter(Objects::nonNull)
+      .forEach(inventory -> inventory.getViewers().forEach(Player::closeInventory));
   }
 }
