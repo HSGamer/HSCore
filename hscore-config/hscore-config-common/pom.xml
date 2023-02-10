@@ -6,7 +6,7 @@
   <parent>
     <artifactId>hscore-config</artifactId>
     <groupId>me.hsgamer</groupId>
-    <version>4.2.6</version>
+    <version>4.2.7-SNAPSHOT</version>
   </parent>
   <artifactId>hscore-config-common</artifactId>
 
