@@ -12,16 +12,18 @@ import me.hsgamer.hscore.expression.string.*;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * The expression manager
  */
 public final class ExpressionUtils {
-  private static ExpressionConfiguration expressionConfiguration;
+  private static Function<ExpressionConfiguration, ExpressionConfiguration> expressionConfigurationModifier;
 
   static {
-    expressionConfiguration = ExpressionConfiguration.defaultConfiguration()
-      .withAdditionalFunctions(
+    expressionConfigurationModifier = configuration ->
+      configuration.withAdditionalFunctions(
         Map.entry("AVG", new Average()),
         Map.entry("STRCT", new Contains()),
         Map.entry("STREDW", new EndsWith()),
@@ -44,7 +46,7 @@ public final class ExpressionUtils {
    * @param function the function
    */
   public static void registerFunction(String name, FunctionIfc function) {
-    expressionConfiguration = expressionConfiguration.withAdditionalFunctions(Map.entry(name, function));
+    expressionConfigurationModifier = expressionConfigurationModifier.andThen(configuration -> configuration.withAdditionalFunctions(Map.entry(name, function)));
   }
 
   /**
@@ -54,16 +56,37 @@ public final class ExpressionUtils {
    * @param operator the operator
    */
   public static void registerOperator(String name, OperatorIfc operator) {
-    expressionConfiguration = expressionConfiguration.withAdditionalOperators(Map.entry(name, operator));
+    expressionConfigurationModifier = expressionConfigurationModifier.andThen(configuration -> configuration.withAdditionalOperators(Map.entry(name, operator)));
   }
 
   /**
-   * Get the expression configuration
+   * Get the expression configuration modifier
+   *
+   * @return the expression configuration modifier
+   */
+  public static Function<ExpressionConfiguration, ExpressionConfiguration> getExpressionConfigurationModifier() {
+    return expressionConfigurationModifier;
+  }
+
+  /**
+   * Get the default expression configuration
    *
    * @return the expression configuration
    */
-  public static ExpressionConfiguration getExpressionConfiguration() {
-    return expressionConfiguration;
+  public static ExpressionConfiguration getDefaultExpressionConfiguration() {
+    return expressionConfigurationModifier.apply(ExpressionConfiguration.defaultConfiguration());
+  }
+
+  /**
+   * Create an expression
+   *
+   * @param expression                      the expression
+   * @param expressionConfigurationSupplier the expression configuration supplier
+   *
+   * @return the expression
+   */
+  public static Expression createExpression(String expression, Supplier<ExpressionConfiguration> expressionConfigurationSupplier) {
+    return new Expression(expression, expressionConfigurationModifier.apply(expressionConfigurationSupplier.get()));
   }
 
   /**
@@ -74,36 +97,38 @@ public final class ExpressionUtils {
    * @return the expression
    */
   public static Expression createExpression(String expression) {
-    return new Expression(expression, expressionConfiguration);
+    return new Expression(expression, ExpressionConfiguration.defaultConfiguration());
   }
 
   /**
    * Evaluate the expression
    *
-   * @param expression the expression
+   * @param expression                      the expression
+   * @param expressionConfigurationSupplier the expression configuration supplier
    *
    * @return the result
    *
    * @throws EvaluationException occurred when evaluating
    * @throws ParseException      if the expression is invalid
    */
-  public static EvaluationValue evaluate(String expression) throws EvaluationException, ParseException {
-    return createExpression(expression).evaluate();
+  public static EvaluationValue evaluate(String expression, Supplier<ExpressionConfiguration> expressionConfigurationSupplier) throws EvaluationException, ParseException {
+    return createExpression(expression, expressionConfigurationSupplier).evaluate();
   }
 
   /**
    * Evaluate the expression
    *
-   * @param expression the expression
+   * @param expression                      the expression
+   * @param expressionConfigurationSupplier the expression configuration supplier
+   * @param values                          the values
    *
    * @return the result
+   *
+   * @throws EvaluationException occurred when evaluating
+   * @throws ParseException      if the expression is invalid
    */
-  public static Optional<EvaluationValue> evaluateSafe(String expression) {
-    try {
-      return Optional.of(evaluate(expression));
-    } catch (EvaluationException | ParseException e) {
-      return Optional.empty();
-    }
+  public static EvaluationValue evaluate(String expression, Supplier<ExpressionConfiguration> expressionConfigurationSupplier, Map<String, Object> values) throws EvaluationException, ParseException {
+    return createExpression(expression, expressionConfigurationSupplier).withValues(values).evaluate();
   }
 
   /**
@@ -125,6 +150,53 @@ public final class ExpressionUtils {
    * Evaluate the expression
    *
    * @param expression the expression
+   *
+   * @return the result
+   *
+   * @throws EvaluationException occurred when evaluating
+   * @throws ParseException      if the expression is invalid
+   */
+  public static EvaluationValue evaluate(String expression) throws EvaluationException, ParseException {
+    return createExpression(expression).evaluate();
+  }
+
+  /**
+   * Evaluate the expression
+   *
+   * @param expression                      the expression
+   * @param expressionConfigurationSupplier the expression configuration supplier
+   *
+   * @return the result
+   */
+  public static Optional<EvaluationValue> evaluateSafe(String expression, Supplier<ExpressionConfiguration> expressionConfigurationSupplier) {
+    try {
+      return Optional.of(evaluate(expression, expressionConfigurationSupplier));
+    } catch (EvaluationException | ParseException e) {
+      return Optional.empty();
+    }
+  }
+
+  /**
+   * Evaluate the expression
+   *
+   * @param expression                      the expression
+   * @param expressionConfigurationSupplier the expression configuration supplier
+   * @param values                          the values
+   *
+   * @return the result
+   */
+  public static Optional<EvaluationValue> evaluateSafe(String expression, Supplier<ExpressionConfiguration> expressionConfigurationSupplier, Map<String, Object> values) {
+    try {
+      return Optional.of(evaluate(expression, expressionConfigurationSupplier, values));
+    } catch (EvaluationException | ParseException e) {
+      return Optional.empty();
+    }
+  }
+
+  /**
+   * Evaluate the expression
+   *
+   * @param expression the expression
    * @param values     the values
    *
    * @return the result
@@ -132,6 +204,21 @@ public final class ExpressionUtils {
   public static Optional<EvaluationValue> evaluateSafe(String expression, Map<String, Object> values) {
     try {
       return Optional.of(evaluate(expression, values));
+    } catch (EvaluationException | ParseException e) {
+      return Optional.empty();
+    }
+  }
+
+  /**
+   * Evaluate the expression
+   *
+   * @param expression the expression
+   *
+   * @return the result
+   */
+  public static Optional<EvaluationValue> evaluateSafe(String expression) {
+    try {
+      return Optional.of(evaluate(expression));
     } catch (EvaluationException | ParseException e) {
       return Optional.empty();
     }
