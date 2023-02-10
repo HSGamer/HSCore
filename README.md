@@ -27,6 +27,7 @@
     * **`hscore-checker-spigotmc`**
     * **`hscore-checker-github`**
     * **`hscore-checker-polymart`**
+    * **`hscore-checker-modrinth`**
   * **`hscore-database`**
     * **`hscore-database-common`**
     * **`hscore-database-driver-mysql`**

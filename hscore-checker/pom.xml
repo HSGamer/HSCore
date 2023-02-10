@@ -16,6 +16,7 @@
     <module>hscore-checker-spigotmc</module>
     <module>hscore-checker-github</module>
     <module>hscore-checker-polymart</module>
+    <module>hscore-checker-modrinth</module>
   </modules>
 
 </project>
