@@ -39,11 +39,6 @@ public final class SpigotVersionChecker implements VersionChecker {
     this(resourceId, UserAgent.FIREFOX);
   }
 
-  public static void main(String[] args) {
-    SpigotVersionChecker versionChecker = new SpigotVersionChecker(75620);
-    System.out.println(versionChecker.getVersion().join());
-  }
-
   /**
    * Get the version of the resource
    *
