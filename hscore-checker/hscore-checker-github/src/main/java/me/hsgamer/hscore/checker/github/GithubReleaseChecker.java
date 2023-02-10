@@ -1,26 +1,22 @@
 package me.hsgamer.hscore.checker.github;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import me.hsgamer.hscore.checker.VersionChecker;
 import me.hsgamer.hscore.web.UserAgent;
 import me.hsgamer.hscore.web.WebUtils;
 import org.jetbrains.annotations.NotNull;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 
 /**
  * The release version checker for the GitHub repository
  */
 public class GithubReleaseChecker implements VersionChecker {
-  private final JSONParser parser = new JSONParser();
   private final String url;
   private final UserAgent userAgent;
 
@@ -51,22 +47,25 @@ public class GithubReleaseChecker implements VersionChecker {
         InputStream inputStream = WebUtils.createConnection(url, userAgent::assignToConnection).getInputStream();
         InputStreamReader reader = new InputStreamReader(inputStream)
       ) {
-        Object object = parser.parse(reader);
-        if (!(object instanceof JSONArray)) {
+        JsonElement element = JsonParser.parseReader(reader);
+        if (!element.isJsonArray()) {
           throw new IOException("The response is not a JSON array");
         }
-        JSONArray array = (JSONArray) object;
+        JsonArray array = element.getAsJsonArray();
         if (array.isEmpty()) {
           throw new IOException("The response is empty");
         }
-        Object first = array.get(0);
-        if (!(first instanceof JSONObject)) {
+        JsonElement first = array.get(0);
+        if (!first.isJsonObject()) {
           throw new IOException("The first element is not a JSON object");
         }
-        JSONObject jsonObject = (JSONObject) first;
-        return Objects.toString(jsonObject.get("tag_name"));
-      } catch (IOException | ParseException e) {
-        throw new CompletionException(e);
+        JsonElement tag = first.getAsJsonObject().get("tag_name");
+        if (tag == null) {
+          throw new IOException("The tag name is null");
+        }
+        return tag.getAsString();
+      } catch (Exception e) {
+        throw new IllegalStateException(e);
       }
     });
   }

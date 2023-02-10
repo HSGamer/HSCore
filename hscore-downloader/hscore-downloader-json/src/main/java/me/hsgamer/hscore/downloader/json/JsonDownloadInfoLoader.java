@@ -1,13 +1,13 @@
 package me.hsgamer.hscore.downloader.json;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import me.hsgamer.hscore.downloader.core.Downloader;
 import me.hsgamer.hscore.downloader.core.loader.DownloadInfoLoader;
 import me.hsgamer.hscore.downloader.core.loader.MapDownloadInfoLoader;
 import me.hsgamer.hscore.web.UserAgent;
 import me.hsgamer.hscore.web.WebUtils;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -54,26 +54,27 @@ public class JsonDownloadInfoLoader extends MapDownloadInfoLoader {
       }
     }).thenApplyAsync(inputStreamReader -> {
       try {
-        return new JSONParser().parse(inputStreamReader);
-      } catch (IOException | ParseException e) {
+        return JsonParser.parseReader(inputStreamReader);
+      } catch (Exception e) {
         throw new CompletionException("Something wrong when parsing the info", e);
       }
-    }).thenApplyAsync(jsonObject -> {
-      if (!(jsonObject instanceof JSONObject)) {
+    }).thenApplyAsync(element -> {
+      if (!element.isJsonObject()) {
         return Collections.emptyMap();
       }
+      JsonObject jsonObject = element.getAsJsonObject();
       Map<String, Map<String, Object>> map = new HashMap<>();
-      // noinspection unchecked
-      ((JSONObject) jsonObject).forEach((key, raw) -> {
-        if (!(raw instanceof JSONObject)) {
-          return;
+      for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
+        if (!entry.getValue().isJsonObject()) {
+          continue;
         }
-        String name = String.valueOf(key);
-        Map<String, Object> valueMap = new HashMap<>();
-        // noinspection unchecked
-        ((JSONObject) raw).forEach((key1, raw1) -> valueMap.put(String.valueOf(key1), raw1));
-        map.put(name, valueMap);
-      });
+        JsonObject object = entry.getValue().getAsJsonObject();
+        Map<String, Object> infoMap = new HashMap<>();
+        for (Map.Entry<String, JsonElement> infoEntry : object.entrySet()) {
+          infoMap.put(infoEntry.getKey(), infoEntry.getValue().getAsString());
+        }
+        map.put(entry.getKey(), infoMap);
+      }
       return map;
     });
   }
