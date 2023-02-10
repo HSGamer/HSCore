@@ -28,6 +28,7 @@ me.hsgamer.hscore.bungeecord.channel
 me.hsgamer.hscore.bungeecord.config
 me.hsgamer.hscore.checker
 me.hsgamer.hscore.checker.github
+me.hsgamer.hscore.checker.modrinth
 me.hsgamer.hscore.checker.polymart
 me.hsgamer.hscore.checker.spigotmc
 me.hsgamer.hscore.collections.map
