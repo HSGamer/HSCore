@@ -13,7 +13,6 @@ import me.hsgamer.hscore.expression.string.*;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * The expression manager
@@ -80,13 +79,13 @@ public final class ExpressionUtils {
   /**
    * Create an expression
    *
-   * @param expression                      the expression
-   * @param expressionConfigurationSupplier the expression configuration supplier
+   * @param expression              the expression
+   * @param expressionConfiguration the expression configuration
    *
    * @return the expression
    */
-  public static Expression createExpression(String expression, Supplier<ExpressionConfiguration> expressionConfigurationSupplier) {
-    return new Expression(expression, expressionConfigurationModifier.apply(expressionConfigurationSupplier.get()));
+  public static Expression createExpression(String expression, ExpressionConfiguration expressionConfiguration) {
+    return new Expression(expression, expressionConfigurationModifier.apply(expressionConfiguration));
   }
 
   /**
@@ -103,32 +102,32 @@ public final class ExpressionUtils {
   /**
    * Evaluate the expression
    *
-   * @param expression                      the expression
-   * @param expressionConfigurationSupplier the expression configuration supplier
+   * @param expression              the expression
+   * @param expressionConfiguration the expression configuration
    *
    * @return the result
    *
    * @throws EvaluationException occurred when evaluating
    * @throws ParseException      if the expression is invalid
    */
-  public static EvaluationValue evaluate(String expression, Supplier<ExpressionConfiguration> expressionConfigurationSupplier) throws EvaluationException, ParseException {
-    return createExpression(expression, expressionConfigurationSupplier).evaluate();
+  public static EvaluationValue evaluate(String expression, ExpressionConfiguration expressionConfiguration) throws EvaluationException, ParseException {
+    return createExpression(expression, expressionConfiguration).evaluate();
   }
 
   /**
    * Evaluate the expression
    *
-   * @param expression                      the expression
-   * @param expressionConfigurationSupplier the expression configuration supplier
-   * @param values                          the values
+   * @param expression              the expression
+   * @param expressionConfiguration the expression configuration
+   * @param values                  the values
    *
    * @return the result
    *
    * @throws EvaluationException occurred when evaluating
    * @throws ParseException      if the expression is invalid
    */
-  public static EvaluationValue evaluate(String expression, Supplier<ExpressionConfiguration> expressionConfigurationSupplier, Map<String, Object> values) throws EvaluationException, ParseException {
-    return createExpression(expression, expressionConfigurationSupplier).withValues(values).evaluate();
+  public static EvaluationValue evaluate(String expression, ExpressionConfiguration expressionConfiguration, Map<String, Object> values) throws EvaluationException, ParseException {
+    return createExpression(expression, expressionConfiguration).withValues(values).evaluate();
   }
 
   /**
@@ -163,14 +162,14 @@ public final class ExpressionUtils {
   /**
    * Evaluate the expression
    *
-   * @param expression                      the expression
-   * @param expressionConfigurationSupplier the expression configuration supplier
+   * @param expression              the expression
+   * @param expressionConfiguration the expression configuration
    *
    * @return the result
    */
-  public static Optional<EvaluationValue> evaluateSafe(String expression, Supplier<ExpressionConfiguration> expressionConfigurationSupplier) {
+  public static Optional<EvaluationValue> evaluateSafe(String expression, ExpressionConfiguration expressionConfiguration) {
     try {
-      return Optional.of(evaluate(expression, expressionConfigurationSupplier));
+      return Optional.of(evaluate(expression, expressionConfiguration));
     } catch (EvaluationException | ParseException e) {
       return Optional.empty();
     }
@@ -179,15 +178,15 @@ public final class ExpressionUtils {
   /**
    * Evaluate the expression
    *
-   * @param expression                      the expression
-   * @param expressionConfigurationSupplier the expression configuration supplier
-   * @param values                          the values
+   * @param expression              the expression
+   * @param expressionConfiguration the expression configuration
+   * @param values                  the values
    *
    * @return the result
    */
-  public static Optional<EvaluationValue> evaluateSafe(String expression, Supplier<ExpressionConfiguration> expressionConfigurationSupplier, Map<String, Object> values) {
+  public static Optional<EvaluationValue> evaluateSafe(String expression, ExpressionConfiguration expressionConfiguration, Map<String, Object> values) {
     try {
-      return Optional.of(evaluate(expression, expressionConfigurationSupplier, values));
+      return Optional.of(evaluate(expression, expressionConfiguration, values));
     } catch (EvaluationException | ParseException e) {
       return Optional.empty();
     }
