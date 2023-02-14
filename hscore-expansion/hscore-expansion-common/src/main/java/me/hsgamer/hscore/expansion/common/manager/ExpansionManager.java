@@ -1,6 +1,5 @@
 package me.hsgamer.hscore.expansion.common.manager;
 
-import me.hsgamer.hscore.expansion.common.exception.InvalidExpansionDescription;
 import me.hsgamer.hscore.expansion.common.factory.ExpansionFactory;
 import me.hsgamer.hscore.expansion.common.loader.ExpansionDescriptionLoader;
 import me.hsgamer.hscore.expansion.common.object.Expansion;
@@ -237,33 +236,21 @@ public class ExpansionManager<T extends Expansion> {
         this.logger.log(Level.INFO, "Enabled {0}", String.join(" ", name, this.classLoaders.get(name).getAddonDescription().getVersion()));
       }
     });
-    failed.forEach(name -> this.closeClassLoaderSafe(this.classLoaders.remove(name)));
+    failed.forEach(this.classLoaders::remove);
   }
 
   /**
    * Call the {@link Expansion#onPostEnable()} method of all enabled addons
    */
   public void callPostEnable() {
-    this.classLoaders.forEach((name, classLoader) -> {
-      try {
-        classLoader.getAddon().onPostEnable();
-      } catch (InvalidExpansionDescription e) {
-        this.logger.log(Level.WARNING, e, () -> "Error when calling post enable of " + name);
-      }
-    });
+    this.classLoaders.values().forEach(classLoader -> classLoader.getAddon().onPostEnable());
   }
 
   /**
    * Call the {@link Expansion#onReload()} method of all enabled addons
    */
   public void callReload() {
-    this.classLoaders.forEach((name, classLoader) -> {
-      try {
-        classLoader.getAddon().onReload();
-      } catch (InvalidExpansionDescription e) {
-        this.logger.log(Level.WARNING, e, () -> "Error when calling reload of " + name);
-      }
-    });
+    this.classLoaders.values().forEach(classLoader -> classLoader.getAddon().onReload());
   }
 
   /**
@@ -292,11 +279,7 @@ public class ExpansionManager<T extends Expansion> {
   @Nullable
   public T getAddon(@NotNull final String name) {
     final ExpansionClassLoader<T> classLoader = this.classLoaders.get(name);
-    try {
-      return classLoader == null ? null : classLoader.getAddon();
-    } catch (InvalidExpansionDescription e) {
-      throw new IllegalStateException(e);
-    }
+    return classLoader == null ? null : classLoader.getAddon();
   }
 
   /**
@@ -319,13 +302,7 @@ public class ExpansionManager<T extends Expansion> {
   public Map<String, T> getLoadedAddons() {
     return this.classLoaders.entrySet()
       .parallelStream()
-      .collect(Collectors.toMap(Map.Entry::getKey, entry -> {
-        try {
-          return entry.getValue().getAddon();
-        } catch (InvalidExpansionDescription e) {
-          throw new IllegalStateException(e);
-        }
-      }));
+      .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getAddon()));
   }
 
   /**

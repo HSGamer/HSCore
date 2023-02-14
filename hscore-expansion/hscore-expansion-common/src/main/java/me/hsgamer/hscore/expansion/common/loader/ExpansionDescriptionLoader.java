@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.expansion.common.loader;
 
-import me.hsgamer.hscore.expansion.common.exception.InvalidExpansionDescription;
+import me.hsgamer.hscore.expansion.common.exception.InvalidExpansionException;
 import me.hsgamer.hscore.expansion.common.object.ExpansionDescription;
 
 import java.io.IOException;
@@ -17,8 +17,8 @@ public interface ExpansionDescriptionLoader {
    *
    * @return the {@link ExpansionDescription}
    *
-   * @throws IOException                 if an I/O error occurs
-   * @throws InvalidExpansionDescription if the {@link ExpansionDescription} is invalid
+   * @throws IOException               if an I/O error occurs
+   * @throws InvalidExpansionException if the {@link ExpansionDescription} is invalid
    */
-  ExpansionDescription load(JarFile jarFile) throws IOException, InvalidExpansionDescription;
+  ExpansionDescription load(JarFile jarFile) throws IOException, InvalidExpansionException;
 }

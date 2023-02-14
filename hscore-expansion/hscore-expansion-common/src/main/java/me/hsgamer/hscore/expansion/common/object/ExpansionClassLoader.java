@@ -1,6 +1,5 @@
 package me.hsgamer.hscore.expansion.common.object;
 
-import me.hsgamer.hscore.expansion.common.exception.InvalidExpansionDescription;
 import me.hsgamer.hscore.expansion.common.manager.ExpansionManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -65,7 +64,7 @@ public final class ExpansionClassLoader<T extends Expansion> extends URLClassLoa
    * @return the addon
    */
   @NotNull
-  public T getAddon() throws InvalidExpansionDescription {
+  public T getAddon() {
     if (this.addon == null) {
       this.addon = this.addonManager.getExpansionFactory().create(this);
     }
