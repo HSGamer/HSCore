@@ -48,7 +48,7 @@ public class PredicateButton implements Button {
    */
   @Contract("_ -> this")
   public PredicateButton setClickPredicate(@NotNull Predicate<@NotNull ClickEvent> clickPredicate) {
-    this.clickFuturePredicate = clickEvent -> CompletableFuture.completedFuture(clickPredicate.test(clickEvent));
+    this.clickFuturePredicate = clickEvent -> CompletableFuture.supplyAsync(() -> clickPredicate.test(clickEvent));
     return this;
   }
 
