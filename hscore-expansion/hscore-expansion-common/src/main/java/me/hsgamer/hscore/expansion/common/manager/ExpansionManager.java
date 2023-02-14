@@ -128,7 +128,7 @@ public class ExpansionManager<T extends Expansion> {
     final Map<String, ExpansionClassLoader<T>> classLoaderMap = new HashMap<>();
     // Load the addon files
     Arrays.stream(Objects.requireNonNull(this.addonsDir.listFiles()))
-      .filter(file -> file.isFile() && file.getName().endsWith(".jar"))
+      .filter(file -> file.isFile() && file.getName().toLowerCase(Locale.ROOT).endsWith(".jar"))
       .forEach(file -> {
         try (final JarFile jar = new JarFile(file)) {
           // Get addon description
