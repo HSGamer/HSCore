@@ -9,6 +9,7 @@ hscore-minestom
 hscore-downloader
 hscore-logging
 hscore-minecraft
+hscore-expansion
 "
 
 BASE_DIR="$(pwd)"
