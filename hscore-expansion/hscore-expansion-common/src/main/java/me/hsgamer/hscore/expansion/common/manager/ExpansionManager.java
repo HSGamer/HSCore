@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -240,17 +241,12 @@ public class ExpansionManager<T extends Expansion> {
   }
 
   /**
-   * Call the {@link Expansion#onPostEnable()} method of all enabled addons
+   * Call the consumer for all enabled addon
+   *
+   * @param consumer the consumer
    */
-  public void callPostEnable() {
-    this.classLoaders.values().forEach(classLoader -> classLoader.getAddon().onPostEnable());
-  }
-
-  /**
-   * Call the {@link Expansion#onReload()} method of all enabled addons
-   */
-  public void callReload() {
-    this.classLoaders.values().forEach(classLoader -> classLoader.getAddon().onReload());
+  public void call(Consumer<T> consumer) {
+    this.classLoaders.values().forEach(classLoader -> consumer.accept(classLoader.getAddon()));
   }
 
   /**
