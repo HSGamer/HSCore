@@ -50,6 +50,9 @@ public class ExpansionManager {
   @NotNull
   private final ExpansionFactory expansionFactory;
 
+  @NotNull
+  private final List<ExpansionStateListener> stateListeners = new ArrayList<>();
+
   /**
    * Create a new addon manager
    *
@@ -78,7 +81,11 @@ public class ExpansionManager {
     this.expansionFactory = expansionFactory;
     this.parentClassLoader = parentClassLoader;
     if (!addonsDir.exists()) {
-      addonsDir.mkdirs();
+      if (addonsDir.mkdirs()) {
+        logger.finest("Created addon directory");
+      } else {
+        throw new IllegalStateException("Cannot create addon directory");
+      }
     }
   }
 
@@ -117,122 +124,135 @@ public class ExpansionManager {
     return expansionFactory;
   }
 
+  public void addStateListener(@NotNull ExpansionStateListener listener) {
+    this.stateListeners.add(listener);
+  }
+
+  public void removeStateListener(@NotNull ExpansionStateListener listener) {
+    this.stateListeners.remove(listener);
+  }
+
   /**
    * Load all addons from the addon directory. Also call {@link Expansion#onLoad()}
    */
   public void loadAddons() {
-    final Map<String, ExpansionClassLoader> classLoaderMap = new HashMap<>();
+    final Map<String, ExpansionClassLoader> initClassLoaders = new HashMap<>();
+
     // Load the addon files
     Arrays.stream(Objects.requireNonNull(this.addonsDir.listFiles()))
       .filter(file -> file.isFile() && file.getName().toLowerCase(Locale.ROOT).endsWith(".jar"))
       .forEach(file -> {
+        ExpansionDescription addonDescription;
+        ExpansionClassLoader loader;
         try (final JarFile jar = new JarFile(file)) {
           // Get addon description
-          final ExpansionDescription addonDescription = addonDescriptionLoader.load(jar);
-          if (classLoaderMap.containsKey(addonDescription.getName())) {
+          addonDescription = addonDescriptionLoader.load(jar);
+          if (initClassLoaders.containsKey(addonDescription.getName())) {
             this.logger.warning("Duplicated addon " + addonDescription.getName());
             return;
           }
-          // Try to load the addon
-          final ExpansionClassLoader loader = new ExpansionClassLoader(this, file, addonDescription, this.parentClassLoader);
-          final Expansion addon = loader.getAddon();
-          if (this.onAddonLoading(addon)) {
-            classLoaderMap.put(addonDescription.getName(), loader);
-          } else {
-            loader.close();
-          }
+          loader = new ExpansionClassLoader(this, file, addonDescription, this.parentClassLoader);
         } catch (final Exception e) {
-          this.logger.log(Level.WARNING, e, () -> "Error when loading " + file.getName());
+          this.logger.log(Level.WARNING, e, () -> "Error when loading file " + file.getName());
+          return;
         }
+
+        try {
+          loader.setState(ExpansionState.LOADING);
+        } catch (final Throwable t) {
+          this.logger.log(Level.WARNING, t, () -> "Error when loading file " + file.getName());
+          loader.setState(ExpansionState.ERROR);
+        }
+
+        initClassLoaders.put(addonDescription.getName(), loader);
       });
+
     // Filter and sort the addons
-    final Map<String, ExpansionClassLoader> sortedClassLoaderMap = this.sortAndFilter(classLoaderMap);
-    // Close AddonClassLoader of remaining addons
-    classLoaderMap.entrySet().stream()
-      .filter(entry -> !sortedClassLoaderMap.containsKey(entry.getKey()))
-      .forEach(entry -> this.closeClassLoaderSafe(entry.getValue()));
+    final Map<String, ExpansionClassLoader> loadingClassLoaders = initClassLoaders.entrySet().stream()
+      .filter(entry -> entry.getValue().getState() == ExpansionState.LOADING)
+      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    final Map<String, ExpansionClassLoader> sortedClassLoaders = this.sortAndFilter(loadingClassLoaders);
+    final Map<String, ExpansionClassLoader> remainingClassLoaders = initClassLoaders.entrySet().stream()
+      .filter(entry -> !sortedClassLoaders.containsKey(entry.getKey()))
+      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    remainingClassLoaders.values().forEach(loader -> loader.setState(ExpansionState.ERROR));
+
     // Load the addons
-    final Map<String, ExpansionClassLoader> finalClassLoaders = new LinkedHashMap<>();
-    sortedClassLoaderMap.forEach((key, loader) -> {
+    sortedClassLoaders.forEach((key, loader) -> {
       try {
         final Expansion addon = loader.getAddon();
         if (!addon.onLoad()) {
-          this.logger.warning("Failed to load " + key + " " + loader.getAddonDescription().getVersion());
-          this.closeClassLoaderSafe(loader);
-          return;
+          throw new IllegalStateException("onLoad() returned false");
         }
         this.logger.info("Loaded " + key + " " + loader.getAddonDescription().getVersion());
-        finalClassLoaders.put(key, loader);
+        loader.setState(ExpansionState.LOADED);
       } catch (final Throwable t) {
-        this.logger.log(Level.WARNING, t, () -> "Error when loading " + key);
-        this.closeClassLoaderSafe(loader);
+        this.logger.log(Level.WARNING, t, () -> "Error when loading addon " + key);
+        loader.setState(ExpansionState.ERROR);
       }
     });
+
     // Store the final addons map
-    this.classLoaders.putAll(finalClassLoaders);
+    this.classLoaders.putAll(remainingClassLoaders);
+    this.classLoaders.putAll(sortedClassLoaders);
   }
 
   /**
-   * Enable (call {@link Expansion#onEnable()}) the addon
+   * Filter and sort the order of the addons
    *
-   * @param name                the addon name
-   * @param closeLoaderOnFailed close the class loader if failed
+   * @param original the original map
    *
-   * @return whether it's enabled successfully
+   * @return the sorted and filtered map
    */
-  public boolean enableAddon(@NotNull final String name, final boolean closeLoaderOnFailed) {
-    try {
-      final Expansion addon = classLoaders.get(name).getAddon();
-      this.onAddonEnable(addon);
-      addon.onEnable();
-      this.onAddonEnabled(addon);
-      return true;
-    } catch (final Throwable t) {
-      this.logger.log(Level.WARNING, t, () -> "Error when enabling " + name);
-      if (closeLoaderOnFailed) {
-        this.closeClassLoaderSafe(name);
-      }
-      return false;
-    }
-  }
-
-  /**
-   * Disable (call {@link Expansion#onDisable()}) the addon
-   *
-   * @param name                the addon name
-   * @param closeLoaderOnFailed close the class loader if failed
-   *
-   * @return whether it's disabled successfully
-   */
-  public boolean disableAddon(@NotNull final String name, final boolean closeLoaderOnFailed) {
-    try {
-      final Expansion addon = classLoaders.get(name).getAddon();
-      this.onAddonDisable(addon);
-      addon.onDisable();
-      this.onAddonDisabled(addon);
-      return true;
-    } catch (final Throwable t) {
-      this.logger.log(Level.WARNING, t, () -> "Error when disabling " + name);
-      if (closeLoaderOnFailed) {
-        this.closeClassLoaderSafe(name);
-      }
-      return false;
-    }
+  @NotNull
+  protected Map<String, ExpansionClassLoader> sortAndFilter(@NotNull final Map<String, ExpansionClassLoader> original) {
+    return original;
   }
 
   /**
    * Enable all addons from the addon directory
    */
   public void enableAddons() {
-    final List<String> failed = new LinkedList<>();
-    this.classLoaders.keySet().forEach(name -> {
-      if (!this.enableAddon(name, true)) {
-        failed.add(name);
-      } else {
-        this.logger.log(Level.INFO, "Enabled {0}", String.join(" ", name, this.classLoaders.get(name).getAddonDescription().getVersion()));
+    this.classLoaders.forEach((name, loader) -> {
+      if (loader.getState() == ExpansionState.LOADED) {
+        Expansion addon = loader.getAddon();
+        try {
+          loader.setState(ExpansionState.ENABLING);
+          addon.onEnable();
+          loader.setState(ExpansionState.ENABLED);
+          this.logger.log(Level.INFO, "Enabled {0} {1}", new Object[]{name, loader.getAddonDescription().getVersion()});
+        } catch (final Throwable t) {
+          this.logger.log(Level.WARNING, t, () -> "Error when enabling " + name);
+          loader.setState(ExpansionState.ERROR);
+        }
       }
     });
-    failed.forEach(this.classLoaders::remove);
+  }
+
+  /**
+   * Disable all enabled addons
+   */
+  public void disableAddons() {
+    Deque<Map.Entry<String, ExpansionClassLoader>> stack = new LinkedList<>(this.classLoaders.entrySet());
+    while (true) {
+      final Map.Entry<String, ExpansionClassLoader> entry = stack.pollLast();
+      if (entry == null) break;
+      final String name = entry.getKey();
+      final ExpansionClassLoader loader = entry.getValue();
+      if (loader.getState() == ExpansionState.ENABLED) {
+        try {
+          loader.setState(ExpansionState.DISABLING);
+          loader.getAddon().onDisable();
+          loader.setState(ExpansionState.DISABLED);
+          this.logger.log(Level.INFO, "Disabled {0} {1}", new Object[]{name, loader.getAddonDescription().getVersion()});
+        } catch (final Throwable t) {
+          this.logger.log(Level.WARNING, t, () -> "Error when disabling " + name);
+          loader.setState(ExpansionState.ERROR);
+        }
+      }
+    }
+    this.classLoaders.values().forEach(this::closeClassLoaderSafe);
+    this.classLoaders.clear();
   }
 
   /**
@@ -258,22 +278,6 @@ public class ExpansionManager {
   }
 
   /**
-   * Disable all enabled addons
-   */
-  public void disableAddons() {
-    Deque<String> stack = new LinkedList<>(this.classLoaders.keySet());
-    while (true) {
-      final String name = stack.pollLast();
-      if (name == null) break;
-      if (this.disableAddon(name, false)) {
-        this.logger.log(Level.INFO, "Disabled {0} {1}", new Object[]{name, this.classLoaders.get(name).getAddonDescription().getVersion()});
-      }
-    }
-    this.classLoaders.values().forEach(this::closeClassLoaderSafe);
-    this.classLoaders.clear();
-  }
-
-  /**
    * Get the enabled addon
    *
    * @param name the name of the addon
@@ -294,7 +298,8 @@ public class ExpansionManager {
    * @return whether it's loaded
    */
   public boolean isAddonLoaded(@NotNull final String name) {
-    return this.classLoaders.containsKey(name);
+    ExpansionClassLoader classLoader = this.classLoaders.get(name);
+    return classLoader != null && classLoader.getState() == ExpansionState.ENABLED;
   }
 
   /**
@@ -306,6 +311,7 @@ public class ExpansionManager {
   public Map<String, Expansion> getLoadedAddons() {
     return this.classLoaders.entrySet()
       .parallelStream()
+      .filter(entry -> entry.getValue().getState() == ExpansionState.ENABLED)
       .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getAddon()));
   }
 
@@ -318,7 +324,7 @@ public class ExpansionManager {
    * @return the class, or null if it's not found
    */
   @Nullable
-  public Class<?> findClass(@NotNull final ExpansionClassLoader classLoader, @NotNull final String name) {
+  Class<?> findClass(@NotNull final ExpansionClassLoader classLoader, @NotNull final String name) {
     return this.classLoaders.entrySet()
       .parallelStream()
       .filter(entry -> entry.getValue() != classLoader)
@@ -327,63 +333,10 @@ public class ExpansionManager {
       .orElse(null);
   }
 
-  /**
-   * Filter and sort the order of the addons
-   *
-   * @param original the original map
-   *
-   * @return the sorted and filtered map
-   */
-  @NotNull
-  protected Map<String, ExpansionClassLoader> sortAndFilter(@NotNull final Map<String, ExpansionClassLoader> original) {
-    return original;
-  }
-
-  /**
-   * Called when the addon is on loading
-   *
-   * @param addon the loading addon
-   *
-   * @return whether the addon is properly loaded
-   */
-  protected boolean onAddonLoading(@NotNull final Expansion addon) {
-    return true;
-  }
-
-  /**
-   * Called when the addon is on enable
-   *
-   * @param addon the enabling addon
-   */
-  protected void onAddonEnable(@NotNull final Expansion addon) {
-    // EMPTY
-  }
-
-  /**
-   * Called when the addon is enabled
-   *
-   * @param addon the enabled addon
-   */
-  protected void onAddonEnabled(@NotNull final Expansion addon) {
-    // EMPTY
-  }
-
-  /**
-   * Called when the addon is on disabling
-   *
-   * @param addon the disabling addon
-   */
-  protected void onAddonDisable(@NotNull final Expansion addon) {
-    // EMPTY
-  }
-
-  /**
-   * Called when the addon is disabled
-   *
-   * @param addon the disabled addon
-   */
-  protected void onAddonDisabled(@NotNull final Expansion addon) {
-    // EMPTY
+  void notifyStateChange(@NotNull final ExpansionClassLoader classLoader, @NotNull final ExpansionState state) {
+    for (final ExpansionStateListener listener : this.stateListeners) {
+      listener.onStateChange(classLoader, state);
+    }
   }
 
   /**
@@ -396,18 +349,6 @@ public class ExpansionManager {
       classLoader.close();
     } catch (final IOException e) {
       this.logger.log(Level.WARNING, "Error when closing ClassLoader", e);
-    }
-  }
-
-  /**
-   * Close the class loader of the addon
-   *
-   * @param name the addon name
-   */
-  private void closeClassLoaderSafe(@NotNull final String name) {
-    ExpansionClassLoader loader = this.classLoaders.get(name);
-    if (loader != null) {
-      this.closeClassLoaderSafe(loader);
     }
   }
 }

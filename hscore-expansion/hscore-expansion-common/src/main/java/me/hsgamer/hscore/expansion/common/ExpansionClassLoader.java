@@ -34,8 +34,13 @@ public final class ExpansionClassLoader extends URLClassLoader {
   /**
    * The addon
    */
-  @Nullable
-  private Expansion addon;
+  @NotNull
+  private final Expansion addon;
+
+  /**
+   * The state of the addon
+   */
+  private ExpansionState currentState = ExpansionState.UNKNOWN;
 
   /**
    * Create an Addon Class Loader
@@ -55,6 +60,7 @@ public final class ExpansionClassLoader extends URLClassLoader {
     this.addonManager = addonManager;
     this.file = file;
     this.addonDescription = addonDescription;
+    this.addon = this.addonManager.getExpansionFactory().create(this);
   }
 
   /**
@@ -64,31 +70,7 @@ public final class ExpansionClassLoader extends URLClassLoader {
    */
   @NotNull
   public Expansion getAddon() {
-    if (this.addon == null) {
-      this.addon = this.addonManager.getExpansionFactory().create(this);
-    }
     return this.addon;
-  }
-
-  /**
-   * Get class by the name
-   *
-   * @param name   the class name
-   * @param global whether it'll try to search globally
-   *
-   * @return the class, or null if it's not found
-   */
-  @Nullable
-  public Class<?> findClass(@NotNull final String name, final boolean global) {
-    Class<?> clazz = null;
-    try {
-      clazz = super.findClass(name);
-    } catch (final ClassNotFoundException | NoClassDefFoundError e) {
-      if (global) {
-        clazz = this.addonManager.findClass(this, name);
-      }
-    }
-    return clazz;
   }
 
   /**
@@ -121,6 +103,26 @@ public final class ExpansionClassLoader extends URLClassLoader {
     return this.addonDescription;
   }
 
+  /**
+   * Get the state of the addon
+   *
+   * @return the state
+   */
+  public ExpansionState getState() {
+    return currentState;
+  }
+
+  /**
+   * Set the state of the addon
+   *
+   * @param state the state
+   */
+  void setState(@NotNull final ExpansionState state) {
+    if (this.currentState == state) return;
+    addonManager.notifyStateChange(this, state);
+    this.currentState = state;
+  }
+
   @Override
   @NotNull
   protected Class<?> findClass(@NotNull final String name) throws ClassNotFoundException {
@@ -130,5 +132,26 @@ public final class ExpansionClassLoader extends URLClassLoader {
     } else {
       return clazz;
     }
+  }
+
+  /**
+   * Get class by the name
+   *
+   * @param name   the class name
+   * @param global whether it'll try to search globally
+   *
+   * @return the class, or null if it's not found
+   */
+  @Nullable
+  Class<?> findClass(@NotNull final String name, final boolean global) {
+    Class<?> clazz = null;
+    try {
+      clazz = super.findClass(name);
+    } catch (final ClassNotFoundException | NoClassDefFoundError e) {
+      if (global) {
+        clazz = this.addonManager.findClass(this, name);
+      }
+    }
+    return clazz;
   }
 }
