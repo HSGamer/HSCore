@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.expansion.common.object;
+package me.hsgamer.hscore.expansion.common;
 
 import org.jetbrains.annotations.NotNull;
 

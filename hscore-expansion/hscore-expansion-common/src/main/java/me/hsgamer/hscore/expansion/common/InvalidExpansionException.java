@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.expansion.common.exception;
+package me.hsgamer.hscore.expansion.common;
 
 /**
  * The exception that is thrown when the addon is invalid

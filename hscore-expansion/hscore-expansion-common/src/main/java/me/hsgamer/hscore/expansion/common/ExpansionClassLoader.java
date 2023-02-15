@@ -1,6 +1,5 @@
-package me.hsgamer.hscore.expansion.common.object;
+package me.hsgamer.hscore.expansion.common;
 
-import me.hsgamer.hscore.expansion.common.manager.ExpansionManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,7 +11,7 @@ import java.net.URLClassLoader;
 /**
  * The class loader of the addon
  */
-public final class ExpansionClassLoader<T extends Expansion> extends URLClassLoader {
+public final class ExpansionClassLoader extends URLClassLoader {
 
   /**
    * The jar file of the addon
@@ -24,7 +23,7 @@ public final class ExpansionClassLoader<T extends Expansion> extends URLClassLoa
    * The addon manager
    */
   @NotNull
-  private final ExpansionManager<T> addonManager;
+  private final ExpansionManager addonManager;
 
   /**
    * The addon's description
@@ -36,7 +35,7 @@ public final class ExpansionClassLoader<T extends Expansion> extends URLClassLoa
    * The addon
    */
   @Nullable
-  private T addon;
+  private Expansion addon;
 
   /**
    * Create an Addon Class Loader
@@ -48,7 +47,7 @@ public final class ExpansionClassLoader<T extends Expansion> extends URLClassLoa
    *
    * @throws MalformedURLException if it cannot convert the file to its related URL
    */
-  public ExpansionClassLoader(@NotNull final ExpansionManager<T> addonManager, @NotNull final File file,
+  public ExpansionClassLoader(@NotNull final ExpansionManager addonManager, @NotNull final File file,
                               @NotNull final ExpansionDescription addonDescription,
                               @NotNull final ClassLoader parent)
     throws MalformedURLException {
@@ -64,7 +63,7 @@ public final class ExpansionClassLoader<T extends Expansion> extends URLClassLoa
    * @return the addon
    */
   @NotNull
-  public T getAddon() {
+  public Expansion getAddon() {
     if (this.addon == null) {
       this.addon = this.addonManager.getExpansionFactory().create(this);
     }
@@ -108,7 +107,7 @@ public final class ExpansionClassLoader<T extends Expansion> extends URLClassLoa
    * @return the addon manager
    */
   @NotNull
-  public ExpansionManager<T> getAddonManager() {
+  public ExpansionManager getAddonManager() {
     return this.addonManager;
   }
 

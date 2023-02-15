@@ -1,10 +1,5 @@
-package me.hsgamer.hscore.expansion.common.manager;
+package me.hsgamer.hscore.expansion.common;
 
-import me.hsgamer.hscore.expansion.common.factory.ExpansionFactory;
-import me.hsgamer.hscore.expansion.common.loader.ExpansionDescriptionLoader;
-import me.hsgamer.hscore.expansion.common.object.Expansion;
-import me.hsgamer.hscore.expansion.common.object.ExpansionClassLoader;
-import me.hsgamer.hscore.expansion.common.object.ExpansionDescription;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,12 +16,12 @@ import java.util.stream.Stream;
 /**
  * A class that manages all addons in it
  */
-public class ExpansionManager<T extends Expansion> {
+public class ExpansionManager {
 
   /**
    * The class loader map keyed addon's id, valued addon's class loader
    */
-  protected final Map<String, ExpansionClassLoader<T>> classLoaders = new LinkedHashMap<>();
+  protected final Map<String, ExpansionClassLoader> classLoaders = new LinkedHashMap<>();
 
   /**
    * The file that contains all addons
@@ -53,7 +48,7 @@ public class ExpansionManager<T extends Expansion> {
   private final ExpansionDescriptionLoader addonDescriptionLoader;
 
   @NotNull
-  private final ExpansionFactory<T> expansionFactory;
+  private final ExpansionFactory expansionFactory;
 
   /**
    * Create a new addon manager
@@ -63,7 +58,7 @@ public class ExpansionManager<T extends Expansion> {
    * @param addonDescriptionLoader the loader to load addon description
    * @param expansionFactory
    */
-  protected ExpansionManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull ExpansionDescriptionLoader addonDescriptionLoader, @NotNull ExpansionFactory<T> expansionFactory) {
+  protected ExpansionManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull ExpansionDescriptionLoader addonDescriptionLoader, @NotNull ExpansionFactory expansionFactory) {
     this(addonsDir, logger, addonDescriptionLoader, expansionFactory, ExpansionManager.class.getClassLoader());
   }
 
@@ -76,7 +71,7 @@ public class ExpansionManager<T extends Expansion> {
    * @param expansionFactory
    * @param parentClassLoader      the parent class loader to load all addons
    */
-  public ExpansionManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull ExpansionDescriptionLoader addonDescriptionLoader, @NotNull ExpansionFactory<T> expansionFactory, @NotNull final ClassLoader parentClassLoader) {
+  public ExpansionManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull ExpansionDescriptionLoader addonDescriptionLoader, @NotNull ExpansionFactory expansionFactory, @NotNull final ClassLoader parentClassLoader) {
     this.logger = logger;
     this.addonsDir = addonsDir;
     this.addonDescriptionLoader = addonDescriptionLoader;
@@ -118,7 +113,7 @@ public class ExpansionManager<T extends Expansion> {
   }
 
   @NotNull
-  public ExpansionFactory<T> getExpansionFactory() {
+  public ExpansionFactory getExpansionFactory() {
     return expansionFactory;
   }
 
@@ -126,7 +121,7 @@ public class ExpansionManager<T extends Expansion> {
    * Load all addons from the addon directory. Also call {@link Expansion#onLoad()}
    */
   public void loadAddons() {
-    final Map<String, ExpansionClassLoader<T>> classLoaderMap = new HashMap<>();
+    final Map<String, ExpansionClassLoader> classLoaderMap = new HashMap<>();
     // Load the addon files
     Arrays.stream(Objects.requireNonNull(this.addonsDir.listFiles()))
       .filter(file -> file.isFile() && file.getName().toLowerCase(Locale.ROOT).endsWith(".jar"))
@@ -139,8 +134,8 @@ public class ExpansionManager<T extends Expansion> {
             return;
           }
           // Try to load the addon
-          final ExpansionClassLoader<T> loader = new ExpansionClassLoader<>(this, file, addonDescription, this.parentClassLoader);
-          final T addon = loader.getAddon();
+          final ExpansionClassLoader loader = new ExpansionClassLoader(this, file, addonDescription, this.parentClassLoader);
+          final Expansion addon = loader.getAddon();
           if (this.onAddonLoading(addon)) {
             classLoaderMap.put(addonDescription.getName(), loader);
           } else {
@@ -151,16 +146,16 @@ public class ExpansionManager<T extends Expansion> {
         }
       });
     // Filter and sort the addons
-    final Map<String, ExpansionClassLoader<T>> sortedClassLoaderMap = this.sortAndFilter(classLoaderMap);
+    final Map<String, ExpansionClassLoader> sortedClassLoaderMap = this.sortAndFilter(classLoaderMap);
     // Close AddonClassLoader of remaining addons
     classLoaderMap.entrySet().stream()
       .filter(entry -> !sortedClassLoaderMap.containsKey(entry.getKey()))
       .forEach(entry -> this.closeClassLoaderSafe(entry.getValue()));
     // Load the addons
-    final Map<String, ExpansionClassLoader<T>> finalClassLoaders = new LinkedHashMap<>();
+    final Map<String, ExpansionClassLoader> finalClassLoaders = new LinkedHashMap<>();
     sortedClassLoaderMap.forEach((key, loader) -> {
       try {
-        final T addon = loader.getAddon();
+        final Expansion addon = loader.getAddon();
         if (!addon.onLoad()) {
           this.logger.warning("Failed to load " + key + " " + loader.getAddonDescription().getVersion());
           this.closeClassLoaderSafe(loader);
@@ -187,7 +182,7 @@ public class ExpansionManager<T extends Expansion> {
    */
   public boolean enableAddon(@NotNull final String name, final boolean closeLoaderOnFailed) {
     try {
-      final T addon = classLoaders.get(name).getAddon();
+      final Expansion addon = classLoaders.get(name).getAddon();
       this.onAddonEnable(addon);
       addon.onEnable();
       this.onAddonEnabled(addon);
@@ -211,7 +206,7 @@ public class ExpansionManager<T extends Expansion> {
    */
   public boolean disableAddon(@NotNull final String name, final boolean closeLoaderOnFailed) {
     try {
-      final T addon = classLoaders.get(name).getAddon();
+      final Expansion addon = classLoaders.get(name).getAddon();
       this.onAddonDisable(addon);
       addon.onDisable();
       this.onAddonDisabled(addon);
@@ -245,8 +240,21 @@ public class ExpansionManager<T extends Expansion> {
    *
    * @param consumer the consumer
    */
-  public void call(Consumer<T> consumer) {
+  public void call(Consumer<Expansion> consumer) {
     this.classLoaders.values().forEach(classLoader -> consumer.accept(classLoader.getAddon()));
+  }
+
+  /**
+   * Call the consumer for all enabled addon
+   *
+   * @param consumer the consumer
+   */
+  public <T> void call(Class<T> clazz, Consumer<T> consumer) {
+    call(addon -> {
+      if (clazz.isInstance(addon)) {
+        consumer.accept(clazz.cast(addon));
+      }
+    });
   }
 
   /**
@@ -273,8 +281,8 @@ public class ExpansionManager<T extends Expansion> {
    * @return the addon, or null if it's not found
    */
   @Nullable
-  public T getAddon(@NotNull final String name) {
-    final ExpansionClassLoader<T> classLoader = this.classLoaders.get(name);
+  public Expansion getAddon(@NotNull final String name) {
+    final ExpansionClassLoader classLoader = this.classLoaders.get(name);
     return classLoader == null ? null : classLoader.getAddon();
   }
 
@@ -295,7 +303,7 @@ public class ExpansionManager<T extends Expansion> {
    * @return the loaded addons
    */
   @NotNull
-  public Map<String, T> getLoadedAddons() {
+  public Map<String, Expansion> getLoadedAddons() {
     return this.classLoaders.entrySet()
       .parallelStream()
       .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getAddon()));
@@ -310,7 +318,7 @@ public class ExpansionManager<T extends Expansion> {
    * @return the class, or null if it's not found
    */
   @Nullable
-  public Class<?> findClass(@NotNull final ExpansionClassLoader<T> classLoader, @NotNull final String name) {
+  public Class<?> findClass(@NotNull final ExpansionClassLoader classLoader, @NotNull final String name) {
     return this.classLoaders.entrySet()
       .parallelStream()
       .filter(entry -> entry.getValue() != classLoader)
@@ -327,7 +335,7 @@ public class ExpansionManager<T extends Expansion> {
    * @return the sorted and filtered map
    */
   @NotNull
-  protected Map<String, ExpansionClassLoader<T>> sortAndFilter(@NotNull final Map<String, ExpansionClassLoader<T>> original) {
+  protected Map<String, ExpansionClassLoader> sortAndFilter(@NotNull final Map<String, ExpansionClassLoader> original) {
     return original;
   }
 
@@ -338,7 +346,7 @@ public class ExpansionManager<T extends Expansion> {
    *
    * @return whether the addon is properly loaded
    */
-  protected boolean onAddonLoading(@NotNull final T addon) {
+  protected boolean onAddonLoading(@NotNull final Expansion addon) {
     return true;
   }
 
@@ -347,7 +355,7 @@ public class ExpansionManager<T extends Expansion> {
    *
    * @param addon the enabling addon
    */
-  protected void onAddonEnable(@NotNull final T addon) {
+  protected void onAddonEnable(@NotNull final Expansion addon) {
     // EMPTY
   }
 
@@ -356,7 +364,7 @@ public class ExpansionManager<T extends Expansion> {
    *
    * @param addon the enabled addon
    */
-  protected void onAddonEnabled(@NotNull final T addon) {
+  protected void onAddonEnabled(@NotNull final Expansion addon) {
     // EMPTY
   }
 
@@ -365,7 +373,7 @@ public class ExpansionManager<T extends Expansion> {
    *
    * @param addon the disabling addon
    */
-  protected void onAddonDisable(@NotNull final T addon) {
+  protected void onAddonDisable(@NotNull final Expansion addon) {
     // EMPTY
   }
 
@@ -374,7 +382,7 @@ public class ExpansionManager<T extends Expansion> {
    *
    * @param addon the disabled addon
    */
-  protected void onAddonDisabled(@NotNull final T addon) {
+  protected void onAddonDisabled(@NotNull final Expansion addon) {
     // EMPTY
   }
 
@@ -383,7 +391,7 @@ public class ExpansionManager<T extends Expansion> {
    *
    * @param classLoader the class loader
    */
-  private void closeClassLoaderSafe(@NotNull final ExpansionClassLoader<T> classLoader) {
+  private void closeClassLoaderSafe(@NotNull final ExpansionClassLoader classLoader) {
     try {
       classLoader.close();
     } catch (final IOException e) {
@@ -397,7 +405,7 @@ public class ExpansionManager<T extends Expansion> {
    * @param name the addon name
    */
   private void closeClassLoaderSafe(@NotNull final String name) {
-    ExpansionClassLoader<T> loader = this.classLoaders.get(name);
+    ExpansionClassLoader loader = this.classLoaders.get(name);
     if (loader != null) {
       this.closeClassLoaderSafe(loader);
     }

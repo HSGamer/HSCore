@@ -1,7 +1,4 @@
-package me.hsgamer.hscore.expansion.common.loader;
-
-import me.hsgamer.hscore.expansion.common.exception.InvalidExpansionException;
-import me.hsgamer.hscore.expansion.common.object.ExpansionDescription;
+package me.hsgamer.hscore.expansion.common;
 
 import java.io.IOException;
 import java.util.jar.JarFile;
