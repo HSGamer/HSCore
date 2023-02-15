@@ -60,7 +60,7 @@ public final class ExpansionClassLoader extends URLClassLoader {
     this.addonManager = addonManager;
     this.file = file;
     this.addonDescription = addonDescription;
-    this.addon = this.addonManager.getExpansionFactory().create(this);
+    this.addon = this.addonManager.getExpansionFactory().apply(this);
   }
 
   /**
