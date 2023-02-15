@@ -126,13 +126,11 @@ public final class ExpansionClassLoader extends URLClassLoader {
   @Override
   @NotNull
   protected Class<?> findClass(@NotNull final String name) throws ClassNotFoundException {
-    synchronized (this.getClassLoadingLock(name)) {
-      Class<?> clazz = this.findClass(name, true);
-      if (clazz == null) {
-        throw new ClassNotFoundException(name);
-      } else {
-        return clazz;
-      }
+    Class<?> clazz = this.findClass(name, true);
+    if (clazz == null) {
+      throw new ClassNotFoundException(name);
+    } else {
+      return clazz;
     }
   }
 
