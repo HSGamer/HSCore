@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +18,20 @@ import java.util.stream.Stream;
  * A class that manages all addons in it
  */
 public class ExpansionManager {
+  public static final Function<ExpansionClassLoader, Expansion> DEFAULT_EXTENSION_FACTORY = classLoader -> {
+    try {
+      final Class<?> clazz = Class.forName(classLoader.getAddonDescription().getMainClass(), true, classLoader);
+      final Class<? extends Expansion> newClass;
+      if (Expansion.class.isAssignableFrom(clazz)) {
+        newClass = clazz.asSubclass(Expansion.class);
+      } else {
+        throw new ClassCastException("The main class does not extend " + Expansion.class.getSimpleName());
+      }
+      return newClass.getDeclaredConstructor().newInstance();
+    } catch (Exception e) {
+      throw new InvalidExpansionException("Can't load the main class", e);
+    }
+  };
 
   /**
    * The class loader map keyed addon's id, valued addon's class loader
@@ -48,7 +63,7 @@ public class ExpansionManager {
   private final ExpansionDescriptionLoader addonDescriptionLoader;
 
   @NotNull
-  private final ExpansionFactory expansionFactory;
+  private final Function<ExpansionClassLoader, Expansion> expansionFactory;
 
   @NotNull
   private final List<ExpansionStateListener> stateListeners = new ArrayList<>();
@@ -60,21 +75,9 @@ public class ExpansionManager {
    * @param logger                 the logger to use in every addon
    * @param addonDescriptionLoader the loader to load addon description
    * @param expansionFactory
-   */
-  protected ExpansionManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull ExpansionDescriptionLoader addonDescriptionLoader, @NotNull ExpansionFactory expansionFactory) {
-    this(addonsDir, logger, addonDescriptionLoader, expansionFactory, ExpansionManager.class.getClassLoader());
-  }
-
-  /**
-   * Create a new addon manager
-   *
-   * @param addonsDir              the directory to store addon files
-   * @param logger                 the logger to use in every addon
-   * @param addonDescriptionLoader the loader to load addon description
-   * @param expansionFactory
    * @param parentClassLoader      the parent class loader to load all addons
    */
-  public ExpansionManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull ExpansionDescriptionLoader addonDescriptionLoader, @NotNull ExpansionFactory expansionFactory, @NotNull final ClassLoader parentClassLoader) {
+  public ExpansionManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull ExpansionDescriptionLoader addonDescriptionLoader, @NotNull Function<ExpansionClassLoader, Expansion> expansionFactory, @NotNull final ClassLoader parentClassLoader) {
     this.logger = logger;
     this.addonsDir = addonsDir;
     this.addonDescriptionLoader = addonDescriptionLoader;
@@ -87,6 +90,26 @@ public class ExpansionManager {
         throw new IllegalStateException("Cannot create addon directory");
       }
     }
+  }
+
+  /**
+   * Create a new addon manager
+   *
+   * @param addonsDir              the directory to store addon files
+   * @param logger                 the logger to use in every addon
+   * @param addonDescriptionLoader the loader to load addon description
+   * @param expansionFactory
+   */
+  public ExpansionManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull ExpansionDescriptionLoader addonDescriptionLoader, @NotNull Function<ExpansionClassLoader, Expansion> expansionFactory) {
+    this(addonsDir, logger, addonDescriptionLoader, expansionFactory, ExpansionManager.class.getClassLoader());
+  }
+
+  public ExpansionManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull ExpansionDescriptionLoader addonDescriptionLoader, @NotNull final ClassLoader parentClassLoader) {
+    this(addonsDir, logger, addonDescriptionLoader, DEFAULT_EXTENSION_FACTORY, parentClassLoader);
+  }
+
+  public ExpansionManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull ExpansionDescriptionLoader addonDescriptionLoader) {
+    this(addonsDir, logger, addonDescriptionLoader, ExpansionManager.class.getClassLoader());
   }
 
   /**
@@ -120,7 +143,7 @@ public class ExpansionManager {
   }
 
   @NotNull
-  public ExpansionFactory getExpansionFactory() {
+  public Function<ExpansionClassLoader, Expansion> getExpansionFactory() {
     return expansionFactory;
   }
 
