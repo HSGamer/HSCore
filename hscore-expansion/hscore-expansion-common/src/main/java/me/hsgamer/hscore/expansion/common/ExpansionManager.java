@@ -284,7 +284,11 @@ public class ExpansionManager {
    * @param consumer the consumer
    */
   public void call(Consumer<Expansion> consumer) {
-    this.classLoaders.values().forEach(classLoader -> consumer.accept(classLoader.getAddon()));
+    this.classLoaders.values().forEach(classLoader -> {
+      if (classLoader.getState() == ExpansionState.ENABLED) {
+        consumer.accept(classLoader.getAddon());
+      }
+    });
   }
 
   /**
