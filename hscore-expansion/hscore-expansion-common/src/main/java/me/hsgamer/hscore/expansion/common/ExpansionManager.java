@@ -200,6 +200,10 @@ public class ExpansionManager {
       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     remainingClassLoaders.values().forEach(loader -> loader.setState(ExpansionState.ERROR));
 
+    // Store the final addons map
+    this.classLoaders.putAll(remainingClassLoaders);
+    this.classLoaders.putAll(sortedClassLoaders);
+
     // Load the addons
     sortedClassLoaders.forEach((key, loader) -> {
       try {
@@ -214,10 +218,6 @@ public class ExpansionManager {
         loader.setState(ExpansionState.ERROR);
       }
     });
-
-    // Store the final addons map
-    this.classLoaders.putAll(remainingClassLoaders);
-    this.classLoaders.putAll(sortedClassLoaders);
   }
 
   /**
