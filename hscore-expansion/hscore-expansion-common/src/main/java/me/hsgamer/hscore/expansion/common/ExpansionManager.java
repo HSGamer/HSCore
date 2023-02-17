@@ -29,7 +29,7 @@ public class ExpansionManager {
       }
       return newClass.getDeclaredConstructor().newInstance();
     } catch (Exception e) {
-      throw new InvalidExpansionException("Can't load the main class", e);
+      throw new IllegalStateException("Cannot create a new instance of the main class", e);
     }
   };
 
@@ -145,6 +145,10 @@ public class ExpansionManager {
   @NotNull
   public Function<ExpansionClassLoader, Expansion> getExpansionFactory() {
     return expansionFactory;
+  }
+
+  public ClassLoader getParentClassLoader() {
+    return parentClassLoader;
   }
 
   public void addStateListener(@NotNull ExpansionStateListener listener) {
