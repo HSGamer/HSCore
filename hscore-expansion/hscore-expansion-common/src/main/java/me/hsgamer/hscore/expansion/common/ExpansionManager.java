@@ -66,7 +66,7 @@ public class ExpansionManager {
   private final Function<ExpansionClassLoader, Expansion> expansionFactory;
 
   @NotNull
-  private final List<ExpansionStateListener> stateListeners = new ArrayList<>();
+  private final Set<ExpansionStateListener> stateListeners = new HashSet<>();
 
   /**
    * Create a new addon manager
