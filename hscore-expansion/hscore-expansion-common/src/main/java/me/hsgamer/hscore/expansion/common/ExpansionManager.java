@@ -4,13 +4,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.jar.JarFile;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -49,12 +47,6 @@ public class ExpansionManager {
   private final File expansionsDir;
 
   /**
-   * The logger to use in all expansions
-   */
-  @NotNull
-  private final Logger logger;
-
-  /**
    * The parent class loader to load all expansions
    */
   @NotNull
@@ -79,24 +71,25 @@ public class ExpansionManager {
   private final Set<BiConsumer<ExpansionClassLoader, ExpansionState>> stateListeners = new HashSet<>();
 
   /**
+   * The handler for the exception
+   */
+  private Consumer<Throwable> exceptionHandler = Throwable::printStackTrace;
+
+  /**
    * Create a new expansion manager
    *
    * @param expansionsDir      the directory to store expansion files
-   * @param logger             the logger to use in every expansion
    * @param descriptionFactory the factory to load description
    * @param expansionFactory   the factory to load expansion instance
    * @param parentClassLoader  the parent class loader to load all expansions
    */
-  public ExpansionManager(@NotNull final File expansionsDir, @NotNull final Logger logger, @NotNull Function<JarFile, ExpansionDescription> descriptionFactory, @NotNull Function<ExpansionClassLoader, Expansion> expansionFactory, @NotNull final ClassLoader parentClassLoader) {
-    this.logger = logger;
+  public ExpansionManager(@NotNull final File expansionsDir, @NotNull Function<JarFile, ExpansionDescription> descriptionFactory, @NotNull Function<ExpansionClassLoader, Expansion> expansionFactory, @NotNull final ClassLoader parentClassLoader) {
     this.expansionsDir = expansionsDir;
     this.descriptionFactory = descriptionFactory;
     this.expansionFactory = expansionFactory;
     this.parentClassLoader = parentClassLoader;
     if (!expansionsDir.exists()) {
-      if (expansionsDir.mkdirs()) {
-        logger.finest("Created expansion directory");
-      } else {
+      if (!expansionsDir.mkdirs()) {
         throw new IllegalStateException("Cannot create expansion directory");
       }
     } else if (!expansionsDir.isDirectory()) {
@@ -109,24 +102,22 @@ public class ExpansionManager {
    * Create a new expansion manager
    *
    * @param expansionsDir      the directory to store expansion files
-   * @param logger             the logger to use in every expansion
    * @param descriptionFactory the factory to load description
    * @param expansionFactory   the factory to load expansion instance
    */
-  public ExpansionManager(@NotNull final File expansionsDir, @NotNull final Logger logger, @NotNull Function<JarFile, ExpansionDescription> descriptionFactory, @NotNull Function<ExpansionClassLoader, Expansion> expansionFactory) {
-    this(expansionsDir, logger, descriptionFactory, expansionFactory, ExpansionManager.class.getClassLoader());
+  public ExpansionManager(@NotNull final File expansionsDir, @NotNull Function<JarFile, ExpansionDescription> descriptionFactory, @NotNull Function<ExpansionClassLoader, Expansion> expansionFactory) {
+    this(expansionsDir, descriptionFactory, expansionFactory, ExpansionManager.class.getClassLoader());
   }
 
   /**
    * Create a new expansion manager
    *
    * @param expansionsDir      the directory to store expansion files
-   * @param logger             the logger to use in every expansion
    * @param descriptionFactory the factory to load description
    * @param parentClassLoader  the parent class loader to load all expansions
    */
-  public ExpansionManager(@NotNull final File expansionsDir, @NotNull final Logger logger, @NotNull Function<JarFile, ExpansionDescription> descriptionFactory, @NotNull final ClassLoader parentClassLoader) {
-    this(expansionsDir, logger, descriptionFactory, DEFAULT_EXPANSION_FACTORY, parentClassLoader);
+  public ExpansionManager(@NotNull final File expansionsDir, @NotNull Function<JarFile, ExpansionDescription> descriptionFactory, @NotNull final ClassLoader parentClassLoader) {
+    this(expansionsDir, descriptionFactory, DEFAULT_EXPANSION_FACTORY, parentClassLoader);
   }
 
   /**
@@ -137,7 +128,7 @@ public class ExpansionManager {
    * @param descriptionFactory the factory to load description
    */
   public ExpansionManager(@NotNull final File expansionsDir, @NotNull final Logger logger, @NotNull Function<JarFile, ExpansionDescription> descriptionFactory) {
-    this(expansionsDir, logger, descriptionFactory, ExpansionManager.class.getClassLoader());
+    this(expansionsDir, descriptionFactory, ExpansionManager.class.getClassLoader());
   }
 
   /**
@@ -148,16 +139,6 @@ public class ExpansionManager {
   @NotNull
   public final File getExpansionsDir() {
     return this.expansionsDir;
-  }
-
-  /**
-   * Get the logger
-   *
-   * @return the logger
-   */
-  @NotNull
-  public final Logger getLogger() {
-    return this.logger;
   }
 
   /**
@@ -218,6 +199,15 @@ public class ExpansionManager {
   }
 
   /**
+   * Set the exception handler
+   *
+   * @param exceptionHandler the exception handler
+   */
+  public void setExceptionHandler(Consumer<Throwable> exceptionHandler) {
+    this.exceptionHandler = exceptionHandler;
+  }
+
+  /**
    * Load all expansions from the expansion directory. Also call {@link Expansion#onLoad()}
    */
   public void loadExpansions() {
@@ -232,20 +222,19 @@ public class ExpansionManager {
         try (final JarFile jar = new JarFile(file)) {
           description = descriptionFactory.apply(jar);
           if (initClassLoaders.containsKey(description.getName())) {
-            this.logger.warning("Duplicated expansion " + description.getName());
             return;
           }
 
           loader = new ExpansionClassLoader(this, file, description, this.parentClassLoader);
         } catch (final Exception e) {
-          this.logger.log(Level.WARNING, e, () -> "Error when loading file " + file.getName());
+          exceptionHandler.accept(new InvalidExpansionFileException("Cannot load expansion file " + file.getName(), file, e));
           return;
         }
 
         try {
           loader.setState(ExpansionState.LOADING);
         } catch (final Throwable t) {
-          this.logger.log(Level.WARNING, t, () -> "Error when loading file " + file.getName());
+          loader.setThrowable(t);
           loader.setState(ExpansionState.ERROR);
         }
 
@@ -273,10 +262,9 @@ public class ExpansionManager {
         if (!expansion.onLoad()) {
           throw new IllegalStateException("onLoad() returned false");
         }
-        this.logger.info("Loaded " + key + " " + loader.getDescription().getVersion());
         loader.setState(ExpansionState.LOADED);
       } catch (final Throwable t) {
-        this.logger.log(Level.WARNING, t, () -> "Error when loading expansion " + key);
+        loader.setThrowable(t);
         loader.setState(ExpansionState.ERROR);
       }
     });
@@ -305,9 +293,8 @@ public class ExpansionManager {
           loader.setState(ExpansionState.ENABLING);
           expansion.onEnable();
           loader.setState(ExpansionState.ENABLED);
-          this.logger.log(Level.INFO, "Enabled {0} {1}", new Object[]{name, loader.getDescription().getVersion()});
         } catch (final Throwable t) {
-          this.logger.log(Level.WARNING, t, () -> "Error when enabling " + name);
+          loader.setThrowable(t);
           loader.setState(ExpansionState.ERROR);
         }
       }
@@ -322,16 +309,14 @@ public class ExpansionManager {
     while (true) {
       final Map.Entry<String, ExpansionClassLoader> entry = stack.pollLast();
       if (entry == null) break;
-      final String name = entry.getKey();
       final ExpansionClassLoader loader = entry.getValue();
       if (loader.getState() == ExpansionState.ENABLED) {
         try {
           loader.setState(ExpansionState.DISABLING);
           loader.getExpansion().onDisable();
           loader.setState(ExpansionState.DISABLED);
-          this.logger.log(Level.INFO, "Disabled {0} {1}", new Object[]{name, loader.getDescription().getVersion()});
         } catch (final Throwable t) {
-          this.logger.log(Level.WARNING, t, () -> "Error when disabling " + name);
+          loader.setThrowable(t);
           loader.setState(ExpansionState.ERROR);
         }
       }
@@ -424,7 +409,7 @@ public class ExpansionManager {
   /**
    * Notify the state change to the listeners
    *
-   * @param classLoader the extension class loader
+   * @param classLoader the expansion class loader
    * @param state       the state
    */
   void notifyStateChange(@NotNull final ExpansionClassLoader classLoader, @NotNull final ExpansionState state) {
@@ -441,8 +426,8 @@ public class ExpansionManager {
   private void closeClassLoaderSafe(@NotNull final ExpansionClassLoader classLoader) {
     try {
       classLoader.close();
-    } catch (final IOException e) {
-      this.logger.log(Level.WARNING, "Error when closing ClassLoader", e);
+    } catch (final Throwable e) {
+      exceptionHandler.accept(new ExpansionClassLoaderException(classLoader, "Failed to close class loader", e));
     }
   }
 }

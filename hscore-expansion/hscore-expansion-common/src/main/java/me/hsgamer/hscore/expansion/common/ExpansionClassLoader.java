@@ -44,6 +44,11 @@ public final class ExpansionClassLoader extends URLClassLoader {
   private ExpansionState currentState = ExpansionState.UNKNOWN;
 
   /**
+   * The throwable if the expansion is in {@link ExpansionState#ERROR}
+   */
+  private Throwable throwable;
+
+  /**
    * Create a new class loader
    *
    * @param manager     the expansion manager
@@ -109,6 +114,7 @@ public final class ExpansionClassLoader extends URLClassLoader {
    *
    * @return the state
    */
+  @NotNull
   public ExpansionState getState() {
     return currentState;
   }
@@ -122,6 +128,25 @@ public final class ExpansionClassLoader extends URLClassLoader {
     if (this.currentState == state) return;
     manager.notifyStateChange(this, state);
     this.currentState = state;
+  }
+
+  /**
+   * Get the throwable if the expansion is in {@link ExpansionState#ERROR}
+   *
+   * @return the throwable
+   */
+  @Nullable
+  public Throwable getThrowable() {
+    return throwable;
+  }
+
+  /**
+   * Set the throwable if the expansion is in {@link ExpansionState#ERROR}
+   *
+   * @param throwable the throwable
+   */
+  void setThrowable(@NotNull final Throwable throwable) {
+    this.throwable = throwable;
   }
 
   @Override
