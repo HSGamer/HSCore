@@ -60,7 +60,7 @@ public class ExpansionManager {
    * The addon description loader
    */
   @NotNull
-  private final ExpansionDescriptionLoader addonDescriptionLoader;
+  private final Function<JarFile, ExpansionDescription> descriptionFactory;
 
   @NotNull
   private final Function<ExpansionClassLoader, Expansion> expansionFactory;
@@ -71,16 +71,16 @@ public class ExpansionManager {
   /**
    * Create a new addon manager
    *
-   * @param addonsDir              the directory to store addon files
-   * @param logger                 the logger to use in every addon
-   * @param addonDescriptionLoader the loader to load addon description
+   * @param addonsDir          the directory to store addon files
+   * @param logger             the logger to use in every addon
+   * @param descriptionFactory the loader to load addon description
    * @param expansionFactory
-   * @param parentClassLoader      the parent class loader to load all addons
+   * @param parentClassLoader  the parent class loader to load all addons
    */
-  public ExpansionManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull ExpansionDescriptionLoader addonDescriptionLoader, @NotNull Function<ExpansionClassLoader, Expansion> expansionFactory, @NotNull final ClassLoader parentClassLoader) {
+  public ExpansionManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull Function<JarFile, ExpansionDescription> descriptionFactory, @NotNull Function<ExpansionClassLoader, Expansion> expansionFactory, @NotNull final ClassLoader parentClassLoader) {
     this.logger = logger;
     this.addonsDir = addonsDir;
-    this.addonDescriptionLoader = addonDescriptionLoader;
+    this.descriptionFactory = descriptionFactory;
     this.expansionFactory = expansionFactory;
     this.parentClassLoader = parentClassLoader;
     if (!addonsDir.exists()) {
@@ -95,21 +95,21 @@ public class ExpansionManager {
   /**
    * Create a new addon manager
    *
-   * @param addonsDir              the directory to store addon files
-   * @param logger                 the logger to use in every addon
-   * @param addonDescriptionLoader the loader to load addon description
+   * @param addonsDir          the directory to store addon files
+   * @param logger             the logger to use in every addon
+   * @param descriptionFactory the loader to load addon description
    * @param expansionFactory
    */
-  public ExpansionManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull ExpansionDescriptionLoader addonDescriptionLoader, @NotNull Function<ExpansionClassLoader, Expansion> expansionFactory) {
-    this(addonsDir, logger, addonDescriptionLoader, expansionFactory, ExpansionManager.class.getClassLoader());
+  public ExpansionManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull Function<JarFile, ExpansionDescription> descriptionFactory, @NotNull Function<ExpansionClassLoader, Expansion> expansionFactory) {
+    this(addonsDir, logger, descriptionFactory, expansionFactory, ExpansionManager.class.getClassLoader());
   }
 
-  public ExpansionManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull ExpansionDescriptionLoader addonDescriptionLoader, @NotNull final ClassLoader parentClassLoader) {
-    this(addonsDir, logger, addonDescriptionLoader, DEFAULT_EXTENSION_FACTORY, parentClassLoader);
+  public ExpansionManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull Function<JarFile, ExpansionDescription> descriptionFactory, @NotNull final ClassLoader parentClassLoader) {
+    this(addonsDir, logger, descriptionFactory, DEFAULT_EXTENSION_FACTORY, parentClassLoader);
   }
 
-  public ExpansionManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull ExpansionDescriptionLoader addonDescriptionLoader) {
-    this(addonsDir, logger, addonDescriptionLoader, ExpansionManager.class.getClassLoader());
+  public ExpansionManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull Function<JarFile, ExpansionDescription> descriptionFactory) {
+    this(addonsDir, logger, descriptionFactory, ExpansionManager.class.getClassLoader());
   }
 
   /**
@@ -138,8 +138,8 @@ public class ExpansionManager {
    * @return the loader
    */
   @NotNull
-  public ExpansionDescriptionLoader getAddonDescriptionLoader() {
-    return addonDescriptionLoader;
+  public Function<JarFile, ExpansionDescription> getDescriptionFactory() {
+    return descriptionFactory;
   }
 
   @NotNull
@@ -169,7 +169,7 @@ public class ExpansionManager {
         ExpansionClassLoader loader;
         try (final JarFile jar = new JarFile(file)) {
           // Get addon description
-          addonDescription = addonDescriptionLoader.load(jar);
+          addonDescription = descriptionFactory.apply(jar);
           if (initClassLoaders.containsKey(addonDescription.getName())) {
             this.logger.warning("Duplicated addon " + addonDescription.getName());
             return;
