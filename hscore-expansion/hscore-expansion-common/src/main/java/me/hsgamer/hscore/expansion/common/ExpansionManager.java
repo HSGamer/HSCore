@@ -99,6 +99,8 @@ public class ExpansionManager {
       } else {
         throw new IllegalStateException("Cannot create expansion directory");
       }
+    } else if (!expansionsDir.isDirectory()) {
+      throw new IllegalStateException("Expansion directory is not a directory");
     }
   }
 
