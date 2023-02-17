@@ -1,5 +1,8 @@
 package me.hsgamer.hscore.expansion.common;
 
+/**
+ * An interface for an expansion instance
+ */
 public interface Expansion {
   /**
    * Called when loading the expansion

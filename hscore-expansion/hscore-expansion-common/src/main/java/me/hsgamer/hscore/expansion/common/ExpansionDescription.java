@@ -5,41 +5,41 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 /**
- * The description for the Addon
+ * The description for the {@link Expansion}
  */
 public final class ExpansionDescription {
 
   /**
-   * The name of the addon
+   * The name of the expansion
    */
   @NotNull
   private final String name;
 
   /**
-   * The version of the addon
+   * The version of the expansion
    */
   @NotNull
   private final String version;
 
   /**
-   * The main class of the addon
+   * The main class of the expansion
    */
   @NotNull
   private final String mainClass;
 
   /**
-   * The data of the addon
+   * The extra data of the expansion
    */
   @NotNull
   private final Map<String, Object> data;
 
   /**
-   * Create an addon description
+   * Create an expansion description
    *
-   * @param name      the name of the addon
-   * @param version   the version of the addon
-   * @param mainClass the main class of the addon
-   * @param data      the data of the addon
+   * @param name      the name of the expansion
+   * @param version   the version of the expansion
+   * @param mainClass the main class of the expansion
+   * @param data      the extra data of the expansion
    */
   public ExpansionDescription(@NotNull final String name, @NotNull final String version, @NotNull final String mainClass,
                               @NotNull final Map<String, Object> data) {
@@ -50,7 +50,7 @@ public final class ExpansionDescription {
   }
 
   /**
-   * Get the name of the addon
+   * Get the name of the expansion
    *
    * @return the name
    */
@@ -60,7 +60,7 @@ public final class ExpansionDescription {
   }
 
   /**
-   * Get the version of the addon
+   * Get the version of the expansion
    *
    * @return the version
    */
@@ -70,7 +70,7 @@ public final class ExpansionDescription {
   }
 
   /**
-   * Get the main class of the addon
+   * Get the main class of the expansion
    *
    * @return the path to the main class
    */
@@ -80,7 +80,7 @@ public final class ExpansionDescription {
   }
 
   /**
-   * Get the data of the addon
+   * Get the extra data of the expansion
    *
    * @return the data
    */

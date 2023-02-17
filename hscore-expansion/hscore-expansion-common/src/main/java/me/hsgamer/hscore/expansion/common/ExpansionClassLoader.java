@@ -9,74 +9,75 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 /**
- * The class loader of the addon
+ * The class loader of the expansion
  */
 public final class ExpansionClassLoader extends URLClassLoader {
 
   /**
-   * The jar file of the addon
+   * The jar file of the expansion
    */
   @NotNull
   private final File file;
 
   /**
-   * The addon manager
+   * The expansion manager
    */
   @NotNull
-  private final ExpansionManager addonManager;
+  private final ExpansionManager manager;
 
   /**
-   * The addon's description
+   * The expansion's description
    */
   @NotNull
-  private final ExpansionDescription addonDescription;
+  private final ExpansionDescription description;
 
   /**
-   * The addon
+   * The expansion
    */
   @NotNull
-  private final Expansion addon;
+  private final Expansion expansion;
 
   /**
-   * The state of the addon
+   * The state of the expansion
    */
+  @NotNull
   private ExpansionState currentState = ExpansionState.UNKNOWN;
 
   /**
-   * Create an Addon Class Loader
+   * Create a new class loader
    *
-   * @param addonManager     the addon manager
-   * @param file             the addon jar
-   * @param addonDescription the description for the addon
-   * @param parent           the parent class loader
+   * @param manager     the expansion manager
+   * @param file        the expansion jar
+   * @param description the description for the expansion
+   * @param parent      the parent class loader
    *
    * @throws MalformedURLException if it cannot convert the file to its related URL
    */
-  public ExpansionClassLoader(@NotNull final ExpansionManager addonManager, @NotNull final File file,
-                              @NotNull final ExpansionDescription addonDescription,
+  public ExpansionClassLoader(@NotNull final ExpansionManager manager, @NotNull final File file,
+                              @NotNull final ExpansionDescription description,
                               @NotNull final ClassLoader parent)
     throws MalformedURLException {
     super(new URL[]{file.toURI().toURL()}, parent);
-    this.addonManager = addonManager;
+    this.manager = manager;
     this.file = file;
-    this.addonDescription = addonDescription;
-    this.addon = this.addonManager.getExpansionFactory().apply(this);
+    this.description = description;
+    this.expansion = this.manager.getExpansionFactory().apply(this);
   }
 
   /**
-   * Get the addon
+   * Get the expansion
    *
-   * @return the addon
+   * @return the expansion
    */
   @NotNull
-  public Expansion getAddon() {
-    return this.addon;
+  public Expansion getExpansion() {
+    return this.expansion;
   }
 
   /**
-   * Get the addon jar
+   * Get the expansion jar
    *
-   * @return the addon jar
+   * @return the expansion jar
    */
   @NotNull
   public File getFile() {
@@ -84,27 +85,27 @@ public final class ExpansionClassLoader extends URLClassLoader {
   }
 
   /**
-   * Get the addon manager
+   * Get the expansion manager
    *
-   * @return the addon manager
+   * @return the expansion manager
    */
   @NotNull
-  public ExpansionManager getAddonManager() {
-    return this.addonManager;
+  public ExpansionManager getManager() {
+    return this.manager;
   }
 
   /**
-   * Get the addon's description
+   * Get the expansion's description
    *
    * @return the description
    */
   @NotNull
-  public ExpansionDescription getAddonDescription() {
-    return this.addonDescription;
+  public ExpansionDescription getDescription() {
+    return this.description;
   }
 
   /**
-   * Get the state of the addon
+   * Get the state of the expansion
    *
    * @return the state
    */
@@ -113,13 +114,13 @@ public final class ExpansionClassLoader extends URLClassLoader {
   }
 
   /**
-   * Set the state of the addon
+   * Set the state of the expansion
    *
    * @param state the state
    */
   void setState(@NotNull final ExpansionState state) {
     if (this.currentState == state) return;
-    addonManager.notifyStateChange(this, state);
+    manager.notifyStateChange(this, state);
     this.currentState = state;
   }
 
@@ -149,7 +150,7 @@ public final class ExpansionClassLoader extends URLClassLoader {
       clazz = super.findClass(name);
     } catch (final ClassNotFoundException | NoClassDefFoundError e) {
       if (global) {
-        clazz = this.addonManager.findClass(this, name);
+        clazz = this.manager.findClass(this, name);
       }
     }
     return clazz;
