@@ -1,6 +1,4 @@
 me.hsgamer.hscore.addon
-me.hsgamer.hscore.addon.exception
-me.hsgamer.hscore.addon.loader
 me.hsgamer.hscore.addon.object
 me.hsgamer.hscore.builder
 me.hsgamer.hscore.bukkit.addon
@@ -68,6 +66,11 @@ me.hsgamer.hscore.downloader.core.loader
 me.hsgamer.hscore.downloader.core.object
 me.hsgamer.hscore.downloader.json
 me.hsgamer.hscore.downloader.webstream
+me.hsgamer.hscore.expansion.common
+me.hsgamer.hscore.expansion.common.exception
+me.hsgamer.hscore.expansion.common.factory
+me.hsgamer.hscore.expansion.manifest
+me.hsgamer.hscore.expansion.properties
 me.hsgamer.hscore.expression
 me.hsgamer.hscore.expression.number
 me.hsgamer.hscore.expression.string
