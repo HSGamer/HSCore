@@ -42,6 +42,6 @@ public interface MapExpansionDescriptionLoader extends Function<JarFile, Expansi
     if (mainClass == null) {
       throw new IllegalArgumentException(jarFile.getName() + " doesn't define a main class");
     }
-    return new ExpansionDescription(name, version, mainClass, data);
+    return ExpansionDescription.simple(name, version, mainClass, data);
   }
 }

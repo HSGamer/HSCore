@@ -42,6 +42,6 @@ public class ManifestExpansionDescriptionLoader implements Function<JarFile, Exp
     }
     Map<String, Object> data = new HashMap<>();
     attributes.forEach((key, value) -> data.put(Objects.toString(key), value));
-    return new ExpansionDescription(name, version, mainClass, data);
+    return ExpansionDescription.simple(name, version, mainClass, data);
   }
 }

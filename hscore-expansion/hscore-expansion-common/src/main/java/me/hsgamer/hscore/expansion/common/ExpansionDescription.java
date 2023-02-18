@@ -2,51 +2,46 @@ package me.hsgamer.hscore.expansion.common;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
  * The description for the {@link Expansion}
  */
-public final class ExpansionDescription {
+public interface ExpansionDescription {
 
   /**
-   * The name of the expansion
-   */
-  @NotNull
-  private final String name;
-
-  /**
-   * The version of the expansion
-   */
-  @NotNull
-  private final String version;
-
-  /**
-   * The main class of the expansion
-   */
-  @NotNull
-  private final String mainClass;
-
-  /**
-   * The extra data of the expansion
-   */
-  @NotNull
-  private final Map<String, Object> data;
-
-  /**
-   * Create an expansion description
+   * Create a simple {@link ExpansionDescription}
    *
-   * @param name      the name of the expansion
-   * @param version   the version of the expansion
-   * @param mainClass the main class of the expansion
-   * @param data      the extra data of the expansion
+   * @param name      the name
+   * @param version   the version
+   * @param mainClass the main class
+   * @param data      the extra data
+   *
+   * @return the {@link ExpansionDescription}
    */
-  public ExpansionDescription(@NotNull final String name, @NotNull final String version, @NotNull final String mainClass,
-                              @NotNull final Map<String, Object> data) {
-    this.name = name;
-    this.version = version;
-    this.mainClass = mainClass;
-    this.data = data;
+  static ExpansionDescription simple(@NotNull final String name, @NotNull final String version, @NotNull final String mainClass, @NotNull final Map<String, Object> data) {
+    return new ExpansionDescription() {
+      @Override
+      public @NotNull String getName() {
+        return name;
+      }
+
+      @Override
+      public @NotNull String getVersion() {
+        return version;
+      }
+
+      @Override
+      public @NotNull String getMainClass() {
+        return mainClass;
+      }
+
+      @Override
+      public @NotNull Map<String, Object> getData() {
+        return data;
+      }
+    };
   }
 
   /**
@@ -55,9 +50,7 @@ public final class ExpansionDescription {
    * @return the name
    */
   @NotNull
-  public String getName() {
-    return this.name;
-  }
+  String getName();
 
   /**
    * Get the version of the expansion
@@ -65,9 +58,7 @@ public final class ExpansionDescription {
    * @return the version
    */
   @NotNull
-  public String getVersion() {
-    return this.version;
-  }
+  String getVersion();
 
   /**
    * Get the main class of the expansion
@@ -75,9 +66,7 @@ public final class ExpansionDescription {
    * @return the path to the main class
    */
   @NotNull
-  public String getMainClass() {
-    return this.mainClass;
-  }
+  String getMainClass();
 
   /**
    * Get the extra data of the expansion
@@ -85,7 +74,7 @@ public final class ExpansionDescription {
    * @return the data
    */
   @NotNull
-  public Map<String, Object> getData() {
-    return data;
+  default Map<String, Object> getData() {
+    return Collections.emptyMap();
   }
 }
