@@ -1,4 +1,6 @@
-package me.hsgamer.hscore.expansion.common;
+package me.hsgamer.hscore.expansion.common.exception;
+
+import me.hsgamer.hscore.expansion.common.Expansion;
 
 import java.io.File;
 
@@ -8,7 +10,7 @@ import java.io.File;
 public class InvalidExpansionFileException extends RuntimeException {
   private final File file;
 
-  InvalidExpansionFileException(String message, File file, Throwable cause) {
+  public InvalidExpansionFileException(String message, File file, Throwable cause) {
     super(message, cause);
     this.file = file;
   }

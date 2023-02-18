@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.expansion.common;
 
+import me.hsgamer.hscore.expansion.common.exception.ExpansionClassLoaderException;
+import me.hsgamer.hscore.expansion.common.exception.InvalidExpansionFileException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

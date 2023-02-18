@@ -1,4 +1,6 @@
-package me.hsgamer.hscore.expansion.common;
+package me.hsgamer.hscore.expansion.common.exception;
+
+import me.hsgamer.hscore.expansion.common.ExpansionClassLoader;
 
 /**
  * The exception thrown when the {@link ExpansionClassLoader} throws an exception
@@ -6,7 +8,7 @@ package me.hsgamer.hscore.expansion.common;
 public class ExpansionClassLoaderException extends RuntimeException {
   private final ExpansionClassLoader expansionClassLoader;
 
-  ExpansionClassLoaderException(ExpansionClassLoader expansionClassLoader, String message, Throwable cause) {
+  public ExpansionClassLoaderException(ExpansionClassLoader expansionClassLoader, String message, Throwable cause) {
     super(message, cause);
     this.expansionClassLoader = expansionClassLoader;
   }
