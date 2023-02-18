@@ -1,14 +1,16 @@
 package me.hsgamer.hscore.bukkit.addon;
 
 import me.hsgamer.hscore.addon.AddonManager;
-import me.hsgamer.hscore.addon.loader.AddonDescriptionLoader;
 import me.hsgamer.hscore.addon.object.Addon;
+import me.hsgamer.hscore.expansion.common.ExpansionDescription;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.function.Function;
+import java.util.jar.JarFile;
 import java.util.logging.Level;
 
 /**
@@ -29,7 +31,7 @@ public class PluginAddonManager extends AddonManager {
    * @param addonFolder            the addon folder
    * @param addonDescriptionLoader the addon description loader
    */
-  public PluginAddonManager(@NotNull final JavaPlugin javaPlugin, @NotNull final File addonFolder, @NotNull final AddonDescriptionLoader addonDescriptionLoader) {
+  public PluginAddonManager(@NotNull final JavaPlugin javaPlugin, @NotNull final File addonFolder, @NotNull final Function<JarFile, ExpansionDescription> addonDescriptionLoader) {
     super(addonFolder, javaPlugin.getLogger(), addonDescriptionLoader);
     this.javaPlugin = javaPlugin;
   }
@@ -40,7 +42,7 @@ public class PluginAddonManager extends AddonManager {
    * @param javaPlugin             the plugin
    * @param addonDescriptionLoader the addon description loader
    */
-  public PluginAddonManager(@NotNull final JavaPlugin javaPlugin, @NotNull final AddonDescriptionLoader addonDescriptionLoader) {
+  public PluginAddonManager(@NotNull final JavaPlugin javaPlugin, @NotNull final Function<JarFile, ExpansionDescription> addonDescriptionLoader) {
     this(javaPlugin, new File(javaPlugin.getDataFolder(), "addon"), addonDescriptionLoader);
   }
 

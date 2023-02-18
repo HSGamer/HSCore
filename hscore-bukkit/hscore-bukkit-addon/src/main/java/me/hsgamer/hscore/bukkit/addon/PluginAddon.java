@@ -1,7 +1,7 @@
 package me.hsgamer.hscore.bukkit.addon;
 
-import me.hsgamer.hscore.addon.AddonManager;
 import me.hsgamer.hscore.addon.object.Addon;
+import me.hsgamer.hscore.expansion.common.ExpansionManager;
 import org.bukkit.Server;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.bukkit.plugin.InvalidPluginException;
@@ -20,7 +20,7 @@ public abstract class PluginAddon extends Addon {
    * @return the plugin
    */
   public final JavaPlugin getPlugin() {
-    final AddonManager addonManager = this.getAddonManager();
+    final ExpansionManager addonManager = this.getExpansionClassLoader().getManager();
     if (!(addonManager instanceof PluginAddonManager)) {
       throw new IllegalStateException("You are calling the method on a non-Bukkit project");
     }
@@ -53,7 +53,7 @@ public abstract class PluginAddon extends Addon {
    */
   public final void loadFakePlugin() throws InvalidPluginException, InvalidDescriptionException {
     if (hasFakePlugin()) {
-      this.fakePlugin = this.getPlugin().getServer().getPluginManager().loadPlugin(this.getClassLoader().getFile());
+      this.fakePlugin = this.getPlugin().getServer().getPluginManager().loadPlugin(this.getExpansionClassLoader().getFile());
     }
   }
 

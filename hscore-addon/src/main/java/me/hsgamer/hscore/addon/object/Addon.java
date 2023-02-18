@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.addon.object;
 
-import me.hsgamer.hscore.addon.AddonManager;
+import me.hsgamer.hscore.expansion.common.Expansion;
+import me.hsgamer.hscore.expansion.common.ExpansionClassLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,61 +12,32 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.logging.Logger;
 
 /**
  * The main class of the addon
  */
-public abstract class Addon {
+public abstract class Addon implements Expansion {
+  private final ExpansionClassLoader expansionClassLoader;
+  private final AddonDescription description;
+  private final File dataFolder;
+  private final Logger logger;
 
-  /**
-   * The addon's class loader
-   */
-  private final AddonClassLoader addonClassLoader;
-
-  /**
-   * The addon's data folder
-   */
-  private File dataFolder;
-
-  /**
-   * Create an addon
-   */
-  public Addon() {
+  protected Addon() {
     ClassLoader classLoader = getClass().getClassLoader();
-    if (classLoader instanceof AddonClassLoader) {
-      this.addonClassLoader = (AddonClassLoader) classLoader;
-    } else {
+    if (!(classLoader instanceof ExpansionClassLoader)) {
       throw new IllegalStateException("Cannot create an addon without AddonClassLoader");
     }
-  }
-
-  /**
-   * Called when loading the addon
-   *
-   * @return whether the addon loaded properly
-   */
-  public boolean onLoad() {
-    return true;
-  }
-
-  /**
-   * Called when enabling the addon
-   */
-  public void onEnable() {
-    // EMPTY
+    this.expansionClassLoader = (ExpansionClassLoader) classLoader;
+    this.description = new AddonDescription(expansionClassLoader.getDescription());
+    this.dataFolder = new File(expansionClassLoader.getManager().getExpansionsDir(), description.getName());
+    this.logger = Logger.getLogger(description.getName());
   }
 
   /**
    * Called after all addons enabled
    */
   public void onPostEnable() {
-    // EMPTY
-  }
-
-  /**
-   * Called when disabling the addon
-   */
-  public void onDisable() {
     // EMPTY
   }
 
@@ -83,17 +55,7 @@ public abstract class Addon {
    */
   @NotNull
   public final AddonDescription getDescription() {
-    return this.addonClassLoader.getAddonDescription();
-  }
-
-  /**
-   * Get the addon manager
-   *
-   * @return the addon manager
-   */
-  @NotNull
-  public final AddonManager getAddonManager() {
-    return this.addonClassLoader.getAddonManager();
+    return description;
   }
 
   /**
@@ -103,9 +65,6 @@ public abstract class Addon {
    */
   @NotNull
   public final File getDataFolder() {
-    if (this.dataFolder == null) {
-      this.dataFolder = new File(this.getAddonManager().getAddonsDir(), this.getDescription().getName());
-    }
     if (!this.dataFolder.exists()) {
       this.dataFolder.mkdirs();
     }
@@ -123,7 +82,7 @@ public abstract class Addon {
       throw new IllegalArgumentException("Path cannot be null or empty");
     }
     final String newPath = path.replace('\\', '/');
-    try (final JarFile jar = new JarFile(this.addonClassLoader.getFile())) {
+    try (final JarFile jar = new JarFile(this.expansionClassLoader.getFile())) {
       final JarEntry jarConfig = jar.getJarEntry(newPath);
       if (jarConfig != null) {
         try (final InputStream in = jar.getInputStream(jarConfig)) {
@@ -140,7 +99,7 @@ public abstract class Addon {
         throw new IllegalArgumentException("The embedded resource '" + newPath + "' cannot be found");
       }
     } catch (final IOException e) {
-      this.getAddonManager().getLogger().warning("Could not load from jar file. " + newPath);
+      logger.warning("Could not load from jar file. " + newPath);
     }
   }
 
@@ -157,7 +116,7 @@ public abstract class Addon {
       throw new IllegalArgumentException("Path cannot be null or empty");
     }
     final String newPath = path.replace('\\', '/');
-    try (final JarFile jar = new JarFile(this.addonClassLoader.getFile())) {
+    try (final JarFile jar = new JarFile(this.expansionClassLoader.getFile())) {
       final JarEntry jarConfig = jar.getJarEntry(newPath);
       if (jarConfig != null) {
         try (final InputStream in = jar.getInputStream(jarConfig)) {
@@ -165,18 +124,17 @@ public abstract class Addon {
         }
       }
     } catch (final IOException e) {
-      this.getAddonManager().getLogger().warning("Could not load from jar file. " + newPath);
+      logger.warning("Could not load from jar file. " + newPath);
     }
     return null;
   }
 
   /**
-   * Get the class loader
+   * Get the expansion class loader
    *
    * @return the class loader
    */
-  @NotNull
-  public final AddonClassLoader getClassLoader() {
-    return this.addonClassLoader;
+  public ExpansionClassLoader getExpansionClassLoader() {
+    return expansionClassLoader;
   }
 }
