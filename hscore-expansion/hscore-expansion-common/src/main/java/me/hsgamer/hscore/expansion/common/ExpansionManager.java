@@ -12,7 +12,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.jar.JarFile;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -129,10 +128,9 @@ public class ExpansionManager {
    * Create a new expansion manager
    *
    * @param expansionsDir      the directory to store expansion files
-   * @param logger             the logger to use in every expansion
    * @param descriptionFactory the factory to load description
    */
-  public ExpansionManager(@NotNull final File expansionsDir, @NotNull final Logger logger, @NotNull Function<JarFile, ExpansionDescription> descriptionFactory) {
+  public ExpansionManager(@NotNull final File expansionsDir, @NotNull Function<JarFile, ExpansionDescription> descriptionFactory) {
     this(expansionsDir, descriptionFactory, ExpansionManager.class.getClassLoader());
   }
 
