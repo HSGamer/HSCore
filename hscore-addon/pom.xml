@@ -9,4 +9,12 @@
     <version>4.2.8-SNAPSHOT</version>
   </parent>
   <artifactId>hscore-addon</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-expansion-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 </project>

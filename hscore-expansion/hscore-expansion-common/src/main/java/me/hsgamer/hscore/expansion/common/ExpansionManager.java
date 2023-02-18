@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.jar.JarFile;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -76,6 +77,8 @@ public class ExpansionManager {
    * The handler for the exception
    */
   private Consumer<Throwable> exceptionHandler = Throwable::printStackTrace;
+
+  private UnaryOperator<Map<String, ExpansionClassLoader>> sortAndFilterFunction = UnaryOperator.identity();
 
   /**
    * Create a new expansion manager
@@ -210,6 +213,15 @@ public class ExpansionManager {
   }
 
   /**
+   * Set the function to sort and filter the {@link ExpansionClassLoader}s
+   *
+   * @param sortAndFilterFunction the function
+   */
+  public void setSortAndFilterFunction(UnaryOperator<Map<String, ExpansionClassLoader>> sortAndFilterFunction) {
+    this.sortAndFilterFunction = sortAndFilterFunction;
+  }
+
+  /**
    * Load all expansions from the expansion directory. Also call {@link Expansion#onLoad()}
    */
   public void loadExpansions() {
@@ -247,7 +259,7 @@ public class ExpansionManager {
     final Map<String, ExpansionClassLoader> loadingClassLoaders = initClassLoaders.entrySet().stream()
       .filter(entry -> entry.getValue().getState() == ExpansionState.LOADING)
       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    final Map<String, ExpansionClassLoader> sortedClassLoaders = this.sortAndFilter(loadingClassLoaders);
+    final Map<String, ExpansionClassLoader> sortedClassLoaders = sortAndFilterFunction.apply(loadingClassLoaders);
     final Map<String, ExpansionClassLoader> remainingClassLoaders = initClassLoaders.entrySet().stream()
       .filter(entry -> !sortedClassLoaders.containsKey(entry.getKey()))
       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -270,18 +282,6 @@ public class ExpansionManager {
         loader.setState(ExpansionState.ERROR);
       }
     });
-  }
-
-  /**
-   * Filter and sort the order of the expansion class loaders
-   *
-   * @param original the original map
-   *
-   * @return the sorted and filtered map
-   */
-  @NotNull
-  protected Map<String, ExpansionClassLoader> sortAndFilter(@NotNull final Map<String, ExpansionClassLoader> original) {
-    return original;
   }
 
   /**
