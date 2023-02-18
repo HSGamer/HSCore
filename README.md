@@ -88,6 +88,10 @@
     * **`hscore-minestom-gui`**
   * **`hscore-logging`**
     * **`hscore-logging-log4j`**
+  * **`hscore-expansion`**
+    * **`hscore-expansion-common`**
+    * **`hscore-expansion-manifest`**
+    * **`hscore-expansion-properties`**
 
 ## Add as a dependency
 
