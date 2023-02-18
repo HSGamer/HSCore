@@ -4,7 +4,6 @@ import me.hsgamer.hscore.addon.object.Addon;
 import me.hsgamer.hscore.expansion.common.Expansion;
 import me.hsgamer.hscore.expansion.common.ExpansionDescription;
 import me.hsgamer.hscore.expansion.common.ExpansionManager;
-import me.hsgamer.hscore.expansion.common.ExpansionState;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -57,8 +56,21 @@ public class AddonManager extends ExpansionManager {
       }
     });
     addStateListener((loader, state) -> {
-      if (state == ExpansionState.ERROR) {
-        logger.log(Level.WARNING, loader.getThrowable(), () -> "There is an error in " + loader.getDescription().getName());
+      switch (state) {
+        case ERROR:
+          logger.log(Level.WARNING, loader.getThrowable(), () -> "There is an error in " + loader.getDescription().getName());
+          break;
+        case LOADED:
+          logger.info(() -> "Loaded " + loader.getDescription().getName() + " " + loader.getDescription().getVersion());
+          break;
+        case ENABLED:
+          logger.info(() -> "Enabled " + loader.getDescription().getName() + " " + loader.getDescription().getVersion());
+          break;
+        case DISABLED:
+          logger.info(() -> "Disabled " + loader.getDescription().getName() + " " + loader.getDescription().getVersion());
+          break;
+        default:
+          break;
       }
     });
     setExceptionHandler(t -> logger.log(Level.WARNING, "There is an unexpected exception on AddonManager", t));
