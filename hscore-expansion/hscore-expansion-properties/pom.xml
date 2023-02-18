@@ -5,15 +5,17 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>me.hsgamer</groupId>
-    <artifactId>hscore</artifactId>
+    <artifactId>hscore-expansion</artifactId>
     <version>4.2.8-SNAPSHOT</version>
   </parent>
-  <packaging>pom</packaging>
-  <artifactId>hscore-expansion</artifactId>
 
-  <modules>
-    <module>hscore-expansion-common</module>
-    <module>hscore-expansion-manifest</module>
-    <module>hscore-expansion-properties</module>
-  </modules>
+  <artifactId>hscore-expansion-properties</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-expansion-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 </project>
