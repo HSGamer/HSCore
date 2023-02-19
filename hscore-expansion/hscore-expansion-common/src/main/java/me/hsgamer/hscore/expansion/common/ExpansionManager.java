@@ -13,7 +13,6 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * A class that manages all {@link Expansion}s
@@ -24,7 +23,7 @@ public class ExpansionManager {
    */
   public static final Function<ExpansionClassLoader, Expansion> DEFAULT_EXPANSION_FACTORY = classLoader -> {
     try {
-      final Class<?> clazz = Class.forName(classLoader.getDescription().getMainClass(), true, classLoader);
+      final Class<?> clazz = classLoader.findClass(classLoader.getDescription().getMainClass());
       final Class<? extends Expansion> newClass;
       if (Expansion.class.isAssignableFrom(clazz)) {
         newClass = clazz.asSubclass(Expansion.class);
@@ -32,7 +31,7 @@ public class ExpansionManager {
         throw new ClassCastException("The main class does not extend " + Expansion.class.getSimpleName());
       }
       return newClass.getDeclaredConstructor().newInstance();
-    } catch (Exception e) {
+    } catch (Throwable e) {
       throw new IllegalStateException("Cannot create a new instance of the main class", e);
     }
   };
@@ -388,12 +387,16 @@ public class ExpansionManager {
    */
   @Nullable
   Class<?> findClass(@NotNull final ExpansionClassLoader classLoader, @NotNull final String name) {
-    return this.classLoaders.entrySet()
-      .parallelStream()
-      .filter(entry -> entry.getValue() != classLoader)
-      .flatMap(entry -> Optional.ofNullable(entry.getValue().findClass(name, false)).map(Stream::of).orElse(Stream.empty()))
-      .findAny()
-      .orElse(null);
+    for (final ExpansionClassLoader loader : this.classLoaders.values()) {
+      if (loader == classLoader) {
+        continue;
+      }
+      Class<?> clazz = loader.findClass(name, false);
+      if (clazz != null) {
+        return clazz;
+      }
+    }
+    return null;
   }
 
   /**

@@ -181,7 +181,10 @@ public final class ExpansionClassLoader extends URLClassLoader {
    */
   @Nullable
   Class<?> findClass(@NotNull final String name, final boolean global) {
-    Class<?> clazz = null;
+    Class<?> clazz = this.findLoadedClass(name);
+    if (clazz != null) {
+      return clazz;
+    }
     try {
       clazz = super.findClass(name);
     } catch (final ClassNotFoundException | NoClassDefFoundError e) {
