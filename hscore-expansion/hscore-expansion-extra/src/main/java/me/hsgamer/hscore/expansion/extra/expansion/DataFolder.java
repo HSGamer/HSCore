@@ -30,19 +30,6 @@ public interface DataFolder extends GetClassLoader {
   }
 
   /**
-   * Get the data folder of the expansion and create it if it doesn't exist
-   *
-   * @return the data folder
-   */
-  default File getAndCreateDataFolder() {
-    File dataFolder = getDataFolder();
-    if (!dataFolder.exists() && !dataFolder.mkdirs()) {
-      throw new IllegalStateException("Cannot create data folder");
-    }
-    return dataFolder;
-  }
-
-  /**
    * Get the resource from the expansion jar
    *
    * @param path path to resource
