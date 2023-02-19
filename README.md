@@ -92,6 +92,7 @@
     * **`hscore-expansion-common`**
     * **`hscore-expansion-manifest`**
     * **`hscore-expansion-properties`**
+    * **`hscore-expansion-extra`**
 
 ## Add as a dependency
 
