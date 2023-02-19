@@ -1,7 +1,6 @@
 package me.hsgamer.hscore.addon;
 
 import me.hsgamer.hscore.addon.object.Addon;
-import me.hsgamer.hscore.expansion.common.Expansion;
 import me.hsgamer.hscore.expansion.common.ExpansionDescription;
 import me.hsgamer.hscore.expansion.common.ExpansionManager;
 import org.jetbrains.annotations.NotNull;
@@ -30,9 +29,8 @@ public class AddonManager extends ExpansionManager {
     super(addonsDir, addonDescriptionLoader, DEFAULT_EXPANSION_FACTORY, parentClassLoader);
     this.logger = logger;
     addStateListener((loader, state) -> {
-      Expansion expansion = loader.getExpansion();
-      if (!(expansion instanceof Addon)) return;
-      Addon addon = (Addon) expansion;
+      Addon addon = loader.getExpansionOptional().filter(Addon.class::isInstance).map(Addon.class::cast).orElse(null);
+      if (addon == null) return;
       switch (state) {
         case LOADING:
           if (!onAddonLoading(addon)) {
