@@ -236,28 +236,16 @@ public class ExpansionManager {
           if (initClassLoaders.containsKey(description.getName())) {
             return;
           }
-
           loader = new ExpansionClassLoader(this, file, description, this.parentClassLoader);
         } catch (final Exception e) {
           exceptionHandler.accept(new InvalidExpansionFileException("Cannot load expansion file " + file.getName(), file, e));
           return;
         }
-
-        try {
-          loader.setState(ExpansionState.LOADING);
-        } catch (final Throwable t) {
-          loader.setThrowable(t);
-          loader.setState(ExpansionState.ERROR);
-        }
-
         initClassLoaders.put(description.getName(), loader);
       });
 
     // Filter and sort the loaders
-    final Map<String, ExpansionClassLoader> loadingClassLoaders = initClassLoaders.entrySet().stream()
-      .filter(entry -> entry.getValue().getState() == ExpansionState.LOADING)
-      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    final Map<String, ExpansionClassLoader> sortedClassLoaders = sortAndFilterFunction.apply(loadingClassLoaders);
+    final Map<String, ExpansionClassLoader> sortedClassLoaders = sortAndFilterFunction.apply(initClassLoaders);
     final Map<String, ExpansionClassLoader> remainingClassLoaders = initClassLoaders.entrySet().stream()
       .filter(entry -> !sortedClassLoaders.containsKey(entry.getKey()))
       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -270,6 +258,8 @@ public class ExpansionManager {
     // Load the expansions
     sortedClassLoaders.forEach((key, loader) -> {
       try {
+        loader.initExpansion();
+        loader.setState(ExpansionState.LOADING);
         final Expansion expansion = loader.getExpansion();
         if (!expansion.onLoad()) {
           throw new IllegalStateException("onLoad() returned false");

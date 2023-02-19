@@ -7,6 +7,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Optional;
 
 /**
  * The class loader of the expansion
@@ -34,8 +35,8 @@ public final class ExpansionClassLoader extends URLClassLoader {
   /**
    * The expansion
    */
-  @NotNull
-  private final Expansion expansion;
+  @Nullable
+  private Expansion expansion;
 
   /**
    * The state of the expansion
@@ -66,17 +67,27 @@ public final class ExpansionClassLoader extends URLClassLoader {
     this.manager = manager;
     this.file = file;
     this.description = description;
-    this.expansion = this.manager.getExpansionFactory().apply(this);
+  }
+
+  /**
+   * Get the expansion if it's initialized
+   *
+   * @return the optional expansion
+   */
+  public Optional<Expansion> getExpansionOptional() {
+    return Optional.ofNullable(this.expansion);
   }
 
   /**
    * Get the expansion
    *
    * @return the expansion
+   *
+   * @throws IllegalStateException if the expansion is not found or not initialized
    */
   @NotNull
   public Expansion getExpansion() {
-    return this.expansion;
+    return this.getExpansionOptional().orElseThrow(() -> new IllegalStateException("Expansion not found or not initialized"));
   }
 
   /**
@@ -179,5 +190,12 @@ public final class ExpansionClassLoader extends URLClassLoader {
       }
     }
     return clazz;
+  }
+
+  /**
+   * Initialize the expansion
+   */
+  void initExpansion() {
+    this.expansion = this.manager.getExpansionFactory().apply(this);
   }
 }
