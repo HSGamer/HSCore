@@ -69,6 +69,8 @@ me.hsgamer.hscore.downloader.webstream
 me.hsgamer.hscore.expansion.common
 me.hsgamer.hscore.expansion.common.exception
 me.hsgamer.hscore.expansion.common.factory
+me.hsgamer.hscore.expansion.extra
+me.hsgamer.hscore.expansion.extra.expansion
 me.hsgamer.hscore.expansion.manifest
 me.hsgamer.hscore.expansion.properties
 me.hsgamer.hscore.expression
