@@ -6,7 +6,7 @@
   <parent>
     <artifactId>hscore-bukkit</artifactId>
     <groupId>me.hsgamer</groupId>
-    <version>4.2.9-SNAPSHOT</version>
+    <version>4.2.9</version>
   </parent>
   <artifactId>hscore-bukkit-command-sub</artifactId>
 
