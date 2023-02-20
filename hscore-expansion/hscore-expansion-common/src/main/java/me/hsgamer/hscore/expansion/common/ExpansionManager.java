@@ -60,57 +60,28 @@ public class ExpansionManager {
   private final Function<JarFile, ExpansionDescription> descriptionFactory;
 
   /**
-   * The factory to create {@link Expansion} from {@link ExpansionClassLoader}
-   */
-  @NotNull
-  private final Function<ExpansionClassLoader, Expansion> expansionFactory;
-
-  /**
    * The set of listeners to listen to the state of the expansion
    */
   @NotNull
   private final Set<BiConsumer<ExpansionClassLoader, ExpansionState>> stateListeners = new HashSet<>();
 
   /**
+   * The factory to create {@link Expansion} from {@link ExpansionClassLoader}
+   */
+  @NotNull
+  private Function<ExpansionClassLoader, Expansion> expansionFactory = DEFAULT_EXPANSION_FACTORY;
+
+  /**
    * The handler for the exception
    */
+  @NotNull
   private Consumer<Throwable> exceptionHandler = Throwable::printStackTrace;
 
+  /**
+   * The function to sort and filter the class loaders
+   */
+  @NotNull
   private UnaryOperator<Map<String, ExpansionClassLoader>> sortAndFilterFunction = UnaryOperator.identity();
-
-  /**
-   * Create a new expansion manager
-   *
-   * @param expansionsDir      the directory to store expansion files
-   * @param descriptionFactory the factory to load description
-   * @param expansionFactory   the factory to load expansion instance
-   * @param parentClassLoader  the parent class loader to load all expansions
-   */
-  public ExpansionManager(@NotNull final File expansionsDir, @NotNull Function<JarFile, ExpansionDescription> descriptionFactory, @NotNull Function<ExpansionClassLoader, Expansion> expansionFactory, @NotNull final ClassLoader parentClassLoader) {
-    this.expansionsDir = expansionsDir;
-    this.descriptionFactory = descriptionFactory;
-    this.expansionFactory = expansionFactory;
-    this.parentClassLoader = parentClassLoader;
-    if (!expansionsDir.exists()) {
-      if (!expansionsDir.mkdirs()) {
-        throw new IllegalStateException("Cannot create expansion directory");
-      }
-    } else if (!expansionsDir.isDirectory()) {
-      throw new IllegalStateException("Expansion directory is not a directory");
-    }
-  }
-
-
-  /**
-   * Create a new expansion manager
-   *
-   * @param expansionsDir      the directory to store expansion files
-   * @param descriptionFactory the factory to load description
-   * @param expansionFactory   the factory to load expansion instance
-   */
-  public ExpansionManager(@NotNull final File expansionsDir, @NotNull Function<JarFile, ExpansionDescription> descriptionFactory, @NotNull Function<ExpansionClassLoader, Expansion> expansionFactory) {
-    this(expansionsDir, descriptionFactory, expansionFactory, ExpansionManager.class.getClassLoader());
-  }
 
   /**
    * Create a new expansion manager
@@ -120,7 +91,16 @@ public class ExpansionManager {
    * @param parentClassLoader  the parent class loader to load all expansions
    */
   public ExpansionManager(@NotNull final File expansionsDir, @NotNull Function<JarFile, ExpansionDescription> descriptionFactory, @NotNull final ClassLoader parentClassLoader) {
-    this(expansionsDir, descriptionFactory, DEFAULT_EXPANSION_FACTORY, parentClassLoader);
+    this.expansionsDir = expansionsDir;
+    this.descriptionFactory = descriptionFactory;
+    this.parentClassLoader = parentClassLoader;
+    if (!expansionsDir.exists()) {
+      if (!expansionsDir.mkdirs()) {
+        throw new IllegalStateException("Cannot create expansion directory");
+      }
+    } else if (!expansionsDir.isDirectory()) {
+      throw new IllegalStateException("Expansion directory is not a directory");
+    }
   }
 
   /**
@@ -144,26 +124,6 @@ public class ExpansionManager {
   }
 
   /**
-   * Get the description factory
-   *
-   * @return the factory
-   */
-  @NotNull
-  public Function<JarFile, ExpansionDescription> getDescriptionFactory() {
-    return descriptionFactory;
-  }
-
-  /**
-   * Get the expansion factory
-   *
-   * @return the factory
-   */
-  @NotNull
-  public Function<ExpansionClassLoader, Expansion> getExpansionFactory() {
-    return expansionFactory;
-  }
-
-  /**
    * Get the parent class loader
    *
    * @return the parent class loader
@@ -178,7 +138,7 @@ public class ExpansionManager {
    *
    * @param listener the listener
    */
-  public void addStateListener(@NotNull BiConsumer<ExpansionClassLoader, ExpansionState> listener) {
+  public void addStateListener(@NotNull final BiConsumer<ExpansionClassLoader, ExpansionState> listener) {
     this.stateListeners.add(listener);
   }
 
@@ -187,7 +147,7 @@ public class ExpansionManager {
    *
    * @param listener the listener
    */
-  public void removeStateListener(@NotNull BiConsumer<ExpansionClassLoader, ExpansionState> listener) {
+  public void removeStateListener(@NotNull final BiConsumer<ExpansionClassLoader, ExpansionState> listener) {
     this.stateListeners.remove(listener);
   }
 
@@ -205,7 +165,7 @@ public class ExpansionManager {
    *
    * @param exceptionHandler the exception handler
    */
-  public void setExceptionHandler(Consumer<Throwable> exceptionHandler) {
+  public void setExceptionHandler(@NotNull final Consumer<Throwable> exceptionHandler) {
     this.exceptionHandler = exceptionHandler;
   }
 
@@ -214,8 +174,27 @@ public class ExpansionManager {
    *
    * @param sortAndFilterFunction the function
    */
-  public void setSortAndFilterFunction(UnaryOperator<Map<String, ExpansionClassLoader>> sortAndFilterFunction) {
+  public void setSortAndFilterFunction(@NotNull final UnaryOperator<Map<String, ExpansionClassLoader>> sortAndFilterFunction) {
     this.sortAndFilterFunction = sortAndFilterFunction;
+  }
+
+  /**
+   * Get the expansion factory
+   *
+   * @return the expansion factory
+   */
+  @NotNull
+  Function<ExpansionClassLoader, Expansion> getExpansionFactory() {
+    return expansionFactory;
+  }
+
+  /**
+   * Set the factory to create {@link Expansion} from {@link ExpansionClassLoader}
+   *
+   * @param expansionFactory the factory
+   */
+  public void setExpansionFactory(@NotNull final Function<ExpansionClassLoader, Expansion> expansionFactory) {
+    this.expansionFactory = expansionFactory;
   }
 
   /**

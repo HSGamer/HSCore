@@ -26,7 +26,7 @@ public class AddonManager extends ExpansionManager {
    * @param parentClassLoader      the parent class loader to load all addons
    */
   public AddonManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull Function<JarFile, ExpansionDescription> addonDescriptionLoader, @NotNull final ClassLoader parentClassLoader) {
-    super(addonsDir, addonDescriptionLoader, DEFAULT_EXPANSION_FACTORY, parentClassLoader);
+    super(addonsDir, addonDescriptionLoader, parentClassLoader);
     this.logger = logger;
     addStateListener((loader, state) -> {
       Addon addon = loader.getExpansionOptional().filter(Addon.class::isInstance).map(Addon.class::cast).orElse(null);
@@ -81,7 +81,7 @@ public class AddonManager extends ExpansionManager {
    * @param logger                 the logger to use in every addon
    * @param addonDescriptionLoader the loader to load addon description
    */
-  protected AddonManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull Function<JarFile, ExpansionDescription> addonDescriptionLoader) {
+  public AddonManager(@NotNull final File addonsDir, @NotNull final Logger logger, @NotNull Function<JarFile, ExpansionDescription> addonDescriptionLoader) {
     this(addonsDir, logger, addonDescriptionLoader, AddonManager.class.getClassLoader());
   }
 
