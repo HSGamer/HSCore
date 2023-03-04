@@ -52,4 +52,15 @@ public abstract class GUIDisplay<H extends GUIHolder<?>> extends BaseDisplay<H> 
   public void handleClickEvent(@NotNull final ClickEvent event) {
     Optional.ofNullable(viewedButtons.get(event.getSlot())).ifPresent(button -> button.handleAction(event));
   }
+
+  /**
+   * Get the viewed button at the slot
+   *
+   * @param slot the slot
+   *
+   * @return the viewed button
+   */
+  public Optional<Button> getViewedButton(int slot) {
+    return Optional.ofNullable(viewedButtons.get(slot));
+  }
 }
