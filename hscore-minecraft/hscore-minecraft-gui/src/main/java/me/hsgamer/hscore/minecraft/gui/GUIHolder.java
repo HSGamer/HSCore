@@ -76,6 +76,16 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
 
   @Override
   public void init() {
+    addEventConsumer(OpenEvent.class, this::onOpen);
+
+    addEventConsumer(ClickEvent.class, this::onClick);
+    addEventConsumer(ClickEvent.class, event -> {
+      if (canClick(event)) {
+        getDisplay(event.getViewerID()).ifPresent(guiDisplay -> guiDisplay.handleClickEvent(event));
+      }
+    });
+
+    addEventConsumer(CloseEvent.class, this::onClose);
     addEventConsumer(CloseEvent.class, event -> {
       UUID uuid = event.getViewerID();
 
@@ -91,12 +101,6 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
         removeDisplay(uuid);
       }
     });
-
-    addEventConsumer(OpenEvent.class, this::onOpen);
-    addEventConsumer(ClickEvent.class, this::onClick);
-    addEventConsumer(CloseEvent.class, this::onClose);
-
-    addEventConsumer(ClickEvent.class, event -> getDisplay(event.getViewerID()).ifPresent(guiDisplay -> guiDisplay.handleClickEvent(event)));
     buttonMap.init();
   }
 
@@ -124,6 +128,18 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
    */
   protected void onClick(@NotNull final ClickEvent event) {
     // EMPTY
+  }
+
+  /**
+   * Check if the player can click.
+   * This is called before the holder calls the display's click event.
+   *
+   * @param event the event
+   *
+   * @return true if the player can click
+   */
+  protected boolean canClick(@NotNull final ClickEvent event) {
+    return true;
   }
 
   /**
