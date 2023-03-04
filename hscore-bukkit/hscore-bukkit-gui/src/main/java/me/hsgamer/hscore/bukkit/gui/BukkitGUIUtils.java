@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.bukkit.gui;
 
 import me.hsgamer.hscore.bukkit.gui.event.BukkitClickEvent;
+import me.hsgamer.hscore.bukkit.gui.event.BukkitDragEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 
@@ -18,12 +19,12 @@ public final class BukkitGUIUtils {
    * @param holder the gui holder
    */
   public static void allowMoveItemOnBottom(BukkitGUIHolder holder) {
-    holder.addEventConsumer(BukkitClickEvent.class, wrappedEvent -> {
-      InventoryClickEvent event = wrappedEvent.getEvent();
-      if (event.getClickedInventory() == event.getInventory()) {
+    holder.addEventConsumer(BukkitClickEvent.class, event -> {
+      InventoryClickEvent clickEvent = event.getEvent();
+      if (clickEvent.getClickedInventory() == clickEvent.getInventory()) {
         return;
       }
-      switch (event.getAction()) {
+      switch (clickEvent.getAction()) {
         case DROP_ALL_SLOT:
         case DROP_ONE_SLOT:
         case PICKUP_ALL:
@@ -36,7 +37,7 @@ public final class BukkitGUIUtils {
         case PLACE_SOME:
         case HOTBAR_SWAP:
         case SWAP_WITH_CURSOR:
-          event.setCancelled(false);
+          clickEvent.setCancelled(false);
           break;
         default:
           break;
@@ -50,9 +51,10 @@ public final class BukkitGUIUtils {
    * @param holder the gui holder
    */
   public static void cancelDragEvent(BukkitGUIHolder holder) {
-    holder.addEventConsumer(InventoryDragEvent.class, event -> {
-      for (int slot : event.getRawSlots()) {
-        if (slot < event.getInventory().getSize()) {
+    holder.addEventConsumer(BukkitDragEvent.class, event -> {
+      InventoryDragEvent dragEvent = event.getEvent();
+      for (int slot : dragEvent.getRawSlots()) {
+        if (slot < dragEvent.getInventory().getSize()) {
           event.setCancelled(true);
           break;
         }

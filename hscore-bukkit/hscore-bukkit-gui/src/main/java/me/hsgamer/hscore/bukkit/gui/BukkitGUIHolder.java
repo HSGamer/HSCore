@@ -1,9 +1,9 @@
 package me.hsgamer.hscore.bukkit.gui;
 
+import me.hsgamer.hscore.bukkit.gui.event.BukkitDragEvent;
 import me.hsgamer.hscore.minecraft.gui.GUIHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
@@ -188,7 +188,7 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
   @Override
   public void init() {
     super.init();
-    addEventConsumer(InventoryDragEvent.class, this::onDrag);
+    addEventConsumer(BukkitDragEvent.class, this::onDrag);
   }
 
   @Override
@@ -201,7 +201,7 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
    *
    * @param event the event
    */
-  protected void onDrag(InventoryDragEvent event) {
+  protected void onDrag(BukkitDragEvent event) {
     // EMPTY
   }
 }
