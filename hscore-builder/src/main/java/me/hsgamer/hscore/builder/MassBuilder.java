@@ -1,6 +1,9 @@
 package me.hsgamer.hscore.builder;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -10,7 +13,22 @@ import java.util.stream.Collectors;
  * @param <O> the type of the output
  */
 public class MassBuilder<I, O> {
-  private final LinkedList<Element<I, O>> elements = new LinkedList<>();
+  private final ArrayDeque<Element<I, O>> elements = new ArrayDeque<>();
+  private boolean addFirst = false;
+
+  /**
+   * Set if the new element should be added at the first index of the registered elements.
+   * If false, the new element will be added at the last index.
+   * Enable this will make the new element to be the first element to be checked.
+   *
+   * @param addFirst true if the new element should be added first
+   *
+   * @return this builder for chaining
+   */
+  public MassBuilder<I, O> setAddFirst(boolean addFirst) {
+    this.addFirst = addFirst;
+    return this;
+  }
 
   /**
    * Register a new build element
@@ -20,7 +38,11 @@ public class MassBuilder<I, O> {
    * @return this builder for chaining
    */
   public MassBuilder<I, O> register(Element<I, O> element) {
-    elements.add(element);
+    if (addFirst) {
+      elements.addFirst(element);
+    } else {
+      elements.addLast(element);
+    }
     return this;
   }
 
@@ -81,8 +103,8 @@ public class MassBuilder<I, O> {
    *
    * @return the registered build elements
    */
-  public List<Element<I, O>> getElements() {
-    return Collections.unmodifiableList(elements);
+  public Collection<Element<I, O>> getElements() {
+    return Collections.unmodifiableCollection(elements);
   }
 
   /**
