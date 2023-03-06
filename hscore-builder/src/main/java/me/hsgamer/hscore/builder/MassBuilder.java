@@ -1,9 +1,6 @@
 package me.hsgamer.hscore.builder;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -13,7 +10,7 @@ import java.util.stream.Collectors;
  * @param <O> the type of the output
  */
 public class MassBuilder<I, O> {
-  private final List<Element<I, O>> elements = new LinkedList<>();
+  private final LinkedList<Element<I, O>> elements = new LinkedList<>();
 
   /**
    * Register a new build element
@@ -24,6 +21,18 @@ public class MassBuilder<I, O> {
    */
   public MassBuilder<I, O> register(Element<I, O> element) {
     elements.add(element);
+    return this;
+  }
+
+  /**
+   * Remove a build element
+   *
+   * @param element the element
+   *
+   * @return this builder for chaining
+   */
+  public MassBuilder<I, O> remove(Element<I, O> element) {
+    elements.remove(element);
     return this;
   }
 
@@ -65,6 +74,15 @@ public class MassBuilder<I, O> {
       .filter(element -> element.canBuild(input))
       .findFirst()
       .map(element -> element.build(input));
+  }
+
+  /**
+   * Get the registered build elements
+   *
+   * @return the registered build elements
+   */
+  public List<Element<I, O>> getElements() {
+    return Collections.unmodifiableList(elements);
   }
 
   /**

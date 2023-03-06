@@ -12,35 +12,18 @@ import java.util.function.Supplier;
  * @param <V> the type of the final value
  */
 public class Builder<R, V> extends MassBuilder<AbstractMap.SimpleEntry<String, R>, V> {
-  private final Map<String, BiFunction<String, R, V>> registeredMap = new HashMap<>();
-
   /**
    * Register a new function
    *
    * @param biFunction the function
    * @param name       the name of the modifier
+   *
+   * @return the registered function element
    */
-  public void register(BiFunction<String, R, V> biFunction, String... name) {
-    for (String s : name) {
-      registeredMap.put(s, biFunction);
-    }
-    register(new Element<AbstractMap.SimpleEntry<String, R>, V>() {
-      @Override
-      public boolean canBuild(AbstractMap.SimpleEntry<String, R> input) {
-        String key = input.getKey();
-        for (String alias : name) {
-          if (key.equalsIgnoreCase(alias)) {
-            return true;
-          }
-        }
-        return false;
-      }
-
-      @Override
-      public V build(AbstractMap.SimpleEntry<String, R> input) {
-        return biFunction.apply(input.getKey(), input.getValue());
-      }
-    });
+  public FunctionElement<R, V> register(BiFunction<String, R, V> biFunction, String... name) {
+    FunctionElement<R, V> element = new FunctionElement<>(biFunction, name);
+    register(element);
+    return element;
   }
 
   /**
@@ -48,9 +31,11 @@ public class Builder<R, V> extends MassBuilder<AbstractMap.SimpleEntry<String, R
    *
    * @param function the function
    * @param name     the name of the modifier
+   *
+   * @return the registered function element
    */
-  public void register(Function<R, V> function, String... name) {
-    register((s, r) -> function.apply(r), name);
+  public FunctionElement<R, V> register(Function<R, V> function, String... name) {
+    return register((s, r) -> function.apply(r), name);
   }
 
   /**
@@ -58,9 +43,11 @@ public class Builder<R, V> extends MassBuilder<AbstractMap.SimpleEntry<String, R
    *
    * @param supplier the supplier
    * @param name     the name of the modifier
+   *
+   * @return the registered function element
    */
-  public void register(Supplier<V> supplier, String... name) {
-    register((s, r) -> supplier.get(), name);
+  public FunctionElement<R, V> register(Supplier<V> supplier, String... name) {
+    return register((s, r) -> supplier.get(), name);
   }
 
   /**
@@ -83,7 +70,7 @@ public class Builder<R, V> extends MassBuilder<AbstractMap.SimpleEntry<String, R
    * @return the map of final values
    */
   public Map<String, V> build(Map<String, R> rawMap) {
-    Map<String, V> map = new HashMap<>();
+    Map<String, V> map = new LinkedHashMap<>();
     rawMap.forEach((name, raw) -> build(name, raw).ifPresent(v -> map.put(name.toLowerCase(Locale.ROOT), v)));
     return map;
   }
@@ -94,6 +81,71 @@ public class Builder<R, V> extends MassBuilder<AbstractMap.SimpleEntry<String, R
    * @return the registered map
    */
   public Map<String, BiFunction<String, R, V>> getRegisteredMap() {
-    return Collections.unmodifiableMap(registeredMap);
+    Map<String, BiFunction<String, R, V>> map = new HashMap<>();
+    getElements().forEach(element -> {
+      if (element instanceof FunctionElement) {
+        FunctionElement<R, V> functionElement = (FunctionElement<R, V>) element;
+        for (String name : functionElement.getNames()) {
+          map.put(name.toLowerCase(Locale.ROOT), functionElement.getFunction());
+        }
+      }
+    });
+    return map;
+  }
+
+  /**
+   * The function element
+   *
+   * @param <R> the type of the raw value
+   * @param <V> the type of the final value
+   */
+  public static class FunctionElement<R, V> implements Element<AbstractMap.SimpleEntry<String, R>, V> {
+    private final BiFunction<String, R, V> function;
+    private final String[] names;
+
+    /**
+     * Create a new function element
+     *
+     * @param function the function
+     * @param names    the names or the aliases of the function
+     */
+    public FunctionElement(BiFunction<String, R, V> function, String... names) {
+      this.function = function;
+      this.names = names;
+    }
+
+    @Override
+    public boolean canBuild(AbstractMap.SimpleEntry<String, R> input) {
+      String key = input.getKey();
+      for (String alias : names) {
+        if (key.equalsIgnoreCase(alias)) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    @Override
+    public V build(AbstractMap.SimpleEntry<String, R> input) {
+      return function.apply(input.getKey(), input.getValue());
+    }
+
+    /**
+     * Get the function
+     *
+     * @return the function
+     */
+    public BiFunction<String, R, V> getFunction() {
+      return function;
+    }
+
+    /**
+     * Get the names or the aliases of the function
+     *
+     * @return the names or the aliases of the function
+     */
+    public String[] getNames() {
+      return names;
+    }
   }
 }
