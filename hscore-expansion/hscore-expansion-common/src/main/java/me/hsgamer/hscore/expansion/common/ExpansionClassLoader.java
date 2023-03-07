@@ -156,7 +156,7 @@ public final class ExpansionClassLoader extends URLClassLoader {
    *
    * @param throwable the throwable
    */
-  void setThrowable(@NotNull final Throwable throwable) {
+  public void setThrowable(@NotNull final Throwable throwable) {
     this.throwable = throwable;
   }
 
