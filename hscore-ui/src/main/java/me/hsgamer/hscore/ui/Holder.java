@@ -13,7 +13,6 @@ import java.util.function.Consumer;
  * @param <D> the type of the display
  */
 public interface Holder<D extends Display> extends Initializable, Updatable {
-
   /**
    * Create a display with the unique id
    *
@@ -80,22 +79,16 @@ public interface Holder<D extends Display> extends Initializable, Updatable {
    * @param event the event
    */
   default <E> void handleEvent(@NotNull E event) {
-    Class<?> eventClass = event.getClass();
     Set<Class<?>> eventClassSet = new HashSet<>();
     Queue<Class<?>> eventClassQueue = new LinkedList<>();
-    while (eventClass != null && !Object.class.equals(eventClass)) {
-      eventClassSet.add(eventClass);
-      handleEvent(eventClass, event);
-      eventClassQueue.addAll(Arrays.asList(eventClass.getInterfaces()));
-      while (true) {
-        Class<?> currentClass = eventClassQueue.poll();
-        if (currentClass == null || !eventClassSet.add(currentClass)) {
-          break;
-        }
-        handleEvent(currentClass, event);
-        eventClassQueue.addAll(Arrays.asList(currentClass.getInterfaces()));
-      }
-      eventClass = eventClass.getSuperclass();
+    eventClassQueue.add(event.getClass());
+    while (true) {
+      Class<?> currentClass = eventClassQueue.poll();
+      if (currentClass == null) break;
+      if (!eventClassSet.add(currentClass)) continue;
+      handleEvent(currentClass, event);
+      Optional.ofNullable(currentClass.getSuperclass()).ifPresent(eventClassQueue::add);
+      eventClassQueue.addAll(Arrays.asList(currentClass.getInterfaces()));
     }
   }
 
