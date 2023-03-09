@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 
 /**
  * A simple {@link DownloadInfoLoader} that loads the download info from a JSON file.
@@ -50,13 +49,13 @@ public class JsonDownloadInfoLoader extends MapDownloadInfoLoader {
       try {
         return new InputStreamReader(WebUtils.createConnection(dbUrl, userAgent::assignToConnection).getInputStream());
       } catch (IOException e) {
-        throw new CompletionException("Something wrong when getting the info", e);
+        throw new IllegalStateException("Something wrong when getting the info", e);
       }
     }).thenApplyAsync(inputStreamReader -> {
       try {
         return JsonParser.parseReader(inputStreamReader);
       } catch (Exception e) {
-        throw new CompletionException("Something wrong when parsing the info", e);
+        throw new IllegalStateException("Something wrong when parsing the info", e);
       }
     }).thenApplyAsync(element -> {
       if (!element.isJsonObject()) {

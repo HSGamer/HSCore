@@ -10,7 +10,6 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -131,7 +130,7 @@ public final class DownloadInfo {
         fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
         return file;
       } catch (IOException e) {
-        throw new CompletionException(e);
+        throw new IllegalStateException(e);
       } finally {
         isDownloading.set(false);
       }
