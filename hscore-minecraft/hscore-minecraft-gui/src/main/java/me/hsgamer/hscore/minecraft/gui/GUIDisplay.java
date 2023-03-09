@@ -6,6 +6,7 @@ import me.hsgamer.hscore.minecraft.gui.event.CloseEvent;
 import me.hsgamer.hscore.ui.BaseDisplay;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -62,5 +63,14 @@ public abstract class GUIDisplay<H extends GUIHolder<?>> extends BaseDisplay<H> 
    */
   public Optional<Button> getViewedButton(int slot) {
     return Optional.ofNullable(viewedButtons.get(slot));
+  }
+
+  /**
+   * Get the viewed buttons
+   *
+   * @return the viewed buttons
+   */
+  public Map<Integer, Button> getViewedButtons() {
+    return Collections.unmodifiableMap(viewedButtons);
   }
 }
