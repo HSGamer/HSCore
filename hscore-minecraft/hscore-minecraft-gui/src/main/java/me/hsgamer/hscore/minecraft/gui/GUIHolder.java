@@ -80,7 +80,7 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
 
     addEventConsumer(ClickEvent.class, this::onClick);
     addEventConsumer(ClickEvent.class, event -> {
-      if (canClick(event)) {
+      if (event.isButtonExecute()) {
         getDisplay(event.getViewerID()).ifPresent(guiDisplay -> guiDisplay.handleClickEvent(event));
       }
     });
@@ -128,18 +128,6 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
    */
   protected void onClick(@NotNull final ClickEvent event) {
     // EMPTY
-  }
-
-  /**
-   * Check if the player can click.
-   * This is called before the holder calls the display's click event.
-   *
-   * @param event the event
-   *
-   * @return true if the player can click
-   */
-  protected boolean canClick(@NotNull final ClickEvent event) {
-    return true;
   }
 
   /**

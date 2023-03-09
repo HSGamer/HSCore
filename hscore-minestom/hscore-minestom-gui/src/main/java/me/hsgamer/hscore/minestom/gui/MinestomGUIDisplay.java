@@ -60,7 +60,7 @@ public class MinestomGUIDisplay extends InventoryGUIDisplay<MinestomGUIHolder> {
   @Override
   public void scheduleReopen(CloseEvent event) {
     if (event instanceof MinestomCloseEvent minestomCloseEvent) {
-      minestomCloseEvent.event().setNewInventory(inventory);
+      minestomCloseEvent.getEvent().setNewInventory(inventory);
     }
   }
 
