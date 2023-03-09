@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -20,7 +21,7 @@ public abstract class SubCommand {
   protected String permission;
   protected String usage;
   protected String description;
-  protected Consumer<CommandSender> usageSender = sender -> sender.sendMessage(getUsage());
+  protected BiConsumer<String, CommandSender> usageSender = (label, sender) -> sender.sendMessage(getUsage().replace("<label>", label));
   protected Consumer<CommandSender> playerOnlyMessageSender = sender -> sender.sendMessage(ChatColor.RED + "You have to be a player to do this");
   protected Consumer<CommandSender> noPermissionMessageSender = sender -> sender.sendMessage(ChatColor.RED + "You don't have permission to do this");
 
@@ -95,7 +96,7 @@ public abstract class SubCommand {
     }
 
     if (!isProperUsage(sender, label, args)) {
-      usageSender.accept(sender);
+      usageSender.accept(label, sender);
       return false;
     }
 
