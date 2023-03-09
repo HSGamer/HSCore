@@ -98,4 +98,13 @@ public interface Holder<D extends Display> extends Initializable, Updatable {
       eventClass = eventClass.getSuperclass();
     }
   }
+
+  /**
+   * Update the display for the unique id
+   *
+   * @param uuid the unique id
+   */
+  default void update(UUID uuid) {
+    getDisplay(uuid).ifPresent(Updatable::update);
+  }
 }
