@@ -161,35 +161,33 @@ public final class ExpansionClassLoader extends URLClassLoader {
   }
 
   @Override
-  @NotNull
-  protected Class<?> findClass(@NotNull final String name) throws ClassNotFoundException {
-    Class<?> clazz = this.findClass(name, true);
-    if (clazz == null) {
-      throw new ClassNotFoundException(name);
-    } else {
+  protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+    synchronized (getClassLoadingLock(name)) {
+      Class<?> clazz = this.loadClass(name, resolve, true);
+      if (clazz == null) {
+        throw new ClassNotFoundException(name);
+      }
       return clazz;
     }
   }
 
   /**
-   * Get class by the name
+   * Load class by the name
    *
-   * @param name   the class name
-   * @param global whether it'll try to search globally
+   * @param name    the class name
+   * @param resolve whether it'll resolve the class
+   * @param global  whether it'll try to search globally
    *
    * @return the class, or null if it's not found
    */
   @Nullable
-  Class<?> findClass(@NotNull final String name, final boolean global) {
-    Class<?> clazz = this.findLoadedClass(name);
-    if (clazz != null) {
-      return clazz;
-    }
+  Class<?> loadClass(@NotNull final String name, final boolean resolve, final boolean global) {
+    Class<?> clazz = null;
     try {
-      clazz = super.findClass(name);
-    } catch (final ClassNotFoundException | NoClassDefFoundError e) {
+      clazz = super.loadClass(name, resolve);
+    } catch (final ClassNotFoundException e) {
       if (global) {
-        clazz = this.manager.findClass(this, name);
+        clazz = this.manager.loadClass(this, name, resolve);
       }
     }
     return clazz;

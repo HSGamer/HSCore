@@ -23,7 +23,7 @@ public class ExpansionManager {
    */
   public static final Function<ExpansionClassLoader, Expansion> DEFAULT_EXPANSION_FACTORY = classLoader -> {
     try {
-      final Class<?> clazz = classLoader.findClass(classLoader.getDescription().getMainClass());
+      final Class<?> clazz = Class.forName(classLoader.getDescription().getMainClass(), false, classLoader);
       final Class<? extends Expansion> newClass;
       if (Expansion.class.isAssignableFrom(clazz)) {
         newClass = clazz.asSubclass(Expansion.class);
@@ -357,7 +357,7 @@ public class ExpansionManager {
   }
 
   /**
-   * Find a class for a class loader
+   * Load a class for a class loader
    *
    * @param classLoader the calling class loader
    * @param name        the class name
@@ -365,12 +365,12 @@ public class ExpansionManager {
    * @return the class, or null if it's not found
    */
   @Nullable
-  Class<?> findClass(@NotNull final ExpansionClassLoader classLoader, @NotNull final String name) {
+  Class<?> loadClass(@NotNull final ExpansionClassLoader classLoader, @NotNull final String name, final boolean resolve) {
     for (final ExpansionClassLoader loader : this.classLoaders.values()) {
       if (loader == classLoader) {
         continue;
       }
-      Class<?> clazz = loader.findClass(name, false);
+      Class<?> clazz = loader.loadClass(name, resolve, false);
       if (clazz != null) {
         return clazz;
       }
