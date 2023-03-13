@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.bungeecord.channel;
 
 import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -76,6 +77,16 @@ public abstract class Channel {
    */
   public void send(ServerInfo server, byte[] data) {
     server.sendData(this.name, data);
+  }
+
+  /**
+   * Send the data to a player
+   *
+   * @param player the player
+   * @param data   the data
+   */
+  public void send(ProxiedPlayer player, byte[] data) {
+    player.sendData(this.name, data);
   }
 
   /**
