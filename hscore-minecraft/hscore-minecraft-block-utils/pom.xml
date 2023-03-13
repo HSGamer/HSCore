@@ -9,7 +9,7 @@
     <version>4.2.13-SNAPSHOT</version>
   </parent>
 
-  <artifactId>hscore-minecraft-block-util</artifactId>
+  <artifactId>hscore-minecraft-block-utils</artifactId>
 
   <dependencies>
     <dependency>

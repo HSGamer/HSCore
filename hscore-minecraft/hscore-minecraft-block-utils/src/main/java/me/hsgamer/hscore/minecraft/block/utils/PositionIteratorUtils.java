@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.minecraft.block.util;
+package me.hsgamer.hscore.minecraft.block.utils;
 
 import me.hsgamer.hscore.collections.map.CaseInsensitiveStringHashMap;
 import me.hsgamer.hscore.minecraft.block.box.BlockBox;
@@ -18,7 +18,7 @@ import static me.hsgamer.hscore.minecraft.block.impl.iterator.LinearPositionIter
 /**
  * The utility class for {@link PositionIterator}
  */
-public final class PositionIteratorUtil {
+public final class PositionIteratorUtils {
   private static final Map<String, Function<BlockBox, PositionIterator>> TYPE_MAP = new CaseInsensitiveStringHashMap<>();
 
   static {
@@ -32,7 +32,7 @@ public final class PositionIteratorUtil {
     registerType("default", LinearPositionIterator::new);
   }
 
-  private PositionIteratorUtil() {
+  private PositionIteratorUtils() {
     // EMPTY
   }
 
@@ -66,7 +66,7 @@ public final class PositionIteratorUtil {
    * @return the {@link PositionIterator}
    */
   public static PositionIterator get(String type, BlockBox box) {
-    return TYPE_MAP.getOrDefault(type, PositionIteratorUtil::random).apply(box);
+    return TYPE_MAP.getOrDefault(type, PositionIteratorUtils::random).apply(box);
   }
 
   /**

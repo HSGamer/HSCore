@@ -60,7 +60,7 @@
     * **`hscore-minecraft-gui-advanced`**
     * **`hscore-minecraft-block`**
     * **`hscore-minecraft-block-impl`**
-    * **`hscore-minecraft-block-util`**
+    * **`hscore-minecraft-block-utils`**
   * **`hscore-bukkit`**
     * **`hscore-bukkit-addon`**
     * **`hscore-bukkit-command`**

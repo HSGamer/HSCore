@@ -19,6 +19,6 @@
     <module>hscore-minecraft-gui-advanced</module>
     <module>hscore-minecraft-block</module>
     <module>hscore-minecraft-block-impl</module>
-    <module>hscore-minecraft-block-util</module>
+    <module>hscore-minecraft-block-utils</module>
   </modules>
 </project>
