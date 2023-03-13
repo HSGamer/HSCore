@@ -83,7 +83,7 @@ public final class BukkitUtils {
    */
   @NotNull
   public static List<String> getMissingDepends(@NotNull final List<String> depends) {
-    return depends.parallelStream()
+    return depends.stream()
       .filter(depend -> Bukkit.getPluginManager().getPlugin(depend) == null)
       .collect(Collectors.toList());
   }
@@ -96,11 +96,11 @@ public final class BukkitUtils {
    *
    * @return true if it is
    *
-   * @see <a href="https://github.com/CryptoMorin/XSeries/blob/3ec904a8d85695729ad51e7bbd06a65362357706/src/main/java/com/cryptomorin/xseries/SkullUtils.java#L200-L209">XSeries's Code</a>
+   * @see <a href="https://github.com/CryptoMorin/XSeries/blob/30544507ad1dd1322936caa41cc1fc28c80c4565/src/main/java/com/cryptomorin/xseries/SkullUtils.java#L301-L317">XSeries's Code</a>
    */
   public static boolean isUsername(@NotNull String string, List<Character> allowedCharacters) {
     int len = string.length();
-    if (len < 3 || len > 16) return false;
+    if (len > 16) return false;
 
     for (int i = 0; i < string.length(); i++) {
       char ch = string.charAt(i);
