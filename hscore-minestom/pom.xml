@@ -28,10 +28,11 @@
   </repositories>
 
   <dependencies>
+    <!--suppress VulnerableLibrariesLocal -->
     <dependency>
       <groupId>com.github.Minestom</groupId>
       <artifactId>Minestom</artifactId>
-      <version>aebf72de90</version>
+      <version>3ca74e00fa</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
