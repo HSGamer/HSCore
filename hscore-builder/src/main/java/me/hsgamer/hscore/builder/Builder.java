@@ -94,7 +94,9 @@ public class Builder<R, V> extends MassBuilder<AbstractMap.SimpleEntry<String, R
       if (element instanceof FunctionElement) {
         FunctionElement<R, V> functionElement = (FunctionElement<R, V>) element;
         for (String name : functionElement.getNames()) {
-          map.put(name.toLowerCase(Locale.ROOT), functionElement.getFunction());
+          String lowerCaseName = name.toLowerCase(Locale.ROOT);
+          if (map.containsKey(lowerCaseName)) continue;
+          map.put(lowerCaseName, functionElement.getFunction());
         }
       }
     });
