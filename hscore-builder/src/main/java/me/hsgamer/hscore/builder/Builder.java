@@ -12,6 +12,14 @@ import java.util.function.Supplier;
  * @param <V> the type of the final value
  */
 public class Builder<R, V> extends MassBuilder<AbstractMap.SimpleEntry<String, R>, V> {
+  @Override
+  public MassBuilder<AbstractMap.SimpleEntry<String, R>, V> register(Element<AbstractMap.SimpleEntry<String, R>, V> element) {
+    if (element instanceof FunctionElement) {
+      return super.register(element);
+    }
+    throw new IllegalArgumentException("The element must be a FunctionElement");
+  }
+
   /**
    * Register a new function
    *
