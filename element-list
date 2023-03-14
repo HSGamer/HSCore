@@ -84,7 +84,7 @@ me.hsgamer.hscore.minecraft.block.box
 me.hsgamer.hscore.minecraft.block.impl
 me.hsgamer.hscore.minecraft.block.impl.iterator
 me.hsgamer.hscore.minecraft.block.iterator
-me.hsgamer.hscore.minecraft.block.util
+me.hsgamer.hscore.minecraft.block.utils
 me.hsgamer.hscore.minecraft.gui
 me.hsgamer.hscore.minecraft.gui.advanced
 me.hsgamer.hscore.minecraft.gui.button
