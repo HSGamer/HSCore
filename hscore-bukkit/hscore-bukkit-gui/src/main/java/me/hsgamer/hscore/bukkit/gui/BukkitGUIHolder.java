@@ -178,14 +178,6 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
   }
 
   @Override
-  protected void onRemoveDisplay(@NotNull BukkitGUIDisplay display) {
-    display.getInventory().getViewers()
-      .stream()
-      .filter(viewer -> viewer.getUniqueId() != display.getUniqueId())
-      .forEach(HumanEntity::closeInventory);
-  }
-
-  @Override
   public void init() {
     super.init();
     addEventConsumer(BukkitDragEvent.class, this::onDrag);
