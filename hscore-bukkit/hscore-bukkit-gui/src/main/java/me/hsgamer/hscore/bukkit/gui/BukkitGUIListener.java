@@ -84,16 +84,18 @@ public class BukkitGUIListener implements Listener {
 
   private void onInventoryOpen(InventoryOpenEvent event) {
     handleIfDisplay(event, display -> {
-      if (display.getOldInventory() != event.getInventory()) {
-        display.handleEvent(new BukkitOpenEvent(event));
+      BukkitOpenEvent bukkitOpenEvent = new BukkitOpenEvent(event);
+      if (display.canCall(bukkitOpenEvent)) {
+        display.handleEvent(bukkitOpenEvent);
       }
     });
   }
 
   private void onInventoryClose(InventoryCloseEvent event) {
     handleIfDisplay(event, display -> {
-      if (display.getInventory() == event.getInventory()) {
-        display.handleEvent(new BukkitCloseEvent(event));
+      BukkitCloseEvent bukkitCloseEvent = new BukkitCloseEvent(event);
+      if (display.canCall(bukkitCloseEvent)) {
+        display.handleEvent(bukkitCloseEvent);
       }
     });
   }

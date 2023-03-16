@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.bukkit.gui;
 
+import me.hsgamer.hscore.bukkit.gui.event.BukkitCloseEvent;
+import me.hsgamer.hscore.bukkit.gui.event.BukkitOpenEvent;
 import me.hsgamer.hscore.bukkit.gui.object.BukkitItem;
 import me.hsgamer.hscore.minecraft.gui.InventoryGUIDisplay;
 import me.hsgamer.hscore.minecraft.gui.event.CloseEvent;
@@ -14,13 +16,13 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * The {@link me.hsgamer.hscore.minecraft.gui.GUIDisplay} for Bukkit
  */
 public class BukkitGUIDisplay extends InventoryGUIDisplay<BukkitGUIHolder> implements InventoryHolder {
-  private final AtomicBoolean isReopening = new AtomicBoolean();
+  private boolean firstOpen = true;
+  private boolean isReopening = false;
   private String title;
   private int size;
   private Inventory inventory;
@@ -72,7 +74,10 @@ public class BukkitGUIDisplay extends InventoryGUIDisplay<BukkitGUIHolder> imple
   public void scheduleReopen(CloseEvent event) {
     Player player = Bukkit.getPlayer(uuid);
     if (player != null) {
-      Bukkit.getScheduler().runTask(holder.getPlugin(), () -> player.openInventory(inventory));
+      Bukkit.getScheduler().runTask(holder.getPlugin(), () -> {
+        oldInventory = null;
+        player.openInventory(inventory);
+      });
     }
   }
 
@@ -86,24 +91,24 @@ public class BukkitGUIDisplay extends InventoryGUIDisplay<BukkitGUIHolder> imple
 
   @Override
   public void update() {
-    if (!isReopening.get()) {
+    if (firstOpen) {
+      firstOpen = false;
+    } else if (!isReopening) {
       String newTitle = holder.getTitleFunction().apply(uuid);
-      int newSize = holder.getSizeFunction().applyAsInt(uuid);
-      if (!newTitle.equals(title) || newSize != size) {
+      if (!newTitle.equals(title)) {
         this.title = newTitle;
-        this.size = newSize;
         oldInventory = inventory;
         inventory = newInventory(uuid);
         inventory.setContents(oldInventory.getContents());
 
         Player player = Bukkit.getPlayer(uuid);
         if (player != null) {
-          isReopening.set(true);
+          isReopening = true;
           Bukkit.getScheduler().runTask(holder.getPlugin(), () -> {
             if (player.getOpenInventory().getTopInventory().equals(oldInventory)) {
               player.openInventory(inventory);
             }
-            isReopening.lazySet(false);
+            isReopening = false;
           });
         }
       }
@@ -117,15 +122,11 @@ public class BukkitGUIDisplay extends InventoryGUIDisplay<BukkitGUIHolder> imple
     return inventory;
   }
 
-  /**
-   * Get the old inventory.
-   * Mainly to check if the inventory is not latest.
-   *
-   * @return the old inventory
-   */
-  @ApiStatus.Internal
-  @Nullable
-  Inventory getOldInventory() {
-    return oldInventory;
+  boolean canCall(BukkitCloseEvent bukkitCloseEvent) {
+    return !isReopening || bukkitCloseEvent.getEvent().getInventory().equals(inventory);
+  }
+
+  boolean canCall(BukkitOpenEvent bukkitOpenEvent) {
+    return !isReopening && oldInventory == null && bukkitOpenEvent.getEvent().getInventory().equals(inventory);
   }
 }
