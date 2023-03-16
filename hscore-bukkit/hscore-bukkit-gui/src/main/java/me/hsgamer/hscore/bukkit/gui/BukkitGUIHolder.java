@@ -24,11 +24,9 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
   private InventoryType inventoryType = InventoryType.CHEST;
   private Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
   private ToIntFunction<UUID> sizeFunction = uuid -> InventoryType.CHEST.getDefaultSize();
-  private BiFunction<BukkitGUIDisplay, UUID, Inventory> inventoryFunction = (display, uuid) -> {
+  private BukkitInventoryFactory inventoryFactory = (display, uuid, size, title) -> {
     BukkitGUIHolder holder = display.getHolder();
     InventoryType type = holder.getInventoryType();
-    int size = holder.getSize(uuid);
-    String title = holder.getTitle(uuid);
     return type == InventoryType.CHEST && size > 0
       ? Bukkit.createInventory(display, BukkitGUIUtils.normalizeToChestSize(size), title)
       : Bukkit.createInventory(display, type, title);
@@ -155,21 +153,33 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
   }
 
   /**
-   * Get the inventory function
+   * Get the inventory factory
    *
-   * @return the inventory function
+   * @return the inventory factory
    */
-  public BiFunction<BukkitGUIDisplay, UUID, Inventory> getInventoryFunction() {
-    return inventoryFunction;
+  public BukkitInventoryFactory getInventoryFactory() {
+    return inventoryFactory;
+  }
+
+  /**
+   * Set the inventory factory
+   *
+   * @param inventoryFactory the inventory factory
+   */
+  public void setInventoryFactory(BukkitInventoryFactory inventoryFactory) {
+    this.inventoryFactory = inventoryFactory;
   }
 
   /**
    * Set the inventory function
    *
-   * @param inventoryFunction the inventory function
+   * @param inventoryFactory the inventory function
+   *
+   * @deprecated use {@link #setInventoryFactory(BukkitInventoryFactory)} instead
    */
-  public void setInventoryFunction(BiFunction<BukkitGUIDisplay, UUID, Inventory> inventoryFunction) {
-    this.inventoryFunction = inventoryFunction;
+  @Deprecated
+  public void setInventoryFunction(BiFunction<BukkitGUIDisplay, UUID, Inventory> inventoryFactory) {
+    setInventoryFactory((display, uuid, size, title) -> inventoryFactory.apply(display, uuid));
   }
 
   @Override

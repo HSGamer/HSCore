@@ -18,6 +18,8 @@ import java.util.UUID;
  * The {@link me.hsgamer.hscore.minecraft.gui.GUIDisplay} for Bukkit
  */
 public class BukkitGUIDisplay extends InventoryGUIDisplay<BukkitGUIHolder> implements InventoryHolder {
+  private String title;
+  private int size;
   private Inventory inventory;
 
   /**
@@ -30,9 +32,15 @@ public class BukkitGUIDisplay extends InventoryGUIDisplay<BukkitGUIHolder> imple
     super(uuid, holder);
   }
 
+  private Inventory newInventory(UUID uuid) {
+    return holder.getInventoryFactory().createInventory(this, uuid, size, title);
+  }
+
   @Override
   protected void initInventory() {
-    this.inventory = holder.getInventoryFunction().apply(this, uuid);
+    this.title = holder.getTitleFunction().apply(uuid);
+    this.size = holder.getSizeFunction().applyAsInt(uuid);
+    this.inventory = newInventory(uuid);
   }
 
   @Override
@@ -69,6 +77,27 @@ public class BukkitGUIDisplay extends InventoryGUIDisplay<BukkitGUIHolder> imple
     Player player = Bukkit.getPlayer(uuid);
     if (player != null) {
       player.openInventory(inventory);
+    }
+  }
+
+  @Override
+  public void update() {
+    Inventory currentInventory = inventory;
+    String newTitle = holder.getTitleFunction().apply(uuid);
+    int newSize = holder.getSizeFunction().applyAsInt(uuid);
+    if (!newTitle.equals(title) || newSize != size) {
+      this.title = newTitle;
+      this.size = newSize;
+      inventory = newInventory(uuid);
+    }
+
+    super.update();
+
+    if (currentInventory != inventory) {
+      Player player = Bukkit.getPlayer(uuid);
+      if (player != null && player.getOpenInventory().getTopInventory().equals(currentInventory)) {
+        player.openInventory(inventory);
+      }
     }
   }
 
