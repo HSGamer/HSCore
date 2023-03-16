@@ -96,20 +96,6 @@ public class BukkitGUIDisplay extends InventoryGUIDisplay<BukkitGUIHolder> imple
   }
 
   @Override
-  public void init() {
-    this.inventory = holder.getInventoryFunction().apply(this, uuid);
-    update();
-  }
-
-  @Override
-  public void stop() {
-    if (inventory != null) {
-      inventory.clear();
-    }
-    viewedButtons.clear();
-  }
-
-  @Override
   public Inventory getInventory() {
     return inventory;
   }
