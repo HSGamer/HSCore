@@ -5,14 +5,12 @@ import me.hsgamer.hscore.minecraft.gui.GUIHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
@@ -168,18 +166,6 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
    */
   public void setInventoryFactory(BukkitInventoryFactory inventoryFactory) {
     this.inventoryFactory = inventoryFactory;
-  }
-
-  /**
-   * Set the inventory function
-   *
-   * @param inventoryFactory the inventory function
-   *
-   * @deprecated use {@link #setInventoryFactory(BukkitInventoryFactory)} instead
-   */
-  @Deprecated
-  public void setInventoryFunction(BiFunction<BukkitGUIDisplay, UUID, Inventory> inventoryFactory) {
-    setInventoryFactory((display, uuid, size, title) -> inventoryFactory.apply(display, uuid));
   }
 
   @Override

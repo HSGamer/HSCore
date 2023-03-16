@@ -96,7 +96,7 @@ public class BukkitGUIDisplay extends InventoryGUIDisplay<BukkitGUIHolder> imple
     if (currentInventory != inventory) {
       Player player = Bukkit.getPlayer(uuid);
       if (player != null && player.getOpenInventory().getTopInventory().equals(currentInventory)) {
-        player.openInventory(inventory);
+        Bukkit.getScheduler().runTask(holder.getPlugin(), () -> player.openInventory(inventory));
       }
     }
   }
