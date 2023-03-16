@@ -12,7 +12,6 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -20,7 +19,6 @@ import java.util.UUID;
  */
 public class BukkitGUIDisplay extends InventoryGUIDisplay<BukkitGUIHolder> implements InventoryHolder {
   private Inventory inventory;
-  private boolean forceUpdate = false;
 
   /**
    * Create a new display
@@ -30,27 +28,6 @@ public class BukkitGUIDisplay extends InventoryGUIDisplay<BukkitGUIHolder> imple
    */
   public BukkitGUIDisplay(UUID uuid, BukkitGUIHolder holder) {
     super(uuid, holder);
-  }
-
-  /**
-   * Should the display force the viewers to update their inventory
-   *
-   * @return true if it should
-   */
-  public boolean isForceUpdate() {
-    return forceUpdate;
-  }
-
-  /**
-   * Should the display force the viewers to update their inventory
-   *
-   * @param forceUpdate true to force them
-   *
-   * @return {@code this} for builder chain
-   */
-  public BukkitGUIDisplay setForceUpdate(boolean forceUpdate) {
-    this.forceUpdate = forceUpdate;
-    return this;
   }
 
   @Override
@@ -98,16 +75,5 @@ public class BukkitGUIDisplay extends InventoryGUIDisplay<BukkitGUIHolder> imple
   @Override
   public Inventory getInventory() {
     return inventory;
-  }
-
-  @Override
-  public void update() {
-    super.update();
-    if (forceUpdate) {
-      new ArrayList<>(inventory.getViewers())
-        .stream()
-        .filter(Player.class::isInstance)
-        .forEach(humanEntity -> ((Player) humanEntity).updateInventory());
-    }
   }
 }
