@@ -86,6 +86,11 @@ public class LightningConfig<F extends FlatFile> implements Config {
   }
 
   @Override
+  public void clear() {
+    this.flatFile.getFileData().clear();
+  }
+
+  @Override
   public void setup() {
     // EMPTY
   }

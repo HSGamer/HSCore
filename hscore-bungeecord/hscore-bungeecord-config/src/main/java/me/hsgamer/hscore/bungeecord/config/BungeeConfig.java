@@ -94,6 +94,11 @@ public class BungeeConfig implements Config {
   }
 
   @Override
+  public void clear() {
+    this.configuration = new Configuration();
+  }
+
+  @Override
   public void save() {
     try {
       ConfigurationProvider.getProvider(YamlConfiguration.class).save(this.configuration, this.file);

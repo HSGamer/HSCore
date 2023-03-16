@@ -101,6 +101,11 @@ public class ConfigurateConfig implements Config {
   }
 
   @Override
+  public void clear() {
+    this.rootNode = this.loader.createNode();
+  }
+
+  @Override
   public void setup() {
     if (!this.file.exists()) {
       File parentFile = this.file.getAbsoluteFile().getParentFile();
