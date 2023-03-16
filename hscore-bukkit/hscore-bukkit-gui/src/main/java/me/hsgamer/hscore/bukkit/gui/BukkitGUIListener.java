@@ -71,11 +71,6 @@ public class BukkitGUIListener implements Listener {
 
   private void onInventoryClick(InventoryClickEvent event) {
     handleIfDisplay(event, display -> {
-      if (display.getInventory() != event.getInventory()) {
-        event.setCancelled(true);
-        return;
-      }
-
       boolean wasCancelled = event.isCancelled();
       event.setCancelled(true);
 
@@ -104,13 +99,7 @@ public class BukkitGUIListener implements Listener {
   }
 
   private void onInventoryDrag(InventoryDragEvent event) {
-    handleIfDisplay(event, display -> {
-      if (display.getInventory() == event.getInventory()) {
-        display.handleEvent(new BukkitDragEvent(event));
-      } else {
-        event.setCancelled(true);
-      }
-    });
+    handleIfDisplay(event, display -> display.handleEvent(new BukkitDragEvent(event)));
   }
 
   private void onPluginDisable(PluginDisableEvent event) {
