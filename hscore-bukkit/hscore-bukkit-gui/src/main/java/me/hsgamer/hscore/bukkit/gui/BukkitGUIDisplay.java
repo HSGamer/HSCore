@@ -10,17 +10,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * The {@link me.hsgamer.hscore.minecraft.gui.GUIDisplay} for Bukkit
  */
 public class BukkitGUIDisplay extends InventoryGUIDisplay<BukkitGUIHolder> implements InventoryHolder {
+  private final AtomicBoolean isReopening = new AtomicBoolean();
   private String title;
   private int size;
   private Inventory inventory;
+  private Inventory oldInventory;
 
   /**
    * Create a new display
@@ -82,27 +86,46 @@ public class BukkitGUIDisplay extends InventoryGUIDisplay<BukkitGUIHolder> imple
 
   @Override
   public void update() {
-    Inventory currentInventory = inventory;
-    String newTitle = holder.getTitleFunction().apply(uuid);
-    int newSize = holder.getSizeFunction().applyAsInt(uuid);
-    if (!newTitle.equals(title) || newSize != size) {
-      this.title = newTitle;
-      this.size = newSize;
-      inventory = newInventory(uuid);
+    if (!isReopening.get()) {
+      String newTitle = holder.getTitleFunction().apply(uuid);
+      int newSize = holder.getSizeFunction().applyAsInt(uuid);
+      if (!newTitle.equals(title) || newSize != size) {
+        this.title = newTitle;
+        this.size = newSize;
+        oldInventory = inventory;
+        inventory = newInventory(uuid);
+        inventory.setContents(oldInventory.getContents());
+
+        Player player = Bukkit.getPlayer(uuid);
+        if (player != null) {
+          isReopening.set(true);
+          Bukkit.getScheduler().runTask(holder.getPlugin(), () -> {
+            if (player.getOpenInventory().getTopInventory().equals(oldInventory)) {
+              player.openInventory(inventory);
+            }
+            isReopening.lazySet(false);
+          });
+        }
+      }
     }
 
     super.update();
-
-    if (currentInventory != inventory) {
-      Player player = Bukkit.getPlayer(uuid);
-      if (player != null && player.getOpenInventory().getTopInventory().equals(currentInventory)) {
-        Bukkit.getScheduler().runTask(holder.getPlugin(), () -> player.openInventory(inventory));
-      }
-    }
   }
 
   @Override
   public Inventory getInventory() {
     return inventory;
+  }
+
+  /**
+   * Get the old inventory.
+   * Mainly to check if the inventory is not latest.
+   *
+   * @return the old inventory
+   */
+  @ApiStatus.Internal
+  @Nullable
+  Inventory getOldInventory() {
+    return oldInventory;
   }
 }

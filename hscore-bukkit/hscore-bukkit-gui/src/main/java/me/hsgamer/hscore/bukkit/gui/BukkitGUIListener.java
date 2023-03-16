@@ -84,7 +84,7 @@ public class BukkitGUIListener implements Listener {
 
   private void onInventoryOpen(InventoryOpenEvent event) {
     handleIfDisplay(event, display -> {
-      if (display.getInventory() == event.getInventory()) {
+      if (display.getOldInventory() != event.getInventory()) {
         display.handleEvent(new BukkitOpenEvent(event));
       }
     });
