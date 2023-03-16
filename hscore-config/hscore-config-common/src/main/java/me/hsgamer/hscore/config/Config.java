@@ -108,6 +108,13 @@ public interface Config {
   }
 
   /**
+   * Remove all paths from the configuration
+   */
+  default void clear() {
+    getKeys(false).forEach(this::remove);
+  }
+
+  /**
    * Get the value from the path
    *
    * @param path the path
