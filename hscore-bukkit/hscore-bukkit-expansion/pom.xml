@@ -2,24 +2,19 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>hscore-bukkit</artifactId>
     <groupId>me.hsgamer</groupId>
+    <artifactId>hscore-bukkit</artifactId>
     <version>4.2.15-SNAPSHOT</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>hscore-bukkit-addon</artifactId>
+  <artifactId>hscore-bukkit-expansion</artifactId>
 
   <dependencies>
     <dependency>
       <groupId>me.hsgamer</groupId>
-      <artifactId>hscore-addon</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>me.hsgamer</groupId>
-      <artifactId>hscore-bukkit-expansion</artifactId>
+      <artifactId>hscore-expansion-common</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

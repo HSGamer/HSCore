@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bukkit.addon;
 
 import me.hsgamer.hscore.addon.AddonManager;
 import me.hsgamer.hscore.addon.object.Addon;
+import me.hsgamer.hscore.bukkit.expansion.BukkitConfigExpansionDescriptionLoader;
 import me.hsgamer.hscore.expansion.common.ExpansionDescription;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.bukkit.plugin.InvalidPluginException;
@@ -53,7 +54,7 @@ public class PluginAddonManager extends AddonManager {
    * @param addonFolder the addon folder
    */
   public PluginAddonManager(@NotNull final JavaPlugin javaPlugin, @NotNull final File addonFolder) {
-    this(javaPlugin, addonFolder, new BukkitConfigAddonDescriptionLoader());
+    this(javaPlugin, addonFolder, new BukkitConfigExpansionDescriptionLoader("addon.yml"));
   }
 
   /**
@@ -62,7 +63,7 @@ public class PluginAddonManager extends AddonManager {
    * @param javaPlugin the plugin
    */
   public PluginAddonManager(@NotNull final JavaPlugin javaPlugin) {
-    this(javaPlugin, new BukkitConfigAddonDescriptionLoader());
+    this(javaPlugin, new BukkitConfigExpansionDescriptionLoader("addon.yml"));
   }
 
   /**

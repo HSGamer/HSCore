@@ -63,6 +63,7 @@
     * **`hscore-minecraft-block-utils`**
   * **`hscore-bukkit`**
     * **`hscore-bukkit-addon`**
+    * **`hscore-bukkit-expansion`**
     * **`hscore-bukkit-command`**
     * **`hscore-bukkit-command-extra`**
     * **`hscore-bukkit-command-sub`**

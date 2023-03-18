@@ -16,6 +16,7 @@
   </properties>
 
   <modules>
+    <module>hscore-bukkit-expansion</module>
     <module>hscore-bukkit-addon</module>
     <module>hscore-bukkit-utils</module>
     <module>hscore-bukkit-command</module>

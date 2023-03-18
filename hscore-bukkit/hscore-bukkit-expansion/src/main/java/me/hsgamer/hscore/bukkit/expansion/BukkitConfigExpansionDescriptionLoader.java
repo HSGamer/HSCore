@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.bukkit.addon;
+package me.hsgamer.hscore.bukkit.expansion;
 
 import me.hsgamer.hscore.expansion.common.factory.InputStreamExpansionDescriptionLoader;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -10,23 +10,16 @@ import java.io.InputStreamReader;
 import java.util.Map;
 
 /**
- * The factory to load {@link me.hsgamer.hscore.addon.object.AddonDescription} from a Bukkit YAML file
+ * The factory to load {@link me.hsgamer.hscore.expansion.common.ExpansionDescription} from a Bukkit YAML file
  */
-public class BukkitConfigAddonDescriptionLoader extends InputStreamExpansionDescriptionLoader {
+public class BukkitConfigExpansionDescriptionLoader extends InputStreamExpansionDescriptionLoader {
   /**
-   * Create a new {@link BukkitConfigAddonDescriptionLoader}
+   * Create a new {@link BukkitConfigExpansionDescriptionLoader}
    *
-   * @param addonFileName the addon file name
+   * @param descriptionFileName the name of the description file
    */
-  public BukkitConfigAddonDescriptionLoader(String addonFileName) {
-    super(addonFileName);
-  }
-
-  /**
-   * Create a new {@link BukkitConfigAddonDescriptionLoader}
-   */
-  public BukkitConfigAddonDescriptionLoader() {
-    this("addon.yml");
+  public BukkitConfigExpansionDescriptionLoader(String descriptionFileName) {
+    super(descriptionFileName);
   }
 
   @Override
