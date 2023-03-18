@@ -73,6 +73,7 @@ public class ModrinthVersionChecker implements VersionChecker {
     this(id, new UserAgent(id));
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public @NotNull CompletableFuture<String> getVersion() {
     StringBuilder urlBuilder = new StringBuilder("https://api.modrinth.com/api/v1/mod/" + id + "/version");
@@ -84,7 +85,7 @@ public class ModrinthVersionChecker implements VersionChecker {
         InputStream inputStream = WebUtils.createConnection(urlBuilder.toString(), userAgent::assignToConnection).getInputStream();
         InputStreamReader reader = new InputStreamReader(inputStream)
       ) {
-        JsonElement element = JsonParser.parseReader(reader);
+        JsonElement element = new JsonParser().parse(reader);
         if (!element.isJsonArray()) {
           throw new IOException("Invalid JSON");
         }

@@ -43,6 +43,7 @@ public class JsonDownloadInfoLoader extends MapDownloadInfoLoader {
     this(dbUrl, UserAgent.FIREFOX);
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   protected CompletableFuture<Map<String, Map<String, Object>>> loadMap(Downloader downloader) {
     return CompletableFuture.supplyAsync(() -> {
@@ -53,7 +54,7 @@ public class JsonDownloadInfoLoader extends MapDownloadInfoLoader {
       }
     }).thenApplyAsync(inputStreamReader -> {
       try {
-        return JsonParser.parseReader(inputStreamReader);
+        return new JsonParser().parse(inputStreamReader);
       } catch (Exception e) {
         throw new IllegalStateException("Something wrong when parsing the info", e);
       }

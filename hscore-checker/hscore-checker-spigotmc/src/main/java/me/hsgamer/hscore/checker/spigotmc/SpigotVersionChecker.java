@@ -44,6 +44,7 @@ public final class SpigotVersionChecker implements VersionChecker {
    *
    * @return the version
    */
+  @SuppressWarnings("deprecation")
   @Override
   public @NotNull CompletableFuture<String> getVersion() {
     return CompletableFuture.supplyAsync(() -> {
@@ -51,7 +52,7 @@ public final class SpigotVersionChecker implements VersionChecker {
         InputStream inputStream = WebUtils.createConnection("https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId, userAgent::assignToConnection).getInputStream();
         InputStreamReader reader = new InputStreamReader(inputStream)
       ) {
-        JsonElement element = JsonParser.parseReader(reader);
+        JsonElement element = new JsonParser().parse(reader);
         if (!element.isJsonObject()) {
           throw new IOException("Invalid JSON");
         }

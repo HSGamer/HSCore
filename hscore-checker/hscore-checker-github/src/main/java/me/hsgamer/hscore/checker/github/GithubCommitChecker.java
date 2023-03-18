@@ -41,6 +41,7 @@ public class GithubCommitChecker implements VersionChecker {
     this(repo, branch, UserAgent.FIREFOX);
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public @NotNull CompletableFuture<String> getVersion() {
     return CompletableFuture.supplyAsync(() -> {
@@ -48,7 +49,7 @@ public class GithubCommitChecker implements VersionChecker {
         InputStream inputStream = WebUtils.createConnection(url, userAgent::assignToConnection).getInputStream();
         InputStreamReader reader = new InputStreamReader(inputStream)
       ) {
-        JsonElement element = JsonParser.parseReader(reader);
+        JsonElement element = new JsonParser().parse(reader);
         if (!element.isJsonObject()) {
           throw new IOException("The response is null");
         }
