@@ -12,6 +12,7 @@ me.hsgamer.hscore.bukkit.command.sub
 me.hsgamer.hscore.bukkit.config
 me.hsgamer.hscore.bukkit.config.object
 me.hsgamer.hscore.bukkit.config.path
+me.hsgamer.hscore.bukkit.expansion
 me.hsgamer.hscore.bukkit.gui
 me.hsgamer.hscore.bukkit.gui.button.impl
 me.hsgamer.hscore.bukkit.gui.event
