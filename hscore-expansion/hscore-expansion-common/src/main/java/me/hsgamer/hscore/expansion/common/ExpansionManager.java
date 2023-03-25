@@ -289,6 +289,12 @@ public class ExpansionManager {
         }
       }
     }
+  }
+
+  /**
+   * Clear all expansions
+   */
+  public void clearExpansions() {
     this.classLoaders.values().forEach(this::closeClassLoaderSafe);
     this.classLoaders.clear();
   }
