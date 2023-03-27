@@ -14,7 +14,7 @@ public class CaseInsensitiveStringLinkedMap<V> extends CaseInsensitiveStringMap<
     super(new LinkedHashMap<>());
   }
 
-  public CaseInsensitiveStringLinkedMap(Map<? extends String, ? extends V> map) {
+  public CaseInsensitiveStringLinkedMap(Map<String, ? extends V> map) {
     this();
     putAll(map);
   }

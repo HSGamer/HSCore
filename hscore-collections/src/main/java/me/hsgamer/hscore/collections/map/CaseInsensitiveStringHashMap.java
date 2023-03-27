@@ -14,7 +14,7 @@ public class CaseInsensitiveStringHashMap<V> extends CaseInsensitiveStringMap<V>
     super(new HashMap<>());
   }
 
-  public CaseInsensitiveStringHashMap(Map<? extends String, ? extends V> map) {
+  public CaseInsensitiveStringHashMap(Map<String, ? extends V> map) {
     this();
     putAll(map);
   }
