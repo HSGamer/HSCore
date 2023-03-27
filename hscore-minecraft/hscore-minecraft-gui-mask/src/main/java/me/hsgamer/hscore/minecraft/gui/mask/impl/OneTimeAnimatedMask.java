@@ -131,7 +131,7 @@ public class OneTimeAnimatedMask extends BaseMask implements IdentifiedUpdatable
   @Override
   public void update(@NotNull UUID uuid) {
     SequenceRunner runner = getRunner(uuid);
-    if (runner.maxed) {
+    if (!runner.maxed) {
       runner.updateIndex();
     }
   }
