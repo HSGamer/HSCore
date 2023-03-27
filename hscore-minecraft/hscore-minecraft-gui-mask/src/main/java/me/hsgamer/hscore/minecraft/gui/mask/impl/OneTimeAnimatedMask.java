@@ -159,6 +159,10 @@ public class OneTimeAnimatedMask extends BaseMask implements IdentifiedUpdatable
     private void updateIndex() {
       long currentTick = System.currentTimeMillis();
       long diff = currentTick - lastTickMillis;
+      if (diff < periodMillis) {
+        return;
+      }
+
       long passed = diff / periodMillis;
       long remainder = diff % periodMillis;
       lastTickMillis = currentTick - remainder;
