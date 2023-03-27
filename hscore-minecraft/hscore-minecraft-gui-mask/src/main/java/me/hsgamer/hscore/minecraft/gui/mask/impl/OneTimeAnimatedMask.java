@@ -163,7 +163,7 @@ public class OneTimeAnimatedMask extends BaseMask implements IdentifiedUpdatable
         return;
       }
 
-      long passed = diff / periodMillis;
+      int passed = (int) (diff / periodMillis);
       long remainder = diff % periodMillis;
       lastTickMillis = currentTick - remainder;
 
