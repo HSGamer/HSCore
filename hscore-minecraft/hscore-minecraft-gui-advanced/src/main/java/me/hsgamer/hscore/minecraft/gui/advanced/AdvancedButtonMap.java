@@ -88,7 +88,7 @@ public class AdvancedButtonMap implements ButtonMap {
   }
 
   @Override
-  public @NotNull Map<Button, Collection<Integer>> getButtons(@NotNull UUID uuid) {
+  public @NotNull Map<Button, Collection<Integer>> getButtons(@NotNull UUID uuid, int size) {
     Map<Button, Collection<Integer>> buttonSlotMap = new LinkedHashMap<>();
     if (allowSlotDuplication) {
       for (Mask mask : masks) {

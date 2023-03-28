@@ -91,7 +91,7 @@ public class SimpleButtonMap implements ButtonMap {
   }
 
   @Override
-  public @NotNull Map<Button, Collection<Integer>> getButtons(@NotNull UUID uuid) {
+  public @NotNull Map<Button, Collection<Integer>> getButtons(@NotNull UUID uuid, int size) {
     return buttonSlotMap;
   }
 
