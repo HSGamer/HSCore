@@ -104,11 +104,11 @@ public class PredicateMask extends BaseMask {
   }
 
   @Override
-  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid) {
+  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid, int size) {
     if (failToViewList.contains(uuid)) {
-      return fallbackMask != null ? fallbackMask.generateButtons(uuid) : Collections.emptyMap();
+      return fallbackMask != null ? fallbackMask.generateButtons(uuid, size) : Collections.emptyMap();
     } else {
-      return mask != null ? mask.generateButtons(uuid) : Collections.emptyMap();
+      return mask != null ? mask.generateButtons(uuid, size) : Collections.emptyMap();
     }
   }
 

@@ -43,7 +43,7 @@ public abstract class SequencePaginatedMask extends PaginatedMask {
   public abstract List<@NotNull Button> getButtons(UUID uuid);
 
   @Override
-  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid) {
+  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid, int size) {
     List<Button> buttons = getButtons(uuid);
     if (buttons.isEmpty() || this.slots.isEmpty()) {
       return Collections.emptyMap();

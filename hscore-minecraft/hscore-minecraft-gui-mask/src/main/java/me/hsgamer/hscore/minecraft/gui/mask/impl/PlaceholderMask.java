@@ -31,8 +31,8 @@ public class PlaceholderMask extends BaseMask {
   }
 
   @Override
-  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid) {
-    return this.userMasks.getOrDefault(uuid, this.defaultMask).generateButtons(uuid);
+  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid, int size) {
+    return this.userMasks.getOrDefault(uuid, this.defaultMask).generateButtons(uuid, size);
   }
 
   @Override

@@ -93,14 +93,14 @@ public class AdvancedButtonMap implements ButtonMap {
     if (allowSlotDuplication) {
       for (Mask mask : masks) {
         if (!mask.canView(uuid)) continue;
-        Map<Integer, Button> buttons = mask.generateButtons(uuid);
+        Map<Integer, Button> buttons = mask.generateButtons(uuid, size);
         buttons.forEach((slot, button) -> buttonSlotMap.computeIfAbsent(button, k -> new ArrayList<>()).add(slot));
       }
     } else {
       Map<Integer, Button> slotMap = new LinkedHashMap<>();
       for (Mask mask : masks) {
         if (!mask.canView(uuid)) continue;
-        Map<Integer, Button> buttons = mask.generateButtons(uuid);
+        Map<Integer, Button> buttons = mask.generateButtons(uuid, size);
         slotMap.putAll(buttons);
       }
       slotMap.forEach((slot, button) -> buttonSlotMap.computeIfAbsent(button, k -> new ArrayList<>()).add(slot));

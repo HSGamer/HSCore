@@ -74,10 +74,10 @@ public class ListMask extends BaseMask {
   }
 
   @Override
-  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid) {
+  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid, int size) {
     return Optional.ofNullable(currentIndexMap.get(uuid))
       .map(masks::get)
-      .map(mask -> mask.generateButtons(uuid))
+      .map(mask -> mask.generateButtons(uuid, size))
       .orElseGet(Collections::emptyMap);
   }
 

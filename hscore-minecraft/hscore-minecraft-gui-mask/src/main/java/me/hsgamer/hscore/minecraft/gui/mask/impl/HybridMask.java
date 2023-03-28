@@ -60,11 +60,11 @@ public class HybridMask extends BaseMask {
   }
 
   @Override
-  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid) {
+  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid, int size) {
     Map<Integer, Button> buttonMap = new HashMap<>();
     for (Map.Entry<Mask, Set<UUID>> entry : maskMap.entrySet()) {
       if (entry.getValue().contains(uuid)) {
-        buttonMap.putAll(entry.getKey().generateButtons(uuid));
+        buttonMap.putAll(entry.getKey().generateButtons(uuid, size));
       }
     }
     return buttonMap;
