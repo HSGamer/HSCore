@@ -3,6 +3,7 @@ package me.hsgamer.hscore.bukkit.scheduler.bukkit;
 import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import me.hsgamer.hscore.bukkit.scheduler.Task;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -161,5 +162,20 @@ public class BukkitScheduler implements Scheduler {
   @Override
   public Task runEntityTaskTimer(Plugin plugin, Entity entity, BooleanSupplier runnable, Runnable retired, long delay, long period, boolean async) {
     return wrapTask(runTaskTimer(plugin, wrapRunnable(entity, runnable, retired), delay, period, async), true);
+  }
+
+  @Override
+  public Task runLocationTask(Plugin plugin, Location location, Runnable runnable) {
+    return wrapTask(runTask(plugin, wrapRunnable(runnable), false), false);
+  }
+
+  @Override
+  public Task runLocationTaskLater(Plugin plugin, Location location, Runnable runnable, long delay) {
+    return wrapTask(runTaskLater(plugin, wrapRunnable(runnable), delay, false), false);
+  }
+
+  @Override
+  public Task runLocationTaskTimer(Plugin plugin, Location location, BooleanSupplier runnable, long delay, long period) {
+    return wrapTask(runTaskTimer(plugin, wrapRunnable(runnable), delay, period, false), true);
   }
 }

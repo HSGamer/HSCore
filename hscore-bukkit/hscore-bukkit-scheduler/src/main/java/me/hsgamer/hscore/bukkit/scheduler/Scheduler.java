@@ -3,6 +3,7 @@ package me.hsgamer.hscore.bukkit.scheduler;
 import me.hsgamer.hscore.bukkit.folia.FoliaChecker;
 import me.hsgamer.hscore.bukkit.scheduler.bukkit.BukkitScheduler;
 import me.hsgamer.hscore.bukkit.scheduler.folia.FoliaScheduler;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 
@@ -253,5 +254,59 @@ public interface Scheduler {
         finalizer.run();
       }
     }, finalizer, delay, async);
+  }
+
+  /**
+   * Run a task related to a location
+   *
+   * @param plugin   the plugin that owns the task
+   * @param location the location that the task is related to
+   * @param runnable the task
+   *
+   * @return the task
+   */
+  Task runLocationTask(Plugin plugin, Location location, Runnable runnable);
+
+  /**
+   * Run a delayed task related to a location
+   *
+   * @param plugin   the plugin that owns the task
+   * @param location the location that the task is related to
+   * @param runnable the task
+   * @param delay    the delay in ticks before the task is run
+   *
+   * @return the task
+   */
+  Task runLocationTaskLater(Plugin plugin, Location location, Runnable runnable, long delay);
+
+  /**
+   * Run a task repeatedly related to a location
+   *
+   * @param plugin   the plugin that owns the task
+   * @param location the location that the task is related to
+   * @param runnable the task. Return true to continue, false to stop.
+   * @param delay    the delay in ticks before the task is run
+   * @param period   the period in ticks between each run
+   *
+   * @return the task
+   */
+  Task runLocationTaskTimer(Plugin plugin, Location location, BooleanSupplier runnable, long delay, long period);
+
+  /**
+   * Run a task repeatedly related to a location
+   *
+   * @param plugin   the plugin that owns the task
+   * @param location the location that the task is related to
+   * @param runnable the task
+   * @param delay    the delay in ticks before the task is run
+   * @param period   the period in ticks between each run
+   *
+   * @return the task
+   */
+  default Task runLocationTaskTimer(Plugin plugin, Location location, Runnable runnable, long delay, long period) {
+    return runLocationTaskTimer(plugin, location, () -> {
+      runnable.run();
+      return true;
+    }, delay, period);
   }
 }

@@ -4,6 +4,7 @@ import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import me.hsgamer.hscore.bukkit.scheduler.Task;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -195,5 +196,26 @@ public class FoliaScheduler implements Scheduler {
     }
     addTask(plugin, scheduledTask);
     return wrap(scheduledTask, async);
+  }
+
+  @Override
+  public Task runLocationTask(Plugin plugin, Location location, Runnable runnable) {
+    ScheduledTask scheduledTask = Bukkit.getRegionScheduler().run(plugin, location, s -> runnable.run());
+    addTask(plugin, scheduledTask);
+    return wrap(scheduledTask, false);
+  }
+
+  @Override
+  public Task runLocationTaskLater(Plugin plugin, Location location, Runnable runnable, long delay) {
+    ScheduledTask scheduledTask = Bukkit.getRegionScheduler().runDelayed(plugin, location, s -> runnable.run(), normalizeTick(delay));
+    addTask(plugin, scheduledTask);
+    return wrap(scheduledTask, false);
+  }
+
+  @Override
+  public Task runLocationTaskTimer(Plugin plugin, Location location, BooleanSupplier runnable, long delay, long period) {
+    ScheduledTask scheduledTask = Bukkit.getRegionScheduler().runAtFixedRate(plugin, location, wrap(runnable), normalizeTick(delay), normalizeTick(period));
+    addTask(plugin, scheduledTask);
+    return wrap(scheduledTask, false);
   }
 }
