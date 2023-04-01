@@ -16,8 +16,16 @@ import java.util.function.BooleanSupplier;
 public class BukkitScheduler implements Scheduler {
   private Task wrapTask(BukkitTask bukkitTask, boolean repeating) {
     return new Task() {
+      boolean cancelled = false;
+
+      @Override
+      public boolean isCancelled() {
+        return cancelled;
+      }
+
       @Override
       public void cancel() {
+        cancelled = true;
         bukkitTask.cancel();
       }
 
