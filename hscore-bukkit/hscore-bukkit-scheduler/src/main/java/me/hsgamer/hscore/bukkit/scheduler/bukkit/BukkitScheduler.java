@@ -12,7 +12,7 @@ import org.bukkit.scheduler.BukkitTask;
  * The Bukkit implementation of {@link Scheduler}
  */
 public class BukkitScheduler implements Scheduler {
-  private Task wrap(BukkitTask bukkitTask, boolean repeating) {
+  private Task wrapTask(BukkitTask bukkitTask, boolean repeating) {
     return new Task() {
       @Override
       public boolean isCancelled() {
@@ -36,7 +36,7 @@ public class BukkitScheduler implements Scheduler {
     };
   }
 
-  private BukkitRunnable wrap(Runnable runnable) {
+  private BukkitRunnable wrapRunnable(Runnable runnable) {
     return new BukkitRunnable() {
       @Override
       public void run() {
@@ -45,7 +45,7 @@ public class BukkitScheduler implements Scheduler {
     };
   }
 
-  private BukkitRunnable wrap(Entity entity, Runnable runnable, Runnable retired) {
+  private BukkitRunnable wrapRunnable(Entity entity, Runnable runnable, Runnable retired) {
     return new BukkitRunnable() {
       @Override
       public void run() {
@@ -90,45 +90,31 @@ public class BukkitScheduler implements Scheduler {
 
   @Override
   public Task runTask(Plugin plugin, Runnable runnable, boolean async) {
-    BukkitRunnable bukkitRunnable = wrap(runnable);
-
-    if (Bukkit.isPrimaryThread() && !async) {
-      bukkitRunnable.runTask(plugin);
-      return Task.completed(false, false);
-    }
-
-    return wrap(runTask(plugin, bukkitRunnable, async), false);
+    return wrapTask(runTask(plugin, wrapRunnable(runnable), async), false);
   }
 
   @Override
   public Task runTaskLater(Plugin plugin, Runnable runnable, long delay, boolean async) {
-    return wrap(runTaskLater(plugin, wrap(runnable), delay, async), false);
+    return wrapTask(runTaskLater(plugin, wrapRunnable(runnable), delay, async), false);
   }
 
   @Override
   public Task runTaskTimer(Plugin plugin, Runnable runnable, long delay, long period, boolean async) {
-    return wrap(runTaskTimer(plugin, wrap(runnable), delay, period, async), true);
+    return wrapTask(runTaskTimer(plugin, wrapRunnable(runnable), delay, period, async), true);
   }
 
   @Override
   public Task runEntityTask(Plugin plugin, Entity entity, Runnable runnable, Runnable retired, boolean async) {
-    BukkitRunnable bukkitRunnable = wrap(entity, runnable, retired);
-
-    if (Bukkit.isPrimaryThread() && !async) {
-      bukkitRunnable.runTask(plugin);
-      return Task.completed(false, false);
-    }
-
-    return wrap(runTask(plugin, bukkitRunnable, async), false);
+    return wrapTask(runTask(plugin, wrapRunnable(entity, runnable, retired), async), false);
   }
 
   @Override
   public Task runEntityTaskLater(Plugin plugin, Entity entity, Runnable runnable, Runnable retired, long delay, boolean async) {
-    return wrap(runTaskLater(plugin, wrap(entity, runnable, retired), delay, async), false);
+    return wrapTask(runTaskLater(plugin, wrapRunnable(entity, runnable, retired), delay, async), false);
   }
 
   @Override
   public Task runEntityTaskTimer(Plugin plugin, Entity entity, Runnable runnable, Runnable retired, long delay, long period, boolean async) {
-    return wrap(runTaskTimer(plugin, wrap(entity, runnable, retired), delay, period, async), true);
+    return wrapTask(runTaskTimer(plugin, wrapRunnable(entity, runnable, retired), delay, period, async), true);
   }
 }
