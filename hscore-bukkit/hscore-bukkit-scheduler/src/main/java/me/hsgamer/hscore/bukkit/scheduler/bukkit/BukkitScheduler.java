@@ -20,7 +20,11 @@ public class BukkitScheduler implements Scheduler {
 
       @Override
       public boolean isCancelled() {
-        return cancelled;
+        try {
+          return bukkitTask.isCancelled();
+        } catch (Throwable throwable) {
+          return cancelled; // For old versions that don't have isCancelled()
+        }
       }
 
       @Override
