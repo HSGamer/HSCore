@@ -8,6 +8,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.function.BooleanSupplier;
+
 /**
  * The Bukkit implementation of {@link Scheduler}
  */
@@ -16,7 +18,7 @@ public class BukkitScheduler implements Scheduler {
     return new Task() {
       @Override
       public boolean isCancelled() {
-        return bukkitTask.isCancelled();
+        return !Bukkit.getScheduler().isCurrentlyRunning(bukkitTask.getTaskId()) && !Bukkit.getScheduler().isQueued(bukkitTask.getTaskId());
       }
 
       @Override
@@ -45,12 +47,39 @@ public class BukkitScheduler implements Scheduler {
     };
   }
 
+  private BukkitRunnable wrapRunnable(BooleanSupplier runnable) {
+    return new BukkitRunnable() {
+      @Override
+      public void run() {
+        if (!runnable.getAsBoolean()) {
+          cancel();
+        }
+      }
+    };
+  }
+
   private BukkitRunnable wrapRunnable(Entity entity, Runnable runnable, Runnable retired) {
     return new BukkitRunnable() {
       @Override
       public void run() {
         if (entity.isValid()) {
           runnable.run();
+        } else {
+          retired.run();
+          cancel();
+        }
+      }
+    };
+  }
+
+  private BukkitRunnable wrapRunnable(Entity entity, BooleanSupplier runnable, Runnable retired) {
+    return new BukkitRunnable() {
+      @Override
+      public void run() {
+        if (entity.isValid()) {
+          if (!runnable.getAsBoolean()) {
+            cancel();
+          }
         } else {
           retired.run();
           cancel();
@@ -99,7 +128,7 @@ public class BukkitScheduler implements Scheduler {
   }
 
   @Override
-  public Task runTaskTimer(Plugin plugin, Runnable runnable, long delay, long period, boolean async) {
+  public Task runTaskTimer(Plugin plugin, BooleanSupplier runnable, long delay, long period, boolean async) {
     return wrapTask(runTaskTimer(plugin, wrapRunnable(runnable), delay, period, async), true);
   }
 
@@ -114,7 +143,7 @@ public class BukkitScheduler implements Scheduler {
   }
 
   @Override
-  public Task runEntityTaskTimer(Plugin plugin, Entity entity, Runnable runnable, Runnable retired, long delay, long period, boolean async) {
+  public Task runEntityTaskTimer(Plugin plugin, Entity entity, BooleanSupplier runnable, Runnable retired, long delay, long period, boolean async) {
     return wrapTask(runTaskTimer(plugin, wrapRunnable(entity, runnable, retired), delay, period, async), true);
   }
 }

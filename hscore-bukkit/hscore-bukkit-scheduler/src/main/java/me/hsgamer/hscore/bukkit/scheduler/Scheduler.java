@@ -5,6 +5,7 @@ import me.hsgamer.hscore.bukkit.scheduler.folia.FoliaScheduler;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 /**
@@ -58,6 +59,19 @@ public interface Scheduler {
    * Run a task repeatedly
    *
    * @param plugin   the plugin that owns the task
+   * @param runnable the task. Return true to continue, false to stop.
+   * @param delay    the delay in ticks before the task is run
+   * @param period   the period in ticks between each run
+   * @param async    whether the task is async
+   *
+   * @return the task
+   */
+  Task runTaskTimer(Plugin plugin, BooleanSupplier runnable, long delay, long period, boolean async);
+
+  /**
+   * Run a task repeatedly
+   *
+   * @param plugin   the plugin that owns the task
    * @param runnable the task
    * @param delay    the delay in ticks before the task is run
    * @param period   the period in ticks between each run
@@ -65,7 +79,12 @@ public interface Scheduler {
    *
    * @return the task
    */
-  Task runTaskTimer(Plugin plugin, Runnable runnable, long delay, long period, boolean async);
+  default Task runTaskTimer(Plugin plugin, Runnable runnable, long delay, long period, boolean async) {
+    return runTaskTimer(plugin, () -> {
+      runnable.run();
+      return true;
+    }, delay, period, async);
+  }
 
   /**
    * Run a task related to an entity
@@ -99,6 +118,21 @@ public interface Scheduler {
    *
    * @param plugin   the plugin that owns the task
    * @param entity   the entity that the task is related to
+   * @param runnable the task. Return true to continue, false to stop.
+   * @param retired  the task when the entity is retired (e.g. removed, invalid)
+   * @param delay    the delay in ticks before the task is run
+   * @param period   the period in ticks between each run
+   * @param async    whether the task is async
+   *
+   * @return the task
+   */
+  Task runEntityTaskTimer(Plugin plugin, Entity entity, BooleanSupplier runnable, Runnable retired, long delay, long period, boolean async);
+
+  /**
+   * Run a task repeatedly related to an entity
+   *
+   * @param plugin   the plugin that owns the task
+   * @param entity   the entity that the task is related to
    * @param runnable the task
    * @param retired  the task when the entity is retired (e.g. removed, invalid)
    * @param delay    the delay in ticks before the task is run
@@ -107,7 +141,12 @@ public interface Scheduler {
    *
    * @return the task
    */
-  Task runEntityTaskTimer(Plugin plugin, Entity entity, Runnable runnable, Runnable retired, long delay, long period, boolean async);
+  default Task runEntityTaskTimer(Plugin plugin, Entity entity, Runnable runnable, Runnable retired, long delay, long period, boolean async) {
+    return runEntityTaskTimer(plugin, entity, () -> {
+      runnable.run();
+      return true;
+    }, retired, delay, period, async);
+  }
 
   /**
    * Run a task related to an entity
@@ -137,6 +176,23 @@ public interface Scheduler {
   default Task runEntityTaskLater(Plugin plugin, Entity entity, Runnable runnable, long delay, boolean async) {
     return runEntityTaskLater(plugin, entity, runnable, () -> {
     }, delay, async);
+  }
+
+  /**
+   * Run a task repeatedly related to an entity
+   *
+   * @param plugin   the plugin that owns the task
+   * @param entity   the entity that the task is related to
+   * @param runnable the task. Return true to continue, false to stop.
+   * @param delay    the delay in ticks before the task is run
+   * @param period   the period in ticks between each run
+   * @param async    whether the task is async
+   *
+   * @return the task
+   */
+  default Task runEntityTaskTimer(Plugin plugin, Entity entity, BooleanSupplier runnable, long delay, long period, boolean async) {
+    return runEntityTaskTimer(plugin, entity, runnable, () -> {
+    }, delay, period, async);
   }
 
   /**

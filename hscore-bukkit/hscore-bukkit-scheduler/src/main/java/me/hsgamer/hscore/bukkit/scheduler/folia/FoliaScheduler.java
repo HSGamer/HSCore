@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
 /**
@@ -29,6 +30,62 @@ public class FoliaScheduler implements Scheduler {
 
   private long toMilliSecond(long tick) {
     return normalizeTick(tick) * 50;
+  }
+
+  private Consumer<ScheduledTask> wrap(BooleanSupplier runnable) {
+    return scheduledTask -> {
+      if (!runnable.getAsBoolean()) {
+        scheduledTask.cancel();
+      }
+    };
+  }
+
+  private Task wrap(ScheduledTask scheduledTask, boolean async) {
+    return new Task() {
+      @Override
+      public boolean isCancelled() {
+        return scheduledTask.isCancelled();
+      }
+
+      @Override
+      public void cancel() {
+        scheduledTask.cancel();
+      }
+
+      @Override
+      public boolean isAsync() {
+        return async;
+      }
+
+      @Override
+      public boolean isRepeating() {
+        return scheduledTask.isRepeatingTask();
+      }
+    };
+  }
+
+  private Consumer<ScheduledTask> wrap(Entity entity, Runnable runnable, Runnable retired) {
+    return scheduledTask -> {
+      if (entity.isValid()) {
+        runnable.run();
+      } else {
+        retired.run();
+        scheduledTask.cancel();
+      }
+    };
+  }
+
+  private Consumer<ScheduledTask> wrap(Entity entity, BooleanSupplier runnable, Runnable retired) {
+    return scheduledTask -> {
+      if (entity.isValid()) {
+        if (!runnable.getAsBoolean()) {
+          scheduledTask.cancel();
+        }
+      } else {
+        retired.run();
+        scheduledTask.cancel();
+      }
+    };
   }
 
   @Override
@@ -72,12 +129,12 @@ public class FoliaScheduler implements Scheduler {
   }
 
   @Override
-  public Task runTaskTimer(Plugin plugin, Runnable runnable, long delay, long period, boolean async) {
+  public Task runTaskTimer(Plugin plugin, BooleanSupplier runnable, long delay, long period, boolean async) {
     ScheduledTask scheduledTask;
     if (async) {
-      scheduledTask = Bukkit.getAsyncScheduler().runAtFixedRate(plugin, s -> runnable.run(), toMilliSecond(delay), toMilliSecond(period), TimeUnit.MILLISECONDS);
+      scheduledTask = Bukkit.getAsyncScheduler().runAtFixedRate(plugin, wrap(runnable), toMilliSecond(delay), toMilliSecond(period), TimeUnit.MILLISECONDS);
     } else {
-      scheduledTask = Bukkit.getGlobalRegionScheduler().runAtFixedRate(plugin, s -> runnable.run(), normalizeTick(delay), normalizeTick(period));
+      scheduledTask = Bukkit.getGlobalRegionScheduler().runAtFixedRate(plugin, wrap(runnable), normalizeTick(delay), normalizeTick(period));
     }
     addTask(plugin, scheduledTask);
     return wrap(scheduledTask, async);
@@ -116,7 +173,7 @@ public class FoliaScheduler implements Scheduler {
   }
 
   @Override
-  public Task runEntityTaskTimer(Plugin plugin, Entity entity, Runnable runnable, Runnable retired, long delay, long period, boolean async) {
+  public Task runEntityTaskTimer(Plugin plugin, Entity entity, BooleanSupplier runnable, Runnable retired, long delay, long period, boolean async) {
     if (entity == null || !entity.isValid()) {
       return Task.completed(async, true);
     }
@@ -125,44 +182,9 @@ public class FoliaScheduler implements Scheduler {
     if (async) {
       scheduledTask = Bukkit.getAsyncScheduler().runAtFixedRate(plugin, wrap(entity, runnable, retired), toMilliSecond(delay), toMilliSecond(period), TimeUnit.MILLISECONDS);
     } else {
-      scheduledTask = entity.getScheduler().runAtFixedRate(plugin, s -> runnable.run(), retired, normalizeTick(delay), normalizeTick(period));
+      scheduledTask = entity.getScheduler().runAtFixedRate(plugin, wrap(runnable), retired, normalizeTick(delay), normalizeTick(period));
     }
     addTask(plugin, scheduledTask);
     return wrap(scheduledTask, async);
-  }
-
-  private Task wrap(ScheduledTask scheduledTask, boolean async) {
-    return new Task() {
-      @Override
-      public boolean isCancelled() {
-        return scheduledTask.isCancelled();
-      }
-
-      @Override
-      public void cancel() {
-        scheduledTask.cancel();
-      }
-
-      @Override
-      public boolean isAsync() {
-        return async;
-      }
-
-      @Override
-      public boolean isRepeating() {
-        return scheduledTask.isRepeatingTask();
-      }
-    };
-  }
-
-  private Consumer<ScheduledTask> wrap(Entity entity, Runnable runnable, Runnable retired) {
-    return scheduledTask -> {
-      if (entity.isValid()) {
-        runnable.run();
-      } else {
-        retired.run();
-        scheduledTask.cancel();
-      }
-    };
   }
 }
