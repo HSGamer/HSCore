@@ -13,6 +13,7 @@ me.hsgamer.hscore.bukkit.config
 me.hsgamer.hscore.bukkit.config.object
 me.hsgamer.hscore.bukkit.config.path
 me.hsgamer.hscore.bukkit.expansion
+me.hsgamer.hscore.bukkit.folia
 me.hsgamer.hscore.bukkit.gui
 me.hsgamer.hscore.bukkit.gui.button.impl
 me.hsgamer.hscore.bukkit.gui.event
@@ -21,7 +22,11 @@ me.hsgamer.hscore.bukkit.item
 me.hsgamer.hscore.bukkit.item.modifier
 me.hsgamer.hscore.bukkit.key
 me.hsgamer.hscore.bukkit.listener
+me.hsgamer.hscore.bukkit.scheduler
+me.hsgamer.hscore.bukkit.scheduler.bukkit
+me.hsgamer.hscore.bukkit.scheduler.folia
 me.hsgamer.hscore.bukkit.simpleplugin
+me.hsgamer.hscore.bukkit.simpleplugin.listener
 me.hsgamer.hscore.bukkit.utils
 me.hsgamer.hscore.bungeecord.channel
 me.hsgamer.hscore.bungeecord.config
