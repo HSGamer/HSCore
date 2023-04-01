@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.scheduler;
 
+import me.hsgamer.hscore.bukkit.folia.FoliaChecker;
 import me.hsgamer.hscore.bukkit.scheduler.bukkit.BukkitScheduler;
 import me.hsgamer.hscore.bukkit.scheduler.folia.FoliaScheduler;
 import org.bukkit.entity.Entity;
@@ -17,10 +18,9 @@ public interface Scheduler {
    * Use this to get the {@link Scheduler} instead of {@link org.bukkit.Bukkit#getScheduler()}.
    */
   Scheduler CURRENT = ((Supplier<Scheduler>) () -> {
-    try {
-      Class.forName("io.papermc.paper.threadedregions.scheduler.AsyncScheduler");
+    if (FoliaChecker.isFolia()) {
       return new FoliaScheduler();
-    } catch (Throwable throwable) {
+    } else {
       return new BukkitScheduler();
     }
   }).get();

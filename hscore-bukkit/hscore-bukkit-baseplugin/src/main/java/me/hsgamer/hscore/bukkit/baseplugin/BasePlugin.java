@@ -1,15 +1,11 @@
 package me.hsgamer.hscore.bukkit.baseplugin;
 
 import me.hsgamer.hscore.bukkit.command.CommandManager;
-import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import me.hsgamer.hscore.bukkit.simpleplugin.SimplePlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.permissions.Permission;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.java.JavaPluginLoader;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Collections;
@@ -30,10 +26,6 @@ public class BasePlugin extends SimplePlugin {
     super();
   }
 
-  protected BasePlugin(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
-    super(loader, description, dataFolder, file);
-  }
-
   @Override
   public final void onLoad() {
     super.onLoad();
@@ -43,7 +35,7 @@ public class BasePlugin extends SimplePlugin {
   public final void onEnable() {
     super.onEnable();
     registerPermissions();
-    Scheduler.CURRENT.runTask(this, CommandManager::syncCommand, false);
+    addPostEnableRunnable(CommandManager::syncCommand);
   }
 
   @Override

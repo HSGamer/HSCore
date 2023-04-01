@@ -82,6 +82,7 @@
     * **`hscore-bukkit-listener`**
     * **`hscore-bukkit-block`**
     * **`hscore-bukkit-scheduler`**
+    * **`hscore-bukkit-folia`**
   * **`hscore-bungeecord`**
     * **`hscore-bungeecord-channel`**
     * **`hscore-bungeecord-config`**

@@ -1,6 +1,10 @@
 package me.hsgamer.hscore.bukkit.simpleplugin;
 
+import me.hsgamer.hscore.bukkit.folia.FoliaChecker;
 import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
+import me.hsgamer.hscore.bukkit.simpleplugin.listener.BukkitPostEnableListener;
+import me.hsgamer.hscore.bukkit.simpleplugin.listener.FoliaPostEnableListener;
+import me.hsgamer.hscore.bukkit.simpleplugin.listener.PostEnableListener;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -15,10 +19,16 @@ import java.util.List;
  * A convenient {@link JavaPlugin} implementation
  */
 public class SimplePlugin extends JavaPlugin {
+  private final PostEnableListener postEnableListener;
   private final List<Runnable> disableFunctions = new ArrayList<>();
 
   public SimplePlugin() {
-    super();
+    if (FoliaChecker.isFolia()) {
+      postEnableListener = new FoliaPostEnableListener(this);
+    } else {
+      postEnableListener = new BukkitPostEnableListener(this);
+    }
+
     preLoad();
   }
 
@@ -31,7 +41,8 @@ public class SimplePlugin extends JavaPlugin {
   public void onEnable() {
     enable();
 
-    Scheduler.CURRENT.runTask(this, this::postEnable, false);
+    postEnableListener.addPostEnableRunnable(this::postEnable);
+    postEnableListener.setup();
   }
 
   @Override
@@ -166,5 +177,14 @@ public class SimplePlugin extends JavaPlugin {
    */
   public void addDisableFunction(Runnable disableFunction) {
     disableFunctions.add(disableFunction);
+  }
+
+  /**
+   * Add a runnable that will be called after enabling the plugin
+   *
+   * @param runnable the runnable
+   */
+  public void addPostEnableRunnable(Runnable runnable) {
+    postEnableListener.addPostEnableRunnable(runnable);
   }
 }

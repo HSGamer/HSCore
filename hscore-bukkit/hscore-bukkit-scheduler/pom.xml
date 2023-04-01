@@ -25,5 +25,10 @@
       <version>1.19.4-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-bukkit-folia</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>
