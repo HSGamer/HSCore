@@ -3,13 +3,10 @@ package me.hsgamer.hscore.bukkit.simpleplugin;
 import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.JavaPluginLoader;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -22,11 +19,6 @@ public class SimplePlugin extends JavaPlugin {
 
   public SimplePlugin() {
     super();
-    preLoad();
-  }
-
-  protected SimplePlugin(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
-    super(loader, description, dataFolder, file);
     preLoad();
   }
 
