@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.bukkit.baseplugin;
 
 import me.hsgamer.hscore.bukkit.command.CommandManager;
+import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import me.hsgamer.hscore.bukkit.simpleplugin.SimplePlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -42,7 +43,7 @@ public class BasePlugin extends SimplePlugin {
   public final void onEnable() {
     super.onEnable();
     registerPermissions();
-    Bukkit.getScheduler().scheduleSyncDelayedTask(this, CommandManager::syncCommand);
+    Scheduler.CURRENT.runTask(this, CommandManager::syncCommand, false);
   }
 
   @Override

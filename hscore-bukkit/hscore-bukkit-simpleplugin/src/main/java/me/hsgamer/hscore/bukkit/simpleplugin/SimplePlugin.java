@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.bukkit.simpleplugin;
 
-import org.bukkit.Bukkit;
+import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -39,7 +39,7 @@ public class SimplePlugin extends JavaPlugin {
   public void onEnable() {
     enable();
 
-    Bukkit.getScheduler().scheduleSyncDelayedTask(this, this::postEnable);
+    Scheduler.CURRENT.runTask(this, this::postEnable, false);
   }
 
   @Override
@@ -49,7 +49,7 @@ public class SimplePlugin extends JavaPlugin {
     disableFunctions.forEach(Runnable::run);
     disableFunctions.clear();
 
-    getServer().getScheduler().cancelTasks(this);
+    Scheduler.CURRENT.cancelAllTasks(this);
     getServer().getServicesManager().unregisterAll(this);
     HandlerList.unregisterAll(this);
 
