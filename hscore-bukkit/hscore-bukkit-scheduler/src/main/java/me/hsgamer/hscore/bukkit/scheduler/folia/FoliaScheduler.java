@@ -5,6 +5,7 @@ import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import me.hsgamer.hscore.bukkit.scheduler.Task;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.util.Map;
@@ -64,9 +65,17 @@ public class FoliaScheduler implements Scheduler {
     };
   }
 
+  private boolean isEntityValid(Entity entity) {
+    if (entity instanceof Player) {
+      return ((Player) entity).isOnline();
+    } else {
+      return entity.isValid();
+    }
+  }
+
   private Consumer<ScheduledTask> wrap(Entity entity, Runnable runnable, Runnable retired) {
     return scheduledTask -> {
-      if (!entity.isDead()) {
+      if (isEntityValid(entity)) {
         runnable.run();
       } else {
         retired.run();
@@ -77,7 +86,7 @@ public class FoliaScheduler implements Scheduler {
 
   private Consumer<ScheduledTask> wrap(Entity entity, BooleanSupplier runnable, Runnable retired) {
     return scheduledTask -> {
-      if (!entity.isDead()) {
+      if (isEntityValid(entity)) {
         if (!runnable.getAsBoolean()) {
           scheduledTask.cancel();
         }
