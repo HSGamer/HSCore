@@ -4,29 +4,30 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.IntStream;
 
 /**
  * The utility to work with AdvancedClickType
  */
 public final class ClickTypeUtils {
-  private static final Map<String, AdvancedClickType> clickTypeMap = new HashMap<>();
+  private static final Map<String, BukkitClickType> clickTypeMap = new HashMap<>();
 
   static {
+    List<BukkitClickType> clickTypeList = new ArrayList<>();
+
     // The original click types
     for (ClickType clickType : ClickType.values()) {
-      clickTypeMap.put(clickType.name(), new AdvancedClickType(clickType));
+      clickTypeList.add(new BukkitClickType(clickType));
     }
 
     // NUMBER_KEY with hotbar
     IntStream
       .range(0, 9)
-      .forEach(
-        i -> clickTypeMap.put(ClickType.NUMBER_KEY.name() + "_" + i, new AdvancedClickType(ClickType.NUMBER_KEY, i))
-      );
+      .mapToObj(i -> new BukkitClickType(ClickType.NUMBER_KEY, i))
+      .forEach(clickTypeList::add);
+
+    clickTypeList.forEach(clickType -> clickTypeMap.put(clickType.getName(), clickType));
   }
 
   private ClickTypeUtils() {
@@ -42,7 +43,7 @@ public final class ClickTypeUtils {
    * @return the click type
    */
   @NotNull
-  public static AdvancedClickType getClickTypeFromEvent(@NotNull final InventoryClickEvent event, final boolean useSlot) {
+  public static BukkitClickType getClickTypeFromEvent(@NotNull final InventoryClickEvent event, final boolean useSlot) {
     ClickType clickType = event.getClick();
     if (!useSlot || !clickType.equals(ClickType.NUMBER_KEY)) {
       return clickTypeMap.get(clickType.name());
@@ -56,7 +57,7 @@ public final class ClickTypeUtils {
    * @return the unmodifiable map
    */
   @NotNull
-  public static Map<String, AdvancedClickType> getClickTypeMap() {
+  public static Map<String, BukkitClickType> getClickTypeMap() {
     return Collections.unmodifiableMap(clickTypeMap);
   }
 }

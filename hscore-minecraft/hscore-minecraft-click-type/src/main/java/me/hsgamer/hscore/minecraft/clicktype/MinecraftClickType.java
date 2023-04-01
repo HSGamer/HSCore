@@ -40,9 +40,9 @@ public interface MinecraftClickType {
   boolean isNumberClick();
 
   /**
-   * Get the number of the click type
+   * Get the hotbar slot (0-8) of the click type if it is number click
    *
-   * @return the number
+   * @return the number, -1 if it is not number click or undefined
    */
-  int getNumber();
+  int getHotbarSlot();
 }

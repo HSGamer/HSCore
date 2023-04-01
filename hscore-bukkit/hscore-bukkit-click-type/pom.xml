@@ -8,6 +8,14 @@
     <groupId>me.hsgamer</groupId>
     <version>4.2.17-SNAPSHOT</version>
   </parent>
-  <artifactId>hscore-bukkit-clicktype</artifactId>
 
+  <artifactId>hscore-bukkit-click-type</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-minecraft-click-type</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 </project>
