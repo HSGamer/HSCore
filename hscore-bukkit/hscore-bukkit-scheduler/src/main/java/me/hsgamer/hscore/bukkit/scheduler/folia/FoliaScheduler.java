@@ -7,6 +7,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -14,6 +17,12 @@ import java.util.function.Consumer;
  * The Folia implementation of {@link Scheduler}
  */
 public class FoliaScheduler implements Scheduler {
+  private final Map<Plugin, Set<ScheduledTask>> pluginTaskMap = new ConcurrentHashMap<>();
+
+  private void addTask(Plugin plugin, ScheduledTask scheduledTask) {
+    pluginTaskMap.computeIfAbsent(plugin, p -> ConcurrentHashMap.newKeySet()).add(scheduledTask);
+  }
+
   private long normalizeTick(long tick) {
     return Math.max(1, tick);
   }
@@ -24,6 +33,16 @@ public class FoliaScheduler implements Scheduler {
 
   @Override
   public void cancelAllTasks(Plugin plugin) {
+    Set<ScheduledTask> scheduledTasks = pluginTaskMap.remove(plugin);
+    if (scheduledTasks != null) {
+      scheduledTasks.forEach(scheduledTask -> {
+        if (!scheduledTask.isCancelled()) {
+          scheduledTask.cancel();
+        }
+      });
+      scheduledTasks.clear();
+    }
+
     Bukkit.getAsyncScheduler().cancelTasks(plugin);
     Bukkit.getGlobalRegionScheduler().cancelTasks(plugin);
   }
@@ -36,6 +55,7 @@ public class FoliaScheduler implements Scheduler {
     } else {
       scheduledTask = Bukkit.getGlobalRegionScheduler().run(plugin, s -> runnable.run());
     }
+    addTask(plugin, scheduledTask);
     return wrap(scheduledTask, async);
   }
 
@@ -47,6 +67,7 @@ public class FoliaScheduler implements Scheduler {
     } else {
       scheduledTask = Bukkit.getGlobalRegionScheduler().runDelayed(plugin, s -> runnable.run(), normalizeTick(delay));
     }
+    addTask(plugin, scheduledTask);
     return wrap(scheduledTask, async);
   }
 
@@ -58,6 +79,7 @@ public class FoliaScheduler implements Scheduler {
     } else {
       scheduledTask = Bukkit.getGlobalRegionScheduler().runAtFixedRate(plugin, s -> runnable.run(), normalizeTick(delay), normalizeTick(period));
     }
+    addTask(plugin, scheduledTask);
     return wrap(scheduledTask, async);
   }
 
@@ -73,6 +95,7 @@ public class FoliaScheduler implements Scheduler {
     } else {
       scheduledTask = entity.getScheduler().run(plugin, s -> runnable.run(), retired);
     }
+    addTask(plugin, scheduledTask);
     return wrap(scheduledTask, async);
   }
 
@@ -88,6 +111,7 @@ public class FoliaScheduler implements Scheduler {
     } else {
       scheduledTask = entity.getScheduler().runDelayed(plugin, s -> runnable.run(), retired, normalizeTick(delay));
     }
+    addTask(plugin, scheduledTask);
     return wrap(scheduledTask, async);
   }
 
@@ -103,6 +127,7 @@ public class FoliaScheduler implements Scheduler {
     } else {
       scheduledTask = entity.getScheduler().runAtFixedRate(plugin, s -> runnable.run(), retired, normalizeTick(delay), normalizeTick(period));
     }
+    addTask(plugin, scheduledTask);
     return wrap(scheduledTask, async);
   }
 
