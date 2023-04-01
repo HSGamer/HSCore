@@ -69,7 +69,7 @@ public class BukkitScheduler implements Scheduler {
     return new BukkitRunnable() {
       @Override
       public void run() {
-        if (entity.isValid()) {
+        if (!entity.isDead()) {
           runnable.run();
         } else {
           retired.run();
@@ -83,7 +83,7 @@ public class BukkitScheduler implements Scheduler {
     return new BukkitRunnable() {
       @Override
       public void run() {
-        if (entity.isValid()) {
+        if (!entity.isDead()) {
           if (!runnable.getAsBoolean()) {
             cancel();
           }

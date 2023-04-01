@@ -66,7 +66,7 @@ public class FoliaScheduler implements Scheduler {
 
   private Consumer<ScheduledTask> wrap(Entity entity, Runnable runnable, Runnable retired) {
     return scheduledTask -> {
-      if (entity.isValid()) {
+      if (!entity.isDead()) {
         runnable.run();
       } else {
         retired.run();
@@ -77,7 +77,7 @@ public class FoliaScheduler implements Scheduler {
 
   private Consumer<ScheduledTask> wrap(Entity entity, BooleanSupplier runnable, Runnable retired) {
     return scheduledTask -> {
-      if (entity.isValid()) {
+      if (!entity.isDead()) {
         if (!runnable.getAsBoolean()) {
           scheduledTask.cancel();
         }
