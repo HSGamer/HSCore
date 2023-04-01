@@ -108,4 +108,94 @@ public interface Scheduler {
    * @return the task
    */
   Task runEntityTaskTimer(Plugin plugin, Entity entity, Runnable runnable, Runnable retired, long delay, long period, boolean async);
+
+  /**
+   * Run a task related to an entity
+   *
+   * @param plugin   the plugin that owns the task
+   * @param entity   the entity that the task is related to
+   * @param runnable the task
+   * @param async    whether the task is async
+   *
+   * @return the task
+   */
+  default Task runEntityTask(Plugin plugin, Entity entity, Runnable runnable, boolean async) {
+    return runEntityTask(plugin, entity, runnable, () -> {
+    }, async);
+  }
+
+  /**
+   * Run a delayed task related to an entity
+   *
+   * @param plugin   the plugin that owns the task
+   * @param entity   the entity that the task is related to
+   * @param runnable the task
+   * @param async    whether the task is async
+   *
+   * @return the task
+   */
+  default Task runEntityTaskLater(Plugin plugin, Entity entity, Runnable runnable, long delay, boolean async) {
+    return runEntityTaskLater(plugin, entity, runnable, () -> {
+    }, delay, async);
+  }
+
+  /**
+   * Run a task repeatedly related to an entity
+   *
+   * @param plugin   the plugin that owns the task
+   * @param entity   the entity that the task is related to
+   * @param runnable the task
+   * @param async    whether the task is async
+   *
+   * @return the task
+   */
+  default Task runEntityTaskTimer(Plugin plugin, Entity entity, Runnable runnable, long delay, long period, boolean async) {
+    return runEntityTaskTimer(plugin, entity, runnable, () -> {
+    }, delay, period, async);
+  }
+
+  /**
+   * Run a task related to an entity with a finalizer.
+   * The finalizer will be run both after the task is run and when the entity is retired.
+   *
+   * @param plugin    the plugin that owns the task
+   * @param entity    the entity that the task is related to
+   * @param runnable  the task
+   * @param finalizer the finalizer
+   * @param async     whether the task is async
+   *
+   * @return the task
+   */
+  default Task runEntityTaskWithFinalizer(Plugin plugin, Entity entity, Runnable runnable, Runnable finalizer, boolean async) {
+    return runEntityTask(plugin, entity, () -> {
+      try {
+        runnable.run();
+      } finally {
+        finalizer.run();
+      }
+    }, finalizer, async);
+  }
+
+  /**
+   * Run a delayed task related to an entity with a finalizer.
+   * The finalizer will be run both after the task is run and when the entity is retired.
+   *
+   * @param plugin    the plugin that owns the task
+   * @param entity    the entity that the task is related to
+   * @param runnable  the task
+   * @param finalizer the finalizer
+   * @param delay     the delay in ticks before the task is run
+   * @param async     whether the task is async
+   *
+   * @return the task
+   */
+  default Task runEntityTaskLaterWithFinalizer(Plugin plugin, Entity entity, Runnable runnable, Runnable finalizer, long delay, boolean async) {
+    return runEntityTaskLater(plugin, entity, () -> {
+      try {
+        runnable.run();
+      } finally {
+        finalizer.run();
+      }
+    }, finalizer, delay, async);
+  }
 }
