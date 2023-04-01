@@ -17,11 +17,6 @@ public class BukkitScheduler implements Scheduler {
   private Task wrapTask(BukkitTask bukkitTask, boolean repeating) {
     return new Task() {
       @Override
-      public boolean isCancelled() {
-        return !Bukkit.getScheduler().isCurrentlyRunning(bukkitTask.getTaskId()) && !Bukkit.getScheduler().isQueued(bukkitTask.getTaskId());
-      }
-
-      @Override
       public void cancel() {
         bukkitTask.cancel();
       }

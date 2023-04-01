@@ -4,11 +4,6 @@ public interface Task {
   static Task completed(boolean async, boolean repeating) {
     return new Task() {
       @Override
-      public boolean isCancelled() {
-        return true;
-      }
-
-      @Override
       public void cancel() {
         // Do nothing
       }
@@ -24,8 +19,6 @@ public interface Task {
       }
     };
   }
-
-  boolean isCancelled();
 
   void cancel();
 

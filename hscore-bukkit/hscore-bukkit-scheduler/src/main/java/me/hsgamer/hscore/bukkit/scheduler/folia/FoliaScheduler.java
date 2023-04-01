@@ -43,11 +43,6 @@ public class FoliaScheduler implements Scheduler {
   private Task wrap(ScheduledTask scheduledTask, boolean async) {
     return new Task() {
       @Override
-      public boolean isCancelled() {
-        return scheduledTask.isCancelled();
-      }
-
-      @Override
       public void cancel() {
         scheduledTask.cancel();
       }
