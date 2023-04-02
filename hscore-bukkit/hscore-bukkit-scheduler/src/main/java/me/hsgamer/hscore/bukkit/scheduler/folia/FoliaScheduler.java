@@ -152,8 +152,8 @@ public class FoliaScheduler implements Scheduler {
 
   @Override
   public Task runEntityTask(Plugin plugin, Entity entity, Runnable runnable, Runnable retired, boolean async) {
-    if (entity == null || !entity.isValid()) {
-      return Task.completed(async, false);
+    if (entity == null || !isEntityValid(entity)) {
+      return runTask(plugin, retired, async);
     }
 
     ScheduledTask scheduledTask;
@@ -168,8 +168,8 @@ public class FoliaScheduler implements Scheduler {
 
   @Override
   public Task runEntityTaskLater(Plugin plugin, Entity entity, Runnable runnable, Runnable retired, long delay, boolean async) {
-    if (entity == null || !entity.isValid()) {
-      return Task.completed(async, false);
+    if (entity == null || !isEntityValid(entity)) {
+      return runTaskLater(plugin, retired, delay, async);
     }
 
     ScheduledTask scheduledTask;
@@ -184,8 +184,8 @@ public class FoliaScheduler implements Scheduler {
 
   @Override
   public Task runEntityTaskTimer(Plugin plugin, Entity entity, BooleanSupplier runnable, Runnable retired, long delay, long period, boolean async) {
-    if (entity == null || !entity.isValid()) {
-      return Task.completed(async, true);
+    if (entity == null || !isEntityValid(entity)) {
+      return runTaskLater(plugin, retired, delay, async);
     }
 
     ScheduledTask scheduledTask;
