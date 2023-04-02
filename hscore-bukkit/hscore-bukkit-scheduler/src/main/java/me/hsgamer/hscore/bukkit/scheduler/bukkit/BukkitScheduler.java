@@ -68,11 +68,15 @@ public class BukkitScheduler implements Scheduler {
   }
 
   private boolean isEntityValid(Entity entity) {
+    if (entity == null) {
+      return false;
+    }
+
     if (entity instanceof Player) {
       return ((Player) entity).isOnline();
-    } else {
-      return entity.isValid();
     }
+
+    return entity.isValid();
   }
 
   private BukkitRunnable wrapRunnable(Entity entity, Runnable runnable, Runnable retired) {

@@ -67,11 +67,15 @@ public class FoliaScheduler implements Scheduler {
   }
 
   private boolean isEntityValid(Entity entity) {
+    if (entity == null) {
+      return false;
+    }
+
     if (entity instanceof Player) {
       return ((Player) entity).isOnline();
-    } else {
-      return entity.isValid();
     }
+
+    return entity.isValid();
   }
 
   private Consumer<ScheduledTask> wrap(Entity entity, Runnable runnable, Runnable retired) {
@@ -152,7 +156,7 @@ public class FoliaScheduler implements Scheduler {
 
   @Override
   public Task runEntityTask(Plugin plugin, Entity entity, Runnable runnable, Runnable retired, boolean async) {
-    if (entity == null || !isEntityValid(entity)) {
+    if (!isEntityValid(entity)) {
       return runTask(plugin, retired, async);
     }
 
@@ -168,7 +172,7 @@ public class FoliaScheduler implements Scheduler {
 
   @Override
   public Task runEntityTaskLater(Plugin plugin, Entity entity, Runnable runnable, Runnable retired, long delay, boolean async) {
-    if (entity == null || !isEntityValid(entity)) {
+    if (!isEntityValid(entity)) {
       return runTaskLater(plugin, retired, delay, async);
     }
 
@@ -184,7 +188,7 @@ public class FoliaScheduler implements Scheduler {
 
   @Override
   public Task runEntityTaskTimer(Plugin plugin, Entity entity, BooleanSupplier runnable, Runnable retired, long delay, long period, boolean async) {
-    if (entity == null || !isEntityValid(entity)) {
+    if (!isEntityValid(entity)) {
       return runTaskLater(plugin, retired, delay, async);
     }
 
