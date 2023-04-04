@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.bukkit.simpleplugin.listener;
 
-import org.bukkit.Bukkit;
+import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import org.bukkit.plugin.Plugin;
 
 public class BukkitPostEnableListener extends PostEnableListener {
@@ -10,6 +10,6 @@ public class BukkitPostEnableListener extends PostEnableListener {
 
   @Override
   public void setup() {
-    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, this::executePostEnableFunctions);
+    Scheduler.CURRENT.runTask(plugin, this::executePostEnableFunctions, false);
   }
 }
