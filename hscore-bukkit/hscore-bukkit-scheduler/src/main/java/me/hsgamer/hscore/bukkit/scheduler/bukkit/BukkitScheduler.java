@@ -79,20 +79,6 @@ public class BukkitScheduler implements Scheduler {
     return entity.isValid();
   }
 
-  private BukkitRunnable wrapRunnable(Entity entity, Runnable runnable, Runnable retired) {
-    return new BukkitRunnable() {
-      @Override
-      public void run() {
-        if (isEntityValid(entity)) {
-          runnable.run();
-        } else {
-          retired.run();
-          cancel();
-        }
-      }
-    };
-  }
-
   private BukkitRunnable wrapRunnable(Entity entity, BooleanSupplier runnable, Runnable retired) {
     return new BukkitRunnable() {
       @Override
@@ -107,6 +93,13 @@ public class BukkitScheduler implements Scheduler {
         }
       }
     };
+  }
+
+  private BukkitRunnable wrapRunnable(Entity entity, Runnable runnable, Runnable retired) {
+    return wrapRunnable(entity, () -> {
+      runnable.run();
+      return true;
+    }, retired);
   }
 
   private BukkitTask runTask(Plugin plugin, BukkitRunnable bukkitRunnable, boolean async) {

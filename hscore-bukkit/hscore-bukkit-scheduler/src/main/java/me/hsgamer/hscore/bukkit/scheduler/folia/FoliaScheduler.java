@@ -34,7 +34,7 @@ public class FoliaScheduler implements Scheduler {
     return normalizeTick(tick) * 50;
   }
 
-  private Consumer<ScheduledTask> wrap(BooleanSupplier runnable) {
+  private Consumer<ScheduledTask> wrapRunnable(BooleanSupplier runnable) {
     return scheduledTask -> {
       if (!runnable.getAsBoolean()) {
         scheduledTask.cancel();
@@ -42,7 +42,7 @@ public class FoliaScheduler implements Scheduler {
     };
   }
 
-  private Task wrap(ScheduledTask scheduledTask, boolean async) {
+  private Task wrapTask(ScheduledTask scheduledTask, boolean async) {
     return new Task() {
       @Override
       public boolean isCancelled() {
@@ -78,18 +78,7 @@ public class FoliaScheduler implements Scheduler {
     return entity.isValid();
   }
 
-  private Consumer<ScheduledTask> wrap(Entity entity, Runnable runnable, Runnable retired) {
-    return scheduledTask -> {
-      if (isEntityValid(entity)) {
-        runnable.run();
-      } else {
-        retired.run();
-        scheduledTask.cancel();
-      }
-    };
-  }
-
-  private Consumer<ScheduledTask> wrap(Entity entity, BooleanSupplier runnable, Runnable retired) {
+  private Consumer<ScheduledTask> wrapRunnable(Entity entity, BooleanSupplier runnable, Runnable retired) {
     return scheduledTask -> {
       if (isEntityValid(entity)) {
         if (!runnable.getAsBoolean()) {
@@ -100,6 +89,13 @@ public class FoliaScheduler implements Scheduler {
         scheduledTask.cancel();
       }
     };
+  }
+
+  private Consumer<ScheduledTask> wrapRunnable(Entity entity, Runnable runnable, Runnable retired) {
+    return wrapRunnable(entity, () -> {
+      runnable.run();
+      return true;
+    }, retired);
   }
 
   @Override
@@ -127,7 +123,7 @@ public class FoliaScheduler implements Scheduler {
       scheduledTask = Bukkit.getGlobalRegionScheduler().run(plugin, s -> runnable.run());
     }
     addTask(plugin, scheduledTask);
-    return wrap(scheduledTask, async);
+    return wrapTask(scheduledTask, async);
   }
 
   @Override
@@ -139,19 +135,19 @@ public class FoliaScheduler implements Scheduler {
       scheduledTask = Bukkit.getGlobalRegionScheduler().runDelayed(plugin, s -> runnable.run(), normalizeTick(delay));
     }
     addTask(plugin, scheduledTask);
-    return wrap(scheduledTask, async);
+    return wrapTask(scheduledTask, async);
   }
 
   @Override
   public Task runTaskTimer(Plugin plugin, BooleanSupplier runnable, long delay, long period, boolean async) {
     ScheduledTask scheduledTask;
     if (async) {
-      scheduledTask = Bukkit.getAsyncScheduler().runAtFixedRate(plugin, wrap(runnable), toMilliSecond(delay), toMilliSecond(period), TimeUnit.MILLISECONDS);
+      scheduledTask = Bukkit.getAsyncScheduler().runAtFixedRate(plugin, wrapRunnable(runnable), toMilliSecond(delay), toMilliSecond(period), TimeUnit.MILLISECONDS);
     } else {
-      scheduledTask = Bukkit.getGlobalRegionScheduler().runAtFixedRate(plugin, wrap(runnable), normalizeTick(delay), normalizeTick(period));
+      scheduledTask = Bukkit.getGlobalRegionScheduler().runAtFixedRate(plugin, wrapRunnable(runnable), normalizeTick(delay), normalizeTick(period));
     }
     addTask(plugin, scheduledTask);
-    return wrap(scheduledTask, async);
+    return wrapTask(scheduledTask, async);
   }
 
   @Override
@@ -162,12 +158,12 @@ public class FoliaScheduler implements Scheduler {
 
     ScheduledTask scheduledTask;
     if (async) {
-      scheduledTask = Bukkit.getAsyncScheduler().runNow(plugin, wrap(entity, runnable, retired));
+      scheduledTask = Bukkit.getAsyncScheduler().runNow(plugin, wrapRunnable(entity, runnable, retired));
     } else {
       scheduledTask = entity.getScheduler().run(plugin, s -> runnable.run(), retired);
     }
     addTask(plugin, scheduledTask);
-    return wrap(scheduledTask, async);
+    return wrapTask(scheduledTask, async);
   }
 
   @Override
@@ -178,12 +174,12 @@ public class FoliaScheduler implements Scheduler {
 
     ScheduledTask scheduledTask;
     if (async) {
-      scheduledTask = Bukkit.getAsyncScheduler().runDelayed(plugin, wrap(entity, runnable, retired), toMilliSecond(delay), TimeUnit.MILLISECONDS);
+      scheduledTask = Bukkit.getAsyncScheduler().runDelayed(plugin, wrapRunnable(entity, runnable, retired), toMilliSecond(delay), TimeUnit.MILLISECONDS);
     } else {
       scheduledTask = entity.getScheduler().runDelayed(plugin, s -> runnable.run(), retired, normalizeTick(delay));
     }
     addTask(plugin, scheduledTask);
-    return wrap(scheduledTask, async);
+    return wrapTask(scheduledTask, async);
   }
 
   @Override
@@ -194,32 +190,32 @@ public class FoliaScheduler implements Scheduler {
 
     ScheduledTask scheduledTask;
     if (async) {
-      scheduledTask = Bukkit.getAsyncScheduler().runAtFixedRate(plugin, wrap(entity, runnable, retired), toMilliSecond(delay), toMilliSecond(period), TimeUnit.MILLISECONDS);
+      scheduledTask = Bukkit.getAsyncScheduler().runAtFixedRate(plugin, wrapRunnable(entity, runnable, retired), toMilliSecond(delay), toMilliSecond(period), TimeUnit.MILLISECONDS);
     } else {
-      scheduledTask = entity.getScheduler().runAtFixedRate(plugin, wrap(runnable), retired, normalizeTick(delay), normalizeTick(period));
+      scheduledTask = entity.getScheduler().runAtFixedRate(plugin, wrapRunnable(runnable), retired, normalizeTick(delay), normalizeTick(period));
     }
     addTask(plugin, scheduledTask);
-    return wrap(scheduledTask, async);
+    return wrapTask(scheduledTask, async);
   }
 
   @Override
   public Task runLocationTask(Plugin plugin, Location location, Runnable runnable) {
     ScheduledTask scheduledTask = Bukkit.getRegionScheduler().run(plugin, location, s -> runnable.run());
     addTask(plugin, scheduledTask);
-    return wrap(scheduledTask, false);
+    return wrapTask(scheduledTask, false);
   }
 
   @Override
   public Task runLocationTaskLater(Plugin plugin, Location location, Runnable runnable, long delay) {
     ScheduledTask scheduledTask = Bukkit.getRegionScheduler().runDelayed(plugin, location, s -> runnable.run(), normalizeTick(delay));
     addTask(plugin, scheduledTask);
-    return wrap(scheduledTask, false);
+    return wrapTask(scheduledTask, false);
   }
 
   @Override
   public Task runLocationTaskTimer(Plugin plugin, Location location, BooleanSupplier runnable, long delay, long period) {
-    ScheduledTask scheduledTask = Bukkit.getRegionScheduler().runAtFixedRate(plugin, location, wrap(runnable), normalizeTick(delay), normalizeTick(period));
+    ScheduledTask scheduledTask = Bukkit.getRegionScheduler().runAtFixedRate(plugin, location, wrapRunnable(runnable), normalizeTick(delay), normalizeTick(period));
     addTask(plugin, scheduledTask);
-    return wrap(scheduledTask, false);
+    return wrapTask(scheduledTask, false);
   }
 }
