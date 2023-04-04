@@ -11,7 +11,21 @@
 
   <artifactId>hscore-bukkit-gui</artifactId>
 
+  <repositories>
+    <repository>
+      <id>papermc</id>
+      <url>https://repo.papermc.io/repository/maven-public/</url>
+    </repository>
+  </repositories>
+
   <dependencies>
+    <dependency>
+      <groupId>dev.folia</groupId>
+      <artifactId>folia-api</artifactId>
+      <version>1.19.4-R0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+
     <dependency>
       <groupId>me.hsgamer</groupId>
       <artifactId>hscore-minecraft-gui</artifactId>
@@ -19,7 +33,7 @@
     </dependency>
     <dependency>
       <groupId>me.hsgamer</groupId>
-      <artifactId>hscore-bukkit-scheduler</artifactId>
+      <artifactId>hscore-bukkit-folia</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
