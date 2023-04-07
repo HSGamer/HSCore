@@ -11,6 +11,8 @@ import me.hsgamer.hscore.config.proxy.defaulthandler.OldJavaDefaultMethodHandler
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,9 +51,9 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
     this.config = config;
     this.stickyValue = stickyValue;
 
-    for (Method method : this.clazz.getDeclaredMethods()) {
-      this.setupMethod(method);
-    }
+    Arrays.stream(this.clazz.getDeclaredMethods())
+      .sorted(Comparator.comparingInt(Method::hashCode))
+      .forEach(this::setupMethod);
 
     if (addDefault) {
       nodes.values().forEach(ConfigNode::addDefault);

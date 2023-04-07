@@ -9,10 +9,7 @@ import me.hsgamer.hscore.config.annotation.converter.manager.DefaultConverterMan
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The annotated {@link Config}, where any fields can be assigned to the config with the annotation {@link ConfigPath}.
@@ -47,12 +44,14 @@ public class AnnotatedConfig extends DecorativeConfig {
   public void setup() {
     super.setup();
     List<Field> validFields = new ArrayList<>();
-    for (Field field : this.getClass().getDeclaredFields()) {
-      if (!checkPathField(field)) continue;
-      ConfigPath configPath = field.getAnnotation(ConfigPath.class);
-      pathFieldMap.put(configPath.value(), field);
-      validFields.add(field);
-    }
+    Arrays.stream(this.getClass().getDeclaredFields())
+      .filter(this::checkPathField)
+      .sorted(Comparator.comparingInt(Field::hashCode))
+      .forEach(field -> {
+        ConfigPath configPath = field.getAnnotation(ConfigPath.class);
+        pathFieldMap.put(configPath.value(), field);
+        validFields.add(field);
+      });
     validFields.forEach(this::setupField);
     setupClassComment();
     this.save();
