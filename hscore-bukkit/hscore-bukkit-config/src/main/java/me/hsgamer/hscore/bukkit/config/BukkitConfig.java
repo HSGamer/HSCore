@@ -20,6 +20,7 @@ public class BukkitConfig implements Config {
 
   static {
     try {
+      //noinspection ConstantValue
       isCommentSupported = ConfigurationSection.class.getDeclaredMethod("getComments", String.class) != null;
     } catch (NoSuchMethodException e) {
       isCommentSupported = false;
@@ -51,6 +52,15 @@ public class BukkitConfig implements Config {
     } catch (IllegalArgumentException e) {
       // IGNORED
     }
+  }
+
+  /**
+   * Create a new config, the file name will be "config.yml"
+   *
+   * @param plugin the plugin
+   */
+  public BukkitConfig(Plugin plugin) {
+    this(plugin, "config.yml");
   }
 
   @Override
