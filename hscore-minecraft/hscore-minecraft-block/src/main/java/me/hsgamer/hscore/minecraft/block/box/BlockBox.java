@@ -57,8 +57,8 @@ public class BlockBox {
   /**
    * Create a new block box
    *
-   * @param pos1         the first vector
-   * @param pos2         the second vector
+   * @param pos1         the first position
+   * @param pos2         the second position
    * @param maxInclusive true if it should include the maximum location
    */
   public BlockBox(Position pos1, Position pos2, boolean maxInclusive) {
@@ -87,5 +87,79 @@ public class BlockBox {
    */
   public boolean contains(Position pos) {
     return contains(pos.x, pos.y, pos.z);
+  }
+
+  /**
+   * Get the center of the box
+   *
+   * @return the center
+   */
+  public Position center() {
+    if (maxInclusive) {
+      return new Position((minX + maxX) / 2.0, (minY + maxY) / 2.0, (minZ + maxZ) / 2.0);
+    } else {
+      return new Position((minX + maxX + 1) / 2.0, (minY + maxY + 1) / 2.0, (minZ + maxZ + 1) / 2.0);
+    }
+  }
+
+  /**
+   * Get the minimum position
+   *
+   * @return the minimum position
+   */
+  public Position min() {
+    return new Position(minX, minY, minZ);
+  }
+
+  /**
+   * Get the maximum position
+   *
+   * @return the maximum position
+   */
+  public Position max() {
+    if (maxInclusive) {
+      return new Position(maxX - 1, maxY - 1, maxZ - 1);
+    } else {
+      return new Position(maxX, maxY, maxZ);
+    }
+  }
+
+  /**
+   * Get the X-size of the box
+   *
+   * @return the size
+   */
+  public double sizeX() {
+    if (maxInclusive) {
+      return maxX - minX;
+    } else {
+      return maxX - minX + 1;
+    }
+  }
+
+  /**
+   * Get the Y-size of the box
+   *
+   * @return the size
+   */
+  public double sizeY() {
+    if (maxInclusive) {
+      return maxY - minY;
+    } else {
+      return maxY - minY + 1;
+    }
+  }
+
+  /**
+   * Get the Z-size of the box
+   *
+   * @return the size
+   */
+  public double sizeZ() {
+    if (maxInclusive) {
+      return maxZ - minZ;
+    } else {
+      return maxZ - minZ + 1;
+    }
   }
 }
