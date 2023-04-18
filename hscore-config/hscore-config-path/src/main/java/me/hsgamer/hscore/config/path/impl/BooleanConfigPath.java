@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.config.path.impl;
 
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.BaseConfigPath;
 
 public class BooleanConfigPath extends BaseConfigPath<Boolean> {
@@ -10,7 +11,7 @@ public class BooleanConfigPath extends BaseConfigPath<Boolean> {
    * @param path the path to the value
    * @param def  the default value if it's not found
    */
-  public BooleanConfigPath(String path, Boolean def) {
+  public BooleanConfigPath(PathString path, Boolean def) {
     super(path, def, o -> Boolean.parseBoolean(String.valueOf(o)));
   }
 }

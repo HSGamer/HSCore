@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.config.path;
 
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.PathString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +15,7 @@ import java.util.function.Function;
 public class BaseConfigPath<T> implements ConfigPath<T> {
 
   private final Function<Object, T> typeConverter;
-  private final String path;
+  private final PathString path;
   private final T def;
   private Config config;
 
@@ -25,7 +26,7 @@ public class BaseConfigPath<T> implements ConfigPath<T> {
    * @param def           the default value if it's not found
    * @param typeConverter how to convert the raw object to the needed type of value
    */
-  public BaseConfigPath(@NotNull final String path, @Nullable final T def, @NotNull final Function<Object, T> typeConverter) {
+  public BaseConfigPath(@NotNull final PathString path, @Nullable final T def, @NotNull final Function<Object, T> typeConverter) {
     this.path = path;
     this.def = def;
     this.typeConverter = typeConverter;
@@ -56,7 +57,7 @@ public class BaseConfigPath<T> implements ConfigPath<T> {
 
   @Override
   @NotNull
-  public String getPath() {
+  public PathString getPath() {
     return path;
   }
 

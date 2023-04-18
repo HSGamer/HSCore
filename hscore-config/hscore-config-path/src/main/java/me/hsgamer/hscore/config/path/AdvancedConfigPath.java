@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.config.path;
 
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.PathString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class AdvancedConfigPath<F, T> implements ConfigPath<T> {
 
-  private final String path;
+  private final PathString path;
   private final T def;
   private Config config;
 
@@ -22,7 +23,7 @@ public abstract class AdvancedConfigPath<F, T> implements ConfigPath<T> {
    * @param path the path to the value
    * @param def  the default value if it's not found
    */
-  public AdvancedConfigPath(@NotNull final String path, @Nullable final T def) {
+  public AdvancedConfigPath(@NotNull final PathString path, @Nullable final T def) {
     this.path = path;
     this.def = def;
   }
@@ -87,7 +88,7 @@ public abstract class AdvancedConfigPath<F, T> implements ConfigPath<T> {
 
   @Override
   @NotNull
-  public String getPath() {
+  public PathString getPath() {
     return path;
   }
 

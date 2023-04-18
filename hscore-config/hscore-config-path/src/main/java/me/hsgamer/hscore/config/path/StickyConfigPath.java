@@ -2,6 +2,7 @@ package me.hsgamer.hscore.config.path;
 
 import me.hsgamer.hscore.common.CachedValue;
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.PathString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,7 +52,7 @@ public class StickyConfigPath<T> extends CachedValue<T> implements ConfigPath<T>
 
   @NotNull
   @Override
-  public String getPath() {
+  public PathString getPath() {
     return this.originalPath.getPath();
   }
 
