@@ -66,7 +66,7 @@ public abstract class InventoryGUIDisplay<H extends GUIHolder<?>> extends GUIDis
     int size = getInventorySize();
     List<Integer> emptyItemSlots = IntStream.range(0, size).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
     List<Integer> emptyActionSlots = IntStream.range(0, size).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-    Map<Button, Collection<Integer>> buttonSlots = holder.getButtonMap().getButtons(uuid);
+    Map<Button, Collection<Integer>> buttonSlots = holder.getButtonMap().getButtons(uuid, size);
     buttonSlots.forEach((button, slots) -> {
       Item item = button.getItem(uuid);
       if (item == null && !button.forceSetAction(uuid)) {

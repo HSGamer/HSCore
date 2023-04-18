@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
   private boolean removeDisplayOnClose = true;
   private @NotNull Predicate<UUID> closeFilter = uuid -> true;
-  private @NotNull ButtonMap buttonMap = uuid -> Collections.emptyMap();
+  private @NotNull ButtonMap buttonMap = (uuid, size) -> Collections.emptyMap();
 
   /**
    * Check if the holder should remove the display on its close

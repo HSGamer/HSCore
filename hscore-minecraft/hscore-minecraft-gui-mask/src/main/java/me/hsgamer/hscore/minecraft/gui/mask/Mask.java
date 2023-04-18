@@ -22,7 +22,7 @@ public interface Mask extends Initializable {
   static Mask empty(String name) {
     return new Mask() {
       @Override
-      public @NotNull Map<@NotNull Integer, @NotNull Button> generateButtons(@NotNull UUID uuid) {
+      public @NotNull Map<@NotNull Integer, @NotNull Button> generateButtons(@NotNull UUID uuid, int size) {
         return Collections.emptyMap();
       }
 
@@ -48,11 +48,12 @@ public interface Mask extends Initializable {
    * Generate the buttons for the unique id
    *
    * @param uuid the unique id
+   * @param size the size of the inventory
    *
    * @return the map contains the slots and the buttons
    */
   @NotNull
-  Map<@NotNull Integer, @NotNull Button> generateButtons(@NotNull UUID uuid);
+  Map<@NotNull Integer, @NotNull Button> generateButtons(@NotNull UUID uuid, int size);
 
   /**
    * Get the name of the mask

@@ -34,9 +34,9 @@ public abstract class MaskPaginatedMask extends PaginatedMask {
   public abstract List<@NotNull Mask> getMasks(@NotNull UUID uuid);
 
   @Override
-  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid) {
+  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid, int size) {
     List<Mask> masks = getMasks(uuid);
-    return masks.isEmpty() ? Collections.emptyMap() : masks.get(this.getPage(uuid)).generateButtons(uuid);
+    return masks.isEmpty() ? Collections.emptyMap() : masks.get(this.getPage(uuid)).generateButtons(uuid, size);
   }
 
   @Override
