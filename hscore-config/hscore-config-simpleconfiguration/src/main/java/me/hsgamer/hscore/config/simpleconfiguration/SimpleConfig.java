@@ -2,6 +2,7 @@ package me.hsgamer.hscore.config.simpleconfiguration;
 
 import me.hsgamer.hscore.config.CommentType;
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.PathString;
 import org.simpleyaml.configuration.ConfigurationSection;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
@@ -48,6 +49,13 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
     });
   }
 
+  private String toPath(PathString pathString) {
+    return PathString.toPath(String.valueOf(configuration.options().pathSeparator()), pathString);
+  }
+
+  private Map<PathString, Object> toPathStringMap(Map<String, Object> map) {
+    return PathString.toPathStringMap(String.valueOf(configuration.options().pathSeparator()), map);
+  }
 
   @Override
   public FileConfiguration getOriginal() {
@@ -55,18 +63,18 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
   }
 
   @Override
-  public Object get(String path, Object def) {
-    return this.configuration.get(path, def);
+  public Object get(PathString path, Object def) {
+    return this.configuration.get(toPath(path), def);
   }
 
   @Override
-  public void set(String path, Object value) {
-    this.configuration.set(path, value);
+  public void set(PathString path, Object value) {
+    this.configuration.set(toPath(path), value);
   }
 
   @Override
-  public boolean contains(String path) {
-    return this.configuration.isSet(path);
+  public boolean contains(PathString path) {
+    return this.configuration.isSet(toPath(path));
   }
 
   @Override
@@ -75,17 +83,18 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
   }
 
   @Override
-  public void addDefault(String path, Object value) {
-    this.configuration.addDefault(path, value);
+  public void addDefault(PathString path, Object value) {
+    this.configuration.addDefault(toPath(path), value);
   }
 
   @Override
-  public Map<String, Object> getValues(String path, boolean deep) {
-    if (path == null || path.isEmpty()) {
-      return this.configuration.getValues(deep);
+  public Map<PathString, Object> getValues(PathString path, boolean deep) {
+    if (path.getPath().length == 0) {
+      return toPathStringMap(this.configuration.getValues(deep));
     } else {
-      return Optional.ofNullable(this.configuration.getConfigurationSection(path))
+      return Optional.ofNullable(this.configuration.getConfigurationSection(toPath(path)))
         .map(configurationSection -> configurationSection.getValues(deep))
+        .map(this::toPathStringMap)
         .orElse(Collections.emptyMap());
     }
   }
@@ -137,11 +146,11 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
   }
 
   @Override
-  public String getComment(String path, CommentType type) {
+  public String getComment(PathString path, CommentType type) {
     if (configuration instanceof org.simpleyaml.configuration.comments.Commentable) {
       try {
         org.simpleyaml.configuration.comments.CommentType commentType = org.simpleyaml.configuration.comments.CommentType.valueOf(type.name());
-        return ((org.simpleyaml.configuration.comments.Commentable) configuration).getComment(path, commentType);
+        return ((org.simpleyaml.configuration.comments.Commentable) configuration).getComment(toPath(path), commentType);
       } catch (Exception e) {
         LOGGER.log(Level.SEVERE, e, () -> "Something wrong when getting comment of " + path);
       }
@@ -150,11 +159,11 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
   }
 
   @Override
-  public void setComment(String path, String value, CommentType type) {
+  public void setComment(PathString path, String value, CommentType type) {
     if (configuration instanceof org.simpleyaml.configuration.comments.Commentable) {
       try {
         org.simpleyaml.configuration.comments.CommentType commentType = org.simpleyaml.configuration.comments.CommentType.valueOf(type.name());
-        ((org.simpleyaml.configuration.comments.Commentable) configuration).setComment(path, value, commentType);
+        ((org.simpleyaml.configuration.comments.Commentable) configuration).setComment(toPath(path), value, commentType);
       } catch (Exception e) {
         LOGGER.log(Level.SEVERE, e, () -> "Something wrong when setting comment of " + path);
       }

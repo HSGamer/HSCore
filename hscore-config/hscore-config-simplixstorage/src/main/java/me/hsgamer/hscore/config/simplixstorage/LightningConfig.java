@@ -3,11 +3,9 @@ package me.hsgamer.hscore.config.simplixstorage;
 import de.leonhard.storage.internal.DataStorage;
 import de.leonhard.storage.internal.FlatFile;
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.PathString;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The {@link Config} implementation for SimplixStorage
@@ -26,24 +24,40 @@ public class LightningConfig<F extends FlatFile> implements Config {
     this.flatFile = flatFile;
   }
 
+  private String toPath(PathString pathString) {
+    return PathString.toPath(".", pathString);
+  }
+
+  private PathString toPathString(String path) {
+    return PathString.toPathString(".", path);
+  }
+
+  private Map<String, Object> toPathMap(Map<PathString, Object> map) {
+    return PathString.toPathMap(".", map);
+  }
+
+  private Map<PathString, Object> toPathStringMap(Map<String, Object> map) {
+    return PathString.toPathStringMap(".", map);
+  }
+
   @Override
   public F getOriginal() {
     return this.flatFile;
   }
 
   @Override
-  public Object get(String path, Object def) {
-    return this.flatFile.get(path, def);
+  public Object get(PathString path, Object def) {
+    return this.flatFile.get(toPath(path), def);
   }
 
   @Override
-  public void set(String path, Object value) {
-    this.flatFile.set(path, value);
+  public void set(PathString path, Object value) {
+    this.flatFile.set(toPath(path), value);
   }
 
   @Override
-  public boolean contains(String path) {
-    return this.flatFile.contains(path);
+  public boolean contains(PathString path) {
+    return this.flatFile.contains(toPath(path));
   }
 
   @Override
@@ -52,36 +66,41 @@ public class LightningConfig<F extends FlatFile> implements Config {
   }
 
   @Override
-  public void addDefault(String path, Object value) {
-    this.flatFile.setDefault(path, value);
+  public void addDefault(PathString path, Object value) {
+    this.flatFile.setDefault(toPath(path), value);
   }
 
   @Override
-  public Set<String> getKeys(String path, boolean deep) {
-    Set<String> keys;
-    if (path == null || path.isEmpty()) {
-      keys = deep ? this.flatFile.keySet() : this.flatFile.singleLayerKeySet();
+  public Set<PathString> getKeys(PathString path, boolean deep) {
+    Set<String> ketStrings;
+    if (path.isRoot()) {
+      ketStrings = deep ? this.flatFile.keySet() : this.flatFile.singleLayerKeySet();
     } else {
-      keys = deep ? this.flatFile.keySet(path) : this.flatFile.singleLayerKeySet(path);
+      ketStrings = deep ? this.flatFile.keySet(toPath(path)) : this.flatFile.singleLayerKeySet(toPath(path));
     }
-    if (keys == null) {
-      keys = Collections.emptySet();
+    if (ketStrings == null) {
+      return Collections.emptySet();
     }
-    return keys;
+
+    Set<PathString> pathStrings = new LinkedHashSet<>();
+    for (String keyString : ketStrings) {
+      pathStrings.add(toPathString(keyString));
+    }
+    return pathStrings;
   }
 
   @Override
-  public Map<String, Object> getValues(String path, boolean deep) {
+  public Map<PathString, Object> getValues(PathString path, boolean deep) {
     DataStorage dataStorage;
-    if (path == null || path.isEmpty()) {
+    if (path.isRoot()) {
       dataStorage = this.flatFile;
-    } else if (this.flatFile.contains(path)) {
-      dataStorage = this.flatFile.getSection(path);
+    } else if (this.flatFile.contains(toPath(path))) {
+      dataStorage = this.flatFile.getSection(toPath(path));
     } else {
       return Collections.emptyMap();
     }
-    Map<String, Object> values = new LinkedHashMap<>();
-    getKeys(path, deep).forEach(p -> values.put(p, dataStorage.get(p)));
+    Map<PathString, Object> values = new LinkedHashMap<>();
+    getKeys(path, deep).forEach(p -> values.put(p, dataStorage.get(toPath(p))));
     return values;
   }
 

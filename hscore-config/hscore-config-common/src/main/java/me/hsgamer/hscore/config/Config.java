@@ -27,7 +27,7 @@ public interface Config {
    *
    * @return the value
    */
-  Object get(String path, Object def);
+  Object get(PathString path, Object def);
 
   /**
    * Set the value to the path
@@ -35,7 +35,7 @@ public interface Config {
    * @param path  the path
    * @param value the value
    */
-  void set(String path, Object value);
+  void set(PathString path, Object value);
 
   /**
    * Check if the configuration contains the path
@@ -44,7 +44,7 @@ public interface Config {
    *
    * @return true if it does
    */
-  default boolean contains(String path) {
+  default boolean contains(PathString path) {
     return get(path, null) != null;
   }
 
@@ -63,7 +63,7 @@ public interface Config {
    *
    * @return the values
    */
-  Map<String, Object> getValues(String path, boolean deep);
+  Map<PathString, Object> getValues(PathString path, boolean deep);
 
   /**
    * Set up the configuration
@@ -103,7 +103,7 @@ public interface Config {
    *
    * @param path the path
    */
-  default void remove(String path) {
+  default void remove(PathString path) {
     set(path, null);
   }
 
@@ -121,7 +121,7 @@ public interface Config {
    *
    * @return the value
    */
-  default Object get(String path) {
+  default Object get(PathString path) {
     return get(path, null);
   }
 
@@ -133,7 +133,7 @@ public interface Config {
    *
    * @return the value
    */
-  default Object getNormalized(String path, Object def) {
+  default Object getNormalized(PathString path, Object def) {
     return normalizeObject(get(path, def));
   }
 
@@ -144,7 +144,7 @@ public interface Config {
    *
    * @return the value
    */
-  default Object getNormalized(String path) {
+  default Object getNormalized(PathString path) {
     return getNormalized(path, null);
   }
 
@@ -158,7 +158,7 @@ public interface Config {
    *
    * @return the value
    */
-  default <T> T getInstance(String path, T def, Class<T> type) {
+  default <T> T getInstance(PathString path, T def, Class<T> type) {
     Object value = getNormalized(path, def);
     if (type == String.class) {
       // noinspection unchecked
@@ -176,7 +176,7 @@ public interface Config {
    *
    * @return the value
    */
-  default <T> T getInstance(String path, Class<T> type) {
+  default <T> T getInstance(PathString path, Class<T> type) {
     return getInstance(path, null, type);
   }
 
@@ -188,7 +188,7 @@ public interface Config {
    *
    * @return true if it does
    */
-  default boolean isInstance(String path, Class<?> type) {
+  default boolean isInstance(PathString path, Class<?> type) {
     return type.isInstance(get(path));
   }
 
@@ -199,8 +199,8 @@ public interface Config {
    *
    * @return the values
    */
-  default Map<String, Object> getValues(boolean deep) {
-    return getValues("", deep);
+  default Map<PathString, Object> getValues(boolean deep) {
+    return getValues(PathString.ROOT, deep);
   }
 
   /**
@@ -211,7 +211,7 @@ public interface Config {
    *
    * @return the keys
    */
-  default Set<String> getKeys(String path, boolean deep) {
+  default Set<PathString> getKeys(PathString path, boolean deep) {
     return getValues(path, deep).keySet();
   }
 
@@ -222,8 +222,8 @@ public interface Config {
    *
    * @return the keys
    */
-  default Set<String> getKeys(boolean deep) {
-    return getKeys("", deep);
+  default Set<PathString> getKeys(boolean deep) {
+    return getKeys(PathString.ROOT, deep);
   }
 
   /**
@@ -234,8 +234,8 @@ public interface Config {
    *
    * @return the values
    */
-  default Map<String, Object> getNormalizedValues(String path, boolean deep) {
-    Map<String, Object> normalized = new LinkedHashMap<>();
+  default Map<PathString, Object> getNormalizedValues(PathString path, boolean deep) {
+    Map<PathString, Object> normalized = new LinkedHashMap<>();
     getValues(path, deep).forEach((k, v) -> normalized.put(k, normalizeObject(v)));
     return normalized;
   }
@@ -268,8 +268,8 @@ public interface Config {
    *
    * @return the values
    */
-  default Map<String, Object> getNormalizedValues(boolean deep) {
-    return getNormalizedValues("", deep);
+  default Map<PathString, Object> getNormalizedValues(boolean deep) {
+    return getNormalizedValues(PathString.ROOT, deep);
   }
 
   /**
@@ -278,7 +278,7 @@ public interface Config {
    * @param path  the path
    * @param value the value
    */
-  default void addDefault(String path, Object value) {
+  default void addDefault(PathString path, Object value) {
     if (!contains(path)) {
       set(path, value);
     }
@@ -289,7 +289,7 @@ public interface Config {
    *
    * @param map the map of default values
    */
-  default void addDefaults(Map<String, Object> map) {
+  default void addDefaults(Map<PathString, Object> map) {
     map.forEach(this::addDefault);
   }
 
@@ -302,7 +302,7 @@ public interface Config {
    *
    * @return the comment
    */
-  default String getComment(String path, CommentType type) {
+  default String getComment(PathString path, CommentType type) {
     return null;
   }
 
@@ -314,7 +314,7 @@ public interface Config {
    * @param value the comment
    * @param type  the comment type
    */
-  default void setComment(String path, String value, CommentType type) {
+  default void setComment(PathString path, String value, CommentType type) {
     // EMPTY
   }
 
@@ -325,9 +325,9 @@ public interface Config {
    *
    * @return the comment
    *
-   * @see #getComment(String, CommentType)
+   * @see #getComment(PathString, CommentType)
    */
-  default String getComment(String path) {
+  default String getComment(PathString path) {
     return getComment(path, CommentType.BLOCK);
   }
 
@@ -337,9 +337,9 @@ public interface Config {
    * @param path  the path
    * @param value the comment
    *
-   * @see #setComment(String, String, CommentType)
+   * @see #setComment(PathString, String, CommentType)
    */
-  default void setComment(String path, String value) {
+  default void setComment(PathString path, String value) {
     setComment(path, value, CommentType.BLOCK);
   }
 }

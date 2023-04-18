@@ -23,7 +23,6 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
   private final Plugin plugin;
   private InventoryType inventoryType = InventoryType.CHEST;
   private Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
-  private ToIntFunction<UUID> sizeFunction = uuid -> InventoryType.CHEST.getDefaultSize();
   private BiFunction<BukkitGUIDisplay, UUID, Inventory> inventoryFunction = (display, uuid) -> {
     BukkitGUIHolder holder = display.getHolder();
     InventoryType type = holder.getInventoryType();
@@ -33,6 +32,7 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
       ? Bukkit.createInventory(display, BukkitGUIUtils.normalizeToChestSize(size), title)
       : Bukkit.createInventory(display, type, title);
   };
+  private ToIntFunction<UUID> sizeFunction = uuid -> InventoryType.CHEST.getDefaultSize();
 
   /**
    * Create a new holder

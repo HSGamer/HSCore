@@ -2,6 +2,7 @@ package me.hsgamer.hscore.config.configurate;
 
 import me.hsgamer.hscore.config.CommentType;
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.PathString;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
@@ -41,25 +42,16 @@ public class ConfigurateConfig implements Config {
     return this.rootNode;
   }
 
-  private Object[] splitPath(String path) {
-    if (path.isEmpty()) {
-      return new Object[0];
-    }
-    return path.split("\\.");
-  }
-
   @Override
-  public Object get(String path, Object def) {
-    Object[] splitPath = splitPath(path);
-    ConfigurationNode node = this.rootNode.node(splitPath);
+  public Object get(PathString path, Object def) {
+    ConfigurationNode node = this.rootNode.node(path.getPathAsObject());
     Object value = node.raw();
     return value == null ? def : value;
   }
 
   @Override
-  public void set(String path, Object value) {
-    Object[] splitPath = splitPath(path);
-    ConfigurationNode node = this.rootNode.node(splitPath);
+  public void set(PathString path, Object value) {
+    ConfigurationNode node = this.rootNode.node(path.getPathAsObject());
     try {
       node.set(value);
     } catch (SerializationException e) {
@@ -73,27 +65,26 @@ public class ConfigurateConfig implements Config {
   }
 
   @Override
-  public Map<String, Object> getValues(String path, boolean deep) {
-    Object[] splitPath = splitPath(path);
+  public Map<PathString, Object> getValues(PathString path, boolean deep) {
     ConfigurationNode node;
-    if (splitPath.length == 0) {
+    if (path.isRoot()) {
       node = this.rootNode;
     } else {
-      node = this.rootNode.node(splitPath);
+      node = this.rootNode.node(path.getPathAsObject());
     }
     if (!node.isMap()) {
       return Collections.emptyMap();
     }
-    Map<String, Object> map = new LinkedHashMap<>();
+    Map<PathString, Object> map = new LinkedHashMap<>();
     for (Map.Entry<Object, ? extends ConfigurationNode> entry : node.childrenMap().entrySet()) {
-      String key = Objects.toString(entry.getKey());
+      PathString key = new PathString(Objects.toString(entry.getKey()));
       ConfigurationNode value = entry.getValue();
       map.put(key, value.raw());
       if (value.isMap() && deep) {
-        String newPath = splitPath.length == 0 ? key : path + "." + key;
-        Map<String, Object> subMap = getValues(newPath, true);
-        for (Map.Entry<String, Object> subEntry : subMap.entrySet()) {
-          map.put(key + "." + subEntry.getKey(), subEntry.getValue());
+        PathString newPath = path.append(key);
+        Map<PathString, Object> subMap = getValues(newPath, true);
+        for (Map.Entry<PathString, Object> subEntry : subMap.entrySet()) {
+          map.put(key.append(subEntry.getKey()), subEntry.getValue());
         }
       }
     }
@@ -167,9 +158,8 @@ public class ConfigurateConfig implements Config {
   }
 
   @Override
-  public String getComment(String path, CommentType type) {
-    Object[] splitPath = splitPath(path);
-    ConfigurationNode node = this.rootNode.node(splitPath);
+  public String getComment(PathString path, CommentType type) {
+    ConfigurationNode node = this.rootNode.node(path.getPathAsObject());
     if (!(node instanceof CommentedConfigurationNode)) return null;
     CommentedConfigurationNode commentedNode = (CommentedConfigurationNode) node;
     if (type != CommentType.BLOCK) return null;
@@ -177,9 +167,8 @@ public class ConfigurateConfig implements Config {
   }
 
   @Override
-  public void setComment(String path, String value, CommentType type) {
-    Object[] splitPath = splitPath(path);
-    ConfigurationNode node = this.rootNode.node(splitPath);
+  public void setComment(PathString path, String value, CommentType type) {
+    ConfigurationNode node = this.rootNode.node(path.getPathAsObject());
     if (!(node instanceof CommentedConfigurationNode)) return;
     CommentedConfigurationNode commentedNode = (CommentedConfigurationNode) node;
     if (type != CommentType.BLOCK) return;
