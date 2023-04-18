@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.minecraft.block.box;
 
+import java.util.Objects;
+
 /**
  * A custom box to bound blocks
  */
@@ -28,41 +30,83 @@ public class BlockBox {
    * The maximum z coordinate
    */
   public final int maxZ;
-  /**
-   * Whether it should include the maximum coordinate
-   */
-  public final boolean maxInclusive;
 
   /**
    * Create a new block box
    *
-   * @param x1           the first x
-   * @param y1           the first y
-   * @param z1           the first z
-   * @param x2           the second x
-   * @param y2           the second y
-   * @param z2           the second z
-   * @param maxInclusive true if it should include the maximum location
+   * @param x1 the first x
+   * @param y1 the first y
+   * @param z1 the first z
+   * @param x2 the second x
+   * @param y2 the second y
+   * @param z2 the second z
    */
-  public BlockBox(int x1, int y1, int z1, int x2, int y2, int z2, boolean maxInclusive) {
+  public BlockBox(int x1, int y1, int z1, int x2, int y2, int z2) {
     minX = Math.min(x1, x2);
     minY = Math.min(y1, y2);
     minZ = Math.min(z1, z2);
-    maxX = Math.max(x1, x2) + (maxInclusive ? 1 : 0);
-    maxY = Math.max(y1, y2) + (maxInclusive ? 1 : 0);
-    maxZ = Math.max(z1, z2) + (maxInclusive ? 1 : 0);
-    this.maxInclusive = maxInclusive;
+    maxX = Math.max(x1, x2);
+    maxY = Math.max(y1, y2);
+    maxZ = Math.max(z1, z2);
   }
 
   /**
    * Create a new block box
    *
-   * @param pos1         the first position
-   * @param pos2         the second position
-   * @param maxInclusive true if it should include the maximum location
+   * @param pos1 the first position
+   * @param pos2 the second position
    */
-  public BlockBox(Position pos1, Position pos2, boolean maxInclusive) {
-    this((int) pos1.x, (int) pos1.y, (int) pos1.z, (int) pos2.x, (int) pos2.y, (int) pos2.z, maxInclusive);
+  public BlockBox(Position pos1, Position pos2) {
+    this((int) pos1.x, (int) pos1.y, (int) pos1.z, (int) pos2.x, (int) pos2.y, (int) pos2.z);
+  }
+
+  /**
+   * Create a new block box that increases the maximum position by the given offset
+   *
+   * @param x the x-axis offset
+   * @param y the y-axis offset
+   * @param z the z-axis offset
+   *
+   * @return the new box
+   */
+  public BlockBox expandMax(int x, int y, int z) {
+    return new BlockBox(min(), max().move(x, y, z));
+  }
+
+  /**
+   * Create a new block box that decreases the minimum position by the given offset
+   *
+   * @param x the x-axis offset
+   * @param y the y-axis offset
+   * @param z the z-axis offset
+   *
+   * @return the new box
+   */
+  public BlockBox expandMin(int x, int y, int z) {
+    return new BlockBox(min().move(-x, -y, -z), max());
+  }
+
+  /**
+   * Create a new block box that expands the minimum and maximum position by the given offset
+   *
+   * @param x the x-axis offset
+   * @param y the y-axis offset
+   * @param z the z-axis offset
+   *
+   * @return the new box
+   */
+  public BlockBox expand(int x, int y, int z) {
+    return expandMin(x, y, z).expandMax(x, y, z);
+  }
+
+  /**
+   * Create a new block box that increases the maximum position by one.
+   * Use this to include the block at the maximum position as a part of the box.
+   *
+   * @return the new box
+   */
+  public BlockBox maxInclusive() {
+    return expandMax(1, 1, 1);
   }
 
   /**
@@ -95,11 +139,7 @@ public class BlockBox {
    * @return the center
    */
   public Position center() {
-    if (maxInclusive) {
-      return new Position((minX + maxX) / 2.0, (minY + maxY) / 2.0, (minZ + maxZ) / 2.0);
-    } else {
-      return new Position((minX + maxX + 1) / 2.0, (minY + maxY + 1) / 2.0, (minZ + maxZ + 1) / 2.0);
-    }
+    return new Position((minX + maxX) / 2.0, (minY + maxY) / 2.0, (minZ + maxZ) / 2.0);
   }
 
   /**
@@ -117,11 +157,7 @@ public class BlockBox {
    * @return the maximum position
    */
   public Position max() {
-    if (maxInclusive) {
-      return new Position(maxX - 1, maxY - 1, maxZ - 1);
-    } else {
-      return new Position(maxX, maxY, maxZ);
-    }
+    return new Position(maxX, maxY, maxZ);
   }
 
   /**
@@ -130,11 +166,7 @@ public class BlockBox {
    * @return the size
    */
   public double sizeX() {
-    if (maxInclusive) {
-      return maxX - minX;
-    } else {
-      return maxX - minX + 1;
-    }
+    return maxX - minX;
   }
 
   /**
@@ -143,11 +175,7 @@ public class BlockBox {
    * @return the size
    */
   public double sizeY() {
-    if (maxInclusive) {
-      return maxY - minY;
-    } else {
-      return maxY - minY + 1;
-    }
+    return maxY - minY;
   }
 
   /**
@@ -156,10 +184,19 @@ public class BlockBox {
    * @return the size
    */
   public double sizeZ() {
-    if (maxInclusive) {
-      return maxZ - minZ;
-    } else {
-      return maxZ - minZ + 1;
-    }
+    return maxZ - minZ;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    BlockBox blockBox = (BlockBox) o;
+    return minX == blockBox.minX && minY == blockBox.minY && minZ == blockBox.minZ && maxX == blockBox.maxX && maxY == blockBox.maxY && maxZ == blockBox.maxZ;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(minX, minY, minZ, maxX, maxY, maxZ);
   }
 }
