@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.config.proxy;
 
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.annotation.converter.Converter;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -9,7 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * The config node for a method in the interface
  */
 public class ConfigNode {
-  private final String path;
+  private final PathString path;
   private final Config config;
   private final Converter converter;
   private final Object defaultValue;
@@ -27,8 +28,8 @@ public class ConfigNode {
    * @param comment      the comment
    * @param stickyValue  true if the value should be sticky
    */
-  ConfigNode(String path, Config config, Converter converter, Object defaultValue, String comment, boolean stickyValue) {
-    this.path = path;
+  ConfigNode(String[] path, Config config, Converter converter, Object defaultValue, String comment, boolean stickyValue) {
+    this.path = new PathString(path);
     this.config = config;
     this.converter = converter;
     this.defaultValue = defaultValue;
@@ -41,7 +42,7 @@ public class ConfigNode {
    *
    * @return the config path
    */
-  public String getPath() {
+  public PathString getPath() {
     return path;
   }
 

@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.config.proxy;
 
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.annotation.Comment;
 import me.hsgamer.hscore.config.annotation.ConfigPath;
 import me.hsgamer.hscore.config.annotation.StickyValue;
@@ -91,8 +92,8 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
    * Set up the class comment
    */
   private void setupClassComment() {
-    if (clazz.isAnnotationPresent(Comment.class) && config.getComment("") == null) {
-      config.setComment("", clazz.getAnnotation(Comment.class).value());
+    if (clazz.isAnnotationPresent(Comment.class) && config.getComment(PathString.ROOT) == null) {
+      config.setComment(PathString.ROOT, clazz.getAnnotation(Comment.class).value());
     }
   }
 
@@ -123,7 +124,7 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
       return;
     }
     ConfigPath configPath = method.getAnnotation(ConfigPath.class);
-    String path = configPath.value();
+    String[] path = configPath.value();
 
     try {
       Object value = DEFAULT_METHOD_HANDLER.invoke(method);

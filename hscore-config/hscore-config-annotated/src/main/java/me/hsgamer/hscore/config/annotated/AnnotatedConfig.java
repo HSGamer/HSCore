@@ -2,6 +2,7 @@ package me.hsgamer.hscore.config.annotated;
 
 import me.hsgamer.hscore.config.Config;
 import me.hsgamer.hscore.config.DecorativeConfig;
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.annotation.Comment;
 import me.hsgamer.hscore.config.annotation.ConfigPath;
 import me.hsgamer.hscore.config.annotation.converter.Converter;
@@ -29,7 +30,7 @@ import java.util.*;
  * </pre>
  */
 public class AnnotatedConfig extends DecorativeConfig {
-  private final Map<String, Field> pathFieldMap = new HashMap<>();
+  private final Map<PathString, Field> pathFieldMap = new HashMap<>();
 
   /**
    * Create an annotated config
@@ -49,7 +50,7 @@ public class AnnotatedConfig extends DecorativeConfig {
       .sorted(Comparator.comparingInt(Field::hashCode))
       .forEach(field -> {
         ConfigPath configPath = field.getAnnotation(ConfigPath.class);
-        pathFieldMap.put(configPath.value(), field);
+        pathFieldMap.put(new PathString(configPath.value()), field);
         validFields.add(field);
       });
     validFields.forEach(this::setupField);
@@ -58,7 +59,7 @@ public class AnnotatedConfig extends DecorativeConfig {
   }
 
   @Override
-  public void set(String path, Object value) {
+  public void set(PathString path, Object value) {
     Field field = pathFieldMap.get(path);
     if (field == null) {
       super.set(path, value);
@@ -78,8 +79,8 @@ public class AnnotatedConfig extends DecorativeConfig {
   }
 
   private void setupClassComment() {
-    if (this.getClass().isAnnotationPresent(Comment.class) && this.getComment("") == null) {
-      this.setComment("", this.getClass().getAnnotation(Comment.class).value());
+    if (this.getClass().isAnnotationPresent(Comment.class) && this.getComment(PathString.ROOT) == null) {
+      this.setComment(PathString.ROOT, this.getClass().getAnnotation(Comment.class).value());
     }
   }
 
@@ -97,7 +98,7 @@ public class AnnotatedConfig extends DecorativeConfig {
 
   private void setupField(Field field) {
     ConfigPath configPath = field.getAnnotation(ConfigPath.class);
-    String path = configPath.value();
+    PathString path = new PathString(configPath.value());
     Converter converter = DefaultConverterManager.getConverterIfDefault(field.getGenericType(), configPath.converter());
     Object defaultValue = this.getValue(field);
 
@@ -113,7 +114,7 @@ public class AnnotatedConfig extends DecorativeConfig {
 
   private void checkAndSetField(Field field, Object value) {
     ConfigPath configPath = field.getAnnotation(ConfigPath.class);
-    String path = configPath.value();
+    PathString path = new PathString(configPath.value());
     Converter converter = DefaultConverterManager.getConverterIfDefault(field.getGenericType(), configPath.converter());
     super.set(path, converter.convertToRaw(value));
     this.setValue(field, value);
