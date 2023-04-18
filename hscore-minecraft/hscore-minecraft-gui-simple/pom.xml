@@ -6,7 +6,7 @@
   <parent>
     <groupId>me.hsgamer</groupId>
     <artifactId>hscore-minecraft</artifactId>
-    <version>4.2.21</version>
+    <version>4.3.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>hscore-minecraft-gui-simple</artifactId>
