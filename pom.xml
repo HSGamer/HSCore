@@ -48,7 +48,6 @@
     <module>hscore-request</module>
     <module>hscore-config</module>
     <module>hscore-expansion</module>
-    <module>hscore-addon</module>
     <module>hscore-checker</module>
     <module>hscore-database</module>
     <module>hscore-ui</module>
