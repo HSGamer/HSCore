@@ -2,10 +2,14 @@ package me.hsgamer.hscore.minecraft.gui.simple;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.button.ButtonMap;
+import me.hsgamer.hscore.minecraft.gui.button.ViewedButton;
+import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.IntFunction;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * A simple {@link ButtonMap} with a list of {@link Button}s
@@ -91,12 +95,36 @@ public class SimpleButtonMap implements ButtonMap {
   }
 
   @Override
-  public @NotNull Map<Button, Collection<Integer>> getButtons(@NotNull UUID uuid, int size) {
-    return buttonSlotMap;
-  }
+  public @NotNull Map<@NotNull Integer, @NotNull ViewedButton> getButtons(@NotNull UUID uuid, int size) {
+    Map<Integer, ViewedButton> map = new HashMap<>();
+    IntFunction<ViewedButton> getViewedButton = i -> map.computeIfAbsent(i, s -> new ViewedButton());
 
-  @Override
-  public @NotNull Button getDefaultButton(@NotNull UUID uuid) {
-    return defaultButton;
+    List<Integer> emptyItemSlots = IntStream.range(0, size).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+    List<Integer> emptyActionSlots = IntStream.range(0, size).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
+    buttonSlotMap.forEach((button, slots) -> {
+      Item item = button.getItem(uuid);
+      if (item == null && !button.forceSetAction(uuid)) {
+        return;
+      }
+      slots.forEach(slot -> {
+        ViewedButton viewedButton = getViewedButton.apply(slot);
+        if (item != null) {
+          viewedButton.setDisplayItem(item);
+          emptyItemSlots.remove(slot);
+        }
+        viewedButton.setButton(button);
+        emptyActionSlots.remove(slot);
+      });
+    });
+
+    Button defaultButton = getDefaultButton();
+    Item defaultItem = defaultButton.getItem(uuid);
+    if (defaultItem != null) {
+      emptyItemSlots.forEach(slot -> getViewedButton.apply(slot).setDisplayItem(defaultItem));
+    }
+    emptyActionSlots.forEach(slot -> getViewedButton.apply(slot).setButton(defaultButton));
+
+    return map;
   }
 }

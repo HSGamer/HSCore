@@ -2,7 +2,9 @@ package me.hsgamer.hscore.minecraft.gui.advanced;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.button.ButtonMap;
+import me.hsgamer.hscore.minecraft.gui.button.ViewedButton;
 import me.hsgamer.hscore.minecraft.gui.mask.Mask;
+import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -13,7 +15,6 @@ import java.util.stream.Collectors;
  */
 public class AdvancedButtonMap implements ButtonMap {
   private final List<Mask> masks = new LinkedList<>();
-  private boolean allowSlotDuplication = false;
 
   /**
    * Add a mask
@@ -67,49 +68,30 @@ public class AdvancedButtonMap implements ButtonMap {
     return Collections.unmodifiableList(masks);
   }
 
-  /**
-   * Get whether to allow slot duplication
-   *
-   * @return whether to allow slot duplication
-   */
-  public boolean isAllowSlotDuplication() {
-    return allowSlotDuplication;
-  }
-
-  /**
-   * Set whether to allow slot duplication when generating buttons from masks.
-   * If it's true, the button will be added to the slot even if there is already a button in the slot.
-   * If it's false, the button will override the button in the slot.
-   *
-   * @param allowSlotDuplication whether to allow slot duplication
-   */
-  public void setAllowSlotDuplication(boolean allowSlotDuplication) {
-    this.allowSlotDuplication = allowSlotDuplication;
-  }
-
-  @Override
-  public @NotNull Map<Button, Collection<Integer>> getButtons(@NotNull UUID uuid, int size) {
-    Map<Button, Collection<Integer>> buttonSlotMap = new LinkedHashMap<>();
-    if (allowSlotDuplication) {
-      for (Mask mask : masks) {
-        if (!mask.canView(uuid)) continue;
-        Map<Integer, Button> buttons = mask.generateButtons(uuid, size);
-        buttons.forEach((slot, button) -> buttonSlotMap.computeIfAbsent(button, k -> new ArrayList<>()).add(slot));
-      }
-    } else {
-      Map<Integer, Button> slotMap = new LinkedHashMap<>();
-      for (Mask mask : masks) {
-        if (!mask.canView(uuid)) continue;
-        Map<Integer, Button> buttons = mask.generateButtons(uuid, size);
-        slotMap.putAll(buttons);
-      }
-      slotMap.forEach((slot, button) -> buttonSlotMap.computeIfAbsent(button, k -> new ArrayList<>()).add(slot));
-    }
-    return buttonSlotMap;
-  }
-
   @Override
   public void stop() {
     removeAllMasks().forEach(Mask::stop);
+  }
+
+  @Override
+  public @NotNull Map<@NotNull Integer, @NotNull ViewedButton> getButtons(@NotNull UUID uuid, int size) {
+    Map<Integer, ViewedButton> map = new HashMap<>();
+    for (Mask mask : masks) {
+      if (!mask.canView(uuid)) continue;
+      Map<Integer, Button> buttons = mask.generateButtons(uuid, size);
+      buttons.forEach((slot, button) -> {
+        Item item = button.getItem(uuid);
+        if (item == null && !button.forceSetAction(uuid)) {
+          return;
+        }
+
+        ViewedButton viewedButton = map.computeIfAbsent(slot, s -> new ViewedButton());
+        if (item != null) {
+          viewedButton.setDisplayItem(item);
+        }
+        viewedButton.setButton(button);
+      });
+    }
+    return map;
   }
 }

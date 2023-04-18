@@ -3,7 +3,6 @@ package me.hsgamer.hscore.minecraft.gui.button;
 import me.hsgamer.hscore.ui.property.Initializable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
@@ -12,25 +11,13 @@ import java.util.UUID;
  */
 public interface ButtonMap extends Initializable {
   /**
-   * Get the button-slot map for the unique id
+   * Get the button map that is ready to be displayed to the unique id
    *
    * @param uuid the unique id
    * @param size the size of the inventory
    *
-   * @return the button-slot map
+   * @return the button map
    */
   @NotNull
-  Map<@NotNull Button, @NotNull Collection<@NotNull Integer>> getButtons(@NotNull final UUID uuid, int size);
-
-  /**
-   * Get the default button for the unique id
-   *
-   * @param uuid the unique id
-   *
-   * @return the default button
-   */
-  @NotNull
-  default Button getDefaultButton(@NotNull UUID uuid) {
-    return Button.EMPTY;
-  }
+  Map<@NotNull Integer, @NotNull ViewedButton> getButtons(@NotNull final UUID uuid, int size);
 }
