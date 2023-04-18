@@ -18,7 +18,7 @@ public class LocationIterator extends WrappedPositionIterator<Location> {
    * @param world            the world
    * @param positionIterator the position iterator
    */
-  protected LocationIterator(World world, PositionIterator positionIterator) {
+  public LocationIterator(World world, PositionIterator positionIterator) {
     super(positionIterator);
     this.world = world;
   }
