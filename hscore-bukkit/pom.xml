@@ -26,7 +26,7 @@
     <module>hscore-bukkit-command-extra</module>
     <module>hscore-bukkit-config</module>
     <module>hscore-bukkit-config-extra</module>
-    <module>hscore-bukkit-clicktype</module>
+    <module>hscore-bukkit-click-type</module>
     <module>hscore-bukkit-item</module>
     <module>hscore-bukkit-gui</module>
     <module>hscore-bukkit-gui-button</module>
