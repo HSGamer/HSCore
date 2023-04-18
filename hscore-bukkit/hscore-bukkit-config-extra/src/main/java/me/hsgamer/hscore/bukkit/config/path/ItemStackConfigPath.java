@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.SerializableMapConfigPath;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -17,11 +18,11 @@ public class ItemStackConfigPath extends SerializableMapConfigPath<ItemStack> {
    * @param path the path to the value
    * @param def  the default value if it's not found
    */
-  public ItemStackConfigPath(String path, ItemStack def) {
+  public ItemStackConfigPath(PathString path, ItemStack def) {
     this(path, def, ItemStack::deserialize, ItemStack::serialize);
   }
 
-  public ItemStackConfigPath(String path, ItemStack def, Function<Map<String, Object>, ItemStack> deserializer, Function<ItemStack, Map<String, Object>> serializer) {
+  public ItemStackConfigPath(PathString path, ItemStack def, Function<Map<String, Object>, ItemStack> deserializer, Function<ItemStack, Map<String, Object>> serializer) {
     super(path, def);
     this.deserializer = deserializer;
     this.serializer = serializer;

@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.SerializableMapConfigPath;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +15,7 @@ public class LocationConfigPath extends SerializableMapConfigPath<Location> {
    * @param path the path to the value
    * @param def  the default value if it's not found
    */
-  public LocationConfigPath(String path, Location def) {
+  public LocationConfigPath(PathString path, Location def) {
     super(path, def);
   }
 
