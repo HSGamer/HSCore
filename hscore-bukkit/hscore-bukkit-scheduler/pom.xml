@@ -11,6 +11,10 @@
 
   <artifactId>hscore-bukkit-scheduler</artifactId>
 
+  <properties>
+    <spigot.version>1.19.4-R0.1-SNAPSHOT</spigot.version>
+  </properties>
+
   <repositories>
     <repository>
       <id>papermc</id>
@@ -22,7 +26,7 @@
     <dependency>
       <groupId>dev.folia</groupId>
       <artifactId>folia-api</artifactId>
-      <version>1.19.4-R0.1-SNAPSHOT</version>
+      <version>${spigot.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
