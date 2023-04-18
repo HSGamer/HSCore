@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.config.path.impl;
 
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.SerializableMapConfigPath;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +14,7 @@ public class MapConfigPath extends SerializableMapConfigPath<Map<String, Object>
    * @param path the path to the value
    * @param def  the default value if it's not found
    */
-  public MapConfigPath(String path, Map<String, Object> def) {
+  public MapConfigPath(PathString path, Map<String, Object> def) {
     super(path, def);
   }
 

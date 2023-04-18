@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.SerializableMapConfigPath;
 import org.bukkit.block.banner.Pattern;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +15,7 @@ public class PatternConfigPath extends SerializableMapConfigPath<Pattern> {
    * @param path the path to the value
    * @param def  the default value if it's not found
    */
-  public PatternConfigPath(String path, Pattern def) {
+  public PatternConfigPath(PathString path, Pattern def) {
     super(path, def);
   }
 

@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.config.path;
 
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.PathString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,7 +51,7 @@ public interface ConfigPath<T> {
    * @return the path
    */
   @NotNull
-  String getPath();
+  PathString getPath();
 
   /**
    * Get the config

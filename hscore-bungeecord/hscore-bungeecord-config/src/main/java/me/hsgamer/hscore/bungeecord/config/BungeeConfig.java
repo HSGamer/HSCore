@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.bungeecord.config;
 
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.PathString;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -37,24 +38,32 @@ public class BungeeConfig implements Config {
     this(new File(plugin.getDataFolder(), filename));
   }
 
+  private String toPath(PathString pathString) {
+    return PathString.toPath(".", pathString);
+  }
+
+  private Map<PathString, Object> toPathStringMap(Map<String, Object> map) {
+    return PathString.toPathStringMap(".", map);
+  }
+
   @Override
   public Configuration getOriginal() {
     return this.configuration;
   }
 
   @Override
-  public Object get(String path, Object def) {
-    return this.configuration.get(path, def);
+  public Object get(PathString path, Object def) {
+    return this.configuration.get(toPath(path), def);
   }
 
   @Override
-  public void set(String path, Object value) {
-    this.configuration.set(path, value);
+  public void set(PathString path, Object value) {
+    this.configuration.set(toPath(path), value);
   }
 
   @Override
-  public boolean contains(String path) {
-    return this.configuration.contains(path);
+  public boolean contains(PathString path) {
+    return this.configuration.contains(toPath(path));
   }
 
   @Override
@@ -63,12 +72,13 @@ public class BungeeConfig implements Config {
   }
 
   @Override
-  public Map<String, Object> getValues(String path, boolean deep) {
-    if (path == null || path.isEmpty()) {
-      return this.getValues(configuration, deep);
+  public Map<PathString, Object> getValues(PathString path, boolean deep) {
+    if (path.isRoot()) {
+      return toPathStringMap(this.getValues(configuration, deep));
     } else {
-      return Optional.ofNullable(configuration.getSection(path))
+      return Optional.ofNullable(configuration.getSection(toPath(path)))
         .map(section -> this.getValues(section, deep))
+        .map(this::toPathStringMap)
         .orElse(Collections.emptyMap());
     }
   }

@@ -32,17 +32,17 @@ public abstract class DecorativeConfig implements Config {
   }
 
   @Override
-  public Object get(String path, Object def) {
+  public Object get(PathString path, Object def) {
     return this.config.get(path, def);
   }
 
   @Override
-  public void set(String path, Object value) {
+  public void set(PathString path, Object value) {
     this.config.set(path, value);
   }
 
   @Override
-  public boolean contains(String path) {
+  public boolean contains(PathString path) {
     return this.config.contains(path);
   }
 
@@ -52,12 +52,12 @@ public abstract class DecorativeConfig implements Config {
   }
 
   @Override
-  public void addDefault(String path, Object value) {
+  public void addDefault(PathString path, Object value) {
     this.config.addDefault(path, value);
   }
 
   @Override
-  public Map<String, Object> getValues(String path, boolean deep) {
+  public Map<PathString, Object> getValues(PathString path, boolean deep) {
     return this.config.getValues(path, deep);
   }
 
@@ -87,12 +87,12 @@ public abstract class DecorativeConfig implements Config {
   }
 
   @Override
-  public String getComment(String path, CommentType type) {
+  public String getComment(PathString path, CommentType type) {
     return this.config.getComment(path, type);
   }
 
   @Override
-  public void setComment(String path, String value, CommentType type) {
+  public void setComment(PathString path, String value, CommentType type) {
     this.config.setComment(path, value, type);
   }
 }

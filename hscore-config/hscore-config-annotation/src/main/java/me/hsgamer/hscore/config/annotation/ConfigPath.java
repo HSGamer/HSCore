@@ -20,7 +20,7 @@ public @interface ConfigPath {
    *
    * @return the path
    */
-  @NotNull String value();
+  @NotNull String[] value();
 
   /**
    * Get the converter

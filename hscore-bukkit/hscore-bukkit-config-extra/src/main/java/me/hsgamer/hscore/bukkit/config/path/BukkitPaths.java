@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bukkit.config.path;
 
 import me.hsgamer.hscore.bukkit.config.object.PlayableSound;
 import me.hsgamer.hscore.bukkit.config.object.Position;
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.AdvancedConfigPath;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -28,7 +29,7 @@ public final class BukkitPaths {
    *
    * @return the config path
    */
-  public static AttributeModifierConfigPath attributeModifierPath(String path, AttributeModifier def) {
+  public static AttributeModifierConfigPath attributeModifierPath(PathString path, AttributeModifier def) {
     return new AttributeModifierConfigPath(path, def);
   }
 
@@ -40,7 +41,7 @@ public final class BukkitPaths {
    *
    * @return the config path
    */
-  public static ColorConfigPath colorPath(String path, Color def) {
+  public static ColorConfigPath colorPath(PathString path, Color def) {
     return new ColorConfigPath(path, def);
   }
 
@@ -52,7 +53,7 @@ public final class BukkitPaths {
    *
    * @return the config path
    */
-  public static FireworkEffectConfigPath fireworkEffectPath(String path, FireworkEffect def) {
+  public static FireworkEffectConfigPath fireworkEffectPath(PathString path, FireworkEffect def) {
     return new FireworkEffectConfigPath(path, def);
   }
 
@@ -64,7 +65,7 @@ public final class BukkitPaths {
    *
    * @return the config path
    */
-  public static ItemStackConfigPath itemStackPath(String path, ItemStack def) {
+  public static ItemStackConfigPath itemStackPath(PathString path, ItemStack def) {
     return new ItemStackConfigPath(path, def);
   }
 
@@ -76,7 +77,7 @@ public final class BukkitPaths {
    *
    * @return the config path
    */
-  public static LocationConfigPath locationPath(String path, Location def) {
+  public static LocationConfigPath locationPath(PathString path, Location def) {
     return new LocationConfigPath(path, def);
   }
 
@@ -88,7 +89,7 @@ public final class BukkitPaths {
    *
    * @return the config path
    */
-  public static PatternConfigPath patternPath(String path, Pattern def) {
+  public static PatternConfigPath patternPath(PathString path, Pattern def) {
     return new PatternConfigPath(path, def);
   }
 
@@ -100,7 +101,7 @@ public final class BukkitPaths {
    *
    * @return the config path
    */
-  public static PotionEffectConfigPath potionEffectPath(String path, PotionEffect def) {
+  public static PotionEffectConfigPath potionEffectPath(PathString path, PotionEffect def) {
     return new PotionEffectConfigPath(path, def);
   }
 
@@ -112,7 +113,7 @@ public final class BukkitPaths {
    *
    * @return the config path
    */
-  public static VectorConfigPath vectorPath(String path, Vector def) {
+  public static VectorConfigPath vectorPath(PathString path, Vector def) {
     return new VectorConfigPath(path, def);
   }
 
@@ -124,7 +125,7 @@ public final class BukkitPaths {
    *
    * @return the config path
    */
-  public static SoundConfigPath soundPath(String path, PlayableSound def) {
+  public static SoundConfigPath soundPath(PathString path, PlayableSound def) {
     return new SoundConfigPath(path, def);
   }
 
@@ -136,7 +137,7 @@ public final class BukkitPaths {
    *
    * @return the config path
    */
-  public static PositionConfigPath positionPath(String path, Position def) {
+  public static PositionConfigPath positionPath(PathString path, Position def) {
     return new PositionConfigPath(path, def);
   }
 }

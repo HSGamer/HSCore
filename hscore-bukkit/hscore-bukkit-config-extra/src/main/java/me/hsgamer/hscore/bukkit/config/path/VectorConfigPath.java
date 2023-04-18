@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.SerializableMapConfigPath;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +15,7 @@ public class VectorConfigPath extends SerializableMapConfigPath<Vector> {
    * @param path the path to the value
    * @param def  the default value if it's not found
    */
-  public VectorConfigPath(String path, Vector def) {
+  public VectorConfigPath(PathString path, Vector def) {
     super(path, def);
   }
 

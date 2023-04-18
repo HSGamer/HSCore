@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.config.path.impl;
 
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.BaseConfigPath;
 
 public class DoubleConfigPath extends BaseConfigPath<Double> {
@@ -10,7 +11,7 @@ public class DoubleConfigPath extends BaseConfigPath<Double> {
    * @param path the path to the value
    * @param def  the default value if it's not found
    */
-  public DoubleConfigPath(String path, Double def) {
+  public DoubleConfigPath(PathString path, Double def) {
     super(path, def, o -> {
       try {
         return Double.parseDouble(String.valueOf(o));

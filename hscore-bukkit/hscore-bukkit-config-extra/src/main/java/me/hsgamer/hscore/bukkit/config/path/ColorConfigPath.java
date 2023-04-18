@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.SerializableMapConfigPath;
 import org.bukkit.Color;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +15,7 @@ public class ColorConfigPath extends SerializableMapConfigPath<Color> {
    * @param path the path to the value
    * @param def  the default value if it's not found
    */
-  public ColorConfigPath(String path, Color def) {
+  public ColorConfigPath(PathString path, Color def) {
     super(path, def);
   }
 

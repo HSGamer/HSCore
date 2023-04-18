@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bukkit.config;
 
 import me.hsgamer.hscore.config.CommentType;
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.PathString;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -63,24 +64,32 @@ public class BukkitConfig implements Config {
     this(plugin, "config.yml");
   }
 
+  private String toPath(PathString pathString) {
+    return PathString.toPath(String.valueOf(configuration.options().pathSeparator()), pathString);
+  }
+
+  private Map<PathString, Object> toPathStringMap(Map<String, Object> map) {
+    return PathString.toPathStringMap(String.valueOf(configuration.options().pathSeparator()), map);
+  }
+
   @Override
   public YamlConfiguration getOriginal() {
     return this.configuration;
   }
 
   @Override
-  public Object get(String path, Object def) {
-    return this.configuration.get(path, def);
+  public Object get(PathString path, Object def) {
+    return this.configuration.get(toPath(path), def);
   }
 
   @Override
-  public void set(String path, Object value) {
-    this.configuration.set(path, value);
+  public void set(PathString path, Object value) {
+    this.configuration.set(toPath(path), value);
   }
 
   @Override
-  public boolean contains(String path) {
-    return this.configuration.isSet(path);
+  public boolean contains(PathString path) {
+    return this.configuration.isSet(toPath(path));
   }
 
   @Override
@@ -89,17 +98,18 @@ public class BukkitConfig implements Config {
   }
 
   @Override
-  public void addDefault(String path, Object value) {
-    this.configuration.addDefault(path, value);
+  public void addDefault(PathString path, Object value) {
+    this.configuration.addDefault(toPath(path), value);
   }
 
   @Override
-  public Map<String, Object> getValues(String path, boolean deep) {
-    if (path == null || path.isEmpty()) {
-      return this.configuration.getValues(deep);
+  public Map<PathString, Object> getValues(PathString path, boolean deep) {
+    if (path.isRoot()) {
+      return toPathStringMap(this.configuration.getValues(deep));
     } else {
-      return Optional.ofNullable(this.configuration.getConfigurationSection(path))
+      return Optional.ofNullable(this.configuration.getConfigurationSection(toPath(path)))
         .map(configurationSection -> configurationSection.getValues(deep))
+        .map(this::toPathStringMap)
         .orElse(Collections.emptyMap());
     }
   }
@@ -155,15 +165,15 @@ public class BukkitConfig implements Config {
   }
 
   @Override
-  public String getComment(String path, CommentType type) {
+  public String getComment(PathString path, CommentType type) {
     if (!isCommentSupported) return null;
     List<String> comments;
     switch (type) {
       case BLOCK:
-        comments = this.configuration.getComments(path);
+        comments = this.configuration.getComments(toPath(path));
         break;
       case SIDE:
-        comments = this.configuration.getInlineComments(path);
+        comments = this.configuration.getInlineComments(toPath(path));
         break;
       default:
         comments = Collections.emptyList();
@@ -173,15 +183,15 @@ public class BukkitConfig implements Config {
   }
 
   @Override
-  public void setComment(String path, String value, CommentType type) {
+  public void setComment(PathString path, String value, CommentType type) {
     if (!isCommentSupported) return;
     List<String> comments = value == null ? null : Arrays.asList(value.split("\n"));
     switch (type) {
       case BLOCK:
-        this.configuration.setComments(path, comments);
+        this.configuration.setComments(toPath(path), comments);
         break;
       case SIDE:
-        this.configuration.setInlineComments(path, comments);
+        this.configuration.setInlineComments(toPath(path), comments);
         break;
       default:
         break;

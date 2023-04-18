@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.config.path.impl;
 
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.CommentablePath;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.StickyConfigPath;
@@ -46,7 +47,7 @@ public final class Paths {
    *
    * @return the config path
    */
-  public static BooleanConfigPath booleanPath(String path, boolean def) {
+  public static BooleanConfigPath booleanPath(PathString path, boolean def) {
     return new BooleanConfigPath(path, def);
   }
 
@@ -58,7 +59,7 @@ public final class Paths {
    *
    * @return the config path
    */
-  public static DoubleConfigPath doublePath(String path, Double def) {
+  public static DoubleConfigPath doublePath(PathString path, Double def) {
     return new DoubleConfigPath(path, def);
   }
 
@@ -70,7 +71,7 @@ public final class Paths {
    *
    * @return the config path
    */
-  public static FloatConfigPath floatPath(String path, Float def) {
+  public static FloatConfigPath floatPath(PathString path, Float def) {
     return new FloatConfigPath(path, def);
   }
 
@@ -82,7 +83,7 @@ public final class Paths {
    *
    * @return the config path
    */
-  public static IntegerConfigPath integerPath(String path, Integer def) {
+  public static IntegerConfigPath integerPath(PathString path, Integer def) {
     return new IntegerConfigPath(path, def);
   }
 
@@ -94,7 +95,7 @@ public final class Paths {
    *
    * @return the config path
    */
-  public static LongConfigPath longPath(String path, Long def) {
+  public static LongConfigPath longPath(PathString path, Long def) {
     return new LongConfigPath(path, def);
   }
 
@@ -107,7 +108,7 @@ public final class Paths {
    *
    * @return the config path
    */
-  public static <T> SimpleConfigPath<T> simplePath(String path, T def) {
+  public static <T> SimpleConfigPath<T> simplePath(PathString path, T def) {
     return new SimpleConfigPath<>(path, def);
   }
 
@@ -119,7 +120,7 @@ public final class Paths {
    *
    * @return the config path
    */
-  public static StringConfigPath stringPath(String path, String def) {
+  public static StringConfigPath stringPath(PathString path, String def) {
     return new StringConfigPath(path, def);
   }
 }

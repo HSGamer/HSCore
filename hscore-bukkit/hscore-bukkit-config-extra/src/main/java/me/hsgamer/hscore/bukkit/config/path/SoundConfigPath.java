@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.bukkit.config.path;
 
 import me.hsgamer.hscore.bukkit.config.object.PlayableSound;
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.SerializableMapConfigPath;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +15,7 @@ public class SoundConfigPath extends SerializableMapConfigPath<PlayableSound> {
    * @param path the path to the value
    * @param def  the default value if it's not found
    */
-  public SoundConfigPath(String path, PlayableSound def) {
+  public SoundConfigPath(PathString path, PlayableSound def) {
     super(path, def);
   }
 
