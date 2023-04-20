@@ -166,6 +166,10 @@ public class BukkitConfig implements Config {
 
   @Override
   public List<String> getComment(PathString path, CommentType type) {
+    if (path.isRoot()) {
+      return Arrays.asList(this.configuration.options().header().split("\\r?\\n"));
+    }
+
     if (!isCommentSupported) return Collections.emptyList();
     List<String> comments;
     switch (type) {
@@ -184,6 +188,13 @@ public class BukkitConfig implements Config {
 
   @Override
   public void setComment(PathString path, List<String> value, CommentType type) {
+    if (path.isRoot()) {
+      this.configuration.options()
+        .header(String.join(System.lineSeparator(), value))
+        .copyHeader(true);
+      return;
+    }
+
     if (!isCommentSupported) return;
     switch (type) {
       case BLOCK:

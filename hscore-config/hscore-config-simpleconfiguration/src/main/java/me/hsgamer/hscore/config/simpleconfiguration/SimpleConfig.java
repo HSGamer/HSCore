@@ -147,24 +147,29 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
 
   @Override
   public List<String> getComment(PathString path, CommentType type) {
-    if (configuration instanceof org.simpleyaml.configuration.comments.Commentable) {
+    String comment = null;
+    if (path.isRoot()) {
+      comment = configuration.options().header();
+    } else if (configuration instanceof org.simpleyaml.configuration.comments.Commentable) {
       try {
         org.simpleyaml.configuration.comments.CommentType commentType = org.simpleyaml.configuration.comments.CommentType.valueOf(type.name());
-        String comment = ((org.simpleyaml.configuration.comments.Commentable) configuration).getComment(toPath(path), commentType);
-        return comment == null ? Collections.emptyList() : Arrays.asList(comment.split("\\r?\\n"));
+        comment = ((org.simpleyaml.configuration.comments.Commentable) configuration).getComment(toPath(path), commentType);
       } catch (Exception e) {
         LOGGER.log(Level.SEVERE, e, () -> "Something wrong when getting comment of " + path);
       }
     }
-    return Collections.emptyList();
+    return comment == null ? Collections.emptyList() : Arrays.asList(comment.split("\\r?\\n"));
   }
 
   @Override
   public void setComment(PathString path, List<String> value, CommentType type) {
-    if (configuration instanceof org.simpleyaml.configuration.comments.Commentable) {
+    String comment = String.join("\n", value);
+    if (path.isRoot()) {
+      configuration.options().header(comment).copyHeader(true);
+    } else if (configuration instanceof org.simpleyaml.configuration.comments.Commentable) {
       try {
         org.simpleyaml.configuration.comments.CommentType commentType = org.simpleyaml.configuration.comments.CommentType.valueOf(type.name());
-        ((org.simpleyaml.configuration.comments.Commentable) configuration).setComment(toPath(path), String.join("\n", value), commentType);
+        ((org.simpleyaml.configuration.comments.Commentable) configuration).setComment(toPath(path), comment, commentType);
       } catch (Exception e) {
         LOGGER.log(Level.SEVERE, e, () -> "Something wrong when setting comment of " + path);
       }
