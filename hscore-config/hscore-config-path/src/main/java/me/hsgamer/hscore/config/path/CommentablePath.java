@@ -6,9 +6,7 @@ import me.hsgamer.hscore.config.PathString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * A commentable config path
@@ -17,7 +15,7 @@ import java.util.Optional;
  */
 public class CommentablePath<T> implements ConfigPath<T> {
   private final ConfigPath<T> originalPath;
-  private final EnumMap<CommentType, String> defaultCommentMap = new EnumMap<>(CommentType.class);
+  private final EnumMap<CommentType, List<String>> defaultCommentMap = new EnumMap<>(CommentType.class);
 
   /**
    * Create a config path
@@ -29,12 +27,12 @@ public class CommentablePath<T> implements ConfigPath<T> {
     this.originalPath = originalPath;
 
     if (defaultComments.length > 0) {
-      defaultCommentMap.put(CommentType.BLOCK, defaultComments[0]);
+      defaultCommentMap.put(CommentType.BLOCK, Collections.singletonList(defaultComments[0]));
     }
 
     if (defaultComments.length > 1) {
       String[] sideComments = Arrays.copyOfRange(defaultComments, 1, defaultComments.length);
-      defaultCommentMap.put(CommentType.SIDE, String.join("\n", sideComments));
+      defaultCommentMap.put(CommentType.SIDE, Arrays.asList(sideComments));
     }
   }
 
@@ -89,7 +87,7 @@ public class CommentablePath<T> implements ConfigPath<T> {
    * @return the comment
    */
   @Nullable
-  public String getComment() {
+  public List<String> getComment() {
     return getComment(CommentType.BLOCK);
   }
 
@@ -98,7 +96,7 @@ public class CommentablePath<T> implements ConfigPath<T> {
    *
    * @param comment the comment
    */
-  public void setComment(@Nullable final String comment) {
+  public void setComment(@Nullable final List<String> comment) {
     setComment(CommentType.BLOCK, comment);
   }
 
@@ -110,7 +108,7 @@ public class CommentablePath<T> implements ConfigPath<T> {
    * @return the comment
    */
   @Nullable
-  public String getComment(@NotNull final CommentType commentType) {
+  public List<String> getComment(@NotNull final CommentType commentType) {
     return Optional.ofNullable(getConfig())
       .map(config -> config.getComment(getPath(), commentType))
       .orElseGet(() -> defaultCommentMap.get(commentType));
@@ -122,7 +120,7 @@ public class CommentablePath<T> implements ConfigPath<T> {
    * @param commentType the comment type
    * @param comment     the comment
    */
-  public void setComment(@NotNull final CommentType commentType, @Nullable final String comment) {
+  public void setComment(@NotNull final CommentType commentType, @Nullable final List<String> comment) {
     Optional.ofNullable(getConfig()).ifPresent(config -> config.setComment(getPath(), comment, commentType));
   }
 }
