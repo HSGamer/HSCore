@@ -80,7 +80,7 @@ public class AnnotatedConfig extends DecorativeConfig {
 
   private void setupClassComment() {
     if (this.getClass().isAnnotationPresent(Comment.class) && this.getComment(PathString.ROOT) == null) {
-      this.setComment(PathString.ROOT, this.getClass().getAnnotation(Comment.class).value());
+      this.setComment(PathString.ROOT, Arrays.asList(this.getClass().getAnnotation(Comment.class).value()));
     }
   }
 
@@ -105,7 +105,7 @@ public class AnnotatedConfig extends DecorativeConfig {
     if (!contains(path)) {
       super.set(path, converter.convertToRaw(defaultValue));
       if (field.isAnnotationPresent(Comment.class)) {
-        super.setComment(path, field.getAnnotation(Comment.class).value());
+        super.setComment(path, Arrays.asList(field.getAnnotation(Comment.class).value()));
       }
     } else {
       this.setValue(field, converter.convert(this.getNormalized(path)));

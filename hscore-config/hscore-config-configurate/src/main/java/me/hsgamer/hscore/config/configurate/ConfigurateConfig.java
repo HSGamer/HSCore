@@ -11,10 +11,7 @@ import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -158,20 +155,22 @@ public class ConfigurateConfig implements Config {
   }
 
   @Override
-  public String getComment(PathString path, CommentType type) {
+  public List<String> getComment(PathString path, CommentType type) {
     ConfigurationNode node = this.rootNode.node(path.getPathAsObject());
     if (!(node instanceof CommentedConfigurationNode)) return null;
     CommentedConfigurationNode commentedNode = (CommentedConfigurationNode) node;
-    if (type != CommentType.BLOCK) return null;
-    return commentedNode.comment();
+    if (type != CommentType.BLOCK) return Collections.emptyList();
+    String comment = commentedNode.comment();
+    if (comment == null) return Collections.emptyList();
+    return Arrays.asList(comment.split("\\r?\\n"));
   }
 
   @Override
-  public void setComment(PathString path, String value, CommentType type) {
+  public void setComment(PathString path, List<String> value, CommentType type) {
     ConfigurationNode node = this.rootNode.node(path.getPathAsObject());
     if (!(node instanceof CommentedConfigurationNode)) return;
     CommentedConfigurationNode commentedNode = (CommentedConfigurationNode) node;
     if (type != CommentType.BLOCK) return;
-    commentedNode.comment(value);
+    commentedNode.comment(String.join("\n", value));
   }
 }

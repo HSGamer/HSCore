@@ -12,10 +12,7 @@ import me.hsgamer.hscore.config.proxy.defaulthandler.OldJavaDefaultMethodHandler
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The internal invocation handler to map the interface to the config
@@ -93,7 +90,7 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
    */
   private void setupClassComment() {
     if (clazz.isAnnotationPresent(Comment.class) && config.getComment(PathString.ROOT) == null) {
-      config.setComment(PathString.ROOT, clazz.getAnnotation(Comment.class).value());
+      config.setComment(PathString.ROOT, Arrays.asList(clazz.getAnnotation(Comment.class).value()));
     }
   }
 
@@ -130,7 +127,7 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
       Object value = DEFAULT_METHOD_HANDLER.invoke(method);
       ConfigNode node = new ConfigNode(
         path, config, DefaultConverterManager.getConverterIfDefault(method.getGenericReturnType(), configPath.converter()), value,
-        method.isAnnotationPresent(Comment.class) ? method.getAnnotation(Comment.class).value() : null,
+        method.isAnnotationPresent(Comment.class) ? Arrays.asList(method.getAnnotation(Comment.class).value()) : Collections.emptyList(),
         stickyValue || method.isAnnotationPresent(StickyValue.class)
       );
       nodes.put(methodName, node);

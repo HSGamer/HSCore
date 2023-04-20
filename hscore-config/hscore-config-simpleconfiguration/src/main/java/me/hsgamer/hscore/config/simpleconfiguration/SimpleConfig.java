@@ -146,24 +146,25 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
   }
 
   @Override
-  public String getComment(PathString path, CommentType type) {
+  public List<String> getComment(PathString path, CommentType type) {
     if (configuration instanceof org.simpleyaml.configuration.comments.Commentable) {
       try {
         org.simpleyaml.configuration.comments.CommentType commentType = org.simpleyaml.configuration.comments.CommentType.valueOf(type.name());
-        return ((org.simpleyaml.configuration.comments.Commentable) configuration).getComment(toPath(path), commentType);
+        String comment = ((org.simpleyaml.configuration.comments.Commentable) configuration).getComment(toPath(path), commentType);
+        return comment == null ? Collections.emptyList() : Arrays.asList(comment.split("\\r?\\n"));
       } catch (Exception e) {
         LOGGER.log(Level.SEVERE, e, () -> "Something wrong when getting comment of " + path);
       }
     }
-    return "";
+    return Collections.emptyList();
   }
 
   @Override
-  public void setComment(PathString path, String value, CommentType type) {
+  public void setComment(PathString path, List<String> value, CommentType type) {
     if (configuration instanceof org.simpleyaml.configuration.comments.Commentable) {
       try {
         org.simpleyaml.configuration.comments.CommentType commentType = org.simpleyaml.configuration.comments.CommentType.valueOf(type.name());
-        ((org.simpleyaml.configuration.comments.Commentable) configuration).setComment(toPath(path), value, commentType);
+        ((org.simpleyaml.configuration.comments.Commentable) configuration).setComment(toPath(path), String.join("\n", value), commentType);
       } catch (Exception e) {
         LOGGER.log(Level.SEVERE, e, () -> "Something wrong when setting comment of " + path);
       }

@@ -16,5 +16,5 @@ public @interface Comment {
    *
    * @return the comment
    */
-  String value();
+  String[] value();
 }

@@ -165,8 +165,8 @@ public class BukkitConfig implements Config {
   }
 
   @Override
-  public String getComment(PathString path, CommentType type) {
-    if (!isCommentSupported) return null;
+  public List<String> getComment(PathString path, CommentType type) {
+    if (!isCommentSupported) return Collections.emptyList();
     List<String> comments;
     switch (type) {
       case BLOCK:
@@ -179,19 +179,18 @@ public class BukkitConfig implements Config {
         comments = Collections.emptyList();
         break;
     }
-    return comments.isEmpty() ? null : String.join("\n", comments);
+    return comments;
   }
 
   @Override
-  public void setComment(PathString path, String value, CommentType type) {
+  public void setComment(PathString path, List<String> value, CommentType type) {
     if (!isCommentSupported) return;
-    List<String> comments = value == null ? null : Arrays.asList(value.split("\n"));
     switch (type) {
       case BLOCK:
-        this.configuration.setComments(toPath(path), comments);
+        this.configuration.setComments(toPath(path), value);
         break;
       case SIDE:
-        this.configuration.setInlineComments(toPath(path), comments);
+        this.configuration.setInlineComments(toPath(path), value);
         break;
       default:
         break;

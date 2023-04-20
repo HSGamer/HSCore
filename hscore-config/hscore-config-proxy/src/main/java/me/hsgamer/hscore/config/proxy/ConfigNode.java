@@ -4,6 +4,7 @@ import me.hsgamer.hscore.config.Config;
 import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.annotation.converter.Converter;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -14,7 +15,7 @@ public class ConfigNode {
   private final Config config;
   private final Converter converter;
   private final Object defaultValue;
-  private final String comment;
+  private final List<String> comment;
   private final boolean stickyValue;
   private final AtomicReference<Object> cachedValue = new AtomicReference<>();
 
@@ -28,7 +29,7 @@ public class ConfigNode {
    * @param comment      the comment
    * @param stickyValue  true if the value should be sticky
    */
-  ConfigNode(String[] path, Config config, Converter converter, Object defaultValue, String comment, boolean stickyValue) {
+  ConfigNode(String[] path, Config config, Converter converter, Object defaultValue, List<String> comment, boolean stickyValue) {
     this.path = new PathString(path);
     this.config = config;
     this.converter = converter;

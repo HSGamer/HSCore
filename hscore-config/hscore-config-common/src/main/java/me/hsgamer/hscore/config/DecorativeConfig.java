@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.config;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -87,12 +88,12 @@ public abstract class DecorativeConfig implements Config {
   }
 
   @Override
-  public String getComment(PathString path, CommentType type) {
+  public List<String> getComment(PathString path, CommentType type) {
     return this.config.getComment(path, type);
   }
 
   @Override
-  public void setComment(PathString path, String value, CommentType type) {
+  public void setComment(PathString path, List<String> value, CommentType type) {
     this.config.setComment(path, value, type);
   }
 }

@@ -302,8 +302,8 @@ public interface Config {
    *
    * @return the comment
    */
-  default String getComment(PathString path, CommentType type) {
-    return null;
+  default List<String> getComment(PathString path, CommentType type) {
+    return Collections.emptyList();
   }
 
   /**
@@ -314,7 +314,7 @@ public interface Config {
    * @param value the comment
    * @param type  the comment type
    */
-  default void setComment(PathString path, String value, CommentType type) {
+  default void setComment(PathString path, List<String> value, CommentType type) {
     // EMPTY
   }
 
@@ -327,7 +327,7 @@ public interface Config {
    *
    * @see #getComment(PathString, CommentType)
    */
-  default String getComment(PathString path) {
+  default List<String> getComment(PathString path) {
     return getComment(path, CommentType.BLOCK);
   }
 
@@ -337,9 +337,9 @@ public interface Config {
    * @param path  the path
    * @param value the comment
    *
-   * @see #setComment(PathString, String, CommentType)
+   * @see #setComment(PathString, List, CommentType)
    */
-  default void setComment(PathString path, String value) {
+  default void setComment(PathString path, List<String> value) {
     setComment(path, value, CommentType.BLOCK);
   }
 }
