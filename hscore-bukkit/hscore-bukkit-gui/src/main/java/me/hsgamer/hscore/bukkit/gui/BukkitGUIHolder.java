@@ -12,9 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.ToIntFunction;
 
 /**
  * The {@link GUIHolder} for Bukkit
@@ -22,17 +20,18 @@ import java.util.function.ToIntFunction;
 public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
   private final Plugin plugin;
   private InventoryType inventoryType = InventoryType.CHEST;
+  private int size = InventoryType.CHEST.getDefaultSize();
   private Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
-  private BiFunction<BukkitGUIDisplay, UUID, Inventory> inventoryFunction = (display, uuid) -> {
+  private Function<BukkitGUIDisplay, Inventory> inventoryFunction = display -> {
     BukkitGUIHolder holder = display.getHolder();
     InventoryType type = holder.getInventoryType();
-    int size = holder.getSize(uuid);
+    UUID uuid = display.getUniqueId();
+    int size = holder.getSize();
     String title = holder.getTitle(uuid);
     return type == InventoryType.CHEST && size > 0
       ? Bukkit.createInventory(display, BukkitGUIUtils.normalizeToChestSize(size), title)
       : Bukkit.createInventory(display, type, title);
   };
-  private ToIntFunction<UUID> sizeFunction = uuid -> InventoryType.CHEST.getDefaultSize();
 
   /**
    * Create a new holder
@@ -113,45 +112,21 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
   }
 
   /**
-   * Get the size function
-   *
-   * @return the size function
-   */
-  public ToIntFunction<UUID> getSizeFunction() {
-    return sizeFunction;
-  }
-
-  /**
-   * Set the size function
-   *
-   * @param sizeFunction the size function
-   */
-  public void setSizeFunction(ToIntFunction<UUID> sizeFunction) {
-    this.sizeFunction = sizeFunction;
-  }
-
-  /**
-   * Get the size of the inventory for the unique id
-   *
-   * @param uuid the unique id
+   * Get the size of the inventory
    *
    * @return the size
-   *
-   * @see #getSizeFunction()
    */
-  public int getSize(UUID uuid) {
-    return sizeFunction.applyAsInt(uuid);
+  public int getSize() {
+    return size;
   }
 
   /**
    * Set the size
    *
    * @param size the size
-   *
-   * @see #setSizeFunction(ToIntFunction)
    */
   public void setSize(int size) {
-    setSizeFunction(uuid -> size);
+    this.size = size;
   }
 
   /**
@@ -159,7 +134,7 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
    *
    * @return the inventory function
    */
-  public BiFunction<BukkitGUIDisplay, UUID, Inventory> getInventoryFunction() {
+  public Function<BukkitGUIDisplay, Inventory> getInventoryFunction() {
     return inventoryFunction;
   }
 
@@ -168,7 +143,7 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
    *
    * @param inventoryFunction the inventory function
    */
-  public void setInventoryFunction(BiFunction<BukkitGUIDisplay, UUID, Inventory> inventoryFunction) {
+  public void setInventoryFunction(Function<BukkitGUIDisplay, Inventory> inventoryFunction) {
     this.inventoryFunction = inventoryFunction;
   }
 

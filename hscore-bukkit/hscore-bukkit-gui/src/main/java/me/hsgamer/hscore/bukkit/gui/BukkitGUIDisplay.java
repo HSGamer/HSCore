@@ -33,7 +33,7 @@ public class BukkitGUIDisplay extends InventoryGUIDisplay<BukkitGUIHolder> imple
 
   @Override
   protected void initInventory() {
-    this.inventory = holder.getInventoryFunction().apply(this, uuid);
+    this.inventory = holder.getInventoryFunction().apply(this);
   }
 
   @Override
