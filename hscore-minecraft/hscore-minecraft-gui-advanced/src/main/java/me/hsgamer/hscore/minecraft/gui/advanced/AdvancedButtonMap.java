@@ -80,6 +80,10 @@ public class AdvancedButtonMap implements ButtonMap {
       if (!mask.canView(uuid)) continue;
       Map<Integer, Button> buttons = mask.generateButtons(uuid, size);
       buttons.forEach((slot, button) -> {
+        if (slot < 0 || slot >= size) {
+          return;
+        }
+
         Item item = button.getItem(uuid);
         if (item == null && !button.forceSetAction(uuid)) {
           return;
