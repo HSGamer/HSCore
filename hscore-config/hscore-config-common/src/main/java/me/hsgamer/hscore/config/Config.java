@@ -104,7 +104,11 @@ public interface Config {
    * @param path the path
    */
   default void remove(PathString path) {
-    set(path, null);
+    if (path.isRoot()) {
+      clear();
+    } else {
+      set(path, null);
+    }
   }
 
   /**
