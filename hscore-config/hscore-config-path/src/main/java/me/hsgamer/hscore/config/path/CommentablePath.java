@@ -20,20 +20,24 @@ public class CommentablePath<T> implements ConfigPath<T> {
   /**
    * Create a config path
    *
-   * @param originalPath    the original config path
-   * @param defaultComments the default comments
+   * @param originalPath  the original config path
+   * @param blockComments the {@link CommentType#BLOCK} comments
+   * @param sideComments  the {@link CommentType#SIDE} comments
    */
-  public CommentablePath(@NotNull final ConfigPath<T> originalPath, @NotNull final String... defaultComments) {
+  public CommentablePath(@NotNull final ConfigPath<T> originalPath, @NotNull final List<String> blockComments, @NotNull final List<String> sideComments) {
     this.originalPath = originalPath;
+    defaultCommentMap.put(CommentType.BLOCK, blockComments);
+    defaultCommentMap.put(CommentType.SIDE, sideComments);
+  }
 
-    if (defaultComments.length > 0) {
-      defaultCommentMap.put(CommentType.BLOCK, Collections.singletonList(defaultComments[0]));
-    }
-
-    if (defaultComments.length > 1) {
-      String[] sideComments = Arrays.copyOfRange(defaultComments, 1, defaultComments.length);
-      defaultCommentMap.put(CommentType.SIDE, Arrays.asList(sideComments));
-    }
+  /**
+   * Create a config path
+   *
+   * @param originalPath  the original config path
+   * @param blockComments the {@link CommentType#BLOCK} comments
+   */
+  public CommentablePath(@NotNull final ConfigPath<T> originalPath, @NotNull final String... blockComments) {
+    this(originalPath, Arrays.asList(blockComments), Collections.emptyList());
   }
 
   @Override

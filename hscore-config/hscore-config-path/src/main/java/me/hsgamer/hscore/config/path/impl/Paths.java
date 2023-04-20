@@ -1,10 +1,13 @@
 package me.hsgamer.hscore.config.path.impl;
 
+import me.hsgamer.hscore.config.CommentType;
 import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.CommentablePath;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.StickyConfigPath;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Utility to easily create {@link ConfigPath}
@@ -17,14 +20,28 @@ public final class Paths {
   /**
    * Create a commentable path
    *
-   * @param path     the path to the value
-   * @param comments the comment to create
-   * @param <T>      path's value type
+   * @param path          the path to the value
+   * @param blockComments the {@link CommentType#BLOCK} comments
+   * @param sideComments  the {@link CommentType#SIDE} comments
+   * @param <T>           path's value type
    *
    * @return the commentable path
    */
-  public static <T> CommentablePath<T> commented(@NotNull ConfigPath<T> path, @NotNull String... comments) {
-    return new CommentablePath<>(path, comments);
+  public static <T> CommentablePath<T> commented(@NotNull ConfigPath<T> path, @NotNull List<String> blockComments, @NotNull List<String> sideComments) {
+    return new CommentablePath<>(path, blockComments, sideComments);
+  }
+
+  /**
+   * Create a commentable path
+   *
+   * @param path          the path to the value
+   * @param blockComments the {@link CommentType#BLOCK} comments
+   * @param <T>           path's value type
+   *
+   * @return the commentable path
+   */
+  public static <T> CommentablePath<T> commented(@NotNull ConfigPath<T> path, @NotNull String... blockComments) {
+    return new CommentablePath<>(path, blockComments);
   }
 
   /**
