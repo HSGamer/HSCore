@@ -24,7 +24,7 @@ public interface Scheduler {
    * @return the scheduler
    */
   static Scheduler current() {
-    return SchedulerPool.plugin(JavaPlugin.getProvidingPlugin(Scheduler.class));
+    return plugin(JavaPlugin.getProvidingPlugin(Scheduler.class));
   }
 
   /**
