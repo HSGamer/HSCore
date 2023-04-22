@@ -7,53 +7,15 @@ import me.hsgamer.hscore.minecraft.gui.event.OpenEvent;
 import me.hsgamer.hscore.ui.BaseHolder;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
-import java.util.function.Predicate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * The base {@link me.hsgamer.hscore.ui.Holder} for UI in Minecraft
  */
 public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
-  private boolean removeDisplayOnClose = true;
-  private @NotNull Predicate<UUID> closeFilter = uuid -> true;
   private @NotNull ButtonMap buttonMap = (uuid, size) -> Collections.emptyMap();
-
-  /**
-   * Check if the holder should remove the display on its close
-   *
-   * @return true if it should
-   */
-  public boolean isRemoveDisplayOnClose() {
-    return removeDisplayOnClose;
-  }
-
-  /**
-   * Set that the display should be removed on close event
-   *
-   * @param removeDisplayOnClose whether the display should be removed on close event
-   */
-  public void setRemoveDisplayOnClose(boolean removeDisplayOnClose) {
-    this.removeDisplayOnClose = removeDisplayOnClose;
-  }
-
-  /**
-   * Get the close filter
-   *
-   * @return the close filter
-   */
-  @NotNull
-  public Predicate<UUID> getCloseFilter() {
-    return closeFilter;
-  }
-
-  /**
-   * Set the close filter
-   *
-   * @param closeFilter the close filter
-   */
-  public void setCloseFilter(@NotNull final Predicate<UUID> closeFilter) {
-    this.closeFilter = closeFilter;
-  }
 
   /**
    * Get the button map
@@ -87,18 +49,8 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
 
     addEventConsumer(CloseEvent.class, this::onClose);
     addEventConsumer(CloseEvent.class, event -> {
-      UUID uuid = event.getViewerID();
-
-      Optional<D> optionalDisplay = getDisplay(uuid);
-      if (!optionalDisplay.isPresent()) {
-        return;
-      }
-      D display = optionalDisplay.get();
-
-      if (!closeFilter.test(uuid)) {
-        display.scheduleReopen(event);
-      } else if (removeDisplayOnClose) {
-        removeDisplay(uuid);
+      if (event.isRemoveDisplay()) {
+        removeDisplay(event.getViewerID());
       }
     });
     buttonMap.init();

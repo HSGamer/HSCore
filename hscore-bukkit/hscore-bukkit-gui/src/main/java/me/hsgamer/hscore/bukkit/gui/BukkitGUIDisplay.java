@@ -1,9 +1,7 @@
 package me.hsgamer.hscore.bukkit.gui;
 
-import me.hsgamer.hscore.bukkit.folia.FoliaChecker;
 import me.hsgamer.hscore.bukkit.gui.object.BukkitItem;
 import me.hsgamer.hscore.minecraft.gui.InventoryGUIDisplay;
-import me.hsgamer.hscore.minecraft.gui.event.CloseEvent;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -54,18 +52,6 @@ public class BukkitGUIDisplay extends InventoryGUIDisplay<BukkitGUIHolder> imple
       inventory.setItem(slot, new ItemStack(Material.AIR));
     } else if (item instanceof BukkitItem) {
       inventory.setItem(slot, ((BukkitItem) item).getItemStack());
-    }
-  }
-
-  @Override
-  public void scheduleReopen(CloseEvent event) {
-    Player player = Bukkit.getPlayer(uuid);
-    if (player != null) {
-      if (FoliaChecker.isFolia()) {
-        player.getScheduler().run(holder.getPlugin(), s -> player.openInventory(inventory), null);
-      } else {
-        Bukkit.getScheduler().runTask(holder.getPlugin(), () -> player.openInventory(inventory));
-      }
     }
   }
 

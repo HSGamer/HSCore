@@ -1,7 +1,6 @@
 package me.hsgamer.hscore.minecraft.gui;
 
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
-import me.hsgamer.hscore.minecraft.gui.event.CloseEvent;
 import me.hsgamer.hscore.ui.BaseDisplay;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,13 +22,6 @@ public abstract class GUIDisplay<H extends GUIHolder<?>> extends BaseDisplay<H> 
   protected GUIDisplay(@NotNull final UUID uuid, @NotNull final H holder) {
     super(uuid, holder);
   }
-
-  /**
-   * Schedule a task to re-open the display
-   *
-   * @param event the close event
-   */
-  public abstract void scheduleReopen(CloseEvent event);
 
   /**
    * Open the display

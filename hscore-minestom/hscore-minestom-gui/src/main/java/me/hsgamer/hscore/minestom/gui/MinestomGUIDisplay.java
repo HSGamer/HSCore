@@ -1,9 +1,7 @@
 package me.hsgamer.hscore.minestom.gui;
 
 import me.hsgamer.hscore.minecraft.gui.InventoryGUIDisplay;
-import me.hsgamer.hscore.minecraft.gui.event.CloseEvent;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
-import me.hsgamer.hscore.minestom.gui.event.MinestomCloseEvent;
 import me.hsgamer.hscore.minestom.gui.inventory.DelegatingInventory;
 import me.hsgamer.hscore.minestom.gui.object.MinestomItem;
 import net.minestom.server.MinecraftServer;
@@ -54,13 +52,6 @@ public class MinestomGUIDisplay extends InventoryGUIDisplay<MinestomGUIHolder> {
       inventory.setItemStack(slot, ItemStack.AIR);
     } else if (item instanceof MinestomItem minestomItem) {
       inventory.setItemStack(slot, minestomItem.itemStack());
-    }
-  }
-
-  @Override
-  public void scheduleReopen(CloseEvent event) {
-    if (event instanceof MinestomCloseEvent minestomCloseEvent) {
-      minestomCloseEvent.getEvent().setNewInventory(inventory);
     }
   }
 
