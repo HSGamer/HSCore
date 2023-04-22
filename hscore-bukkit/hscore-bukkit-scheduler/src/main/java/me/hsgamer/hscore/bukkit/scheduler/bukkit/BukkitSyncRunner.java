@@ -4,7 +4,6 @@ import me.hsgamer.hscore.bukkit.scheduler.Runner;
 import me.hsgamer.hscore.bukkit.scheduler.Task;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.plugin.Plugin;
 
 import java.util.function.BooleanSupplier;
 
@@ -12,52 +11,54 @@ import static me.hsgamer.hscore.bukkit.scheduler.bukkit.BukkitScheduler.wrapRunn
 import static me.hsgamer.hscore.bukkit.scheduler.bukkit.BukkitScheduler.wrapTask;
 
 class BukkitSyncRunner implements Runner {
-  BukkitSyncRunner() {
-    // EMPTY
+  private final BukkitScheduler scheduler;
+
+  BukkitSyncRunner(BukkitScheduler scheduler) {
+    this.scheduler = scheduler;
   }
 
   @Override
-  public Task runTask(Plugin plugin, Runnable runnable) {
-    return wrapTask(wrapRunnable(runnable).runTask(plugin), false);
+  public Task runTask(Runnable runnable) {
+    return wrapTask(wrapRunnable(runnable).runTask(scheduler.getPlugin()), false);
   }
 
   @Override
-  public Task runTaskLater(Plugin plugin, Runnable runnable, long delay) {
-    return wrapTask(wrapRunnable(runnable).runTaskLater(plugin, delay), false);
+  public Task runTaskLater(Runnable runnable, long delay) {
+    return wrapTask(wrapRunnable(runnable).runTaskLater(scheduler.getPlugin(), delay), false);
   }
 
   @Override
-  public Task runTaskTimer(Plugin plugin, BooleanSupplier runnable, long delay, long period) {
-    return wrapTask(wrapRunnable(runnable).runTaskTimer(plugin, delay, period), false);
+  public Task runTaskTimer(BooleanSupplier runnable, long delay, long period) {
+    return wrapTask(wrapRunnable(runnable).runTaskTimer(scheduler.getPlugin(), delay, period), true);
   }
 
   @Override
-  public Task runEntityTask(Plugin plugin, Entity entity, Runnable runnable, Runnable retired) {
-    return wrapTask(wrapRunnable(entity, runnable, retired).runTask(plugin), false);
+  public Task runEntityTask(Entity entity, Runnable runnable, Runnable retired) {
+    return wrapTask(wrapRunnable(entity, runnable, retired).runTask(scheduler.getPlugin()), false);
   }
 
   @Override
-  public Task runEntityTaskLater(Plugin plugin, Entity entity, Runnable runnable, Runnable retired, long delay) {
-    return wrapTask(wrapRunnable(entity, runnable, retired).runTaskLater(plugin, delay), false);
+  public Task runEntityTaskLater(Entity entity, Runnable runnable, Runnable retired, long delay) {
+    return wrapTask(wrapRunnable(entity, runnable, retired).runTaskLater(scheduler.getPlugin(), delay), false);
   }
 
   @Override
-  public Task runEntityTaskTimer(Plugin plugin, Entity entity, BooleanSupplier runnable, Runnable retired, long delay, long period) {
-    return wrapTask(wrapRunnable(entity, runnable, retired).runTaskTimer(plugin, delay, period), false);
+  public Task runEntityTaskTimer(Entity entity, BooleanSupplier runnable, Runnable retired, long delay, long period) {
+    return wrapTask(wrapRunnable(entity, runnable, retired).runTaskTimer(scheduler.getPlugin(), delay, period), true);
   }
 
   @Override
-  public Task runLocationTask(Plugin plugin, Location location, Runnable runnable) {
-    return wrapTask(wrapRunnable(runnable).runTask(plugin), false);
+  public Task runLocationTask(Location location, Runnable runnable) {
+    return wrapTask(wrapRunnable(runnable).runTask(scheduler.getPlugin()), false);
   }
 
   @Override
-  public Task runLocationTaskLater(Plugin plugin, Location location, Runnable runnable, long delay) {
-    return wrapTask(wrapRunnable(runnable).runTaskLater(plugin, delay), false);
+  public Task runLocationTaskLater(Location location, Runnable runnable, long delay) {
+    return wrapTask(wrapRunnable(runnable).runTaskLater(scheduler.getPlugin(), delay), false);
   }
 
   @Override
-  public Task runLocationTaskTimer(Plugin plugin, Location location, BooleanSupplier runnable, long delay, long period) {
-    return wrapTask(wrapRunnable(runnable).runTaskTimer(plugin, delay, period), false);
+  public Task runLocationTaskTimer(Location location, BooleanSupplier runnable, long delay, long period) {
+    return wrapTask(wrapRunnable(runnable).runTaskTimer(scheduler.getPlugin(), delay, period), true);
   }
 }

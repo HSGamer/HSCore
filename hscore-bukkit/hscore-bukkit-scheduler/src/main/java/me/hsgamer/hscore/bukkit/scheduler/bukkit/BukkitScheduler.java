@@ -16,38 +16,14 @@ import java.util.function.BooleanSupplier;
  * The Bukkit implementation of {@link Scheduler}
  */
 public class BukkitScheduler implements Scheduler {
-  private final BukkitSyncRunner syncRunner = new BukkitSyncRunner();
-  private final BukkitAsyncRunner asyncRunner = new BukkitAsyncRunner();
+  private final BukkitSyncRunner syncRunner;
+  private final BukkitAsyncRunner asyncRunner;
+  private final Plugin plugin;
 
-  static Task wrapTask(BukkitTask bukkitTask, boolean repeating) {
-    return new Task() {
-      boolean cancelled = false;
-
-      @Override
-      public boolean isCancelled() {
-        try {
-          return bukkitTask.isCancelled();
-        } catch (Throwable throwable) {
-          return cancelled; // For old versions that don't have isCancelled()
-        }
-      }
-
-      @Override
-      public void cancel() {
-        cancelled = true;
-        bukkitTask.cancel();
-      }
-
-      @Override
-      public boolean isAsync() {
-        return !bukkitTask.isSync();
-      }
-
-      @Override
-      public boolean isRepeating() {
-        return repeating;
-      }
-    };
+  public BukkitScheduler(Plugin plugin) {
+    this.plugin = plugin;
+    syncRunner = new BukkitSyncRunner(this);
+    asyncRunner = new BukkitAsyncRunner(this);
   }
 
   static BukkitRunnable wrapRunnable(Runnable runnable) {
@@ -105,8 +81,48 @@ public class BukkitScheduler implements Scheduler {
     }, retired);
   }
 
+  static Task wrapTask(BukkitTask bukkitTask, boolean repeating) {
+    return new Task() {
+      boolean cancelled = false;
+
+      @Override
+      public boolean isCancelled() {
+        try {
+          return bukkitTask.isCancelled();
+        } catch (Throwable throwable) {
+          return cancelled; // For old versions that don't have isCancelled()
+        }
+      }
+
+      @Override
+      public void cancel() {
+        cancelled = true;
+        bukkitTask.cancel();
+      }
+
+      @Override
+      public boolean isAsync() {
+        return !bukkitTask.isSync();
+      }
+
+      @Override
+      public boolean isRepeating() {
+        return repeating;
+      }
+
+      @Override
+      public Plugin getPlugin() {
+        return bukkitTask.getOwner();
+      }
+    };
+  }
+
+  Plugin getPlugin() {
+    return plugin;
+  }
+
   @Override
-  public void cancelAllTasks(Plugin plugin) {
+  public void cancelAllTasks() {
     Bukkit.getScheduler().cancelTasks(plugin);
   }
 

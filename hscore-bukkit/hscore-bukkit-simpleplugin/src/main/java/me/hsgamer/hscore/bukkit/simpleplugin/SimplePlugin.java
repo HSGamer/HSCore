@@ -52,7 +52,7 @@ public class SimplePlugin extends JavaPlugin {
     disableFunctions.forEach(Runnable::run);
     disableFunctions.clear();
 
-    Scheduler.CURRENT.cancelAllTasks(this);
+    Scheduler.plugin(this).cancelAllTasks();
     getServer().getServicesManager().unregisterAll(this);
     HandlerList.unregisterAll(this);
 

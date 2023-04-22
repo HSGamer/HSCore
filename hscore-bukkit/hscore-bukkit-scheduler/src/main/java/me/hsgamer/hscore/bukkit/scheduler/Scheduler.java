@@ -1,34 +1,36 @@
 package me.hsgamer.hscore.bukkit.scheduler;
 
-import me.hsgamer.hscore.bukkit.folia.FoliaChecker;
-import me.hsgamer.hscore.bukkit.scheduler.bukkit.BukkitScheduler;
-import me.hsgamer.hscore.bukkit.scheduler.folia.FoliaScheduler;
 import org.bukkit.plugin.Plugin;
-
-import java.util.function.Supplier;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * The scheduler
  */
 public interface Scheduler {
   /**
-   * The current {@link Scheduler}.
-   * Use this to get the {@link Scheduler} instead of {@link org.bukkit.Bukkit#getScheduler()}.
-   */
-  Scheduler CURRENT = ((Supplier<Scheduler>) () -> {
-    if (FoliaChecker.isFolia()) {
-      return new FoliaScheduler();
-    } else {
-      return new BukkitScheduler();
-    }
-  }).get();
-
-  /**
-   * Cancel all tasks of the plugin
+   * Get the {@link Scheduler} for the given {@link Plugin}
    *
    * @param plugin the plugin
+   *
+   * @return the scheduler
    */
-  void cancelAllTasks(Plugin plugin);
+  static Scheduler plugin(Plugin plugin) {
+    return SchedulerPool.plugin(plugin);
+  }
+
+  /**
+   * Get the {@link Scheduler} for the given {@link JavaPlugin} that provides the class
+   *
+   * @return the scheduler
+   */
+  static Scheduler current() {
+    return SchedulerPool.plugin(JavaPlugin.getProvidingPlugin(Scheduler.class));
+  }
+
+  /**
+   * Cancel all tasks
+   */
+  void cancelAllTasks();
 
   /**
    * Get the {@link Runner} for asynchronous tasks

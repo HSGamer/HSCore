@@ -9,7 +9,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BooleanSupplier;
@@ -19,9 +18,16 @@ import java.util.function.Consumer;
  * The Folia implementation of {@link Scheduler}
  */
 public class FoliaScheduler implements Scheduler {
-  private final Map<Plugin, Set<ScheduledTask>> pluginTaskMap = new ConcurrentHashMap<>();
-  private final FoliaSyncRunner syncRunner = new FoliaSyncRunner(this);
-  private final FoliaAsyncRunner asyncRunner = new FoliaAsyncRunner(this);
+  private final Set<ScheduledTask> tasks = ConcurrentHashMap.newKeySet();
+  private final FoliaSyncRunner syncRunner;
+  private final FoliaAsyncRunner asyncRunner;
+  private final Plugin plugin;
+
+  public FoliaScheduler(Plugin plugin) {
+    this.plugin = plugin;
+    this.syncRunner = new FoliaSyncRunner(this);
+    this.asyncRunner = new FoliaAsyncRunner(this);
+  }
 
   static long normalizeTick(long tick) {
     return Math.max(1, tick);
@@ -64,6 +70,11 @@ public class FoliaScheduler implements Scheduler {
       public boolean isRepeating() {
         return scheduledTask.isRepeatingTask();
       }
+
+      @Override
+      public Plugin getPlugin() {
+        return scheduledTask.getOwningPlugin();
+      }
     };
   }
 
@@ -79,21 +90,22 @@ public class FoliaScheduler implements Scheduler {
     return entity.isValid();
   }
 
-  void addTask(Plugin plugin, ScheduledTask scheduledTask) {
-    pluginTaskMap.computeIfAbsent(plugin, p -> ConcurrentHashMap.newKeySet()).add(scheduledTask);
+  Plugin getPlugin() {
+    return plugin;
+  }
+
+  void addTask(ScheduledTask scheduledTask) {
+    tasks.add(scheduledTask);
   }
 
   @Override
-  public void cancelAllTasks(Plugin plugin) {
-    Set<ScheduledTask> scheduledTasks = pluginTaskMap.remove(plugin);
-    if (scheduledTasks != null) {
-      scheduledTasks.forEach(scheduledTask -> {
-        if (!scheduledTask.isCancelled()) {
-          scheduledTask.cancel();
-        }
-      });
-      scheduledTasks.clear();
-    }
+  public void cancelAllTasks() {
+    tasks.forEach(scheduledTask -> {
+      if (!scheduledTask.isCancelled()) {
+        scheduledTask.cancel();
+      }
+    });
+    tasks.clear();
 
     Bukkit.getAsyncScheduler().cancelTasks(plugin);
     Bukkit.getGlobalRegionScheduler().cancelTasks(plugin);

@@ -10,6 +10,6 @@ public class BukkitPostEnableListener extends PostEnableListener {
 
   @Override
   public void setup() {
-    Scheduler.CURRENT.sync().runTask(plugin, this::executePostEnableFunctions);
+    Scheduler.plugin(plugin).sync().runTask(this::executePostEnableFunctions);
   }
 }
