@@ -19,12 +19,35 @@ public interface Scheduler {
   }
 
   /**
-   * Get the {@link Scheduler} for the given {@link JavaPlugin} that provides the class
+   * Get the {@link Scheduler} for the given {@link JavaPlugin}
+   *
+   * @param clazz the plugin class
+   * @param <T>   the plugin type
+   *
+   * @return the scheduler
+   */
+  static <T extends JavaPlugin> Scheduler plugin(Class<T> clazz) {
+    return plugin(JavaPlugin.getPlugin(clazz));
+  }
+
+  /**
+   * Get the {@link Scheduler} for the {@link JavaPlugin} that provides the class
+   *
+   * @param clazz the class
+   *
+   * @return the scheduler
+   */
+  static Scheduler providingPlugin(Class<?> clazz) {
+    return plugin(JavaPlugin.getProvidingPlugin(clazz));
+  }
+
+  /**
+   * Get the {@link Scheduler} for the given {@link JavaPlugin} that provides the {@link Scheduler} class
    *
    * @return the scheduler
    */
   static Scheduler current() {
-    return plugin(JavaPlugin.getProvidingPlugin(Scheduler.class));
+    return providingPlugin(Scheduler.class);
   }
 
   /**
