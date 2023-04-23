@@ -7,6 +7,7 @@ import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Objects;
@@ -39,7 +40,7 @@ public class NBTModifier implements ItemModifier {
 
   @SuppressWarnings("deprecation")
   @Override
-  public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public @NotNull ItemStack modify(@NotNull ItemStack original, UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     if (Validate.isNullOrEmpty(nbtData)) {
       return original;
     }
@@ -71,7 +72,7 @@ public class NBTModifier implements ItemModifier {
   }
 
   @Override
-  public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public boolean compareWithItemStack(@NotNull ItemStack itemStack, UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     return false;
   }
 }

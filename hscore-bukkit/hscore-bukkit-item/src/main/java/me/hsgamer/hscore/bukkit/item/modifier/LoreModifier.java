@@ -5,6 +5,8 @@ import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -26,7 +28,7 @@ public class LoreModifier extends ItemMetaModifier {
   }
 
   @Override
-  public ItemMeta modifyMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     meta.setLore(getReplacedLore(uuid, stringReplacerMap));
     return meta;
   }
@@ -41,7 +43,7 @@ public class LoreModifier extends ItemMetaModifier {
   }
 
   @Override
-  public boolean compareWithItemMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public boolean compareWithItemMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     return (!meta.hasLore() && this.lore.isEmpty()) || getReplacedLore(uuid, stringReplacerMap).equals(meta.getLore());
   }
 

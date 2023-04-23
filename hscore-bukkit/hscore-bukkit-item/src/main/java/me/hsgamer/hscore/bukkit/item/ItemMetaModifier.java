@@ -3,6 +3,8 @@ package me.hsgamer.hscore.bukkit.item;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.UUID;
@@ -20,7 +22,8 @@ public abstract class ItemMetaModifier implements ItemModifier {
    *
    * @return the modified item meta
    */
-  public abstract ItemMeta modifyMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap);
+  @NotNull
+  public abstract ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap);
 
   /**
    * Load the modifier from the item meta
@@ -42,10 +45,10 @@ public abstract class ItemMetaModifier implements ItemModifier {
    *
    * @see #compareWithItemStack(ItemStack, UUID, Map)
    */
-  public abstract boolean compareWithItemMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap);
+  public abstract boolean compareWithItemMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap);
 
   @Override
-  public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public @NotNull ItemStack modify(@NotNull ItemStack original, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     ItemMeta itemMeta = original.getItemMeta();
     if (itemMeta != null) {
       original.setItemMeta(this.modifyMeta(itemMeta, uuid, stringReplacerMap));
@@ -62,7 +65,17 @@ public abstract class ItemMetaModifier implements ItemModifier {
   }
 
   @Override
-  public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
-    return itemStack.hasItemMeta() && this.compareWithItemMeta(itemStack.getItemMeta(), uuid, stringReplacerMap);
+  public boolean compareWithItemStack(@NotNull ItemStack itemStack, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
+    ItemMeta itemMeta;
+    try {
+      itemMeta = itemStack.getItemMeta();
+    } catch (Exception e) {
+      return false;
+    }
+
+    if (itemMeta == null) {
+      return false;
+    }
+    return this.compareWithItemMeta(itemMeta, uuid, stringReplacerMap);
   }
 }

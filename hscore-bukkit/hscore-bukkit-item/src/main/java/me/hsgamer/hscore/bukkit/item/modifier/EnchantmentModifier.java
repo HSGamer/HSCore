@@ -8,6 +8,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -65,7 +67,7 @@ public class EnchantmentModifier extends ItemMetaModifier {
   }
 
   @Override
-  public ItemMeta modifyMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     Map<Enchantment, Integer> map = getParsed(uuid, stringReplacerMap.values());
     if (map instanceof EnchantmentStorageMeta) {
       map.forEach((enchant, level) -> ((EnchantmentStorageMeta) meta).addStoredEnchant(enchant, level, true));
@@ -94,7 +96,7 @@ public class EnchantmentModifier extends ItemMetaModifier {
   }
 
   @Override
-  public boolean compareWithItemMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public boolean compareWithItemMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     Map<Enchantment, Integer> list1 = getParsed(uuid, stringReplacerMap.values());
     Map<Enchantment, Integer> list2 = meta.getEnchants();
     if (list1.size() != list2.size()) {

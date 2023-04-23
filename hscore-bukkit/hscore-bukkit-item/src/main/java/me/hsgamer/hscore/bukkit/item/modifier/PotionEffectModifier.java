@@ -9,6 +9,8 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -63,7 +65,7 @@ public class PotionEffectModifier extends ItemMetaModifier {
   }
 
   @Override
-  public ItemMeta modifyMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     if (meta instanceof PotionMeta) {
       PotionMeta potionMeta = (PotionMeta) meta;
       getParsed(uuid, stringReplacerMap.values()).forEach(potionEffect -> potionMeta.addCustomEffect(potionEffect, true));
@@ -85,7 +87,7 @@ public class PotionEffectModifier extends ItemMetaModifier {
   }
 
   @Override
-  public boolean compareWithItemMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public boolean compareWithItemMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     if (!(meta instanceof PotionMeta)) {
       return false;
     }

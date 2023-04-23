@@ -7,6 +7,7 @@ import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -87,7 +88,7 @@ public class MaterialModifier implements ItemModifier {
   }
 
   @Override
-  public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public @NotNull ItemStack modify(@NotNull ItemStack original, UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     for (String materialString : materialList) {
       if (setMaterial(original, StringReplacer.replace(materialString, uuid, stringReplacerMap.values()))) {
         break;
@@ -113,7 +114,7 @@ public class MaterialModifier implements ItemModifier {
   }
 
   @Override
-  public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public boolean compareWithItemStack(@NotNull ItemStack itemStack, UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     if (materialList.isEmpty()) {
       return true;
     }

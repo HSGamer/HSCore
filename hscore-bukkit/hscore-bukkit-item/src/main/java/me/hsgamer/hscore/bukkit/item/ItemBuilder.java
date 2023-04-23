@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -106,10 +108,10 @@ public class ItemBuilder {
    *
    * @return the item
    */
-  public ItemStack build(UUID uuid) {
+  public ItemStack build(@Nullable UUID uuid) {
     ItemStack itemStack = defaultItemStack == null ? new ItemStack(Material.STONE) : defaultItemStack.clone();
     for (ItemModifier modifier : itemModifiers) {
-      itemStack = modifier.modify(itemStack, uuid, this);
+      itemStack = modifier.modify(itemStack, uuid, getStringReplacerMap());
     }
     return itemStack;
   }
@@ -121,7 +123,7 @@ public class ItemBuilder {
    *
    * @return the item
    */
-  public ItemStack build(Player player) {
+  public ItemStack build(@NotNull Player player) {
     return build(player.getUniqueId());
   }
 
@@ -131,7 +133,7 @@ public class ItemBuilder {
    * @return the item
    */
   public ItemStack build() {
-    return build(UUID.randomUUID());
+    return build((UUID) null);
   }
 
   /**

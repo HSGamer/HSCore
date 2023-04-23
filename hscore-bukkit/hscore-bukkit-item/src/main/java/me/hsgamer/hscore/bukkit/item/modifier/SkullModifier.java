@@ -13,6 +13,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -119,7 +121,7 @@ public class SkullModifier extends ItemMetaModifier {
   }
 
   @Override
-  public ItemMeta modifyMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     if (!(meta instanceof SkullMeta)) {
       return meta;
     }
@@ -137,7 +139,7 @@ public class SkullModifier extends ItemMetaModifier {
   }
 
   @Override
-  public boolean compareWithItemMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public boolean compareWithItemMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     if (!(meta instanceof SkullMeta)) {
       return false;
     }

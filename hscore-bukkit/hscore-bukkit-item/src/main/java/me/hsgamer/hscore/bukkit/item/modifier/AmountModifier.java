@@ -5,6 +5,7 @@ import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.UUID;
@@ -21,7 +22,7 @@ public class AmountModifier implements ItemModifier {
   }
 
   @Override
-  public ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public @NotNull ItemStack modify(@NotNull ItemStack original, UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     Validate
       .getNumber(StringReplacer.replace(amount, uuid, stringReplacerMap.values()))
       .ifPresent(bigDecimal -> original.setAmount(bigDecimal.intValue()));
@@ -45,7 +46,7 @@ public class AmountModifier implements ItemModifier {
   }
 
   @Override
-  public boolean compareWithItemStack(ItemStack itemStack, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public boolean compareWithItemStack(@NotNull ItemStack itemStack, UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     return Validate.getNumber(StringReplacer.replace(amount, uuid, stringReplacerMap.values()))
       .map(bigDecimal -> bigDecimal.intValue() >= itemStack.getAmount())
       .orElse(false);

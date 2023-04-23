@@ -2,6 +2,8 @@ package me.hsgamer.hscore.bukkit.item;
 
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Map;
@@ -27,7 +29,8 @@ public interface ItemModifier {
    *
    * @return the modified item
    */
-  ItemStack modify(ItemStack original, UUID uuid, Map<String, StringReplacer> stringReplacerMap);
+  @NotNull
+  ItemStack modify(@NotNull ItemStack original, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap);
 
   /**
    * Serialize the modifier to an object
@@ -63,7 +66,7 @@ public interface ItemModifier {
    *
    * @return true if it matches, otherwise false
    */
-  boolean compareWithItemStack(ItemStack itemStack, UUID uuid, Map<String, StringReplacer> stringReplacerMap);
+  boolean compareWithItemStack(@NotNull ItemStack itemStack, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap);
 
   /**
    * Compare the modifier of an item
@@ -73,7 +76,7 @@ public interface ItemModifier {
    *
    * @return true if it matches, otherwise false
    */
-  default boolean compareWithItemStack(ItemStack itemStack, UUID uuid) {
+  default boolean compareWithItemStack(@NotNull ItemStack itemStack, @Nullable UUID uuid) {
     return compareWithItemStack(itemStack, uuid, Collections.emptyMap());
   }
 
@@ -84,8 +87,8 @@ public interface ItemModifier {
    *
    * @return true if it matches, otherwise false
    */
-  default boolean compareWithItemStack(ItemStack itemStack) {
-    return compareWithItemStack(itemStack, UUID.randomUUID(), Collections.emptyMap());
+  default boolean compareWithItemStack(@NotNull ItemStack itemStack) {
+    return compareWithItemStack(itemStack, null, Collections.emptyMap());
   }
 
   /**
@@ -96,20 +99,20 @@ public interface ItemModifier {
    *
    * @return the modified item
    */
-  default ItemStack modify(ItemStack original, UUID uuid) {
+  @NotNull
+  default ItemStack modify(@NotNull ItemStack original, @Nullable UUID uuid) {
     return modify(original, uuid, Collections.emptyMap());
   }
 
   /**
    * Modify the item
    *
-   * @param original    the original item
-   * @param uuid        the unique id
-   * @param itemBuilder the item builder
+   * @param original the original item
    *
    * @return the modified item
    */
-  default ItemStack modify(ItemStack original, UUID uuid, ItemBuilder itemBuilder) {
-    return modify(original, uuid, itemBuilder.getStringReplacerMap());
+  @NotNull
+  default ItemStack modify(@NotNull ItemStack original) {
+    return modify(original, null);
   }
 }

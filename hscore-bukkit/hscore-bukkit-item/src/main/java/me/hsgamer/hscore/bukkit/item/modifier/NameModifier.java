@@ -4,6 +4,8 @@ import me.hsgamer.hscore.bukkit.item.ItemMetaModifier;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.UUID;
@@ -33,7 +35,7 @@ public class NameModifier extends ItemMetaModifier {
   }
 
   @Override
-  public ItemMeta modifyMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     meta.setDisplayName(StringReplacer.replace(name, uuid, stringReplacerMap.values()));
     return meta;
   }
@@ -48,9 +50,12 @@ public class NameModifier extends ItemMetaModifier {
   }
 
   @Override
-  public boolean compareWithItemMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
-    String replaced = StringReplacer.replace(this.name, uuid, stringReplacerMap.values());
-    return (!meta.hasDisplayName() && replaced == null) || replaced.equals(meta.getDisplayName());
+  public boolean compareWithItemMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
+    if (!meta.hasDisplayName() && this.name == null) {
+      return true;
+    }
+    String replaced = this.name == null ? "" : StringReplacer.replace(this.name, uuid, stringReplacerMap.values());
+    return replaced.equals(meta.getDisplayName());
   }
 
   @Override

@@ -5,6 +5,8 @@ import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,7 +40,7 @@ public class ItemFlagModifier extends ItemMetaModifier {
   }
 
   @Override
-  public ItemMeta modifyMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     for (ItemFlag flag : getParsed(uuid, stringReplacerMap.values())) {
       meta.addItemFlags(flag);
     }
@@ -52,7 +54,7 @@ public class ItemFlagModifier extends ItemMetaModifier {
   }
 
   @Override
-  public boolean compareWithItemMeta(ItemMeta meta, UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  public boolean compareWithItemMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     Set<ItemFlag> list1 = getParsed(uuid, stringReplacerMap.values());
     Set<ItemFlag> list2 = meta.getItemFlags();
     return list1.size() == list2.size() && list1.containsAll(list2);
