@@ -39,8 +39,9 @@ public class AmountModifier implements ItemModifier {
   }
 
   @Override
-  public void loadFromItemStack(ItemStack itemStack) {
+  public boolean loadFromItemStack(ItemStack itemStack) {
     this.amount = String.valueOf(itemStack.getAmount());
+    return true;
   }
 
   @Override

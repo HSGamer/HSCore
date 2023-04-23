@@ -32,13 +32,12 @@ public class LoreModifier extends ItemMetaModifier {
   }
 
   @Override
-  public void loadFromItemMeta(ItemMeta meta) {
-    setLore(meta.getLore());
-  }
-
-  @Override
-  public boolean canLoadFromItemMeta(ItemMeta meta) {
-    return meta.hasLore();
+  public boolean loadFromItemMeta(ItemMeta meta) {
+    if (meta.hasLore()) {
+      setLore(meta.getLore());
+      return true;
+    }
+    return false;
   }
 
   @Override

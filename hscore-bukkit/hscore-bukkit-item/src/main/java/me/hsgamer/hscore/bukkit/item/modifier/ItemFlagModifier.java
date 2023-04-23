@@ -46,12 +46,8 @@ public class ItemFlagModifier extends ItemMetaModifier {
   }
 
   @Override
-  public void loadFromItemMeta(ItemMeta meta) {
+  public boolean loadFromItemMeta(ItemMeta meta) {
     this.flagList = meta.getItemFlags().stream().map(ItemFlag::name).collect(Collectors.toList());
-  }
-
-  @Override
-  public boolean canLoadFromItemMeta(ItemMeta meta) {
     return true;
   }
 

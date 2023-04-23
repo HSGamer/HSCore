@@ -29,18 +29,7 @@ public abstract class ItemMetaModifier implements ItemModifier {
    *
    * @see #loadFromItemStack(ItemStack)
    */
-  public abstract void loadFromItemMeta(ItemMeta meta);
-
-  /**
-   * Check if a modifier can be loaded from the item meta
-   *
-   * @param meta the item meta
-   *
-   * @return true if it can
-   *
-   * @see #canLoadFromItemStack(ItemStack)
-   */
-  public abstract boolean canLoadFromItemMeta(ItemMeta meta);
+  public abstract boolean loadFromItemMeta(ItemMeta meta);
 
   /**
    * Compare the modifier of an item meta
@@ -65,15 +54,11 @@ public abstract class ItemMetaModifier implements ItemModifier {
   }
 
   @Override
-  public void loadFromItemStack(ItemStack itemStack) {
+  public boolean loadFromItemStack(ItemStack itemStack) {
     if (itemStack.hasItemMeta()) {
-      this.loadFromItemMeta(itemStack.getItemMeta());
+      return this.loadFromItemMeta(itemStack.getItemMeta());
     }
-  }
-
-  @Override
-  public boolean canLoadFromItemStack(ItemStack itemStack) {
-    return itemStack.hasItemMeta() && this.canLoadFromItemMeta(itemStack.getItemMeta());
+    return false;
   }
 
   @Override

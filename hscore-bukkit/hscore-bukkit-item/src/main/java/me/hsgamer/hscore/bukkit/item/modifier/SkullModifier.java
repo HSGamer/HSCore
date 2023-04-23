@@ -128,16 +128,12 @@ public class SkullModifier extends ItemMetaModifier {
   }
 
   @Override
-  public void loadFromItemMeta(ItemMeta meta) {
+  public boolean loadFromItemMeta(ItemMeta meta) {
     if (meta instanceof SkullMeta) {
-      SkullMeta skullMeta = (SkullMeta) meta;
-      skullString = getSkullValue(skullMeta);
+      skullString = getSkullValue((SkullMeta) meta);
+      return true;
     }
-  }
-
-  @Override
-  public boolean canLoadFromItemMeta(ItemMeta meta) {
-    return meta instanceof SkullMeta;
+    return false;
   }
 
   @Override

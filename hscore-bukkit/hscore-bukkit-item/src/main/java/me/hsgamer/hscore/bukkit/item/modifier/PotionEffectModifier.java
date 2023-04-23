@@ -73,16 +73,15 @@ public class PotionEffectModifier extends ItemMetaModifier {
   }
 
   @Override
-  public void loadFromItemMeta(ItemMeta meta) {
+  public boolean loadFromItemMeta(ItemMeta meta) {
+    if (!(meta instanceof PotionMeta)) {
+      return false;
+    }
     this.potionEffectList = ((PotionMeta) meta).getCustomEffects()
       .stream()
       .map(PotionEffectModifier::serializePotionEffect)
       .collect(Collectors.toList());
-  }
-
-  @Override
-  public boolean canLoadFromItemMeta(ItemMeta meta) {
-    return meta instanceof PotionMeta;
+    return true;
   }
 
   @Override

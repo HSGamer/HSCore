@@ -39,13 +39,12 @@ public class NameModifier extends ItemMetaModifier {
   }
 
   @Override
-  public void loadFromItemMeta(ItemMeta meta) {
-    this.name = meta.getDisplayName();
-  }
-
-  @Override
-  public boolean canLoadFromItemMeta(ItemMeta meta) {
-    return meta.hasDisplayName();
+  public boolean loadFromItemMeta(ItemMeta meta) {
+    if (meta.hasDisplayName()) {
+      this.name = meta.getDisplayName();
+      return true;
+    }
+    return false;
   }
 
   @Override

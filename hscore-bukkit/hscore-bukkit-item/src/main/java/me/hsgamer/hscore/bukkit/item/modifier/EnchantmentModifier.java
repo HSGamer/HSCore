@@ -76,16 +76,21 @@ public class EnchantmentModifier extends ItemMetaModifier {
   }
 
   @Override
-  public void loadFromItemMeta(ItemMeta meta) {
-    this.enchantmentList = meta.getEnchants().entrySet()
+  public boolean loadFromItemMeta(ItemMeta meta) {
+    Map<Enchantment, Integer> map;
+    if (meta instanceof EnchantmentStorageMeta) {
+      map = ((EnchantmentStorageMeta) meta).getStoredEnchants();
+    } else if (meta.hasEnchants()) {
+      map = meta.getEnchants();
+    } else {
+      return false;
+    }
+
+    this.enchantmentList = map.entrySet()
       .stream()
       .map(entry -> entry.getKey().getName() + ", " + entry.getValue())
       .collect(Collectors.toList());
-  }
-
-  @Override
-  public boolean canLoadFromItemMeta(ItemMeta meta) {
-    return meta.hasEnchants();
+    return true;
   }
 
   @Override

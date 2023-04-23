@@ -66,12 +66,7 @@ public class NBTModifier implements ItemModifier {
   }
 
   @Override
-  public void loadFromItemStack(ItemStack itemStack) {
-    // EMPTY
-  }
-
-  @Override
-  public boolean canLoadFromItemStack(ItemStack itemStack) {
+  public boolean loadFromItemStack(ItemStack itemStack) {
     return false;
   }
 

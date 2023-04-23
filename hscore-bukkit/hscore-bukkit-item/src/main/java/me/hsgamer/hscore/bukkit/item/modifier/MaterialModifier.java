@@ -107,8 +107,9 @@ public class MaterialModifier implements ItemModifier {
   }
 
   @Override
-  public void loadFromItemStack(ItemStack itemStack) {
+  public boolean loadFromItemStack(ItemStack itemStack) {
     this.materialList = Collections.singletonList(itemStack.getType().name());
+    return true;
   }
 
   @Override

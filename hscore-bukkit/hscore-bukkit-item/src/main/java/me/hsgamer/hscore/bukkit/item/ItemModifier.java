@@ -44,25 +44,14 @@ public interface ItemModifier {
   void loadFromObject(Object object);
 
   /**
-   * Load the modifier from an item <br> Should call {@link #canLoadFromItemStack(ItemStack)} before using this method
-   *
-   * @param itemStack the item
-   *
-   * @see #canLoadFromItemStack(ItemStack)
-   */
-  void loadFromItemStack(ItemStack itemStack);
-
-  /**
-   * Check if a modifier can be loaded from the item
+   * Load the modifier from an item
    *
    * @param itemStack the item
    *
    * @return true if it can
-   *
-   * @see #loadFromItemStack(ItemStack)
    */
-  default boolean canLoadFromItemStack(ItemStack itemStack) {
-    return true;
+  default boolean loadFromItemStack(ItemStack itemStack) {
+    return false;
   }
 
   /**
