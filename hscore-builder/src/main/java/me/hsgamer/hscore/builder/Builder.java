@@ -13,7 +13,7 @@ import java.util.function.Supplier;
  */
 public class Builder<R, V> extends MassBuilder<AbstractMap.SimpleEntry<String, R>, V> {
   @Override
-  public MassBuilder<AbstractMap.SimpleEntry<String, R>, V> register(Element<AbstractMap.SimpleEntry<String, R>, V> element) {
+  public MassBuilder<AbstractMap.SimpleEntry<String, R>, V> register(Function<AbstractMap.SimpleEntry<String, R>, Optional<V>> element) {
     if (element instanceof FunctionElement) {
       return super.register(element);
     }
@@ -109,7 +109,7 @@ public class Builder<R, V> extends MassBuilder<AbstractMap.SimpleEntry<String, R
    * @param <R> the type of the raw value
    * @param <V> the type of the final value
    */
-  public static class FunctionElement<R, V> implements Element<AbstractMap.SimpleEntry<String, R>, V> {
+  public static class FunctionElement<R, V> implements Function<AbstractMap.SimpleEntry<String, R>, Optional<V>> {
     private final BiFunction<String, R, V> function;
     private final String[] names;
 
@@ -122,22 +122,6 @@ public class Builder<R, V> extends MassBuilder<AbstractMap.SimpleEntry<String, R
     public FunctionElement(BiFunction<String, R, V> function, String... names) {
       this.function = function;
       this.names = names;
-    }
-
-    @Override
-    public boolean canBuild(AbstractMap.SimpleEntry<String, R> input) {
-      String key = input.getKey();
-      for (String alias : names) {
-        if (key.equalsIgnoreCase(alias)) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    @Override
-    public V build(AbstractMap.SimpleEntry<String, R> input) {
-      return function.apply(input.getKey(), input.getValue());
     }
 
     /**
@@ -156,6 +140,24 @@ public class Builder<R, V> extends MassBuilder<AbstractMap.SimpleEntry<String, R
      */
     public String[] getNames() {
       return names;
+    }
+
+    @Override
+    public Optional<V> apply(AbstractMap.SimpleEntry<String, R> input) {
+      String key = input.getKey();
+      boolean found = false;
+      for (String alias : names) {
+        if (key.equalsIgnoreCase(alias)) {
+          found = true;
+          break;
+        }
+      }
+
+      if (!found) {
+        return Optional.empty();
+      }
+
+      return Optional.ofNullable(function.apply(key, input.getValue()));
     }
   }
 }
