@@ -58,40 +58,6 @@ public interface ItemModifier {
   }
 
   /**
-   * Compare the modifier of an item
-   *
-   * @param itemStack         the item
-   * @param uuid              the unique id
-   * @param stringReplacerMap the map of string replacers
-   *
-   * @return true if it matches, otherwise false
-   */
-  boolean compareWithItemStack(@NotNull ItemStack itemStack, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap);
-
-  /**
-   * Compare the modifier of an item
-   *
-   * @param itemStack the item
-   * @param uuid      the unique id
-   *
-   * @return true if it matches, otherwise false
-   */
-  default boolean compareWithItemStack(@NotNull ItemStack itemStack, @Nullable UUID uuid) {
-    return compareWithItemStack(itemStack, uuid, Collections.emptyMap());
-  }
-
-  /**
-   * Compare the modifier of an item
-   *
-   * @param itemStack the item
-   *
-   * @return true if it matches, otherwise false
-   */
-  default boolean compareWithItemStack(@NotNull ItemStack itemStack) {
-    return compareWithItemStack(itemStack, null, Collections.emptyMap());
-  }
-
-  /**
    * Modify the item
    *
    * @param original the original item

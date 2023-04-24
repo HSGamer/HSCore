@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
+import me.hsgamer.hscore.bukkit.item.ItemComparator;
 import me.hsgamer.hscore.bukkit.item.ItemModifier;
 import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
@@ -13,7 +14,7 @@ import java.util.UUID;
 /**
  * The amount modifier
  */
-public class AmountModifier implements ItemModifier {
+public class AmountModifier implements ItemModifier, ItemComparator {
   private String amount = "1";
 
   @Override
@@ -46,7 +47,7 @@ public class AmountModifier implements ItemModifier {
   }
 
   @Override
-  public boolean compareWithItemStack(@NotNull ItemStack itemStack, UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
+  public boolean compare(@NotNull ItemStack itemStack, UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     return Validate.getNumber(StringReplacer.replace(amount, uuid, stringReplacerMap.values()))
       .map(bigDecimal -> bigDecimal.intValue() >= itemStack.getAmount())
       .orElse(false);

@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
+import me.hsgamer.hscore.bukkit.item.ItemMetaComparator;
 import me.hsgamer.hscore.bukkit.item.ItemMetaModifier;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.Validate;
@@ -20,7 +21,7 @@ import java.util.stream.Stream;
 /**
  * The potion effect modifier
  */
-public class PotionEffectModifier extends ItemMetaModifier {
+public class PotionEffectModifier implements ItemMetaModifier, ItemMetaComparator {
   private List<String> potionEffectList = Collections.emptyList();
 
   private static Optional<PotionEffect> pastePotionEffect(String string) {
@@ -87,7 +88,7 @@ public class PotionEffectModifier extends ItemMetaModifier {
   }
 
   @Override
-  public boolean compareWithItemMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
+  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     if (!(meta instanceof PotionMeta)) {
       return false;
     }

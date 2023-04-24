@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bukkit.item.modifier;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import me.hsgamer.hscore.bukkit.item.ItemMetaComparator;
 import me.hsgamer.hscore.bukkit.item.ItemMetaModifier;
 import me.hsgamer.hscore.bukkit.utils.BukkitUtils;
 import me.hsgamer.hscore.bukkit.utils.VersionUtils;
@@ -23,7 +24,7 @@ import java.util.*;
  * The skull modifier
  */
 @SuppressWarnings("deprecation")
-public class SkullModifier extends ItemMetaModifier {
+public class SkullModifier implements ItemMetaModifier, ItemMetaComparator {
   private static final SkullMeta delegateSkullMeta;
 
   static {
@@ -139,7 +140,7 @@ public class SkullModifier extends ItemMetaModifier {
   }
 
   @Override
-  public boolean compareWithItemMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
+  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     if (!(meta instanceof SkullMeta)) {
       return false;
     }

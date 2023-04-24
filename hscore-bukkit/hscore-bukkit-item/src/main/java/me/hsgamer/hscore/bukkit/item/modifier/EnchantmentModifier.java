@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
+import me.hsgamer.hscore.bukkit.item.ItemMetaComparator;
 import me.hsgamer.hscore.bukkit.item.ItemMetaModifier;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.Validate;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 /**
  * The enchantment modifier
  */
-public class EnchantmentModifier extends ItemMetaModifier {
+public class EnchantmentModifier implements ItemMetaModifier, ItemMetaComparator {
   private static final Map<String, Enchantment> ENCHANTMENT_MAP = new HashMap<>();
 
   static {
@@ -96,7 +97,7 @@ public class EnchantmentModifier extends ItemMetaModifier {
   }
 
   @Override
-  public boolean compareWithItemMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
+  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     Map<Enchantment, Integer> list1 = getParsed(uuid, stringReplacerMap.values());
     Map<Enchantment, Integer> list2 = meta.getEnchants();
     if (list1.size() != list2.size()) {

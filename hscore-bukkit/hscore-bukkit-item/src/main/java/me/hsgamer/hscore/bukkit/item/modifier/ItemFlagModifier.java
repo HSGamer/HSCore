@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
+import me.hsgamer.hscore.bukkit.item.ItemMetaComparator;
 import me.hsgamer.hscore.bukkit.item.ItemMetaModifier;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * The item flag modifier
  */
-public class ItemFlagModifier extends ItemMetaModifier {
+public class ItemFlagModifier implements ItemMetaModifier, ItemMetaComparator {
   private List<String> flagList = Collections.emptyList();
 
   @Override
@@ -54,7 +55,7 @@ public class ItemFlagModifier extends ItemMetaModifier {
   }
 
   @Override
-  public boolean compareWithItemMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
+  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     Set<ItemFlag> list1 = getParsed(uuid, stringReplacerMap.values());
     Set<ItemFlag> list2 = meta.getItemFlags();
     return list1.size() == list2.size() && list1.containsAll(list2);

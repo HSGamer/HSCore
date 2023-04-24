@@ -70,9 +70,4 @@ public class NBTModifier implements ItemModifier {
   public boolean loadFromItemStack(ItemStack itemStack) {
     return false;
   }
-
-  @Override
-  public boolean compareWithItemStack(@NotNull ItemStack itemStack, UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
-    return false;
-  }
 }

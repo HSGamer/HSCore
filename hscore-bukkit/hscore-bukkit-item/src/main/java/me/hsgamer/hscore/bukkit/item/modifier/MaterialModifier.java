@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
+import me.hsgamer.hscore.bukkit.item.ItemComparator;
 import me.hsgamer.hscore.bukkit.item.ItemModifier;
 import me.hsgamer.hscore.bukkit.utils.VersionUtils;
 import me.hsgamer.hscore.common.CollectionUtils;
@@ -15,7 +16,7 @@ import java.util.*;
  * The material modifier
  */
 @SuppressWarnings("deprecation")
-public class MaterialModifier implements ItemModifier {
+public class MaterialModifier implements ItemModifier, ItemComparator {
   private static final Map<Integer, Material> ID_MATERIAL_MAP = new HashMap<>();
 
   static {
@@ -114,7 +115,7 @@ public class MaterialModifier implements ItemModifier {
   }
 
   @Override
-  public boolean compareWithItemStack(@NotNull ItemStack itemStack, UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
+  public boolean compare(@NotNull ItemStack itemStack, UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     if (materialList.isEmpty()) {
       return true;
     }

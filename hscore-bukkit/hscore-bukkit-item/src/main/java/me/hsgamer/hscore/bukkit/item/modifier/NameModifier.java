@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
+import me.hsgamer.hscore.bukkit.item.ItemMetaComparator;
 import me.hsgamer.hscore.bukkit.item.ItemMetaModifier;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,7 +14,7 @@ import java.util.UUID;
 /**
  * The name modifier
  */
-public class NameModifier extends ItemMetaModifier {
+public class NameModifier implements ItemMetaModifier, ItemMetaComparator {
   private String name;
 
   @Override
@@ -52,7 +53,7 @@ public class NameModifier extends ItemMetaModifier {
   }
 
   @Override
-  public boolean compareWithItemMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
+  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     if (!meta.hasDisplayName() && this.name == null) {
       return true;
     }

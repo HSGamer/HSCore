@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
+import me.hsgamer.hscore.bukkit.item.ItemMetaComparator;
 import me.hsgamer.hscore.bukkit.item.ItemMetaModifier;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
@@ -13,7 +14,7 @@ import java.util.*;
 /**
  * The lore modifier
  */
-public class LoreModifier extends ItemMetaModifier {
+public class LoreModifier implements ItemMetaModifier, ItemMetaComparator {
   private final List<String> lore = new ArrayList<>();
 
   @Override
@@ -43,7 +44,7 @@ public class LoreModifier extends ItemMetaModifier {
   }
 
   @Override
-  public boolean compareWithItemMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
+  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
     return (!meta.hasLore() && this.lore.isEmpty()) || getReplacedLore(uuid, stringReplacerMap).equals(meta.getLore());
   }
 
