@@ -1,10 +1,9 @@
 package me.hsgamer.hscore.minecraft.gui.object;
 
 /**
- * The 2D position
+ * The position of the inventory
  */
-public class Position2D {
-
+public class InventoryPosition {
   private final int x;
   private final int y;
 
@@ -14,7 +13,7 @@ public class Position2D {
    * @param x the x coordinate
    * @param y the y coordinate
    */
-  private Position2D(int x, int y) {
+  private InventoryPosition(int x, int y) {
     this.x = x;
     this.y = y;
   }
@@ -25,8 +24,8 @@ public class Position2D {
    * @param x the x coordinate
    * @param y the y coordinate
    */
-  public static Position2D of(int x, int y) {
-    return new Position2D(x, y);
+  public static InventoryPosition of(int x, int y) {
+    return new InventoryPosition(x, y);
   }
 
   /**
@@ -39,8 +38,8 @@ public class Position2D {
    *
    * @return the max position
    */
-  public static Position2D maxPosition(int x1, int y1, int x2, int y2) {
-    return Position2D.of(Math.max(x1, x2), Math.max(y1, y2));
+  public static InventoryPosition maxPosition(int x1, int y1, int x2, int y2) {
+    return InventoryPosition.of(Math.max(x1, x2), Math.max(y1, y2));
   }
 
   /**
@@ -51,7 +50,7 @@ public class Position2D {
    *
    * @return the max position
    */
-  public static Position2D maxPosition(Position2D position1, Position2D position2) {
+  public static InventoryPosition maxPosition(InventoryPosition position1, InventoryPosition position2) {
     return maxPosition(position1.getX(), position1.getY(), position2.getX(), position2.getY());
   }
 
@@ -65,8 +64,8 @@ public class Position2D {
    *
    * @return the min position
    */
-  public static Position2D minPosition(int x1, int y1, int x2, int y2) {
-    return Position2D.of(Math.min(x1, x2), Math.min(y1, y2));
+  public static InventoryPosition minPosition(int x1, int y1, int x2, int y2) {
+    return InventoryPosition.of(Math.min(x1, x2), Math.min(y1, y2));
   }
 
   /**
@@ -77,7 +76,7 @@ public class Position2D {
    *
    * @return the min position
    */
-  public static Position2D minPosition(Position2D position1, Position2D position2) {
+  public static InventoryPosition minPosition(InventoryPosition position1, InventoryPosition position2) {
     return minPosition(position1.getX(), position1.getY(), position2.getX(), position2.getY());
   }
 

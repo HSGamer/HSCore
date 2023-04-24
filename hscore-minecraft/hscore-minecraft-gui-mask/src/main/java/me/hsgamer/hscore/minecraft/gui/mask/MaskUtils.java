@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.minecraft.gui.mask;
 
-import me.hsgamer.hscore.minecraft.gui.object.Position2D;
+import me.hsgamer.hscore.minecraft.gui.object.InventoryPosition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -49,10 +49,10 @@ public class MaskUtils {
    * @return the position
    */
   @NotNull
-  public static Position2D toPosition(int slot, int slotPerRow) {
+  public static InventoryPosition toPosition(int slot, int slotPerRow) {
     int x = slot % slotPerRow;
     int y = slot / slotPerRow;
-    return Position2D.of(x, y);
+    return InventoryPosition.of(x, y);
   }
 
   /**
@@ -63,7 +63,7 @@ public class MaskUtils {
    * @return the position
    */
   @NotNull
-  public static Position2D toPosition(int slot) {
+  public static InventoryPosition toPosition(int slot) {
     return toPosition(slot, 9);
   }
 
@@ -75,7 +75,7 @@ public class MaskUtils {
    *
    * @return the raw slot
    */
-  public static int toSlot(@NotNull Position2D position, int slotPerRow) {
+  public static int toSlot(@NotNull InventoryPosition position, int slotPerRow) {
     return toSlot(position.getX(), position.getY(), slotPerRow);
   }
 
@@ -86,7 +86,7 @@ public class MaskUtils {
    *
    * @return the raw slot
    */
-  public static int toSlot(@NotNull Position2D position) {
+  public static int toSlot(@NotNull InventoryPosition position) {
     return toSlot(position, 9);
   }
 
@@ -102,8 +102,8 @@ public class MaskUtils {
    * @return the stream of slots
    */
   public static IntStream generateAreaSlots(int x1, int y1, int x2, int y2, int slotPerRow) {
-    Position2D max = Position2D.maxPosition(x1, y1, x2, y2);
-    Position2D min = Position2D.minPosition(x1, y1, x2, y2);
+    InventoryPosition max = InventoryPosition.maxPosition(x1, y1, x2, y2);
+    InventoryPosition min = InventoryPosition.minPosition(x1, y1, x2, y2);
     return IntStream.rangeClosed(min.getY(), max.getY()).flatMap(y -> IntStream.rangeClosed(toSlot(min.getX(), y, slotPerRow), toSlot(max.getX(), y, slotPerRow)));
   }
 
@@ -131,7 +131,7 @@ public class MaskUtils {
    * @return the stream of slots
    */
   @NotNull
-  public static IntStream generateAreaSlots(@NotNull Position2D position1, @NotNull Position2D position2, int slotPerRow) {
+  public static IntStream generateAreaSlots(@NotNull InventoryPosition position1, @NotNull InventoryPosition position2, int slotPerRow) {
     return generateAreaSlots(position1.getX(), position1.getY(), position2.getX(), position2.getY(), slotPerRow);
   }
 
@@ -144,7 +144,7 @@ public class MaskUtils {
    * @return the stream of slots
    */
   @NotNull
-  public static IntStream generateAreaSlots(@NotNull Position2D position1, @NotNull Position2D position2) {
+  public static IntStream generateAreaSlots(@NotNull InventoryPosition position1, @NotNull InventoryPosition position2) {
     return generateAreaSlots(position1, position2, 9);
   }
 
@@ -161,8 +161,8 @@ public class MaskUtils {
    */
   @NotNull
   public static IntStream generateOutlineSlots(int x1, int y1, int x2, int y2, int slotPerRow) {
-    Position2D max = Position2D.maxPosition(x1, y1, x2, y2);
-    Position2D min = Position2D.minPosition(x1, y1, x2, y2);
+    InventoryPosition max = InventoryPosition.maxPosition(x1, y1, x2, y2);
+    InventoryPosition min = InventoryPosition.minPosition(x1, y1, x2, y2);
     IntStream top = IntStream.rangeClosed(toSlot(min.getX(), min.getY(), slotPerRow), toSlot(max.getX(), min.getY(), slotPerRow));
     IntStream right = IntStream.rangeClosed(min.getY(), max.getY()).map(y -> toSlot(max.getX(), y, slotPerRow));
     IntStream bottom = IntStream.rangeClosed(toSlot(min.getX(), max.getY(), slotPerRow), toSlot(max.getX(), max.getY(), slotPerRow)).boxed().sorted(Collections.reverseOrder()).mapToInt(Integer::intValue);
@@ -195,7 +195,7 @@ public class MaskUtils {
    * @return the stream of slots
    */
   @NotNull
-  public static IntStream generateOutlineSlots(Position2D position1, Position2D position2, int slotPerRow) {
+  public static IntStream generateOutlineSlots(InventoryPosition position1, InventoryPosition position2, int slotPerRow) {
     return generateOutlineSlots(position1.getX(), position1.getY(), position2.getX(), position2.getY(), slotPerRow);
   }
 
@@ -208,7 +208,7 @@ public class MaskUtils {
    * @return the stream of slots
    */
   @NotNull
-  public static IntStream generateOutlineSlots(Position2D position1, Position2D position2) {
+  public static IntStream generateOutlineSlots(InventoryPosition position1, InventoryPosition position2) {
     return generateOutlineSlots(position1, position2, 9);
   }
 }
