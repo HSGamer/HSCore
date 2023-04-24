@@ -1,10 +1,14 @@
 package me.hsgamer.hscore.config.simplixstorage;
 
+import de.leonhard.storage.Json;
+import de.leonhard.storage.Toml;
+import de.leonhard.storage.Yaml;
 import de.leonhard.storage.internal.DataStorage;
 import de.leonhard.storage.internal.FlatFile;
 import me.hsgamer.hscore.config.Config;
 import me.hsgamer.hscore.config.PathString;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -22,6 +26,39 @@ public class LightningConfig<F extends FlatFile> implements Config {
    */
   public LightningConfig(F flatFile) {
     this.flatFile = flatFile;
+  }
+
+  /**
+   * Create a new config from a Json file
+   *
+   * @param file the file
+   *
+   * @return the config
+   */
+  public static LightningConfig<Json> ofJson(File file) {
+    return new LightningConfig<>(new Json(file));
+  }
+
+  /**
+   * Create a new config from a Toml file
+   *
+   * @param file the file
+   *
+   * @return the config
+   */
+  public static LightningConfig<Toml> ofToml(File file) {
+    return new LightningConfig<>(new Toml(file));
+  }
+
+  /**
+   * Create a new config from a Yaml file
+   *
+   * @param file the file
+   *
+   * @return the config
+   */
+  public static LightningConfig<Yaml> ofYaml(File file) {
+    return new LightningConfig<>(new Yaml(file));
   }
 
   private String toPath(PathString pathString) {
