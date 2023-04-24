@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.ui;
+package me.hsgamer.hscore.minecraft.gui.object;
 
 /**
  * The 2D position

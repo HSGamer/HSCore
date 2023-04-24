@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.minecraft.gui.mask;
 
-import me.hsgamer.hscore.ui.Position2D;
+import me.hsgamer.hscore.minecraft.gui.object.Position2D;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
