@@ -2,9 +2,11 @@ package me.hsgamer.hscore.minestom.gui;
 
 import me.hsgamer.hscore.minecraft.gui.GUIHolder;
 import me.hsgamer.hscore.minecraft.gui.GUIProperties;
+import me.hsgamer.hscore.minestom.gui.event.MinestomCloseEvent;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.inventory.InventoryType;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * The {@link GUIHolder} for Minestom
@@ -23,6 +26,7 @@ public class MinestomGUIHolder extends GUIHolder<MinestomGUIDisplay> {
 
   private InventoryType inventoryType = InventoryType.CHEST_3_ROW;
   private Function<UUID, Component> titleFunction = uuid -> Component.empty();
+  private Predicate<UUID> closePredicate = uuid -> true;
 
   /**
    * Get the inventory type
@@ -85,6 +89,38 @@ public class MinestomGUIHolder extends GUIHolder<MinestomGUIDisplay> {
    */
   public void setTitle(@NotNull Component title) {
     setTitleFunction(uuid -> title);
+  }
+
+  /**
+   * Get the close predicate
+   *
+   * @return the close predicate
+   */
+  @NotNull
+  public Predicate<@NotNull UUID> getClosePredicate() {
+    return closePredicate;
+  }
+
+  /**
+   * Set the close predicate
+   *
+   * @param closePredicate the close predicate
+   */
+  public void setClosePredicate(@NotNull Predicate<@NotNull UUID> closePredicate) {
+    this.closePredicate = closePredicate;
+  }
+
+  @Override
+  public void init() {
+    addEventConsumer(MinestomCloseEvent.class, event -> {
+      UUID uuid = event.getViewerID();
+      if (closePredicate != null && !closePredicate.test(uuid)) {
+        event.setRemoveDisplay(false);
+        InventoryCloseEvent inventoryCloseEvent = event.getEvent();
+        inventoryCloseEvent.setNewInventory(inventoryCloseEvent.getInventory());
+      }
+    });
+    super.init();
   }
 
   @Override
