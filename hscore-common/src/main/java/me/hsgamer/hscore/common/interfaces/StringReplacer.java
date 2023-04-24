@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.function.BiFunction;
+import java.util.function.UnaryOperator;
 
 /**
  * A simple interface for String replacement
@@ -53,19 +54,20 @@ public interface StringReplacer {
   }
 
   /**
-   * Create a new {@link StringReplacer} from a {@link BiFunction} that takes the original string and the unique id and returns the replaced string
+   * Create a new {@link StringReplacer} from a {@link UnaryOperator} as {@link #replace(String)} and a {@link BiFunction} as {@link #replace(String, UUID)}
    *
+   * @param operator the {@link UnaryOperator}
    * @param function the {@link BiFunction}
    *
    * @return the {@link StringReplacer}
    */
   @NotNull
-  static StringReplacer ofUUID(@NotNull BiFunction<String, UUID, String> function) {
+  static StringReplacer of(@NotNull UnaryOperator<String> operator, @NotNull BiFunction<String, UUID, String> function) {
     return new StringReplacer() {
       @Nullable
       @Override
       public String replace(@NotNull String original) {
-        return null;
+        return operator.apply(original);
       }
 
       @Nullable
@@ -74,6 +76,30 @@ public interface StringReplacer {
         return function.apply(original, uuid);
       }
     };
+  }
+
+  /**
+   * Create a new {@link StringReplacer} from a {@link UnaryOperator} as {@link #replace(String)}
+   *
+   * @param operator the {@link UnaryOperator}
+   *
+   * @return the {@link StringReplacer}
+   */
+  @NotNull
+  static StringReplacer of(@NotNull UnaryOperator<String> operator) {
+    return operator::apply;
+  }
+
+  /**
+   * Create a new {@link StringReplacer} from a {@link BiFunction} as {@link #replace(String, UUID)}
+   *
+   * @param function the {@link BiFunction}
+   *
+   * @return the {@link StringReplacer}
+   */
+  @NotNull
+  static StringReplacer of(@NotNull BiFunction<String, UUID, String> function) {
+    return of(UnaryOperator.identity(), function);
   }
 
   /**
