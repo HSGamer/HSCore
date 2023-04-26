@@ -19,7 +19,7 @@ import java.util.logging.Level;
  * The {@link Config} implementation for Gson
  */
 public class GsonConfig implements Config {
-  private static final Gson GSON = new Gson();
+  private final Gson gson;
   private final File file;
   private JsonObject root = new JsonObject();
 
@@ -27,9 +27,20 @@ public class GsonConfig implements Config {
    * Create a new config
    *
    * @param file the file
+   * @param gson the Gson instance
+   */
+  public GsonConfig(File file, Gson gson) {
+    this.file = file;
+    this.gson = gson;
+  }
+
+  /**
+   * Create a new config
+   *
+   * @param file the file
    */
   public GsonConfig(File file) {
-    this.file = file;
+    this(file, new Gson());
   }
 
   private static Map<PathString, Object> getValues(JsonObject object, boolean deep) {
@@ -49,7 +60,7 @@ public class GsonConfig implements Config {
   }
 
   @Override
-  public Object getOriginal() {
+  public JsonObject getOriginal() {
     return this.root;
   }
 
@@ -97,13 +108,13 @@ public class GsonConfig implements Config {
       if (def instanceof JsonElement) {
         return def;
       }
-      return GSON.toJsonTree(def);
+      return gson.toJsonTree(def);
     });
   }
 
   @Override
   public void set(PathString path, Object value) {
-    JsonElement element = value instanceof JsonElement ? (JsonElement) value : GSON.toJsonTree(value);
+    JsonElement element = value instanceof JsonElement ? (JsonElement) value : gson.toJsonTree(value);
     if (path.isRoot()) {
       if (element.isJsonObject()) {
         this.root = element.getAsJsonObject();
@@ -168,7 +179,7 @@ public class GsonConfig implements Config {
       JsonWriter jsonWriter = new JsonWriter(writer)
     ) {
       jsonWriter.setIndent("  ");
-      GSON.toJson(this.root, jsonWriter);
+      gson.toJson(this.root, jsonWriter);
     } catch (IOException e) {
       LOGGER.log(Level.WARNING, e, () -> "Something wrong when saving " + file.getName());
     }
