@@ -81,12 +81,22 @@ public class GsonConfig implements Config {
 
   @Override
   public Object get(PathString path, Object def) {
+    if (path.isRoot()) {
+      return normalizeObject(this.root);
+    }
     return getJsonObject(path, false).map(object -> normalizeObject(object.get(path.getLastPath()))).orElse(def);
   }
 
   @Override
   public void set(PathString path, Object value) {
-    getJsonObject(path, true).ifPresent(object -> object.add(path.getLastPath(), GSON.toJsonTree(value)));
+    JsonElement element = GSON.toJsonTree(value);
+    if (path.isRoot()) {
+      if (element.isJsonObject()) {
+        this.root = element.getAsJsonObject();
+      }
+      return;
+    }
+    getJsonObject(path, true).ifPresent(object -> object.add(path.getLastPath(), element));
   }
 
   @Override
