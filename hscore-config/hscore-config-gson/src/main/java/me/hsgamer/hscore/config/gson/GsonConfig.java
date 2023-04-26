@@ -19,7 +19,7 @@ import java.util.logging.Level;
  * The {@link Config} implementation for Gson
  */
 public class GsonConfig implements Config {
-  private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+  private static final Gson GSON = new Gson();
   private final File file;
   private JsonObject root = new JsonObject();
 
@@ -167,6 +167,7 @@ public class GsonConfig implements Config {
       FileWriter writer = new FileWriter(file);
       JsonWriter jsonWriter = new JsonWriter(writer)
     ) {
+      jsonWriter.setIndent("  ");
       GSON.toJson(this.root, jsonWriter);
     } catch (IOException e) {
       LOGGER.log(Level.WARNING, e, () -> "Something wrong when saving " + file.getName());
