@@ -110,7 +110,18 @@ public class GsonConfig implements Config {
       }
       return;
     }
-    getJsonObject(path, true).ifPresent(object -> object.add(path.getLastPath(), element));
+    getJsonObject(path, true).ifPresent(object -> {
+      if (element.isJsonNull()) {
+        object.remove(path.getLastPath());
+      } else {
+        object.add(path.getLastPath(), element);
+      }
+    });
+  }
+
+  @Override
+  public void clear() {
+    this.root = new JsonObject();
   }
 
   @Override
