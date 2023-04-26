@@ -91,6 +91,9 @@ public class GsonConfig implements Config {
       }
       return null;
     }).orElseGet(() -> {
+      if (def == null) {
+        return null;
+      }
       if (def instanceof JsonElement) {
         return def;
       }
