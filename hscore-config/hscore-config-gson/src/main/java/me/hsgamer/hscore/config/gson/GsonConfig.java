@@ -100,7 +100,7 @@ public class GsonConfig implements Config {
 
   @Override
   public void set(PathString path, Object value) {
-    JsonElement element = GSON.toJsonTree(value);
+    JsonElement element = value instanceof JsonElement ? (JsonElement) value : GSON.toJsonTree(value);
     if (path.isRoot()) {
       if (element.isJsonObject()) {
         this.root = element.getAsJsonObject();
