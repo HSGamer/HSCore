@@ -13,6 +13,11 @@ import java.util.regex.Pattern;
  * The variable manager for the instance
  */
 public class VariableManager {
+  /**
+   * The global variable manager
+   */
+  public static final VariableManager GLOBAL = new VariableManager();
+
   private static final Pattern PATTERN = Pattern.compile("(.?)([{]([^{}]+)[}])(.?)");
   private static final char START_IGNORE_CHAR = '\\';
   private static final char END_IGNORE_CHAR = '\\';
