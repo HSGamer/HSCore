@@ -64,7 +64,7 @@ public class GsonConfig implements Config {
       if (i == pathArray.length - 1) {
         return Optional.of(currentObject);
       } else {
-        JsonElement element = currentObject.get(key);
+        JsonElement element = currentObject.has(key) ? currentObject.get(key) : JsonNull.INSTANCE;
         if (element.isJsonObject()) {
           currentObject = element.getAsJsonObject();
         } else if (createIfNotFound) {
