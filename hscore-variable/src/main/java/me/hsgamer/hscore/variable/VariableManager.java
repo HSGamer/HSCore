@@ -17,6 +17,7 @@ public class VariableManager {
   private static final char START_IGNORE_CHAR = '\\';
   private static final char END_IGNORE_CHAR = '\\';
   private final Map<String, StringReplacer> variables = new HashMap<>();
+  private final List<StringReplacer> externalReplacers = new ArrayList<>();
   private BooleanSupplier replaceAll = () -> false;
 
   /**
@@ -48,6 +49,40 @@ public class VariableManager {
   }
 
   /**
+   * Add an external replacer
+   *
+   * @param replacer the external string replacer
+   */
+  public void addExternalReplacer(StringReplacer replacer) {
+    externalReplacers.add(replacer);
+  }
+
+  /**
+   * Remove an external replacer
+   *
+   * @param replacer the external string replacer
+   */
+  public void removeExternalReplacer(StringReplacer replacer) {
+    externalReplacers.remove(replacer);
+  }
+
+  /**
+   * Clear all external replacers
+   */
+  public void clearExternalReplacers() {
+    externalReplacers.clear();
+  }
+
+  /**
+   * Get all external replacers
+   *
+   * @return the external replacers
+   */
+  public List<StringReplacer> getExternalReplacers() {
+    return Collections.unmodifiableList(externalReplacers);
+  }
+
+  /**
    * Replace the variables of the string until it cannot be replaced anymore
    *
    * @param message the string
@@ -61,6 +96,12 @@ public class VariableManager {
     do {
       old = message;
       message = setSingleVariables(message, uuid);
+      for (StringReplacer externalStringReplacer : externalReplacers) {
+        String replaced = externalStringReplacer.tryReplace(message, uuid);
+        if (replaced != null) {
+          message = replaced;
+        }
+      }
     } while (!old.equals(message));
     return message;
   }
