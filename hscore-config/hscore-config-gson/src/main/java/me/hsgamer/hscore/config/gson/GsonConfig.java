@@ -9,10 +9,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.BiFunction;
 import java.util.logging.Level;
 
 /**
@@ -21,7 +19,7 @@ import java.util.logging.Level;
 public class GsonConfig implements Config {
   private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
   private final File file;
-  private JsonObject jsonObject = new JsonObject();
+  private JsonObject root = new JsonObject();
 
   /**
    * Create a new config
@@ -32,19 +30,62 @@ public class GsonConfig implements Config {
     this.file = file;
   }
 
-  @Override
-  public Object getOriginal() {
-    return this.jsonObject;
+  private static Map<PathString, Object> getValues(JsonObject object, boolean deep) {
+    Map<PathString, Object> values = new HashMap<>();
+    for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+      PathString key = new PathString(entry.getKey());
+      JsonElement element = entry.getValue();
+      values.put(key, element);
+      if (element.isJsonObject() && deep) {
+        Map<PathString, Object> subValues = getValues(element.getAsJsonObject(), true);
+        for (Map.Entry<PathString, Object> subEntry : subValues.entrySet()) {
+          values.put(key.append(subEntry.getKey()), subEntry.getValue());
+        }
+      }
+    }
+    return values;
   }
 
   @Override
-  public Object get(PathString path, Object def) {
+  public Object getOriginal() {
+    return this.root;
+  }
+
+  private <T> T operateOnPath(PathString path, BiFunction<JsonObject, String, T> function) {
+    JsonObject currentObject = this.root;
+    String[] pathArray = path.getPath();
+    if (pathArray.length == 0) {
+      return function.apply(currentObject, "");
+    }
+    for (int i = 0; i < pathArray.length; i++) {
+      String key = pathArray[i];
+      if (i == pathArray.length - 1) {
+        return function.apply(currentObject, key);
+      } else {
+        JsonElement element = currentObject.get(key);
+        if (element.isJsonObject()) {
+          currentObject = element.getAsJsonObject();
+        } else {
+          JsonObject newObject = new JsonObject();
+          currentObject.add(key, newObject);
+          currentObject = newObject;
+        }
+      }
+    }
     return null;
   }
 
   @Override
-  public void set(PathString path, Object value) {
+  public Object get(PathString path, Object def) {
+    return operateOnPath(path, JsonObject::get);
+  }
 
+  @Override
+  public void set(PathString path, Object value) {
+    operateOnPath(path, (object, key) -> {
+      object.add(key, GSON.toJsonTree(value));
+      return null;
+    });
   }
 
   @Override
@@ -54,7 +95,14 @@ public class GsonConfig implements Config {
 
   @Override
   public Map<PathString, Object> getValues(PathString path, boolean deep) {
-    return null;
+    return operateOnPath(path, (object, key) -> {
+      JsonElement element = object.get(key);
+      if (element.isJsonObject()) {
+        return getValues(element.getAsJsonObject(), deep);
+      } else {
+        return Collections.emptyMap();
+      }
+    });
   }
 
   @Override
@@ -74,7 +122,7 @@ public class GsonConfig implements Config {
     try (FileReader reader = new FileReader(file)) {
       JsonElement jsonElement = JsonParser.parseReader(reader);
       if (jsonElement.isJsonObject()) {
-        this.jsonObject = jsonElement.getAsJsonObject();
+        this.root = jsonElement.getAsJsonObject();
       }
     } catch (IOException e) {
       LOGGER.log(Level.WARNING, e, () -> "Something wrong when setting up " + file.getName());
@@ -87,7 +135,7 @@ public class GsonConfig implements Config {
       FileWriter writer = new FileWriter(file);
       JsonWriter jsonWriter = new JsonWriter(writer)
     ) {
-      GSON.toJson(this.jsonObject, jsonWriter);
+      GSON.toJson(this.root, jsonWriter);
     } catch (IOException e) {
       LOGGER.log(Level.WARNING, e, () -> "Something wrong when saving " + file.getName());
     }
@@ -95,7 +143,7 @@ public class GsonConfig implements Config {
 
   @Override
   public void reload() {
-    this.jsonObject = new JsonObject();
+    this.root = new JsonObject();
     this.setup();
   }
 
