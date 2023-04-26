@@ -105,6 +105,18 @@ public class PathString {
   }
 
   /**
+   * Get the last path
+   *
+   * @return the last path
+   */
+  public String getLastPath() {
+    if (path.length == 0) {
+      return "";
+    }
+    return path[path.length - 1];
+  }
+
+  /**
    * Create a new path string by appending the path string to the current path string
    *
    * @param pathString the path string to append

@@ -9,8 +9,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
-import java.util.function.BiFunction;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Level;
 
 /**
@@ -51,41 +53,40 @@ public class GsonConfig implements Config {
     return this.root;
   }
 
-  private <T> T operateOnPath(PathString path, BiFunction<JsonObject, String, T> function) {
+  private Optional<JsonObject> getJsonObject(PathString path, boolean createIfNotFound) {
     JsonObject currentObject = this.root;
-    String[] pathArray = path.getPath();
-    if (pathArray.length == 0) {
-      return function.apply(currentObject, "");
+    if (path.isRoot()) {
+      return Optional.of(currentObject);
     }
+    String[] pathArray = path.getPath();
     for (int i = 0; i < pathArray.length; i++) {
       String key = pathArray[i];
       if (i == pathArray.length - 1) {
-        return function.apply(currentObject, key);
+        return Optional.of(currentObject);
       } else {
         JsonElement element = currentObject.get(key);
         if (element.isJsonObject()) {
           currentObject = element.getAsJsonObject();
-        } else {
+        } else if (createIfNotFound) {
           JsonObject newObject = new JsonObject();
           currentObject.add(key, newObject);
           currentObject = newObject;
+        } else {
+          return Optional.empty();
         }
       }
     }
-    return null;
+    return Optional.empty();
   }
 
   @Override
   public Object get(PathString path, Object def) {
-    return operateOnPath(path, JsonObject::get);
+    return getJsonObject(path, false).map(object -> normalizeObject(object.get(path.getLastPath()))).orElse(def);
   }
 
   @Override
   public void set(PathString path, Object value) {
-    operateOnPath(path, (object, key) -> {
-      object.add(key, GSON.toJsonTree(value));
-      return null;
-    });
+    getJsonObject(path, true).ifPresent(object -> object.add(path.getLastPath(), GSON.toJsonTree(value)));
   }
 
   @Override
@@ -95,14 +96,10 @@ public class GsonConfig implements Config {
 
   @Override
   public Map<PathString, Object> getValues(PathString path, boolean deep) {
-    return operateOnPath(path, (object, key) -> {
-      JsonElement element = object.get(key);
-      if (element.isJsonObject()) {
-        return getValues(element.getAsJsonObject(), deep);
-      } else {
-        return Collections.emptyMap();
-      }
-    });
+    if (path.isRoot()) {
+      return getValues(this.root, deep);
+    }
+    return getJsonObject(path, false).map(object -> getValues(object, deep)).orElse(Collections.emptyMap());
   }
 
   @Override
@@ -149,7 +146,7 @@ public class GsonConfig implements Config {
 
   @Override
   public Object normalize(Object object) {
-    if (!(object instanceof JsonElement)) {
+    if (!isNormalizable(object)) {
       return object;
     }
 
@@ -164,19 +161,9 @@ public class GsonConfig implements Config {
         return jsonPrimitive.getAsString();
       }
     } else if (jsonElement.isJsonArray()) {
-      JsonArray jsonArray = jsonElement.getAsJsonArray();
-      List<Object> list = new ArrayList<>();
-      for (JsonElement element : jsonArray) {
-        list.add(this.normalize(element));
-      }
-      return list;
+      return jsonElement.getAsJsonArray().asList();
     } else if (jsonElement.isJsonObject()) {
-      JsonObject jsonObject = jsonElement.getAsJsonObject();
-      Map<String, Object> map = new LinkedHashMap<>();
-      for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
-        map.put(entry.getKey(), this.normalize(entry.getValue()));
-      }
-      return map;
+      return jsonElement.getAsJsonObject().asMap();
     } else if (jsonElement.isJsonNull()) {
       return null;
     }
