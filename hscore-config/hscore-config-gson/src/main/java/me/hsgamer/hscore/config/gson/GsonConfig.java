@@ -82,9 +82,20 @@ public class GsonConfig implements Config {
   @Override
   public Object get(PathString path, Object def) {
     if (path.isRoot()) {
-      return normalizeObject(this.root);
+      return this.root;
     }
-    return getJsonObject(path, false).map(object -> normalizeObject(object.get(path.getLastPath()))).orElse(def);
+    return getJsonObject(path, false).<Object>map(object -> {
+      String lastPath = path.getLastPath();
+      if (object.has(lastPath)) {
+        return object.get(lastPath);
+      }
+      return null;
+    }).orElseGet(() -> {
+      if (def instanceof JsonElement) {
+        return def;
+      }
+      return GSON.toJsonTree(def);
+    });
   }
 
   @Override
