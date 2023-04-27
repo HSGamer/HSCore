@@ -6,7 +6,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -16,14 +16,14 @@ public interface ItemMetaModifier extends ItemModifier {
   /**
    * Modify the item meta
    *
-   * @param meta              the item meta
-   * @param uuid              the unique id
-   * @param stringReplacerMap the map of string replacers
+   * @param meta            the item meta
+   * @param uuid            the unique id
+   * @param stringReplacers the string replacers
    *
    * @return the modified item meta
    */
   @NotNull
-  ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap);
+  ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers);
 
   /**
    * Load the modifier from the item meta
@@ -35,10 +35,10 @@ public interface ItemMetaModifier extends ItemModifier {
   boolean loadFromItemMeta(ItemMeta meta);
 
   @Override
-  default @NotNull ItemStack modify(@NotNull ItemStack original, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
+  default @NotNull ItemStack modify(@NotNull ItemStack original, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
     ItemMeta itemMeta = original.getItemMeta();
     if (itemMeta != null) {
-      original.setItemMeta(this.modifyMeta(itemMeta, uuid, stringReplacerMap));
+      original.setItemMeta(this.modifyMeta(itemMeta, uuid, stringReplacers));
     }
     return original;
   }

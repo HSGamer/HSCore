@@ -1,6 +1,5 @@
 package me.hsgamer.hscore.bukkit.item;
 
-import me.hsgamer.hscore.collections.map.CaseInsensitiveStringLinkedMap;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,8 +14,8 @@ import java.util.*;
  * The item builder
  */
 public class ItemBuilder {
-  private final List<ItemModifier> itemModifiers = new LinkedList<>();
-  private final Map<String, StringReplacer> stringReplacerMap = new CaseInsensitiveStringLinkedMap<>();
+  private final List<ItemModifier> itemModifiers = new ArrayList<>();
+  private final List<StringReplacer> stringReplacers = new ArrayList<>();
   private ItemStack defaultItemStack;
 
   /**
@@ -66,38 +65,37 @@ public class ItemBuilder {
   }
 
   /**
-   * Get the map of the string replacer
+   * Get the list of string replacers
    *
    * @return the string replacers
    */
-  public Map<String, StringReplacer> getStringReplacerMap() {
-    return Collections.unmodifiableMap(stringReplacerMap);
+  public List<StringReplacer> getStringReplacers() {
+    return Collections.unmodifiableList(stringReplacers);
   }
 
   /**
    * Add a string replacer
    *
-   * @param name     the name of the string replacer
    * @param replacer the string replacer
    *
    * @return {@code this} for builder chain
    */
-  @Contract("_, _ -> this")
-  public ItemBuilder addStringReplacer(String name, StringReplacer replacer) {
-    this.stringReplacerMap.put(name, replacer);
+  @Contract("_ -> this")
+  public ItemBuilder addStringReplacer(StringReplacer replacer) {
+    this.stringReplacers.add(replacer);
     return this;
   }
 
   /**
    * Remove a string replacer
    *
-   * @param name the name of the string replacer
+   * @param replacer the string replacer
    *
    * @return {@code this} for builder chain
    */
   @Contract("_ -> this")
-  public ItemBuilder removeStringReplacer(String name) {
-    this.stringReplacerMap.remove(name);
+  public ItemBuilder removeStringReplacer(StringReplacer replacer) {
+    this.stringReplacers.remove(replacer);
     return this;
   }
 
@@ -111,7 +109,7 @@ public class ItemBuilder {
   public ItemStack build(@Nullable UUID uuid) {
     ItemStack itemStack = defaultItemStack == null ? new ItemStack(Material.STONE) : defaultItemStack.clone();
     for (ItemModifier modifier : itemModifiers) {
-      itemStack = modifier.modify(itemStack, uuid, getStringReplacerMap());
+      itemStack = modifier.modify(itemStack, uuid, getStringReplacers());
     }
     return itemStack;
   }

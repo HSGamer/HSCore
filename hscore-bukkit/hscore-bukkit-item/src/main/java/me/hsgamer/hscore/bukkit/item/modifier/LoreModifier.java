@@ -22,15 +22,15 @@ public class LoreModifier implements ItemMetaModifier, ItemMetaComparator {
     return "lore";
   }
 
-  private List<String> getReplacedLore(UUID uuid, Map<String, StringReplacer> stringReplacerMap) {
+  private List<String> getReplacedLore(UUID uuid, Collection<StringReplacer> stringReplacers) {
     List<String> replacedLore = new ArrayList<>(lore);
-    replacedLore.replaceAll(s -> StringReplacer.replace(s, uuid, stringReplacerMap.values()));
+    replacedLore.replaceAll(s -> StringReplacer.replace(s, uuid, stringReplacers));
     return replacedLore;
   }
 
   @Override
-  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
-    meta.setLore(getReplacedLore(uuid, stringReplacerMap));
+  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
+    meta.setLore(getReplacedLore(uuid, stringReplacers));
     return meta;
   }
 
@@ -44,8 +44,8 @@ public class LoreModifier implements ItemMetaModifier, ItemMetaComparator {
   }
 
   @Override
-  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
-    return (!meta.hasLore() && this.lore.isEmpty()) || getReplacedLore(uuid, stringReplacerMap).equals(meta.getLore());
+  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
+    return (!meta.hasLore() && this.lore.isEmpty()) || getReplacedLore(uuid, stringReplacers).equals(meta.getLore());
   }
 
   @Override

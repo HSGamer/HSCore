@@ -68,8 +68,8 @@ public class EnchantmentModifier implements ItemMetaModifier, ItemMetaComparator
   }
 
   @Override
-  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
-    Map<Enchantment, Integer> map = getParsed(uuid, stringReplacerMap.values());
+  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
+    Map<Enchantment, Integer> map = getParsed(uuid, stringReplacers);
     if (map instanceof EnchantmentStorageMeta) {
       map.forEach((enchant, level) -> ((EnchantmentStorageMeta) meta).addStoredEnchant(enchant, level, true));
     } else {
@@ -97,8 +97,8 @@ public class EnchantmentModifier implements ItemMetaModifier, ItemMetaComparator
   }
 
   @Override
-  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
-    Map<Enchantment, Integer> list1 = getParsed(uuid, stringReplacerMap.values());
+  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
+    Map<Enchantment, Integer> list1 = getParsed(uuid, stringReplacers);
     Map<Enchantment, Integer> list2 = meta.getEnchants();
     if (list1.size() != list2.size()) {
       return false;

@@ -66,10 +66,10 @@ public class PotionEffectModifier implements ItemMetaModifier, ItemMetaComparato
   }
 
   @Override
-  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
+  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
     if (meta instanceof PotionMeta) {
       PotionMeta potionMeta = (PotionMeta) meta;
-      getParsed(uuid, stringReplacerMap.values()).forEach(potionEffect -> potionMeta.addCustomEffect(potionEffect, true));
+      getParsed(uuid, stringReplacers).forEach(potionEffect -> potionMeta.addCustomEffect(potionEffect, true));
       return potionMeta;
     }
     return meta;
@@ -88,11 +88,11 @@ public class PotionEffectModifier implements ItemMetaModifier, ItemMetaComparato
   }
 
   @Override
-  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
+  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
     if (!(meta instanceof PotionMeta)) {
       return false;
     }
-    Set<PotionEffect> list1 = new HashSet<>(getParsed(uuid, stringReplacerMap.values()));
+    Set<PotionEffect> list1 = new HashSet<>(getParsed(uuid, stringReplacers));
     List<PotionEffect> list2 = ((PotionMeta) meta).getCustomEffects();
     return list1.size() == list2.size() && list1.containsAll(list2);
   }

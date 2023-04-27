@@ -89,9 +89,9 @@ public class MaterialModifier implements ItemModifier, ItemComparator {
   }
 
   @Override
-  public @NotNull ItemStack modify(@NotNull ItemStack original, UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
+  public @NotNull ItemStack modify(@NotNull ItemStack original, UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
     for (String materialString : materialList) {
-      if (setMaterial(original, StringReplacer.replace(materialString, uuid, stringReplacerMap.values()))) {
+      if (setMaterial(original, StringReplacer.replace(materialString, uuid, stringReplacers))) {
         break;
       }
     }
@@ -115,12 +115,12 @@ public class MaterialModifier implements ItemModifier, ItemComparator {
   }
 
   @Override
-  public boolean compare(@NotNull ItemStack itemStack, UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
+  public boolean compare(@NotNull ItemStack itemStack, UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
     if (materialList.isEmpty()) {
       return true;
     }
     return materialList.parallelStream()
-      .map(s -> StringReplacer.replace(s, uuid, stringReplacerMap.values()))
+      .map(s -> StringReplacer.replace(s, uuid, stringReplacers))
       .anyMatch(s -> compareMaterial(itemStack, s));
   }
 

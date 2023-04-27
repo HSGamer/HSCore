@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -23,9 +23,9 @@ public class AmountModifier implements ItemModifier, ItemComparator {
   }
 
   @Override
-  public @NotNull ItemStack modify(@NotNull ItemStack original, UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
+  public @NotNull ItemStack modify(@NotNull ItemStack original, UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
     Validate
-      .getNumber(StringReplacer.replace(amount, uuid, stringReplacerMap.values()))
+      .getNumber(StringReplacer.replace(amount, uuid, stringReplacers))
       .ifPresent(bigDecimal -> original.setAmount(bigDecimal.intValue()));
     return original;
   }
@@ -47,8 +47,8 @@ public class AmountModifier implements ItemModifier, ItemComparator {
   }
 
   @Override
-  public boolean compare(@NotNull ItemStack itemStack, UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
-    return Validate.getNumber(StringReplacer.replace(amount, uuid, stringReplacerMap.values()))
+  public boolean compare(@NotNull ItemStack itemStack, UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
+    return Validate.getNumber(StringReplacer.replace(amount, uuid, stringReplacers))
       .map(bigDecimal -> bigDecimal.intValue() >= itemStack.getAmount())
       .orElse(false);
   }

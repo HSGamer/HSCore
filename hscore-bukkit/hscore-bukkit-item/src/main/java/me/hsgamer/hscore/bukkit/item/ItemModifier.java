@@ -5,8 +5,8 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -23,14 +23,14 @@ public interface ItemModifier {
   /**
    * Modify the item
    *
-   * @param original          the original item
-   * @param uuid              the unique id
-   * @param stringReplacerMap the map of string replacers
+   * @param original        the original item
+   * @param uuid            the unique id
+   * @param stringReplacers the string replacers
    *
    * @return the modified item
    */
   @NotNull
-  ItemStack modify(@NotNull ItemStack original, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap);
+  ItemStack modify(@NotNull ItemStack original, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers);
 
   /**
    * Serialize the modifier to an object
@@ -67,7 +67,7 @@ public interface ItemModifier {
    */
   @NotNull
   default ItemStack modify(@NotNull ItemStack original, @Nullable UUID uuid) {
-    return modify(original, uuid, Collections.emptyMap());
+    return modify(original, uuid, Collections.emptyList());
   }
 
   /**

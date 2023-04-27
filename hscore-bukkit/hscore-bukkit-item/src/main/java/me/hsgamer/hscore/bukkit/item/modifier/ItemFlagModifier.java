@@ -41,8 +41,8 @@ public class ItemFlagModifier implements ItemMetaModifier, ItemMetaComparator {
   }
 
   @Override
-  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
-    for (ItemFlag flag : getParsed(uuid, stringReplacerMap.values())) {
+  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
+    for (ItemFlag flag : getParsed(uuid, stringReplacers)) {
       meta.addItemFlags(flag);
     }
     return meta;
@@ -55,8 +55,8 @@ public class ItemFlagModifier implements ItemMetaModifier, ItemMetaComparator {
   }
 
   @Override
-  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
-    Set<ItemFlag> list1 = getParsed(uuid, stringReplacerMap.values());
+  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
+    Set<ItemFlag> list1 = getParsed(uuid, stringReplacers);
     Set<ItemFlag> list2 = meta.getItemFlags();
     return list1.size() == list2.size() && list1.containsAll(list2);
   }

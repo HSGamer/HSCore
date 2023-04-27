@@ -26,10 +26,5 @@
       <artifactId>hscore-common</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>me.hsgamer</groupId>
-      <artifactId>hscore-collections</artifactId>
-      <version>${project.version}</version>
-    </dependency>
   </dependencies>
 </project>

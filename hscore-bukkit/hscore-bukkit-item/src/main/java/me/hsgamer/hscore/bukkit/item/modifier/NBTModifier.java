@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -40,12 +41,12 @@ public class NBTModifier implements ItemModifier {
 
   @SuppressWarnings("deprecation")
   @Override
-  public @NotNull ItemStack modify(@NotNull ItemStack original, UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
+  public @NotNull ItemStack modify(@NotNull ItemStack original, UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
     if (Validate.isNullOrEmpty(nbtData)) {
       return original;
     }
     try {
-      return Bukkit.getUnsafe().modifyItemStack(original, StringReplacer.replace(nbtData, uuid, stringReplacerMap.values()));
+      return Bukkit.getUnsafe().modifyItemStack(original, StringReplacer.replace(nbtData, uuid, stringReplacers));
     } catch (Throwable throwable) {
       return original;
     }
@@ -64,10 +65,5 @@ public class NBTModifier implements ItemModifier {
     } else {
       this.nbtData = Objects.toString(object, "");
     }
-  }
-
-  @Override
-  public boolean loadFromItemStack(ItemStack itemStack) {
-    return false;
   }
 }

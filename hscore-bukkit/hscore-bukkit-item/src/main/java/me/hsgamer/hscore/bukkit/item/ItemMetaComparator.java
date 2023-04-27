@@ -6,7 +6,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -16,18 +16,18 @@ public interface ItemMetaComparator extends ItemComparator {
   /**
    * Compare the modifier of an item meta
    *
-   * @param meta              the item meta
-   * @param uuid              the unique id
-   * @param stringReplacerMap the map of string replacers
+   * @param meta            the item meta
+   * @param uuid            the unique id
+   * @param stringReplacers the string replacers
    *
    * @return true if it matches, otherwise false
    *
-   * @see #compare(ItemStack, UUID, Map)
+   * @see #compare(ItemStack, UUID, Collection)
    */
-  boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap);
+  boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers);
 
   @Override
-  default boolean compare(@NotNull ItemStack itemStack, @Nullable UUID uuid, @NotNull Map<String, StringReplacer> stringReplacerMap) {
+  default boolean compare(@NotNull ItemStack itemStack, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
     ItemMeta itemMeta;
     try {
       itemMeta = itemStack.getItemMeta();
@@ -38,6 +38,6 @@ public interface ItemMetaComparator extends ItemComparator {
     if (itemMeta == null) {
       return false;
     }
-    return compare(itemMeta, uuid, stringReplacerMap);
+    return compare(itemMeta, uuid, stringReplacers);
   }
 }
