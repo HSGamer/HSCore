@@ -1,6 +1,9 @@
 package me.hsgamer.hscore.config;
 
 import me.hsgamer.hscore.config.path.ConfigPath;
+import me.hsgamer.hscore.logger.common.LogLevel;
+import me.hsgamer.hscore.logger.common.Logger;
+import me.hsgamer.hscore.logger.provider.LoggerProvider;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -11,6 +14,8 @@ import java.util.stream.Collectors;
  * A class that loads config paths on the config instance
  */
 public final class PathLoader {
+  private static final Logger LOGGER = LoggerProvider.getLogger(PathLoader.class);
+
   private PathLoader() {
     // EMPTY
   }
@@ -40,7 +45,7 @@ public final class PathLoader {
         field.setAccessible(true);
         ((ConfigPath<?>) field.get(config)).setConfig(config);
       } catch (IllegalAccessException e) {
-        e.printStackTrace();
+        LOGGER.log(LogLevel.WARN, e);
       } finally {
         field.setAccessible(accessible);
       }
@@ -59,7 +64,7 @@ public final class PathLoader {
         field.setAccessible(true);
         ((ConfigPath<?>) field.get(config)).reload();
       } catch (IllegalAccessException e) {
-        e.printStackTrace();
+        LOGGER.log(LogLevel.WARN, e);
       } finally {
         field.setAccessible(accessible);
       }

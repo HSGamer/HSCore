@@ -1,6 +1,8 @@
 package me.hsgamer.hscore.database.client.sql;
 
 import me.hsgamer.hscore.database.Client;
+import me.hsgamer.hscore.logger.common.LogLevel;
+import me.hsgamer.hscore.logger.provider.LoggerProvider;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -42,7 +44,7 @@ public interface SqlClient<T> extends Client<T> {
     try {
       return Optional.of(this.createStatementBuilder());
     } catch (Exception e) {
-      e.printStackTrace();
+      LoggerProvider.getLogger(this.getClass()).log(LogLevel.WARN, e);
       return Optional.empty();
     }
   }
@@ -67,7 +69,7 @@ public interface SqlClient<T> extends Client<T> {
     try {
       return Optional.of(this.createBatchBuilder());
     } catch (Exception e) {
-      e.printStackTrace();
+      LoggerProvider.getLogger(this.getClass()).log(LogLevel.WARN, e);
       return Optional.empty();
     }
   }

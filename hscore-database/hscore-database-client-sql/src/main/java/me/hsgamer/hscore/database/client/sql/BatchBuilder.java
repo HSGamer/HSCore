@@ -1,5 +1,8 @@
 package me.hsgamer.hscore.database.client.sql;
 
+import me.hsgamer.hscore.logger.common.LogLevel;
+import me.hsgamer.hscore.logger.common.Logger;
+import me.hsgamer.hscore.logger.provider.LoggerProvider;
 import org.intellij.lang.annotations.Language;
 
 import java.sql.Connection;
@@ -11,6 +14,7 @@ import java.util.List;
  * The batch builder for continuous updating
  */
 public class BatchBuilder implements AutoCloseable {
+  private static final Logger LOGGER = LoggerProvider.getLogger(BatchBuilder.class);
   private final Connection connection;
   private final List<StatementBuilder> statementBuilderList = new LinkedList<>();
 
@@ -51,7 +55,7 @@ public class BatchBuilder implements AutoCloseable {
     try {
       this.execute();
     } catch (Exception e) {
-      e.printStackTrace();
+      LOGGER.log(LogLevel.WARN, e);
     }
   }
 

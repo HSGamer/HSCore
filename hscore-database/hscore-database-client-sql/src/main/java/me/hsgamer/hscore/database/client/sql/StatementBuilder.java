@@ -1,5 +1,8 @@
 package me.hsgamer.hscore.database.client.sql;
 
+import me.hsgamer.hscore.logger.common.LogLevel;
+import me.hsgamer.hscore.logger.common.Logger;
+import me.hsgamer.hscore.logger.provider.LoggerProvider;
 import org.intellij.lang.annotations.Language;
 
 import java.sql.Connection;
@@ -16,6 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * The {@link PreparedStatement} builder
  */
 public class StatementBuilder {
+  private static final Logger LOGGER = LoggerProvider.getLogger(StatementBuilder.class);
   private final Connection connection;
   private final AtomicReference<String> statement = new AtomicReference<>("");
   private final List<Object> values = new ArrayList<>();
@@ -135,7 +139,7 @@ public class StatementBuilder {
     try {
       return Optional.of(this.query(converter));
     } catch (Exception e) {
-      e.printStackTrace();
+      LOGGER.log(LogLevel.WARN, e);
       return Optional.empty();
     }
   }
@@ -149,7 +153,7 @@ public class StatementBuilder {
     try {
       this.consume(consumer);
     } catch (Exception e) {
-      e.printStackTrace();
+      LOGGER.log(LogLevel.WARN, e);
     }
   }
 
@@ -162,7 +166,7 @@ public class StatementBuilder {
     try {
       return this.update();
     } catch (Exception e) {
-      e.printStackTrace();
+      LOGGER.log(LogLevel.WARN, e);
       return 0;
     }
   }
