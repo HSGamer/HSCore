@@ -1,8 +1,6 @@
 package me.hsgamer.hscore.common.consumer;
 
 import java.util.function.Consumer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * {@link Consumer} but ignores exceptions
@@ -15,7 +13,7 @@ public interface ThrowableConsumer<T> extends Consumer<T> {
     try {
       acceptSafe(t);
     } catch (Throwable throwable) {
-      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is an exception on accepting", throwable);
+      throwable.printStackTrace();
     }
   }
 

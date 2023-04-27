@@ -3,6 +3,7 @@ package me.hsgamer.hscore.config.simpleconfiguration;
 import me.hsgamer.hscore.config.CommentType;
 import me.hsgamer.hscore.config.Config;
 import me.hsgamer.hscore.config.PathString;
+import me.hsgamer.hscore.logger.common.LogLevel;
 import org.simpleyaml.configuration.ConfigurationSection;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
@@ -10,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.logging.Level;
 
 /**
  * The {@link Config} implementation for SimpleYAML
@@ -44,7 +44,7 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
       try {
         t.load(file1);
       } catch (IOException e) {
-        LOGGER.log(Level.WARNING, e, () -> "Something wrong when loading " + file1.getName());
+        LOGGER.log(LogLevel.WARN, "Something wrong when loading " + file1.getName(), e);
       }
     });
   }
@@ -109,7 +109,7 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
       try {
         this.file.createNewFile();
       } catch (IOException e) {
-        LOGGER.log(Level.WARNING, e, () -> "Something wrong when creating " + this.file.getName());
+        LOGGER.log(LogLevel.WARN, "Something wrong when creating " + this.file.getName(), e);
       }
     }
     this.configuration.options().copyDefaults(true);
@@ -121,7 +121,7 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
     try {
       this.configuration.save(this.file);
     } catch (IOException e) {
-      LOGGER.log(Level.WARNING, e, () -> "Something wrong when saving " + this.file.getName());
+      LOGGER.log(LogLevel.WARN, "Something wrong when saving " + this.file.getName(), e);
     }
   }
 
@@ -155,7 +155,7 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
         org.simpleyaml.configuration.comments.CommentType commentType = org.simpleyaml.configuration.comments.CommentType.valueOf(type.name());
         comment = ((org.simpleyaml.configuration.comments.Commentable) configuration).getComment(toPath(path), commentType);
       } catch (Exception e) {
-        LOGGER.log(Level.SEVERE, e, () -> "Something wrong when getting comment of " + path);
+        LOGGER.log(LogLevel.WARN, "Something wrong when getting comment of " + path, e);
       }
     }
     return comment == null ? Collections.emptyList() : Arrays.asList(comment.split("\\r?\\n"));
@@ -171,7 +171,7 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
         org.simpleyaml.configuration.comments.CommentType commentType = org.simpleyaml.configuration.comments.CommentType.valueOf(type.name());
         ((org.simpleyaml.configuration.comments.Commentable) configuration).setComment(toPath(path), comment, commentType);
       } catch (Exception e) {
-        LOGGER.log(Level.SEVERE, e, () -> "Something wrong when setting comment of " + path);
+        LOGGER.log(LogLevel.WARN, "Something wrong when setting comment of " + path, e);
       }
     }
   }

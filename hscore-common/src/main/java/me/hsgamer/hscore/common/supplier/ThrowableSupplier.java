@@ -1,8 +1,6 @@
 package me.hsgamer.hscore.common.supplier;
 
 import java.util.function.Supplier;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * {@link Supplier} but returns null if there is an exception
@@ -15,7 +13,7 @@ public interface ThrowableSupplier<T> extends Supplier<T> {
     try {
       return getSafe();
     } catch (Throwable throwable) {
-      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is an exception on getting", throwable);
+      throwable.printStackTrace();
       return null;
     }
   }

@@ -10,4 +10,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>hscore-downloader-core</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-logger-provider</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 </project>

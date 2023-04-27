@@ -6,12 +6,13 @@ import com.cronutils.model.definition.CronDefinition;
 import com.cronutils.model.definition.CronDefinitionBuilder;
 import com.cronutils.model.time.ExecutionTime;
 import com.cronutils.parser.CronParser;
+import me.hsgamer.hscore.logger.common.LogLevel;
+import me.hsgamer.hscore.logger.common.Logger;
+import me.hsgamer.hscore.logger.provider.LoggerProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.ZonedDateTime;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A simple cron-time manager to manage next execution time
@@ -20,7 +21,7 @@ public class CronTimeManager {
   /**
    * The internal logger
    */
-  protected static final Logger LOGGER = Logger.getLogger(CronTimeManager.class.getSimpleName());
+  protected static final Logger LOGGER = LoggerProvider.getLogger(CronTimeManager.class);
   private final List<Cron> cronList;
 
   /**
@@ -55,7 +56,7 @@ public class CronTimeManager {
         Cron cron = parser.parse(cronTime);
         cronList.add(cron);
       } catch (Exception ex) {
-        LOGGER.log(Level.WARNING, ex, () -> String.format("Cron time is invalid: `%s`", cronTime));
+        LOGGER.log(LogLevel.WARN, "Cron time is invalid: `" + cronTime + "`", ex);
       }
     });
   }

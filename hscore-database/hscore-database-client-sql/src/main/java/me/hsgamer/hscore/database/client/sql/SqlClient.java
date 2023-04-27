@@ -5,8 +5,6 @@ import me.hsgamer.hscore.database.Client;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * The interface for SQL client
@@ -44,7 +42,7 @@ public interface SqlClient<T> extends Client<T> {
     try {
       return Optional.of(this.createStatementBuilder());
     } catch (Exception e) {
-      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is an error when creating the statement builder", e);
+      e.printStackTrace();
       return Optional.empty();
     }
   }
@@ -69,7 +67,7 @@ public interface SqlClient<T> extends Client<T> {
     try {
       return Optional.of(this.createBatchBuilder());
     } catch (Exception e) {
-      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is an error when creating the batch builder", e);
+      e.printStackTrace();
       return Optional.empty();
     }
   }

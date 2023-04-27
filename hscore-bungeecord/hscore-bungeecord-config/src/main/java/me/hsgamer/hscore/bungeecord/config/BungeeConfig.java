@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bungeecord.config;
 
 import me.hsgamer.hscore.config.Config;
 import me.hsgamer.hscore.config.PathString;
+import me.hsgamer.hscore.logger.common.LogLevel;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -10,7 +11,6 @@ import net.md_5.bungee.config.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Level;
 
 /**
  * The BungeeCord Configuration
@@ -93,13 +93,13 @@ public class BungeeConfig implements Config {
       try {
         this.file.createNewFile();
       } catch (IOException e) {
-        LOGGER.log(Level.WARNING, e, () -> "Something wrong when creating " + this.file.getName());
+        LOGGER.log(LogLevel.WARN, "Something wrong when creating " + this.file.getName(), e);
       }
     }
     try {
       this.configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(this.file);
     } catch (IOException e) {
-      LOGGER.log(Level.WARNING, e, () -> "Something wrong when loading " + this.file.getName());
+      LOGGER.log(LogLevel.WARN, "Something wrong when loading " + this.file.getName(), e);
     }
   }
 
@@ -113,7 +113,7 @@ public class BungeeConfig implements Config {
     try {
       ConfigurationProvider.getProvider(YamlConfiguration.class).save(this.configuration, this.file);
     } catch (IOException e) {
-      LOGGER.log(Level.WARNING, e, () -> "Something wrong when saving " + this.file.getName());
+      LOGGER.log(LogLevel.WARN, "Something wrong when saving " + this.file.getName(), e);
     }
   }
 

@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
 import me.hsgamer.hscore.config.Config;
 import me.hsgamer.hscore.config.PathString;
+import me.hsgamer.hscore.logger.common.LogLevel;
 
 import java.io.File;
 import java.io.FileReader;
@@ -13,7 +14,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Level;
 
 /**
  * The {@link Config} implementation for Gson
@@ -158,7 +158,7 @@ public class GsonConfig implements Config {
       try {
         this.file.createNewFile();
       } catch (IOException e) {
-        LOGGER.log(Level.WARNING, e, () -> "Something wrong when creating " + this.file.getName());
+        LOGGER.log(LogLevel.WARN, "Something wrong when creating " + file.getName(), e);
       }
     }
 
@@ -168,7 +168,7 @@ public class GsonConfig implements Config {
         this.root = jsonElement.getAsJsonObject();
       }
     } catch (IOException e) {
-      LOGGER.log(Level.WARNING, e, () -> "Something wrong when setting up " + file.getName());
+      LOGGER.log(LogLevel.WARN, "Something wrong when loading " + file.getName(), e);
     }
   }
 
@@ -181,7 +181,7 @@ public class GsonConfig implements Config {
       jsonWriter.setIndent("  ");
       gson.toJson(this.root, jsonWriter);
     } catch (IOException e) {
-      LOGGER.log(Level.WARNING, e, () -> "Something wrong when saving " + file.getName());
+      LOGGER.log(LogLevel.WARN, "Something wrong when saving " + file.getName(), e);
     }
   }
 

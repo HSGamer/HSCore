@@ -13,6 +13,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-logger-provider</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>com.cronutils</groupId>
       <artifactId>cron-utils</artifactId>
       <version>9.2.1</version>

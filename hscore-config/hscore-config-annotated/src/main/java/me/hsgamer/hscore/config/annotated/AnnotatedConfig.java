@@ -7,6 +7,7 @@ import me.hsgamer.hscore.config.annotation.Comment;
 import me.hsgamer.hscore.config.annotation.ConfigPath;
 import me.hsgamer.hscore.config.annotation.converter.Converter;
 import me.hsgamer.hscore.config.annotation.converter.manager.DefaultConverterManager;
+import me.hsgamer.hscore.logger.common.LogLevel;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -90,7 +91,7 @@ public class AnnotatedConfig extends DecorativeConfig {
       return false;
     }
     if (Modifier.isFinal(field.getModifiers()) && Modifier.isStatic(field.getModifiers())) {
-      LOGGER.warning(() -> field.getName() + " is a static final field. Ignored");
+      LOGGER.log(LogLevel.WARN, field.getName() + " is a static final field. Ignored");
       return false;
     }
     return true;

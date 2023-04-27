@@ -2,13 +2,14 @@ package me.hsgamer.hscore.downloader.core.loader;
 
 import me.hsgamer.hscore.downloader.core.Downloader;
 import me.hsgamer.hscore.downloader.core.object.DownloadInfo;
+import me.hsgamer.hscore.logger.common.LogLevel;
+import me.hsgamer.hscore.logger.common.Logger;
+import me.hsgamer.hscore.logger.provider.LoggerProvider;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A simple {@link DownloadInfoLoader} that loads the download info from a map.
@@ -34,7 +35,7 @@ import java.util.logging.Logger;
  * </pre>
  */
 public abstract class MapDownloadInfoLoader implements DownloadInfoLoader {
-  private static final Logger logger = Logger.getLogger(MapDownloadInfoLoader.class.getSimpleName());
+  private static final Logger logger = LoggerProvider.getLogger(MapDownloadInfoLoader.class);
 
   private DownloadInfo getDownloadInfo(Downloader downloader, String name, Map<String, Object> map) {
     if (!map.containsKey("file-name")) {
@@ -77,7 +78,7 @@ public abstract class MapDownloadInfoLoader implements DownloadInfoLoader {
           DownloadInfo downloadInfo = getDownloadInfo(downloader, name, value);
           map.put(name, downloadInfo);
         } catch (Exception e) {
-          logger.log(Level.WARNING, e, () -> "Something wrong when parsing the info of " + name);
+          logger.log(LogLevel.WARN, "Something wrong when parsing the info of " + name, e);
         }
       });
 

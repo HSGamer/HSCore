@@ -3,6 +3,7 @@ package me.hsgamer.hscore.config.configurate;
 import me.hsgamer.hscore.config.CommentType;
 import me.hsgamer.hscore.config.Config;
 import me.hsgamer.hscore.config.PathString;
+import me.hsgamer.hscore.logger.common.LogLevel;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
@@ -12,7 +13,6 @@ import org.spongepowered.configurate.serialize.SerializationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Level;
 
 /**
  * The {@link Config} implementation for Configurate
@@ -52,7 +52,7 @@ public class ConfigurateConfig implements Config {
     try {
       node.set(value);
     } catch (SerializationException e) {
-      LOGGER.log(Level.WARNING, e, () -> "Something wrong when setting " + path);
+      LOGGER.log(LogLevel.WARN, "Something wrong when setting " + path, e);
     }
   }
 
@@ -103,7 +103,7 @@ public class ConfigurateConfig implements Config {
       try {
         this.file.createNewFile();
       } catch (IOException e) {
-        LOGGER.log(Level.WARNING, e, () -> "Something wrong when creating " + this.file.getName());
+        LOGGER.log(LogLevel.WARN, "Something wrong when creating " + this.file.getName(), e);
       }
     }
     this.loader = this.builder.file(file).build();
@@ -115,7 +115,7 @@ public class ConfigurateConfig implements Config {
     try {
       this.loader.save(this.rootNode);
     } catch (IOException e) {
-      LOGGER.log(Level.WARNING, e, () -> "Something wrong when saving " + this.file.getName());
+      LOGGER.log(LogLevel.WARN, "Something wrong when saving " + this.file.getName(), e);
     }
   }
 
@@ -128,7 +128,7 @@ public class ConfigurateConfig implements Config {
     try {
       this.rootNode = this.loader.load();
     } catch (IOException e) {
-      LOGGER.log(Level.WARNING, e, () -> "Something wrong when loading " + this.file.getName());
+      LOGGER.log(LogLevel.WARN, "Something wrong when loading " + this.file.getName(), e);
     }
   }
 

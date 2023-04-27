@@ -6,8 +6,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * The batch builder for continuous updating
@@ -53,7 +51,7 @@ public class BatchBuilder implements AutoCloseable {
     try {
       this.execute();
     } catch (Exception e) {
-      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is a error when executing", e);
+      e.printStackTrace();
     }
   }
 

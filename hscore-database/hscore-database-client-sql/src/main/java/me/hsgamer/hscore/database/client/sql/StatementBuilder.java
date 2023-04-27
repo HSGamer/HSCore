@@ -11,8 +11,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * The {@link PreparedStatement} builder
@@ -137,7 +135,7 @@ public class StatementBuilder {
     try {
       return Optional.of(this.query(converter));
     } catch (Exception e) {
-      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is a error when querying", e);
+      e.printStackTrace();
       return Optional.empty();
     }
   }
@@ -151,7 +149,7 @@ public class StatementBuilder {
     try {
       this.consume(consumer);
     } catch (Exception e) {
-      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is a error when consuming", e);
+      e.printStackTrace();
     }
   }
 
@@ -164,7 +162,7 @@ public class StatementBuilder {
     try {
       return this.update();
     } catch (Exception e) {
-      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is a error when updating", e);
+      e.printStackTrace();
       return 0;
     }
   }

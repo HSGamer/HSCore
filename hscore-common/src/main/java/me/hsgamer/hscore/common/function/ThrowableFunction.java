@@ -1,8 +1,6 @@
 package me.hsgamer.hscore.common.function;
 
 import java.util.function.Function;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * {@link Function} but returns null if there is an exception
@@ -16,7 +14,7 @@ public interface ThrowableFunction<T, R> extends Function<T, R> {
     try {
       return applySafe(t);
     } catch (Throwable throwable) {
-      Logger.getLogger(getClass().getName()).log(Level.WARNING, "There is an exception on applying", throwable);
+      throwable.printStackTrace();
       return null;
     }
   }

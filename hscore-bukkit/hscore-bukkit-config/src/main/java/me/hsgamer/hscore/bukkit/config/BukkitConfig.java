@@ -3,6 +3,7 @@ package me.hsgamer.hscore.bukkit.config;
 import me.hsgamer.hscore.config.CommentType;
 import me.hsgamer.hscore.config.Config;
 import me.hsgamer.hscore.config.PathString;
+import me.hsgamer.hscore.logger.common.LogLevel;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,7 +12,6 @@ import org.bukkit.plugin.Plugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Level;
 
 /**
  * The bukkit configuration
@@ -137,14 +137,14 @@ public class BukkitConfig implements Config {
       try {
         this.file.createNewFile();
       } catch (IOException e) {
-        LOGGER.log(Level.WARNING, e, () -> "Something wrong when creating " + this.file.getName());
+        LOGGER.log(LogLevel.WARN, "Something wrong when creating " + this.file.getName(), e);
       }
     }
     this.configuration.options().copyDefaults(true);
     try {
       this.configuration.load(this.file);
     } catch (IOException | InvalidConfigurationException e) {
-      LOGGER.log(Level.WARNING, e, () -> "Something wrong when loading " + this.file.getName());
+      LOGGER.log(LogLevel.WARN, "Something wrong when loading " + this.file.getName(), e);
     }
   }
 
@@ -153,7 +153,7 @@ public class BukkitConfig implements Config {
     try {
       this.configuration.save(this.file);
     } catch (IOException e) {
-      LOGGER.log(Level.WARNING, e, () -> "Something wrong when saving " + this.file.getName());
+      LOGGER.log(LogLevel.WARN, "Something wrong when saving " + this.file.getName(), e);
     }
   }
 

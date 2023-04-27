@@ -3,6 +3,9 @@ package me.hsgamer.hscore.downloader.core;
 import me.hsgamer.hscore.downloader.core.loader.DownloadInfoLoader;
 import me.hsgamer.hscore.downloader.core.loader.InputStreamLoader;
 import me.hsgamer.hscore.downloader.core.object.DownloadInfo;
+import me.hsgamer.hscore.logger.common.LogLevel;
+import me.hsgamer.hscore.logger.common.Logger;
+import me.hsgamer.hscore.logger.provider.LoggerProvider;
 
 import java.io.File;
 import java.util.Collections;
@@ -10,14 +13,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * The downloader
  */
 public class Downloader {
-  private static final Logger logger = Logger.getLogger(Downloader.class.getSimpleName());
+  private static final Logger logger = LoggerProvider.getLogger(Downloader.class);
   private final Map<String, DownloadInfo> downloadInfoMap = new ConcurrentHashMap<>();
   private final AtomicBoolean isLoaded = new AtomicBoolean(false);
   private final DownloadInfoLoader downloadInfoLoader;
@@ -35,7 +36,7 @@ public class Downloader {
     this.inputStreamLoader = inputStreamLoader;
     this.folder = folder;
     if (!folder.exists() && folder.mkdirs()) {
-      logger.info(() -> "Create folder: " + folder.getAbsolutePath());
+      logger.log("Create folder: " + folder.getAbsolutePath());
     }
   }
 
@@ -103,7 +104,7 @@ public class Downloader {
     downloadInfoMap.clear();
     downloadInfoLoader.load(this).whenCompleteAsync((map, throwable) -> {
       if (throwable != null) {
-        logger.log(Level.WARNING, "A throwable occurred when loading download info", throwable);
+        logger.log(LogLevel.WARN, "A throwable occurred when loading download info", throwable);
       }
       if (map != null) {
         downloadInfoMap.putAll(map);

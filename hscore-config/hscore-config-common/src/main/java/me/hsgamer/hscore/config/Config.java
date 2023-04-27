@@ -1,7 +1,9 @@
 package me.hsgamer.hscore.config;
 
+import me.hsgamer.hscore.logger.common.Logger;
+import me.hsgamer.hscore.logger.provider.LoggerProvider;
+
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * The interface for all configurations
@@ -10,7 +12,7 @@ public interface Config {
   /**
    * The logger for ease
    */
-  Logger LOGGER = Logger.getLogger(Config.class.getSimpleName());
+  Logger LOGGER = LoggerProvider.getLogger(Config.class);
 
   /**
    * Get the original instance
