@@ -54,7 +54,6 @@
     <module>hscore-downloader</module>
     <module>hscore-crontime</module>
     <module>hscore-task</module>
-    <module>hscore-logging</module>
     <module>hscore-minecraft</module>
     <module>hscore-bukkit</module>
     <module>hscore-bungeecord</module>
