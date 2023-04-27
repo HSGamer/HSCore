@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 /**
  * The variable manager for the instance
  */
-public class VariableManager {
+public class VariableManager implements StringReplacer {
   /**
    * The global variable manager
    */
@@ -184,5 +184,15 @@ public class VariableManager {
    */
   public void setReplaceAll(BooleanSupplier replaceAll) {
     this.replaceAll = replaceAll;
+  }
+
+  @Override
+  public @Nullable String replace(@NotNull String original) {
+    return setVariables(original, null);
+  }
+
+  @Override
+  public @Nullable String replace(@NotNull String original, @NotNull UUID uuid) {
+    return setVariables(original, uuid);
   }
 }
