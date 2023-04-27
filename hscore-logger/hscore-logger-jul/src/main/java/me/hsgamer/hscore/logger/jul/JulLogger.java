@@ -33,7 +33,7 @@ public class JulLogger implements Logger {
    * @param clazz the class
    */
   public JulLogger(Class<?> clazz) {
-    this(clazz.getName());
+    this(clazz.getSimpleName());
   }
 
   @Override
