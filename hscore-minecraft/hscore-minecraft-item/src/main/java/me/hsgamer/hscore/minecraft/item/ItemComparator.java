@@ -1,7 +1,6 @@
-package me.hsgamer.hscore.bukkit.item;
+package me.hsgamer.hscore.minecraft.item;
 
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,39 +10,41 @@ import java.util.UUID;
 
 /**
  * An extension to {@link ItemModifier} to compare the modifier of an item
+ *
+ * @param <T> the type of the item
  */
-public interface ItemComparator {
+public interface ItemComparator<T> {
   /**
    * Compare the modifier of an item
    *
-   * @param itemStack       the item
+   * @param item            the item
    * @param uuid            the unique id
    * @param stringReplacers the string replacers
    *
    * @return true if it matches, otherwise false
    */
-  boolean compare(@NotNull ItemStack itemStack, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers);
+  boolean compare(@NotNull T item, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers);
 
   /**
    * Compare the modifier of an item
    *
-   * @param itemStack the item
-   * @param uuid      the unique id
+   * @param item the item
+   * @param uuid the unique id
    *
    * @return true if it matches, otherwise false
    */
-  default boolean compare(@NotNull ItemStack itemStack, @Nullable UUID uuid) {
-    return compare(itemStack, uuid, Collections.emptyList());
+  default boolean compare(@NotNull T item, @Nullable UUID uuid) {
+    return compare(item, uuid, Collections.emptyList());
   }
 
   /**
    * Compare the modifier of an item
    *
-   * @param itemStack the item
+   * @param item the item
    *
    * @return true if it matches, otherwise false
    */
-  default boolean compare(@NotNull ItemStack itemStack) {
-    return compare(itemStack, null, Collections.emptyList());
+  default boolean compare(@NotNull T item) {
+    return compare(item, null, Collections.emptyList());
   }
 }

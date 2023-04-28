@@ -1,9 +1,6 @@
-package me.hsgamer.hscore.bukkit.item;
+package me.hsgamer.hscore.minecraft.item;
 
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,11 +12,20 @@ import java.util.UUID;
 
 /**
  * The item builder
+ *
+ * @param <T> the type of the item
  */
-public class ItemBuilder {
-  private final List<ItemModifier> itemModifiers = new ArrayList<>();
+public abstract class ItemBuilder<T> {
+  private final List<ItemModifier<T>> itemModifiers = new ArrayList<>();
   private final List<StringReplacer> stringReplacers = new ArrayList<>();
-  private ItemStack defaultItemStack;
+
+  /**
+   * Get the default item
+   *
+   * @return the default item
+   */
+  @NotNull
+  protected abstract T getDefaultItem();
 
   /**
    * Add an item modifier
@@ -29,7 +35,7 @@ public class ItemBuilder {
    * @return {@code this} for builder chain
    */
   @Contract("_ -> this")
-  public ItemBuilder addItemModifier(ItemModifier modifier) {
+  public ItemBuilder<T> addItemModifier(ItemModifier<T> modifier) {
     itemModifiers.add(modifier);
     return this;
   }
@@ -42,7 +48,7 @@ public class ItemBuilder {
    * @return {@code this} for builder chain
    */
   @Contract("_ -> this")
-  public ItemBuilder removeItemModifier(ItemModifier modifier) {
+  public ItemBuilder<T> removeItemModifier(ItemModifier<T> modifier) {
     itemModifiers.remove(modifier);
     return this;
   }
@@ -52,7 +58,7 @@ public class ItemBuilder {
    *
    * @return the item modifiers
    */
-  public List<ItemModifier> getItemModifiers() {
+  public List<ItemModifier<T>> getItemModifiers() {
     return Collections.unmodifiableList(itemModifiers);
   }
 
@@ -73,7 +79,7 @@ public class ItemBuilder {
    * @return {@code this} for builder chain
    */
   @Contract("_ -> this")
-  public ItemBuilder addStringReplacer(StringReplacer replacer) {
+  public ItemBuilder<T> addStringReplacer(StringReplacer replacer) {
     this.stringReplacers.add(replacer);
     return this;
   }
@@ -86,7 +92,7 @@ public class ItemBuilder {
    * @return {@code this} for builder chain
    */
   @Contract("_ -> this")
-  public ItemBuilder removeStringReplacer(StringReplacer replacer) {
+  public ItemBuilder<T> removeStringReplacer(StringReplacer replacer) {
     this.stringReplacers.remove(replacer);
     return this;
   }
@@ -98,23 +104,12 @@ public class ItemBuilder {
    *
    * @return the item
    */
-  public ItemStack build(@Nullable UUID uuid) {
-    ItemStack itemStack = defaultItemStack == null ? new ItemStack(Material.STONE) : defaultItemStack.clone();
-    for (ItemModifier modifier : itemModifiers) {
-      itemStack = modifier.modify(itemStack, uuid, getStringReplacers());
+  public T build(@Nullable UUID uuid) {
+    T item = getDefaultItem();
+    for (ItemModifier<T> modifier : itemModifiers) {
+      item = modifier.modify(item, uuid, getStringReplacers());
     }
-    return itemStack;
-  }
-
-  /**
-   * Build the item
-   *
-   * @param player the player
-   *
-   * @return the item
-   */
-  public ItemStack build(@NotNull Player player) {
-    return build(player.getUniqueId());
+    return item;
   }
 
   /**
@@ -122,34 +117,7 @@ public class ItemBuilder {
    *
    * @return the item
    */
-  public ItemStack build() {
-    return build((UUID) null);
-  }
-
-  /**
-   * Set the default item stack
-   *
-   * @param itemStack the item stack
-   *
-   * @return {@code this} for builder chain
-   */
-  @Contract("_ -> this")
-  public ItemBuilder setDefaultItemStack(ItemStack itemStack) {
-    this.defaultItemStack = itemStack;
-    return this;
-  }
-
-  /**
-   * Set the default material
-   *
-   * @param material the material
-   *
-   * @return {@code this} for builder chain
-   *
-   * @see #setDefaultItemStack(ItemStack)
-   */
-  @Contract("_ -> this")
-  public ItemBuilder setDefaultMaterial(Material material) {
-    return setDefaultItemStack(new ItemStack(material));
+  public T build() {
+    return build(null);
   }
 }

@@ -1,6 +1,7 @@
-package me.hsgamer.hscore.bukkit.item;
+package me.hsgamer.hscore.bukkit.item.modifier;
 
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
+import me.hsgamer.hscore.minecraft.item.ItemModifier;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +13,7 @@ import java.util.UUID;
 /**
  * The {@link ItemMeta} modifier
  */
-public interface ItemMetaModifier extends ItemModifier {
+public interface ItemMetaModifier extends ItemModifier<ItemStack> {
   /**
    * Modify the item meta
    *
@@ -30,7 +31,7 @@ public interface ItemMetaModifier extends ItemModifier {
    *
    * @param meta the item meta
    *
-   * @see #loadFromItemStack(ItemStack)
+   * @see #loadFromItem(ItemStack)
    */
   boolean loadFromItemMeta(ItemMeta meta);
 
@@ -44,9 +45,9 @@ public interface ItemMetaModifier extends ItemModifier {
   }
 
   @Override
-  default boolean loadFromItemStack(ItemStack itemStack) {
-    if (itemStack.hasItemMeta()) {
-      return this.loadFromItemMeta(itemStack.getItemMeta());
+  default boolean loadFromItem(ItemStack item) {
+    if (item.hasItemMeta()) {
+      return this.loadFromItemMeta(item.getItemMeta());
     }
     return false;
   }

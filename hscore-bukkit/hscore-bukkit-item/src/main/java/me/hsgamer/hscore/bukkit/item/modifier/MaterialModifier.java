@@ -1,10 +1,10 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
-import me.hsgamer.hscore.bukkit.item.ItemComparator;
-import me.hsgamer.hscore.bukkit.item.ItemModifier;
 import me.hsgamer.hscore.bukkit.utils.VersionUtils;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
+import me.hsgamer.hscore.minecraft.item.ItemComparator;
+import me.hsgamer.hscore.minecraft.item.ItemModifier;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
@@ -16,7 +16,7 @@ import java.util.*;
  * The material modifier
  */
 @SuppressWarnings("deprecation")
-public class MaterialModifier implements ItemModifier, ItemComparator {
+public class MaterialModifier implements ItemComparator<ItemStack>, ItemModifier<ItemStack> {
   private static final Map<Integer, Material> ID_MATERIAL_MAP = new HashMap<>();
 
   static {
@@ -104,19 +104,19 @@ public class MaterialModifier implements ItemModifier, ItemComparator {
   }
 
   @Override
-  public boolean loadFromItemStack(ItemStack itemStack) {
-    this.materialList = Collections.singletonList(itemStack.getType().name());
+  public boolean loadFromItem(ItemStack item) {
+    this.materialList = Collections.singletonList(item.getType().name());
     return true;
   }
 
   @Override
-  public boolean compare(@NotNull ItemStack itemStack, UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
+  public boolean compare(@NotNull ItemStack item, UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
     if (materialList.isEmpty()) {
       return true;
     }
     return materialList.parallelStream()
       .map(s -> StringReplacer.replace(s, uuid, stringReplacers))
-      .anyMatch(s -> compareMaterial(itemStack, s));
+      .anyMatch(s -> compareMaterial(item, s));
   }
 
   /**

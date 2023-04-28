@@ -1,9 +1,9 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
-import me.hsgamer.hscore.bukkit.item.ItemComparator;
-import me.hsgamer.hscore.bukkit.item.ItemModifier;
 import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
+import me.hsgamer.hscore.minecraft.item.ItemComparator;
+import me.hsgamer.hscore.minecraft.item.ItemModifier;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +14,7 @@ import java.util.UUID;
 /**
  * The amount modifier
  */
-public class AmountModifier implements ItemModifier, ItemComparator {
+public class AmountModifier implements ItemComparator<ItemStack>, ItemModifier<ItemStack> {
   private String amount = "1";
 
   @Override
@@ -36,15 +36,15 @@ public class AmountModifier implements ItemModifier, ItemComparator {
   }
 
   @Override
-  public boolean loadFromItemStack(ItemStack itemStack) {
-    this.amount = String.valueOf(itemStack.getAmount());
+  public boolean loadFromItem(ItemStack item) {
+    this.amount = String.valueOf(item.getAmount());
     return true;
   }
 
   @Override
-  public boolean compare(@NotNull ItemStack itemStack, UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
+  public boolean compare(@NotNull ItemStack item, UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
     return Validate.getNumber(StringReplacer.replace(amount, uuid, stringReplacers))
-      .map(bigDecimal -> bigDecimal.intValue() >= itemStack.getAmount())
+      .map(bigDecimal -> bigDecimal.intValue() >= item.getAmount())
       .orElse(false);
   }
 

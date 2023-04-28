@@ -1,7 +1,6 @@
-package me.hsgamer.hscore.bukkit.item;
+package me.hsgamer.hscore.minecraft.item;
 
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,8 +10,10 @@ import java.util.UUID;
 
 /**
  * The item modifier
+ *
+ * @param <T> the type of the item
  */
-public interface ItemModifier {
+public interface ItemModifier<T> {
   /**
    * Modify the item
    *
@@ -23,7 +24,7 @@ public interface ItemModifier {
    * @return the modified item
    */
   @NotNull
-  ItemStack modify(@NotNull ItemStack original, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers);
+  T modify(@NotNull T original, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers);
 
   /**
    * Serialize the modifier to an object
@@ -42,11 +43,11 @@ public interface ItemModifier {
   /**
    * Load the modifier from an item
    *
-   * @param itemStack the item
+   * @param item the item
    *
    * @return true if it can
    */
-  default boolean loadFromItemStack(ItemStack itemStack) {
+  default boolean loadFromItem(T item) {
     return false;
   }
 
@@ -59,7 +60,7 @@ public interface ItemModifier {
    * @return the modified item
    */
   @NotNull
-  default ItemStack modify(@NotNull ItemStack original, @Nullable UUID uuid) {
+  default T modify(@NotNull T original, @Nullable UUID uuid) {
     return modify(original, uuid, Collections.emptyList());
   }
 
@@ -71,7 +72,7 @@ public interface ItemModifier {
    * @return the modified item
    */
   @NotNull
-  default ItemStack modify(@NotNull ItemStack original) {
+  default T modify(@NotNull T original) {
     return modify(original, null);
   }
 }

@@ -1,9 +1,9 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
-import me.hsgamer.hscore.bukkit.item.ItemComparator;
-import me.hsgamer.hscore.bukkit.item.ItemModifier;
 import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
+import me.hsgamer.hscore.minecraft.item.ItemComparator;
+import me.hsgamer.hscore.minecraft.item.ItemModifier;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +15,7 @@ import java.util.UUID;
  * The durability modifier
  */
 @SuppressWarnings("deprecation")
-public class DurabilityModifier implements ItemModifier, ItemComparator {
+public class DurabilityModifier implements ItemComparator<ItemStack>, ItemModifier<ItemStack> {
   private String durability = "1";
 
   @Override
@@ -37,15 +37,15 @@ public class DurabilityModifier implements ItemModifier, ItemComparator {
   }
 
   @Override
-  public boolean loadFromItemStack(ItemStack itemStack) {
-    this.durability = String.valueOf(itemStack.getDurability());
+  public boolean loadFromItem(ItemStack item) {
+    this.durability = String.valueOf(item.getDurability());
     return true;
   }
 
   @Override
-  public boolean compare(@NotNull ItemStack itemStack, UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
+  public boolean compare(@NotNull ItemStack item, UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
     return Validate.getNumber(StringReplacer.replace(durability, uuid, stringReplacers))
-      .map(bigDecimal -> bigDecimal.shortValue() == itemStack.getDurability())
+      .map(bigDecimal -> bigDecimal.shortValue() == item.getDurability())
       .orElse(false);
   }
 

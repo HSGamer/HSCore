@@ -21,5 +21,6 @@
     <module>hscore-minecraft-block-impl</module>
     <module>hscore-minecraft-block-utils</module>
     <module>hscore-minecraft-click-type</module>
+    <module>hscore-minecraft-item</module>
   </modules>
 </project>
