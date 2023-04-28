@@ -34,11 +34,6 @@ public class EnchantmentModifier implements ItemMetaModifier, ItemMetaComparator
     return name.toUpperCase(Locale.ROOT).replace(" ", "_");
   }
 
-  @Override
-  public String getName() {
-    return "enchantment";
-  }
-
   private Map<Enchantment, Integer> getParsed(UUID uuid, Collection<StringReplacer> stringReplacers) {
     Map<Enchantment, Integer> enchantments = new LinkedHashMap<>();
     for (String string : enchantmentList) {

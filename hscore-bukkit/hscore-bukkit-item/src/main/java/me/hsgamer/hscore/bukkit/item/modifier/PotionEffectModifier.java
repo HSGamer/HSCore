@@ -98,11 +98,6 @@ public class PotionEffectModifier implements ItemMetaModifier, ItemMetaComparato
   }
 
   @Override
-  public String getName() {
-    return "potion-effect";
-  }
-
-  @Override
   public Object toObject() {
     return potionEffectList;
   }

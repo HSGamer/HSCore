@@ -84,11 +84,6 @@ public class MaterialModifier implements ItemModifier, ItemComparator {
   }
 
   @Override
-  public String getName() {
-    return "material";
-  }
-
-  @Override
   public @NotNull ItemStack modify(@NotNull ItemStack original, UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
     for (String materialString : materialList) {
       if (setMaterial(original, StringReplacer.replace(materialString, uuid, stringReplacers))) {

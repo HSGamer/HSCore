@@ -14,13 +14,6 @@ import java.util.UUID;
  */
 public interface ItemModifier {
   /**
-   * Get the name of the modifier
-   *
-   * @return the name
-   */
-  String getName();
-
-  /**
    * Modify the item
    *
    * @param original        the original item

@@ -18,11 +18,6 @@ public class AmountModifier implements ItemModifier, ItemComparator {
   private String amount = "1";
 
   @Override
-  public String getName() {
-    return "amount";
-  }
-
-  @Override
   public @NotNull ItemStack modify(@NotNull ItemStack original, UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
     Validate
       .getNumber(StringReplacer.replace(amount, uuid, stringReplacers))

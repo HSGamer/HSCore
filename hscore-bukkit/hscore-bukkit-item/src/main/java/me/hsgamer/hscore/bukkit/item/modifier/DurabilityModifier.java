@@ -19,11 +19,6 @@ public class DurabilityModifier implements ItemModifier, ItemComparator {
   private String durability = "1";
 
   @Override
-  public String getName() {
-    return "durability";
-  }
-
-  @Override
   public @NotNull ItemStack modify(@NotNull ItemStack original, UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
     Validate
       .getNumber(StringReplacer.replace(durability, uuid, stringReplacers))

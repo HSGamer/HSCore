@@ -18,11 +18,6 @@ import java.util.stream.Collectors;
 public class ItemFlagModifier implements ItemMetaModifier, ItemMetaComparator {
   private List<String> flagList = Collections.emptyList();
 
-  @Override
-  public String getName() {
-    return "item-flag";
-  }
-
   private Set<ItemFlag> getParsed(UUID uuid, Collection<StringReplacer> stringReplacers) {
     Set<ItemFlag> flags = new HashSet<>();
     flagList.forEach(string -> {

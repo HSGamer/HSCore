@@ -34,11 +34,6 @@ public class NBTModifier implements ItemModifier {
     return this;
   }
 
-  @Override
-  public String getName() {
-    return "nbt";
-  }
-
   @SuppressWarnings("deprecation")
   @Override
   public @NotNull ItemStack modify(@NotNull ItemStack original, UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {

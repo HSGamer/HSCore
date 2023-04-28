@@ -17,11 +17,6 @@ import java.util.UUID;
 public class NameModifier implements ItemMetaModifier, ItemMetaComparator {
   private String name;
 
-  @Override
-  public String getName() {
-    return "name";
-  }
-
   /**
    * Set the name
    *

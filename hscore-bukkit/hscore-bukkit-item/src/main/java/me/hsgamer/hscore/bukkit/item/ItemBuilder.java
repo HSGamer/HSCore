@@ -8,7 +8,10 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * The item builder
@@ -34,13 +37,13 @@ public class ItemBuilder {
   /**
    * Remove an item modifier
    *
-   * @param name the name of the modifier
+   * @param modifier the item modifier
    *
    * @return {@code this} for builder chain
    */
   @Contract("_ -> this")
-  public ItemBuilder removeItemModifier(String name) {
-    itemModifiers.removeIf(itemModifier -> itemModifier.getName().equals(name));
+  public ItemBuilder removeItemModifier(ItemModifier modifier) {
+    itemModifiers.remove(modifier);
     return this;
   }
 
@@ -51,17 +54,6 @@ public class ItemBuilder {
    */
   public List<ItemModifier> getItemModifiers() {
     return Collections.unmodifiableList(itemModifiers);
-  }
-
-  /**
-   * Serialize the item modifiers
-   *
-   * @return the object map
-   */
-  public Map<String, Object> serializeItemModifiers() {
-    Map<String, Object> map = new HashMap<>();
-    itemModifiers.forEach(itemModifier -> map.put(itemModifier.getName(), itemModifier.toObject()));
-    return map;
   }
 
   /**

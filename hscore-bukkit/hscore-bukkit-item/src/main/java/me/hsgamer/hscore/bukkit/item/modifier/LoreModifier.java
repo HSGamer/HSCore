@@ -17,11 +17,6 @@ import java.util.*;
 public class LoreModifier implements ItemMetaModifier, ItemMetaComparator {
   private final List<String> lore = new ArrayList<>();
 
-  @Override
-  public String getName() {
-    return "lore";
-  }
-
   private List<String> getReplacedLore(UUID uuid, Collection<StringReplacer> stringReplacers) {
     List<String> replacedLore = new ArrayList<>(lore);
     replacedLore.replaceAll(s -> StringReplacer.replace(s, uuid, stringReplacers));

@@ -154,11 +154,6 @@ public class SkullModifier implements ItemMetaModifier, ItemMetaComparator {
   }
 
   @Override
-  public String getName() {
-    return "skull";
-  }
-
-  @Override
   public Object toObject() {
     return skullString;
   }
