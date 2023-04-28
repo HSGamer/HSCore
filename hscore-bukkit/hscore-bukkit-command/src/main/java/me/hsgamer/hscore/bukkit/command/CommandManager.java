@@ -8,43 +8,81 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 
 /**
  * The command manager
  */
 public class CommandManager {
-
-  private static final Field knownCommandsField;
-  private static final CommandMap bukkitCommandMap;
-  private static Method syncCommandsMethod;
+  private static final Supplier<CommandMap> COMMAND_MAP_SUPPLIER;
+  private static final Supplier<Map<?, ?>> KNOWN_COMMANDS_SUPPLIER;
+  private static final Runnable SYNC_COMMANDS_RUNNABLE;
 
   static {
+    Method commandMapMethod;
     try {
-      Method commandMapMethod = Bukkit.getServer().getClass().getMethod("getCommandMap");
-      bukkitCommandMap = (CommandMap) commandMapMethod.invoke(Bukkit.getServer());
-
-      knownCommandsField = SimpleCommandMap.class.getDeclaredField("knownCommands");
-      knownCommandsField.setAccessible(true);
-    } catch (ReflectiveOperationException e) {
+      commandMapMethod = Bukkit.getServer().getClass().getMethod("getCommandMap");
+    } catch (NoSuchMethodException e) {
       throw new ExceptionInInitializerError(e);
     }
 
+    COMMAND_MAP_SUPPLIER = () -> {
+      try {
+        return (CommandMap) commandMapMethod.invoke(Bukkit.getServer());
+      } catch (ReflectiveOperationException e) {
+        throw new ExceptionInInitializerError(e);
+      }
+    };
+
+    Supplier<Map<?, ?>> knownCommandsSupplier;
     try {
-      Class<?> craftServer = Bukkit.getServer().getClass();
-      syncCommandsMethod = craftServer.getDeclaredMethod("syncCommands");
-    } catch (Exception e) {
-      // Ignored
-    } finally {
-      if (syncCommandsMethod != null) {
-        syncCommandsMethod.setAccessible(true);
+      Method knownCommandsMethod = SimpleCommandMap.class.getDeclaredMethod("getKnownCommands");
+      knownCommandsSupplier = () -> {
+        try {
+          return (Map<?, ?>) knownCommandsMethod.invoke(COMMAND_MAP_SUPPLIER.get());
+        } catch (ReflectiveOperationException e) {
+          throw new ExceptionInInitializerError(e);
+        }
+      };
+    } catch (NoSuchMethodException e) {
+      try {
+        Field knownCommandsField = SimpleCommandMap.class.getDeclaredField("knownCommands");
+        knownCommandsField.setAccessible(true);
+        knownCommandsSupplier = () -> {
+          try {
+            return (Map<?, ?>) knownCommandsField.get(COMMAND_MAP_SUPPLIER.get());
+          } catch (ReflectiveOperationException ex) {
+            throw new ExceptionInInitializerError(ex);
+          }
+        };
+      } catch (ReflectiveOperationException ex) {
+        throw new ExceptionInInitializerError(ex);
       }
     }
+    KNOWN_COMMANDS_SUPPLIER = knownCommandsSupplier;
+
+    Runnable syncCommandsRunnable;
+    try {
+      Class<?> craftServer = Bukkit.getServer().getClass();
+      Method syncCommandsMethod = craftServer.getDeclaredMethod("syncCommands");
+      syncCommandsMethod.setAccessible(true);
+      syncCommandsRunnable = () -> {
+        try {
+          syncCommandsMethod.invoke(Bukkit.getServer());
+        } catch (ReflectiveOperationException e) {
+          Bukkit.getLogger().log(Level.WARNING, "Error when syncing commands", e);
+        }
+      };
+    } catch (Exception e) {
+      syncCommandsRunnable = () -> {
+      };
+    }
+    SYNC_COMMANDS_RUNNABLE = syncCommandsRunnable;
   }
 
   protected final JavaPlugin plugin;
@@ -63,28 +101,18 @@ public class CommandManager {
    * Sync the commands to the server. Mainly used to make tab completer work in 1.13+
    */
   public static void syncCommand() {
-    if (syncCommandsMethod == null) {
-      return;
-    }
-
-    try {
-      syncCommandsMethod.invoke(Bukkit.getServer());
-    } catch (IllegalAccessException | InvocationTargetException e) {
-      Bukkit.getLogger().log(Level.WARNING, "Error when syncing commands", e);
-    }
+    SYNC_COMMANDS_RUNNABLE.run();
   }
 
   /**
    * Unregister a command from the known commands
    *
    * @param command the command
-   *
-   * @throws IllegalAccessException if this can not get the known commands
    */
-  public static void unregisterFromKnownCommands(@NotNull final Command command) throws IllegalAccessException {
-    Map<?, ?> knownCommands = (Map<?, ?>) knownCommandsField.get(bukkitCommandMap);
+  public static void unregisterFromKnownCommands(@NotNull final Command command) {
+    Map<?, ?> knownCommands = KNOWN_COMMANDS_SUPPLIER.get();
     knownCommands.values().removeIf(command::equals);
-    command.unregister(bukkitCommandMap);
+    command.unregister(COMMAND_MAP_SUPPLIER.get());
   }
 
   /**
@@ -94,7 +122,7 @@ public class CommandManager {
    * @param command the command
    */
   public static void registerCommandToCommandMap(@NotNull final String label, @NotNull final Command command) {
-    bukkitCommandMap.register(label, command);
+    COMMAND_MAP_SUPPLIER.get().register(label, command);
   }
 
   /**
@@ -119,12 +147,8 @@ public class CommandManager {
    * @param command the command object
    */
   public final void unregister(@NotNull final Command command) {
-    try {
-      unregisterFromKnownCommands(command);
-      this.registered.remove(command.getLabel());
-    } catch (ReflectiveOperationException e) {
-      this.plugin.getLogger().log(Level.WARNING, "Something wrong when unregister the command", e);
-    }
+    unregisterFromKnownCommands(command);
+    this.registered.remove(command.getLabel());
   }
 
   /**
@@ -142,13 +166,7 @@ public class CommandManager {
    * Unregister all commands
    */
   public final void unregisterAll() {
-    this.registered.values().forEach(command -> {
-      try {
-        unregisterFromKnownCommands(command);
-      } catch (ReflectiveOperationException e) {
-        this.plugin.getLogger().log(Level.WARNING, "Something wrong when unregister the command", e);
-      }
-    });
+    this.registered.values().forEach(CommandManager::unregisterFromKnownCommands);
     this.registered.clear();
   }
 
