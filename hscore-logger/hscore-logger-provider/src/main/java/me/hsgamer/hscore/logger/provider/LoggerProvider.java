@@ -11,7 +11,6 @@ import java.util.function.Function;
 public class LoggerProvider {
   private static final Map<String, Logger> LOGGER_MAP = new ConcurrentHashMap<>();
   private static Function<String, Logger> LOGGER_PROVIDER = JulLogger::new;
-  private static boolean urgentLoad = false;
 
   private LoggerProvider() {
     // EMPTY
@@ -27,15 +26,6 @@ public class LoggerProvider {
   }
 
   /**
-   * Set whether the logger should be loaded immediately
-   *
-   * @param urgentLoad true if it should be loaded immediately
-   */
-  public static void setUrgentLoad(boolean urgentLoad) {
-    LoggerProvider.urgentLoad = urgentLoad;
-  }
-
-  /**
    * Get the logger
    *
    * @param name the name
@@ -43,21 +33,15 @@ public class LoggerProvider {
    * @return the logger
    */
   public static Logger getLogger(String name) {
-    return LOGGER_MAP.computeIfAbsent(name, s -> {
-      if (urgentLoad) {
-        return LOGGER_PROVIDER.apply(s);
-      } else {
-        return new Logger() {
-          private Logger logger;
+    return LOGGER_MAP.computeIfAbsent(name, s -> new Logger() {
+      private Logger logger;
 
-          @Override
-          public void log(LogLevel level, String message) {
-            if (logger == null) {
-              logger = LOGGER_PROVIDER.apply(s);
-            }
-            logger.log(level, message);
-          }
-        };
+      @Override
+      public void log(LogLevel level, String message) {
+        if (logger == null) {
+          logger = LOGGER_PROVIDER.apply(s);
+        }
+        logger.log(level, message);
       }
     });
   }
