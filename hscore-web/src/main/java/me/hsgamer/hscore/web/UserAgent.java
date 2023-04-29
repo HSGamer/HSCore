@@ -9,12 +9,12 @@ public final class UserAgent {
   /**
    * User agent for Firefox
    */
-  public static final UserAgent FIREFOX = new UserAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0");
+  public static final UserAgent FIREFOX = new UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109) Gecko/20100101 Firefox/112.0");
 
   /**
    * User agent for Chrome
    */
-  public static final UserAgent CHROME = new UserAgent("Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36");
+  public static final UserAgent CHROME = new UserAgent("Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36");
 
   /**
    * The agent string
