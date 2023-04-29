@@ -1,7 +1,7 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
+import me.hsgamer.hscore.common.StringReplacer;
 import me.hsgamer.hscore.common.Validate;
-import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import me.hsgamer.hscore.minecraft.item.ItemComparator;
 import me.hsgamer.hscore.minecraft.item.ItemModifier;
 import org.bukkit.inventory.ItemStack;

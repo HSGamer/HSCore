@@ -1,4 +1,7 @@
-package me.hsgamer.hscore.common.function;
+package me.hsgamer.hscore.extra.function;
+
+import me.hsgamer.hscore.logger.common.LogLevel;
+import me.hsgamer.hscore.logger.provider.LoggerProvider;
 
 import java.util.function.Function;
 
@@ -14,7 +17,7 @@ public interface ThrowableFunction<T, R> extends Function<T, R> {
     try {
       return applySafe(t);
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LoggerProvider.getLogger(ThrowableFunction.class).log(LogLevel.WARN, throwable);
       return null;
     }
   }

@@ -1,4 +1,7 @@
-package me.hsgamer.hscore.common.function;
+package me.hsgamer.hscore.extra.function;
+
+import me.hsgamer.hscore.logger.common.LogLevel;
+import me.hsgamer.hscore.logger.provider.LoggerProvider;
 
 import java.util.function.BiFunction;
 
@@ -15,7 +18,7 @@ public interface ThrowableBiFunction<T, U, R> extends BiFunction<T, U, R> {
     try {
       return applySafe(t, u);
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LoggerProvider.getLogger(ThrowableBiFunction.class).log(LogLevel.WARN, throwable);
       return null;
     }
   }

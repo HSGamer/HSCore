@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.common.interfaces;
+package me.hsgamer.hscore.common;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

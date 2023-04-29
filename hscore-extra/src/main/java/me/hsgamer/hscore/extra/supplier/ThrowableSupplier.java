@@ -1,4 +1,7 @@
-package me.hsgamer.hscore.common.supplier;
+package me.hsgamer.hscore.extra.supplier;
+
+import me.hsgamer.hscore.logger.common.LogLevel;
+import me.hsgamer.hscore.logger.provider.LoggerProvider;
 
 import java.util.function.Supplier;
 
@@ -13,7 +16,7 @@ public interface ThrowableSupplier<T> extends Supplier<T> {
     try {
       return getSafe();
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LoggerProvider.getLogger(ThrowableSupplier.class).log(LogLevel.WARN, throwable);
       return null;
     }
   }

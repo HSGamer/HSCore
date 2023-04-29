@@ -41,6 +41,7 @@
   <modules>
     <module>hscore-common</module>
     <module>hscore-logger</module>
+    <module>hscore-extra</module>
     <module>hscore-variable</module>
     <module>hscore-builder</module>
     <module>hscore-collections</module>

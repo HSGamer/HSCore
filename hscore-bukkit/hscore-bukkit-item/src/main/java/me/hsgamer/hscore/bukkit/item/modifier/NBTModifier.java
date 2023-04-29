@@ -1,8 +1,8 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
 import com.google.gson.Gson;
+import me.hsgamer.hscore.common.StringReplacer;
 import me.hsgamer.hscore.common.Validate;
-import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import me.hsgamer.hscore.minecraft.item.ItemModifier;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;

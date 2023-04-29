@@ -1,4 +1,7 @@
-package me.hsgamer.hscore.common.consumer;
+package me.hsgamer.hscore.extra.consumer;
+
+import me.hsgamer.hscore.logger.common.LogLevel;
+import me.hsgamer.hscore.logger.provider.LoggerProvider;
 
 import java.util.function.BiConsumer;
 
@@ -14,7 +17,7 @@ public interface ThrowableBiConsumer<T, U> extends BiConsumer<T, U> {
     try {
       acceptSafe(t, u);
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LoggerProvider.getLogger(ThrowableBiConsumer.class).log(LogLevel.WARN, throwable);
     }
   }
 

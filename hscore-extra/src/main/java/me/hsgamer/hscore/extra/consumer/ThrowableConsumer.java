@@ -1,4 +1,7 @@
-package me.hsgamer.hscore.common.consumer;
+package me.hsgamer.hscore.extra.consumer;
+
+import me.hsgamer.hscore.logger.common.LogLevel;
+import me.hsgamer.hscore.logger.provider.LoggerProvider;
 
 import java.util.function.Consumer;
 
@@ -13,7 +16,7 @@ public interface ThrowableConsumer<T> extends Consumer<T> {
     try {
       acceptSafe(t);
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LoggerProvider.getLogger(ThrowableConsumer.class).log(LogLevel.WARN, throwable);
     }
   }
 
