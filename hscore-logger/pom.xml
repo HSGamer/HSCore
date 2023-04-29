@@ -17,5 +17,6 @@
     <module>hscore-logger-jul</module>
     <module>hscore-logger-system</module>
     <module>hscore-logger-provider</module>
+    <module>hscore-logger-service</module>
   </modules>
 </project>
