@@ -22,7 +22,6 @@
     <module>hscore-bukkit-command</module>
     <module>hscore-bukkit-command-sub</module>
     <module>hscore-bukkit-scheduler</module>
-    <module>hscore-bukkit-command-extra</module>
     <module>hscore-bukkit-config</module>
     <module>hscore-bukkit-config-extra</module>
     <module>hscore-bukkit-click-type</module>
