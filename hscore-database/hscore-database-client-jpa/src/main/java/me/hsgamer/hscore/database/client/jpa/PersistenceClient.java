@@ -21,10 +21,10 @@ public class PersistenceClient extends BaseClient<EntityManagerFactory> {
    *
    * @param name    The name of the persistence client
    * @param setting The setting of the persistence client
-   * @param driver  The driver of the persistence client
    */
-  public PersistenceClient(String name, Setting setting, Driver driver) {
+  public PersistenceClient(String name, Setting setting) {
     super(setting);
+    Driver driver = setting.getDriver();
     Map<String, Object> properties = new HashMap<>();
     properties.put("javax.persistence.jdbc.url", driver.convertURL(setting));
     properties.put("javax.persistence.jdbc.user", setting.getUsername());

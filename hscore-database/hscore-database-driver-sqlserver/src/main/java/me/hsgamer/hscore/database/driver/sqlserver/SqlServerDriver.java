@@ -30,7 +30,7 @@ public class SqlServerDriver implements Driver {
   }
 
   @Override
-  public Setting applyDefaultSetting(Setting setting) {
-    return setting.setPort("1433").setUsername("sa");
+  public void applyDefaultSetting(Setting setting) {
+    setting.setPort("1433").setUsername("sa");
   }
 }

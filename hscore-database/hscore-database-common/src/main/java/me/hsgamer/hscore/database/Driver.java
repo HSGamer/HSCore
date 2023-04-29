@@ -57,19 +57,8 @@ public interface Driver {
    * Apply the default setting
    *
    * @param setting the setting
-   *
-   * @return the applied setting
    */
-  default Setting applyDefaultSetting(Setting setting) {
-    return setting;
-  }
-
-  /**
-   * Create a setting with the default values
-   *
-   * @return the setting
-   */
-  default Setting createSetting() {
-    return applyDefaultSetting(Setting.create());
+  default void applyDefaultSetting(Setting setting) {
+    // EMPTY
   }
 }

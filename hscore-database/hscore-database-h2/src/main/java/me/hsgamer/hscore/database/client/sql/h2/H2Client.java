@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.database.client.sql.h2;
 
+import me.hsgamer.hscore.database.Driver;
 import me.hsgamer.hscore.database.Setting;
 import me.hsgamer.hscore.database.client.sql.BaseSqlClient;
 import me.hsgamer.hscore.database.driver.h2.H2BaseDriver;
@@ -15,10 +16,13 @@ public class H2Client extends BaseSqlClient<JdbcDataSource> {
    * Create a new H2 client
    *
    * @param setting the setting
-   * @param driver  the H2 driver
    */
-  public H2Client(Setting setting, H2BaseDriver driver) {
+  public H2Client(Setting setting) {
     super(setting);
+    Driver driver = setting.getDriver();
+    if (!(driver instanceof H2BaseDriver)) {
+      throw new IllegalArgumentException("The driver must be H2");
+    }
     dataSource = new JdbcDataSource();
     dataSource.setURL(driver.convertURL(setting));
     dataSource.setUser(setting.getUsername());

@@ -18,7 +18,7 @@ public class MariaDBDriver implements Driver {
   }
 
   @Override
-  public Setting applyDefaultSetting(Setting setting) {
-    return setting.setPort("3306").setUsername("root");
+  public void applyDefaultSetting(Setting setting) {
+    setting.setPort("3306").setUsername("root");
   }
 }

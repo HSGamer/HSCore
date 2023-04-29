@@ -20,10 +20,10 @@ public class HikariSqlClient extends BaseSqlClient<HikariDataSource> {
    * Create new SQL client
    *
    * @param setting the setting
-   * @param driver  the driver
    */
-  public HikariSqlClient(Setting setting, Driver driver) {
+  public HikariSqlClient(Setting setting) {
     super(setting);
+    Driver driver = setting.getDriver();
     final HikariConfig config = new HikariConfig();
     config.setDriverClassName(driver.getDriverClass().getName());
     config.setJdbcUrl(driver.convertURL(setting));

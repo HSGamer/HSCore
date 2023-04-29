@@ -21,10 +21,10 @@ public class JavaSqlClient extends BaseSqlClient<Properties> {
    * Create new SQL client
    *
    * @param setting the setting
-   * @param driver  the driver
    */
-  public JavaSqlClient(Setting setting, Driver driver) {
+  public JavaSqlClient(Setting setting) {
     super(setting);
+    Driver driver = setting.getDriver();
     this.properties = new Properties();
     try {
       this.sqlDriver = driver.getDriverClass().getConstructor().newInstance();

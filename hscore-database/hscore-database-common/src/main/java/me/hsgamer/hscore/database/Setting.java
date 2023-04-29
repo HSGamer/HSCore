@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
  * The setting for connection
  */
 public class Setting {
+  private final Driver driver;
   private final Map<String, Object> clientProperties;
   private final Map<String, Object> driverProperties;
   private String host;
@@ -23,7 +24,8 @@ public class Setting {
   /**
    * The constructor
    */
-  private Setting() {
+  private Setting(Driver driver) {
+    this.driver = driver;
     clientProperties = new HashMap<>();
     driverProperties = new HashMap<>();
     host = "localhost";
@@ -31,15 +33,7 @@ public class Setting {
     port = "";
     username = "root";
     password = "";
-  }
-
-  /**
-   * Create a new setting
-   *
-   * @return the setting
-   */
-  public static Setting create() {
-    return new Setting();
+    driver.applyDefaultSetting(this);
   }
 
   /**
@@ -50,7 +44,7 @@ public class Setting {
    * @return the setting
    */
   public static Setting create(Driver driver) {
-    return driver.createSetting();
+    return new Setting(driver);
   }
 
   /**
@@ -60,8 +54,8 @@ public class Setting {
    *
    * @return the setting
    */
-  public static Setting deserialize(Map<String, Object> map) {
-    Setting setting = new Setting();
+  public static Setting deserialize(Driver driver, Map<String, Object> map) {
+    Setting setting = new Setting(driver);
     setting.host = (String) map.get("host");
     setting.databaseName = (String) map.get("databaseName");
     setting.port = (String) map.get("port");
@@ -89,6 +83,15 @@ public class Setting {
     map.put("clientProperties", clientProperties);
     map.put("driverProperties", driverProperties);
     return map;
+  }
+
+  /**
+   * Get the driver
+   *
+   * @return the driver
+   */
+  public Driver getDriver() {
+    return driver;
   }
 
   /**

@@ -30,7 +30,7 @@ public class H2ServerDriver implements H2BaseDriver {
   }
 
   @Override
-  public Setting applyDefaultSetting(Setting setting) {
-    return setting.setPort(isSSH ? "9092" : "9091");
+  public void applyDefaultSetting(Setting setting) {
+    setting.setPort(isSSH ? "9092" : "9091");
   }
 }

@@ -23,10 +23,10 @@ public class HibernateClient extends BaseClient<MetadataSources> {
    * Create new Hibernate client
    *
    * @param setting the setting
-   * @param driver  the driver
    */
-  public HibernateClient(Setting setting, Driver driver) {
+  public HibernateClient(Setting setting) {
     super(setting);
+    Driver driver = setting.getDriver();
     ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
       .applySetting(AvailableSettings.DRIVER, driver.getDriverClass().getName())
       .applySetting(AvailableSettings.URL, driver.convertURL(setting))

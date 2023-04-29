@@ -18,7 +18,7 @@ public class PostgreSqlDriver implements Driver {
   }
 
   @Override
-  public Setting applyDefaultSetting(Setting setting) {
-    return setting.setPort("5432").setUsername("postgres");
+  public void applyDefaultSetting(Setting setting) {
+    setting.setPort("5432").setUsername("postgres");
   }
 }
