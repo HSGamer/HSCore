@@ -36,12 +36,31 @@ public class LoggerProvider {
     return LOGGER_MAP.computeIfAbsent(name, s -> new Logger() {
       private Logger logger;
 
-      @Override
-      public void log(LogLevel level, String message) {
+      private Logger getLogger() {
         if (logger == null) {
           logger = LOGGER_PROVIDER.apply(s);
         }
-        logger.log(level, message);
+        return logger;
+      }
+
+      @Override
+      public void log(LogLevel level, String message) {
+        getLogger().log(level, message);
+      }
+
+      @Override
+      public void log(String message) {
+        getLogger().log(message);
+      }
+
+      @Override
+      public void log(LogLevel level, Throwable throwable) {
+        getLogger().log(level, throwable);
+      }
+
+      @Override
+      public void log(LogLevel level, String message, Throwable throwable) {
+        getLogger().log(level, message, throwable);
       }
     });
   }
