@@ -11,6 +11,7 @@ import me.hsgamer.hscore.logger.common.Logger;
 import me.hsgamer.hscore.logger.provider.LoggerProvider;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.*;
 
@@ -92,16 +93,6 @@ public class CronTimeManager {
   }
 
   /**
-   * Get the next time from now
-   *
-   * @return the next time
-   */
-  @NotNull
-  public ZonedDateTime getNextTime() {
-    return getNextTime(ZonedDateTime.now());
-  }
-
-  /**
    * Get the next time from the initial time
    *
    * @param initTime the initial time to get the next time
@@ -119,7 +110,7 @@ public class CronTimeManager {
       if (optionalTime.isPresent()) {
         ZonedDateTime time = optionalTime.get();
         long delayMillis = time.toInstant().toEpochMilli() - currentMillis;
-        if (delayMillis < minDelayMillis || minDelayMillis == -1) {
+        if (delayMillis < minDelayMillis || minDelayMillis < 0) {
           minDelayMillis = delayMillis;
           nextDateTime = time;
         }
@@ -130,12 +121,37 @@ public class CronTimeManager {
   }
 
   /**
-   * Get the next epoch millis from now
+   * Get the next time from now
    *
-   * @return the epoch millis
+   * @return the next time
    */
-  public long getNextEpochMillis() {
-    return getNextTime().toInstant().toEpochMilli();
+  @NotNull
+  public ZonedDateTime getNextTime() {
+    return getNextTime(ZonedDateTime.now());
+  }
+
+  /**
+   * Get the next instant from the initial instant
+   *
+   * @param initInstant the initial instant to get the next instant
+   *
+   * @return the next instant
+   */
+  @NotNull
+  public Instant getNextInstant(@NotNull Instant initInstant) {
+    ZonedDateTime initTime = ZonedDateTime.ofInstant(initInstant, TimeZone.getDefault().toZoneId());
+    ZonedDateTime nextTime = getNextTime(initTime);
+    return nextTime.toInstant();
+  }
+
+  /**
+   * Get the next instant from now
+   *
+   * @return the next instant
+   */
+  @NotNull
+  public Instant getNextInstant() {
+    return getNextInstant(Instant.now());
   }
 
   /**
@@ -150,12 +166,23 @@ public class CronTimeManager {
   }
 
   /**
-   * Get the remaining millis from now to the next time
+   * Get the next epoch millis from now
    *
-   * @return the millis
+   * @return the epoch millis
    */
-  public long getRemainingMillis() {
-    return getRemainingMillis(ZonedDateTime.now());
+  public long getNextEpochMillis() {
+    return getNextEpochMillis(ZonedDateTime.now());
+  }
+
+  /**
+   * Get the next epoch millis from now
+   *
+   * @param initInstant the initial instant to get the next time
+   *
+   * @return the epoch millis
+   */
+  public long getNextEpochMillis(@NotNull Instant initInstant) {
+    return getNextEpochMillis(ZonedDateTime.ofInstant(initInstant, TimeZone.getDefault().toZoneId()));
   }
 
   /**
@@ -167,6 +194,26 @@ public class CronTimeManager {
    */
   public long getRemainingMillis(@NotNull ZonedDateTime initTime) {
     return getNextEpochMillis(initTime) - initTime.toInstant().toEpochMilli();
+  }
+
+  /**
+   * Get the remaining millis from now to the next time
+   *
+   * @return the millis
+   */
+  public long getRemainingMillis() {
+    return getRemainingMillis(ZonedDateTime.now());
+  }
+
+  /**
+   * Get the remaining millis from now to the next time
+   *
+   * @param initInstant the initial instant to get the next time
+   *
+   * @return the millis
+   */
+  public long getRemainingMillis(@NotNull Instant initInstant) {
+    return getRemainingMillis(ZonedDateTime.ofInstant(initInstant, TimeZone.getDefault().toZoneId()));
   }
 
   /**
