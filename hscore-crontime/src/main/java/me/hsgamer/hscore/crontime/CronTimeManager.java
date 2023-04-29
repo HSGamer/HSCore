@@ -155,7 +155,7 @@ public class CronTimeManager {
    * @return the millis
    */
   public long getRemainingMillis() {
-    return getNextEpochMillis() - System.currentTimeMillis();
+    return getRemainingMillis(ZonedDateTime.now());
   }
 
   /**
@@ -166,7 +166,7 @@ public class CronTimeManager {
    * @return the millis
    */
   public long getRemainingMillis(@NotNull ZonedDateTime initTime) {
-    return getNextEpochMillis(initTime) - System.currentTimeMillis();
+    return getNextEpochMillis(initTime) - initTime.toInstant().toEpochMilli();
   }
 
   /**
