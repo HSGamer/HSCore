@@ -5,10 +5,7 @@ import me.hsgamer.hscore.task.element.TaskProcess;
 import me.hsgamer.hscore.task.exception.BatchRunnableException;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
@@ -35,7 +32,7 @@ public class BatchRunnable implements Runnable {
    * Create a new batch runnable with no initial data
    */
   public BatchRunnable() {
-    this(new HashMap<>());
+    this(new ConcurrentHashMap<>());
   }
 
   @Override
