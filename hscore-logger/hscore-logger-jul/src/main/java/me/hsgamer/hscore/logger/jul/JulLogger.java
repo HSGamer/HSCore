@@ -3,6 +3,8 @@ package me.hsgamer.hscore.logger.jul;
 import me.hsgamer.hscore.logger.common.LogLevel;
 import me.hsgamer.hscore.logger.common.Logger;
 
+import static java.util.logging.Level.*;
+
 /**
  * The {@link Logger} for {@link java.util.logging.Logger}
  */
@@ -50,6 +52,31 @@ public class JulLogger implements Logger {
         break;
       case ERROR:
         logger.severe(message);
+        break;
+      default:
+        break;
+    }
+  }
+
+  @Override
+  public void log(LogLevel level, Throwable throwable) {
+    log(level, throwable.getMessage(), throwable);
+  }
+
+  @Override
+  public void log(LogLevel level, String message, Throwable throwable) {
+    switch (level) {
+      case DEBUG:
+        logger.log(FINE, message, throwable);
+        break;
+      case INFO:
+        logger.log(INFO, message, throwable);
+        break;
+      case WARN:
+        logger.log(WARNING, message, throwable);
+        break;
+      case ERROR:
+        logger.log(SEVERE, message, throwable);
         break;
       default:
         break;
