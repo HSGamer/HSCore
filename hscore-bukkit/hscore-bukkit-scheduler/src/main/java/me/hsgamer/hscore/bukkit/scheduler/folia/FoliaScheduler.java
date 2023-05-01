@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.bukkit.scheduler.folia;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import me.hsgamer.hscore.bukkit.scheduler.Runner;
 import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
@@ -9,8 +11,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
@@ -18,7 +18,7 @@ import java.util.function.Consumer;
  * The Folia implementation of {@link Scheduler}
  */
 public class FoliaScheduler implements Scheduler {
-  private final Set<ScheduledTask> tasks = ConcurrentHashMap.newKeySet();
+  private final Cache<ScheduledTask, Boolean> tasks = CacheBuilder.newBuilder().weakKeys().build();
   private final FoliaSyncRunner syncRunner;
   private final FoliaAsyncRunner asyncRunner;
   private final Plugin plugin;
@@ -95,17 +95,13 @@ public class FoliaScheduler implements Scheduler {
   }
 
   void addTask(ScheduledTask scheduledTask) {
-    tasks.add(scheduledTask);
+    tasks.put(scheduledTask, true);
   }
 
   @Override
   public void cancelAllTasks() {
-    tasks.forEach(scheduledTask -> {
-      if (!scheduledTask.isCancelled()) {
-        scheduledTask.cancel();
-      }
-    });
-    tasks.clear();
+    tasks.asMap().keySet().forEach(ScheduledTask::cancel);
+    tasks.invalidateAll();
 
     Bukkit.getAsyncScheduler().cancelTasks(plugin);
     Bukkit.getGlobalRegionScheduler().cancelTasks(plugin);
