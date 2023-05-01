@@ -130,6 +130,17 @@ public class PathString {
     return new PathString(newPath);
   }
 
+  /**
+   * Create a new path string by appending the path to the current path string
+   *
+   * @param path the path to append
+   *
+   * @return the new path string
+   */
+  public PathString append(String... path) {
+    return append(new PathString(path));
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
