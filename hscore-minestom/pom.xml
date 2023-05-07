@@ -30,16 +30,10 @@
   <dependencies>
     <!--suppress VulnerableLibrariesLocal -->
     <dependency>
-      <groupId>com.github.Minestom</groupId>
-      <artifactId>Minestom</artifactId>
-      <version>85febebd09</version>
+      <groupId>dev.hollowcube</groupId>
+      <artifactId>minestom-ce</artifactId>
+      <version>381d89497a</version>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.jboss.shrinkwrap.resolver</groupId>
-          <artifactId>shrinkwrap-resolver-depchain</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
   </dependencies>
 </project>
