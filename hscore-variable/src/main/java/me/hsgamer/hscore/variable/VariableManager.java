@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.BooleanSupplier;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,12 +18,81 @@ public class VariableManager implements StringReplacer {
    */
   public static final VariableManager GLOBAL = new VariableManager();
 
-  private static final Pattern PATTERN = Pattern.compile("(.?)([{]([^{}]+)[}])(.?)");
-  private static final char START_IGNORE_CHAR = '\\';
-  private static final char END_IGNORE_CHAR = '\\';
-  private final List<VariableEntry> variableEntries = new ArrayList<>();
+  private final Function<String, VariableSession> sessionFunction;
+  private final List<Variable> variableEntries = new ArrayList<>();
   private final List<StringReplacer> externalReplacers = new ArrayList<>();
-  private BooleanSupplier replaceAll = () -> false;
+
+  /**
+   * Create a new variable manager
+   *
+   * @param sessionFunction the function to create a new {@link VariableSession} from a string
+   */
+  public VariableManager(Function<String, VariableSession> sessionFunction) {
+    this.sessionFunction = sessionFunction;
+  }
+
+  /**
+   * Create a new variable manager with the default {@link VariableSession} with the user-defined ignore char.
+   * The default {@link VariableSession} uses the {@link Pattern} to check for variables with the format <code>{variable}</code>.
+   * Developers can add the ignore char to the start and end of the variable to ignore it.
+   *
+   * @param startIgnoreChar the ignore char at the start of the variable
+   * @param endIgnoreChar   the ignore char at the end of the variable
+   */
+  public VariableManager(char startIgnoreChar, char endIgnoreChar) {
+    this(new Function<String, VariableSession>() {
+      private final Pattern pattern = Pattern.compile("(.?)([{]([^{}]+)[}])(.?)");
+
+      @Override
+      public VariableSession apply(String s) {
+
+        return new VariableSession() {
+          private final Matcher matcher = pattern.matcher(s);
+          private final StringBuffer stringBuffer = new StringBuffer();
+
+          @Override
+          public boolean hasVariable() {
+            while (matcher.find()) {
+              char startChar = Optional.ofNullable(matcher.group(1)).filter(s -> !s.isEmpty()).map(s -> s.charAt(0)).orElse(' ');
+              char endChar = Optional.ofNullable(matcher.group(4)).filter(s -> !s.isEmpty()).map(s -> s.charAt(0)).orElse(' ');
+              if (startIgnoreChar == startChar && endIgnoreChar == endChar) {
+                String original = matcher.group(2);
+                matcher.appendReplacement(stringBuffer, Matcher.quoteReplacement(original));
+              } else {
+                return true;
+              }
+            }
+            return false;
+          }
+
+          @Override
+          public String getVariable() {
+            return matcher.group(3).trim();
+          }
+
+          @Override
+          public void replaceVariable(String replacement) {
+            String startChar = Optional.ofNullable(matcher.group(1)).filter(s -> !s.isEmpty()).orElse("");
+            String endChar = Optional.ofNullable(matcher.group(4)).filter(s -> !s.isEmpty()).orElse("");
+            matcher.appendReplacement(stringBuffer, Matcher.quoteReplacement(startChar + replacement + endChar));
+          }
+
+          @Override
+          public String getFinalString() {
+            matcher.appendTail(stringBuffer);
+            return stringBuffer.toString();
+          }
+        };
+      }
+    });
+  }
+
+  /**
+   * Create a new variable manager with the default {@link VariableSession} with the default ignore char <code>\</code>.
+   */
+  public VariableManager() {
+    this('\\', '\\');
+  }
 
   /**
    * Register new variable
@@ -33,7 +102,7 @@ public class VariableManager implements StringReplacer {
    * @param isWhole  whether the manager should check the whole string matches the prefix, set it to false if you want to check if the prefix is at the beginning of the string
    */
   public void register(String prefix, StringReplacer variable, boolean isWhole) {
-    variableEntries.add(new VariableEntry(prefix, isWhole, variable));
+    variableEntries.add(new Variable(prefix, isWhole, variable));
   }
 
   /**
@@ -69,7 +138,7 @@ public class VariableManager implements StringReplacer {
    *
    * @return the variable entries
    */
-  public List<VariableEntry> getVariableEntries() {
+  public List<Variable> getVariableEntries() {
     return Collections.unmodifiableList(variableEntries);
   }
 
@@ -96,39 +165,6 @@ public class VariableManager implements StringReplacer {
    */
   public void clearExternalReplacers() {
     externalReplacers.clear();
-  }
-
-  /**
-   * Get the status whether the manager should replace all similar variables at once
-   *
-   * @return true if it should
-   *
-   * @see #setSingleVariables(String, UUID)
-   */
-  public boolean getReplaceAll() {
-    return replaceAll.getAsBoolean();
-  }
-
-  /**
-   * Whether the manager should replace all similar variables at once
-   *
-   * @param replaceAll true if it should
-   *
-   * @see #setSingleVariables(String, UUID)
-   */
-  public void setReplaceAll(boolean replaceAll) {
-    setReplaceAll(() -> replaceAll);
-  }
-
-  /**
-   * Whether the manager should replace all similar variables at once
-   *
-   * @param replaceAll the boolean supplier (true if it should)
-   *
-   * @see #setSingleVariables(String, UUID)
-   */
-  public void setReplaceAll(BooleanSupplier replaceAll) {
-    this.replaceAll = replaceAll;
   }
 
   /**
@@ -168,29 +204,17 @@ public class VariableManager implements StringReplacer {
    */
   @NotNull
   public String setSingleVariables(@NotNull String message, @Nullable UUID uuid) {
-    Matcher matcher = PATTERN.matcher(message);
-    while (matcher.find()) {
-      char startChar = Optional.ofNullable(matcher.group(1)).filter(s -> !s.isEmpty()).map(s -> s.charAt(0)).orElse(' ');
-      char endChar = Optional.ofNullable(matcher.group(4)).filter(s -> !s.isEmpty()).map(s -> s.charAt(0)).orElse(' ');
-      String original = matcher.group(2);
-      if (START_IGNORE_CHAR == startChar && END_IGNORE_CHAR == endChar) {
-        message = message.replaceAll(Pattern.quote(matcher.group()), Matcher.quoteReplacement(original));
-        continue;
-      }
-
-      String identifier = matcher.group(3).trim();
-      Optional<String> optionalReplaced = variableEntries.stream()
+    VariableSession session = sessionFunction.apply(message);
+    while (session.hasVariable()) {
+      String identifier = session.getVariable();
+      variableEntries.stream()
         .filter(entry -> entry.isWhole ? identifier.equalsIgnoreCase(entry.prefix) : identifier.toLowerCase(Locale.ROOT).startsWith(entry.prefix.toLowerCase(Locale.ROOT)))
         .findFirst()
-        .map(entry -> entry.replacer.tryReplace(identifier.substring(entry.prefix.length()), uuid));
-      if (optionalReplaced.isPresent()) {
-        if (this.getReplaceAll()) {
-          message = message.replaceAll(Pattern.quote(original), Matcher.quoteReplacement(optionalReplaced.get()));
-        } else {
-          message = message.replaceFirst(Pattern.quote(original), Matcher.quoteReplacement(optionalReplaced.get()));
-        }
-      }
+        .map(entry -> entry.replacer.tryReplace(identifier.substring(entry.prefix.length()), uuid))
+        .ifPresent(session::replaceVariable);
     }
+
+    message = session.getFinalString();
 
     for (StringReplacer externalStringReplacer : externalReplacers) {
       String replaced = externalStringReplacer.tryReplace(message, uuid);
@@ -210,29 +234,5 @@ public class VariableManager implements StringReplacer {
   @Override
   public @Nullable String replace(@NotNull String original, @NotNull UUID uuid) {
     return setVariables(original, uuid);
-  }
-
-  /**
-   * A variable entry
-   */
-  public static class VariableEntry {
-    /**
-     * The prefix
-     */
-    public final String prefix;
-    /**
-     * Whether the manager should check if the whole string matches the prefix, or just the start
-     */
-    public final boolean isWhole;
-    /**
-     * The string replacer
-     */
-    public final StringReplacer replacer;
-
-    private VariableEntry(String prefix, boolean isWhole, StringReplacer replacer) {
-      this.prefix = prefix;
-      this.isWhole = isWhole;
-      this.replacer = replacer;
-    }
   }
 }
