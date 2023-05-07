@@ -21,9 +21,20 @@ public class VariableManager implements StringReplacer {
   private static final Pattern PATTERN = Pattern.compile("(.?)([{]([^{}]+)[}])(.?)");
   private static final char START_IGNORE_CHAR = '\\';
   private static final char END_IGNORE_CHAR = '\\';
-  private final Map<String, StringReplacer> variables = new HashMap<>();
+  private final List<VariableEntry> variableEntries = new ArrayList<>();
   private final List<StringReplacer> externalReplacers = new ArrayList<>();
   private BooleanSupplier replaceAll = () -> false;
+
+  /**
+   * Register new variable
+   *
+   * @param prefix   the prefix
+   * @param variable the replacer
+   * @param isWhole  whether the manager should check the whole string matches the prefix, set it to false if you want to check if the prefix is at the beginning of the string
+   */
+  public void register(String prefix, StringReplacer variable, boolean isWhole) {
+    variableEntries.add(new VariableEntry(prefix, isWhole, variable));
+  }
 
   /**
    * Register new variable
@@ -32,7 +43,7 @@ public class VariableManager implements StringReplacer {
    * @param variable the Variable object
    */
   public void register(String prefix, StringReplacer variable) {
-    variables.put(prefix, variable);
+    register(prefix, variable, false);
   }
 
   /**
@@ -41,7 +52,7 @@ public class VariableManager implements StringReplacer {
    * @param prefix the prefix
    */
   public void unregister(String prefix) {
-    variables.remove(prefix);
+    variableEntries.removeIf(entry -> entry.prefix.equalsIgnoreCase(prefix));
   }
 
   /**
@@ -50,7 +61,16 @@ public class VariableManager implements StringReplacer {
    * @return the variables
    */
   public Map<String, StringReplacer> getVariables() {
-    return Collections.unmodifiableMap(variables);
+    return variableEntries.stream().collect(HashMap::new, (map, entry) -> map.put(entry.prefix, entry.replacer), HashMap::putAll);
+  }
+
+  /**
+   * Get all variable entries
+   *
+   * @return the variable entries
+   */
+  public List<VariableEntry> getVariableEntries() {
+    return Collections.unmodifiableList(variableEntries);
   }
 
   /**
@@ -132,21 +152,15 @@ public class VariableManager implements StringReplacer {
       }
 
       String identifier = matcher.group(3).trim();
-      for (Map.Entry<String, StringReplacer> variable : variables.entrySet()) {
-        if (!identifier.startsWith(variable.getKey())) {
-          continue;
-        }
-
-        String parameter = identifier.substring(variable.getKey().length());
-        String replace = variable.getValue().tryReplace(parameter, uuid);
-        if (replace == null) {
-          continue;
-        }
-
+      Optional<String> optionalReplaced = variableEntries.stream()
+        .filter(entry -> entry.isWhole ? identifier.equalsIgnoreCase(entry.prefix) : identifier.toLowerCase(Locale.ROOT).startsWith(entry.prefix.toLowerCase(Locale.ROOT)))
+        .findFirst()
+        .map(entry -> entry.replacer.tryReplace(identifier.substring(entry.prefix.length()), uuid));
+      if (optionalReplaced.isPresent()) {
         if (this.getReplaceAll()) {
-          message = message.replaceAll(Pattern.quote(original), Matcher.quoteReplacement(replace));
+          message = message.replaceAll(Pattern.quote(original), Matcher.quoteReplacement(optionalReplaced.get()));
         } else {
-          message = message.replaceFirst(Pattern.quote(original), Matcher.quoteReplacement(replace));
+          message = message.replaceFirst(Pattern.quote(original), Matcher.quoteReplacement(optionalReplaced.get()));
         }
       }
     }
@@ -194,5 +208,29 @@ public class VariableManager implements StringReplacer {
   @Override
   public @Nullable String replace(@NotNull String original, @NotNull UUID uuid) {
     return setVariables(original, uuid);
+  }
+
+  /**
+   * A variable entry
+   */
+  public static class VariableEntry {
+    /**
+     * The prefix
+     */
+    public final String prefix;
+    /**
+     * Whether the manager should check if the whole string matches the prefix, or just the start
+     */
+    public final boolean isWhole;
+    /**
+     * The string replacer
+     */
+    public final StringReplacer replacer;
+
+    private VariableEntry(String prefix, boolean isWhole, StringReplacer replacer) {
+      this.prefix = prefix;
+      this.isWhole = isWhole;
+      this.replacer = replacer;
+    }
   }
 }
