@@ -121,12 +121,6 @@ public class VariableManager implements StringReplacer {
     do {
       old = message;
       message = setSingleVariables(message, uuid);
-      for (StringReplacer externalStringReplacer : externalReplacers) {
-        String replaced = externalStringReplacer.tryReplace(message, uuid);
-        if (replaced != null) {
-          message = replaced;
-        }
-      }
     } while (!old.equals(message));
     return message;
   }
@@ -164,6 +158,14 @@ public class VariableManager implements StringReplacer {
         }
       }
     }
+
+    for (StringReplacer externalStringReplacer : externalReplacers) {
+      String replaced = externalStringReplacer.tryReplace(message, uuid);
+      if (replaced != null) {
+        message = replaced;
+      }
+    }
+
     return message;
   }
 
