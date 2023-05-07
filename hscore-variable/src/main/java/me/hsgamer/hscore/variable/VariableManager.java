@@ -99,6 +99,39 @@ public class VariableManager implements StringReplacer {
   }
 
   /**
+   * Get the status whether the manager should replace all similar variables at once
+   *
+   * @return true if it should
+   *
+   * @see #setSingleVariables(String, UUID)
+   */
+  public boolean getReplaceAll() {
+    return replaceAll.getAsBoolean();
+  }
+
+  /**
+   * Whether the manager should replace all similar variables at once
+   *
+   * @param replaceAll true if it should
+   *
+   * @see #setSingleVariables(String, UUID)
+   */
+  public void setReplaceAll(boolean replaceAll) {
+    setReplaceAll(() -> replaceAll);
+  }
+
+  /**
+   * Whether the manager should replace all similar variables at once
+   *
+   * @param replaceAll the boolean supplier (true if it should)
+   *
+   * @see #setSingleVariables(String, UUID)
+   */
+  public void setReplaceAll(BooleanSupplier replaceAll) {
+    this.replaceAll = replaceAll;
+  }
+
+  /**
    * Get all external replacers
    *
    * @return the external replacers
@@ -167,39 +200,6 @@ public class VariableManager implements StringReplacer {
     }
 
     return message;
-  }
-
-  /**
-   * Get the status whether the manager should replace all similar variables on single time
-   *
-   * @return true if it should
-   *
-   * @see #setSingleVariables(String, UUID)
-   */
-  public boolean getReplaceAll() {
-    return replaceAll.getAsBoolean();
-  }
-
-  /**
-   * Whether the manager should replace all similar variables on single time
-   *
-   * @param replaceAll true if it should
-   *
-   * @see #setSingleVariables(String, UUID)
-   */
-  public void setReplaceAll(boolean replaceAll) {
-    setReplaceAll(() -> replaceAll);
-  }
-
-  /**
-   * Whether the manager should replace all similar variables on single time
-   *
-   * @param replaceAll the boolean supplier (true if it should)
-   *
-   * @see #setSingleVariables(String, UUID)
-   */
-  public void setReplaceAll(BooleanSupplier replaceAll) {
-    this.replaceAll = replaceAll;
   }
 
   @Override
