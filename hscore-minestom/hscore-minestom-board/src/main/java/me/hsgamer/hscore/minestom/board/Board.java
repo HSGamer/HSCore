@@ -6,6 +6,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
+import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.scoreboard.Sidebar;
 
 import java.util.List;
@@ -40,10 +41,32 @@ public class Board {
    * Hook the board event to the event node.
    * Call the method when the server is starting up to hook the event and make sure the function work properly.
    *
+   * @param node         the event node
+   * @param initOnJoin   true to initialize the board when the player joins the server
+   * @param removeOnQuit true to remove the board when the player quits the server
+   */
+  public static void hook(EventNode<Event> node, boolean initOnJoin, boolean removeOnQuit) {
+    node
+      .addListener(PlayerDisconnectEvent.class, event -> {
+        if (removeOnQuit) {
+          Board.remove(event.getPlayer());
+        }
+      })
+      .addListener(PlayerSpawnEvent.class, event -> {
+        if (event.isFirstSpawn() && initOnJoin) {
+          Board.init(event.getPlayer());
+        }
+      });
+  }
+
+  /**
+   * Hook the board event to the event node.
+   * Call the method when the server is starting up to hook the event and make sure the function work properly.
+   *
    * @param node the event node
    */
   public static void hook(EventNode<Event> node) {
-    node.addListener(PlayerDisconnectEvent.class, event -> Board.remove(event.getPlayer()));
+    hook(node, true, true);
   }
 
   /**
