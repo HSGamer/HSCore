@@ -14,9 +14,10 @@
 
   <modules>
     <module>hscore-logger-common</module>
-    <module>hscore-logger-jul</module>
-    <module>hscore-logger-system</module>
     <module>hscore-logger-provider</module>
     <module>hscore-logger-service</module>
+    <module>hscore-logger-jul</module>
+    <module>hscore-logger-system</module>
+    <module>hscore-logger-slf4j</module>
   </modules>
 </project>
