@@ -43,23 +43,37 @@ public class Board {
    * @param node the event node
    */
   public static void hook(EventNode<Event> node) {
-    node.addListener(PlayerDisconnectEvent.class, event -> Board.removeBoard(event.getPlayer()));
+    node.addListener(PlayerDisconnectEvent.class, event -> Board.remove(event.getPlayer()));
   }
 
-  private static Sidebar getBoard(Player player) {
-    return boards.computeIfAbsent(player, p -> {
-      Sidebar sidebar = new Sidebar(Component.text(""));
-      sidebar.addViewer(p);
-      return sidebar;
-    });
+  /**
+   * Initialize the board for the player
+   *
+   * @param player the player
+   */
+  public static void init(Player player) {
+    if (boards.containsKey(player)) {
+      return;
+    }
+    Sidebar sidebar = new Sidebar(Component.text(""));
+    sidebar.addViewer(player);
+    boards.put(player, sidebar);
   }
 
-  private static void removeBoard(Player player) {
+  /**
+   * Remove the board for the player
+   *
+   * @param player the player
+   */
+  public static void remove(Player player) {
     Optional.ofNullable(boards.remove(player)).ifPresent(sidebar -> sidebar.removeViewer(player));
   }
 
-  private static void updateBoard(Player player, Component title, List<Component> lines) {
-    Sidebar sidebar = getBoard(player);
+  private static boolean update(Player player, Component title, List<Component> lines) {
+    Sidebar sidebar = boards.get(player);
+    if (sidebar == null) {
+      return false;
+    }
 
     sidebar.setTitle(title);
 
@@ -78,14 +92,18 @@ public class Board {
         sidebar.updateLineContent(lineId, component);
       }
     }
+
+    return true;
   }
 
   /**
    * Update the board for the player
    *
    * @param player the player
+   *
+   * @return true if the board was updated, false if the board is not initialized
    */
-  public void update(Player player) {
-    updateBoard(player, title.apply(player), lines.apply(player));
+  public boolean update(Player player) {
+    return update(player, title.apply(player), lines.apply(player));
   }
 }
