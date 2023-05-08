@@ -14,4 +14,15 @@ public interface LoggerService {
    * @return the logger
    */
   Logger getLogger(String name);
+
+  /**
+   * Get the logger
+   *
+   * @param clazz the class
+   *
+   * @return the logger
+   */
+  default Logger getLogger(Class<?> clazz) {
+    return getLogger(clazz.getSimpleName());
+  }
 }
