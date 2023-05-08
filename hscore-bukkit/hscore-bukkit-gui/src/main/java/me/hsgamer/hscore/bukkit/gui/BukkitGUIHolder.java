@@ -21,16 +21,13 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
   private final Plugin plugin;
   private InventoryType inventoryType = InventoryType.CHEST;
   private int size = InventoryType.CHEST.getDefaultSize();
-  private Function<UUID, String> titleFunction = uuid -> inventoryType.getDefaultTitle();
   private Function<BukkitGUIDisplay, Inventory> inventoryFunction = display -> {
     BukkitGUIHolder holder = display.getHolder();
     InventoryType type = holder.getInventoryType();
-    UUID uuid = display.getUniqueId();
     int size = holder.getSize();
-    String title = holder.getTitle(uuid);
     return type == InventoryType.CHEST && size > 0
-      ? Bukkit.createInventory(display, BukkitGUIUtils.normalizeToChestSize(size), title)
-      : Bukkit.createInventory(display, type, title);
+      ? Bukkit.createInventory(display, BukkitGUIUtils.normalizeToChestSize(size))
+      : Bukkit.createInventory(display, type);
   };
 
   /**
@@ -70,48 +67,6 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
   }
 
   /**
-   * Get the title function
-   *
-   * @return the title function
-   */
-  public Function<UUID, String> getTitleFunction() {
-    return titleFunction;
-  }
-
-  /**
-   * Set the title function
-   *
-   * @param titleFunction the title function
-   */
-  public void setTitleFunction(Function<UUID, String> titleFunction) {
-    this.titleFunction = titleFunction;
-  }
-
-  /**
-   * Get the title for the unique id
-   *
-   * @param uuid the unique id
-   *
-   * @return the title
-   *
-   * @see #getTitleFunction()
-   */
-  public String getTitle(UUID uuid) {
-    return titleFunction.apply(uuid);
-  }
-
-  /**
-   * Set the title
-   *
-   * @param title the title
-   *
-   * @see #setTitleFunction(Function)
-   */
-  public void setTitle(String title) {
-    setTitleFunction(uuid -> title);
-  }
-
-  /**
    * Get the size of the inventory
    *
    * @return the size
@@ -136,6 +91,34 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
    */
   public Function<BukkitGUIDisplay, Inventory> getInventoryFunction() {
     return inventoryFunction;
+  }
+
+  /**
+   * Set the title function
+   *
+   * @param titleFunction the title function
+   */
+  public void setTitleFunction(Function<UUID, String> titleFunction) {
+    setInventoryFunction(display -> {
+      BukkitGUIHolder holder = display.getHolder();
+      InventoryType type = holder.getInventoryType();
+      int size = holder.getSize();
+      String title = titleFunction.apply(display.getUniqueId());
+      return type == InventoryType.CHEST && size > 0
+        ? Bukkit.createInventory(display, BukkitGUIUtils.normalizeToChestSize(size), title)
+        : Bukkit.createInventory(display, type, title);
+    });
+  }
+
+  /**
+   * Set the title
+   *
+   * @param title the title
+   *
+   * @see #setTitleFunction(Function)
+   */
+  public void setTitle(String title) {
+    setTitleFunction(uuid -> title);
   }
 
   /**
