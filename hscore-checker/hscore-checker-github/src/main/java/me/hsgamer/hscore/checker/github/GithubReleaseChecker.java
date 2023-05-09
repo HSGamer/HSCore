@@ -2,8 +2,8 @@ package me.hsgamer.hscore.checker.github;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import me.hsgamer.hscore.checker.VersionChecker;
+import me.hsgamer.hscore.gson.GsonUtils;
 import me.hsgamer.hscore.web.UserAgent;
 import me.hsgamer.hscore.web.WebUtils;
 import org.jetbrains.annotations.NotNull;
@@ -47,7 +47,7 @@ public class GithubReleaseChecker implements VersionChecker {
         InputStream inputStream = WebUtils.createConnection(url, userAgent::assignToConnection).getInputStream();
         InputStreamReader reader = new InputStreamReader(inputStream)
       ) {
-        JsonElement element = JsonParser.parseReader(reader);
+        JsonElement element = GsonUtils.parse(reader);
         if (!element.isJsonArray()) {
           throw new IOException("The response is not a JSON array");
         }

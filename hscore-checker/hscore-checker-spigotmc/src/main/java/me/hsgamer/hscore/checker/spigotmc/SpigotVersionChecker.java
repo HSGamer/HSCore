@@ -1,8 +1,8 @@
 package me.hsgamer.hscore.checker.spigotmc;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import me.hsgamer.hscore.checker.VersionChecker;
+import me.hsgamer.hscore.gson.GsonUtils;
 import me.hsgamer.hscore.web.UserAgent;
 import me.hsgamer.hscore.web.WebUtils;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +44,6 @@ public final class SpigotVersionChecker implements VersionChecker {
    *
    * @return the version
    */
-  @SuppressWarnings("deprecation")
   @Override
   public @NotNull CompletableFuture<String> getVersion() {
     return CompletableFuture.supplyAsync(() -> {
@@ -52,7 +51,7 @@ public final class SpigotVersionChecker implements VersionChecker {
         InputStream inputStream = WebUtils.createConnection("https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId, userAgent::assignToConnection).getInputStream();
         InputStreamReader reader = new InputStreamReader(inputStream)
       ) {
-        JsonElement element = new JsonParser().parse(reader);
+        JsonElement element = GsonUtils.parse(reader);
         if (!element.isJsonObject()) {
           throw new IOException("Invalid JSON");
         }

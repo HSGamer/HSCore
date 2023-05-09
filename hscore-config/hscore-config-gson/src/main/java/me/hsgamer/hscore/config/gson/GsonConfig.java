@@ -1,9 +1,13 @@
 package me.hsgamer.hscore.config.gson;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
 import me.hsgamer.hscore.config.Config;
 import me.hsgamer.hscore.config.PathString;
+import me.hsgamer.hscore.gson.GsonUtils;
 import me.hsgamer.hscore.logger.common.LogLevel;
 
 import java.io.File;
@@ -163,7 +167,7 @@ public class GsonConfig implements Config {
     }
 
     try (FileReader reader = new FileReader(file)) {
-      JsonElement jsonElement = JsonParser.parseReader(reader);
+      JsonElement jsonElement = GsonUtils.parse(reader);
       if (jsonElement.isJsonObject()) {
         this.root = jsonElement.getAsJsonObject();
       }
@@ -196,25 +200,7 @@ public class GsonConfig implements Config {
     if (!isNormalizable(object)) {
       return object;
     }
-
-    JsonElement jsonElement = (JsonElement) object;
-    if (jsonElement.isJsonPrimitive()) {
-      JsonPrimitive jsonPrimitive = jsonElement.getAsJsonPrimitive();
-      if (jsonPrimitive.isBoolean()) {
-        return jsonPrimitive.getAsBoolean();
-      } else if (jsonPrimitive.isNumber()) {
-        return jsonPrimitive.getAsNumber();
-      } else if (jsonPrimitive.isString()) {
-        return jsonPrimitive.getAsString();
-      }
-    } else if (jsonElement.isJsonArray()) {
-      return jsonElement.getAsJsonArray().asList();
-    } else if (jsonElement.isJsonObject()) {
-      return jsonElement.getAsJsonObject().asMap();
-    } else if (jsonElement.isJsonNull()) {
-      return null;
-    }
-    return jsonElement.getAsString();
+    return GsonUtils.normalize((JsonElement) object, false);
   }
 
   @Override

@@ -2,8 +2,8 @@ package me.hsgamer.hscore.checker.modrinth;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import me.hsgamer.hscore.checker.VersionChecker;
+import me.hsgamer.hscore.gson.GsonUtils;
 import me.hsgamer.hscore.web.UserAgent;
 import me.hsgamer.hscore.web.WebUtils;
 import org.jetbrains.annotations.NotNull;
@@ -73,7 +73,6 @@ public class ModrinthVersionChecker implements VersionChecker {
     this(id, new UserAgent(id));
   }
 
-  @SuppressWarnings("deprecation")
   @Override
   public @NotNull CompletableFuture<String> getVersion() {
     StringBuilder urlBuilder = new StringBuilder("https://api.modrinth.com/api/v1/mod/" + id + "/version");
@@ -85,7 +84,7 @@ public class ModrinthVersionChecker implements VersionChecker {
         InputStream inputStream = WebUtils.createConnection(urlBuilder.toString(), userAgent::assignToConnection).getInputStream();
         InputStreamReader reader = new InputStreamReader(inputStream)
       ) {
-        JsonElement element = new JsonParser().parse(reader);
+        JsonElement element = GsonUtils.parse(reader);
         if (!element.isJsonArray()) {
           throw new IOException("Invalid JSON");
         }

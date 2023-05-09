@@ -1,8 +1,8 @@
 package me.hsgamer.hscore.checker.github;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import me.hsgamer.hscore.checker.VersionChecker;
+import me.hsgamer.hscore.gson.GsonUtils;
 import me.hsgamer.hscore.web.UserAgent;
 import me.hsgamer.hscore.web.WebUtils;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +41,6 @@ public class GithubCommitChecker implements VersionChecker {
     this(repo, branch, UserAgent.FIREFOX);
   }
 
-  @SuppressWarnings("deprecation")
   @Override
   public @NotNull CompletableFuture<String> getVersion() {
     return CompletableFuture.supplyAsync(() -> {
@@ -49,7 +48,7 @@ public class GithubCommitChecker implements VersionChecker {
         InputStream inputStream = WebUtils.createConnection(url, userAgent::assignToConnection).getInputStream();
         InputStreamReader reader = new InputStreamReader(inputStream)
       ) {
-        JsonElement element = new JsonParser().parse(reader);
+        JsonElement element = GsonUtils.parse(reader);
         if (!element.isJsonObject()) {
           throw new IOException("The response is null");
         }

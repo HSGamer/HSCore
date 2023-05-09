@@ -2,10 +2,10 @@ package me.hsgamer.hscore.downloader.json;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import me.hsgamer.hscore.downloader.core.Downloader;
 import me.hsgamer.hscore.downloader.core.loader.DownloadInfoLoader;
 import me.hsgamer.hscore.downloader.core.loader.MapDownloadInfoLoader;
+import me.hsgamer.hscore.gson.GsonUtils;
 import me.hsgamer.hscore.web.UserAgent;
 import me.hsgamer.hscore.web.WebUtils;
 
@@ -43,7 +43,6 @@ public class JsonDownloadInfoLoader extends MapDownloadInfoLoader {
     this(dbUrl, UserAgent.FIREFOX);
   }
 
-  @SuppressWarnings("deprecation")
   @Override
   protected CompletableFuture<Map<String, Map<String, Object>>> loadMap(Downloader downloader) {
     return CompletableFuture.supplyAsync(() -> {
@@ -54,7 +53,7 @@ public class JsonDownloadInfoLoader extends MapDownloadInfoLoader {
       }
     }).thenApplyAsync(inputStreamReader -> {
       try {
-        return new JsonParser().parse(inputStreamReader);
+        return GsonUtils.parse(inputStreamReader);
       } catch (Exception e) {
         throw new IllegalStateException("Something wrong when parsing the info", e);
       }
