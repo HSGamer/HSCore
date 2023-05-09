@@ -16,5 +16,6 @@
     <module>hscore-expansion-manifest</module>
     <module>hscore-expansion-properties</module>
     <module>hscore-expansion-extra</module>
+    <module>hscore-expansion-gson</module>
   </modules>
 </project>

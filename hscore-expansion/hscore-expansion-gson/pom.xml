@@ -5,17 +5,22 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>me.hsgamer</groupId>
-    <artifactId>hscore</artifactId>
+    <artifactId>hscore-expansion</artifactId>
     <version>4.3.4-SNAPSHOT</version>
   </parent>
 
-  <artifactId>hscore-gson</artifactId>
+  <artifactId>hscore-expansion-gson</artifactId>
 
   <dependencies>
     <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.10.1</version>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-expansion-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-gson</artifactId>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
 </project>
