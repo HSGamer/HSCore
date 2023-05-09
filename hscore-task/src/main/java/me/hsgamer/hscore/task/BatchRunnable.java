@@ -78,45 +78,45 @@ public class BatchRunnable implements Runnable {
     };
 
     while (isRunning.get()) {
-      TaskPool taskPool = tasks.poll();
-      if (taskPool == null) {
-        isRunning.set(false);
-        break;
-      }
-      currentTaskPool.set(taskPool);
+      TaskPool taskPool = currentTaskPool.get();
+      Consumer<TaskProcess> task = taskPool == null ? null : taskPool.pollTask();
+      if (task == null) {
+        taskPool = tasks.poll();
 
-      do {
-        Consumer<TaskProcess> task = taskPool.pollTask();
-        if (task == null) {
+        if (taskPool == null) {
+          isRunning.set(false);
           break;
         }
 
-        isLocked.set(true);
-        task.accept(process);
+        currentTaskPool.set(taskPool);
+        continue;
+      }
 
-        synchronized (lock) {
-          if (isLocked.get()) {
-            try {
-              if (timeout <= 0) {
-                lock.wait();
-              } else {
-                lock.wait(timeoutUnit.toMillis(timeout));
+      isLocked.set(true);
+      task.accept(process);
 
-                // Stop the task if it's still locked after the timeout
-                if (isLocked.get()) {
-                  isTimeout.set(true);
-                  throw new InterruptedException();
-                }
+      synchronized (lock) {
+        if (isLocked.get()) {
+          try {
+            if (timeout <= 0) {
+              lock.wait();
+            } else {
+              lock.wait(timeoutUnit.toMillis(timeout));
+
+              // Stop the task if it's still locked after the timeout
+              if (isLocked.get()) {
+                isTimeout.set(true);
+                throw new InterruptedException();
               }
-            } catch (InterruptedException e) {
-              Thread.currentThread().interrupt();
-              isRunning.set(false);
-              isLocked.set(false);
-              break;
             }
+          } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            isRunning.set(false);
+            isLocked.set(false);
+            break;
           }
         }
-      } while (isRunning.get());
+      }
     }
   }
 
