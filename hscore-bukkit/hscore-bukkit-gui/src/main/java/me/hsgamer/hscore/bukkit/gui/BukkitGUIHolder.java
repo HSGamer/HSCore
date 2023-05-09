@@ -94,6 +94,15 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
   }
 
   /**
+   * Set the inventory function
+   *
+   * @param inventoryFunction the inventory function
+   */
+  public void setInventoryFunction(Function<BukkitGUIDisplay, Inventory> inventoryFunction) {
+    this.inventoryFunction = inventoryFunction;
+  }
+
+  /**
    * Set the title function
    *
    * @param titleFunction the title function
@@ -119,15 +128,6 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
    */
   public void setTitle(String title) {
     setTitleFunction(uuid -> title);
-  }
-
-  /**
-   * Set the inventory function
-   *
-   * @param inventoryFunction the inventory function
-   */
-  public void setInventoryFunction(Function<BukkitGUIDisplay, Inventory> inventoryFunction) {
-    this.inventoryFunction = inventoryFunction;
   }
 
   @Override
