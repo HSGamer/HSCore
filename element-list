@@ -71,6 +71,7 @@ me.hsgamer.hscore.expansion.common.factory
 me.hsgamer.hscore.expansion.extra
 me.hsgamer.hscore.expansion.extra.expansion
 me.hsgamer.hscore.expansion.extra.manager
+me.hsgamer.hscore.expansion.gson
 me.hsgamer.hscore.expansion.manifest
 me.hsgamer.hscore.expansion.properties
 me.hsgamer.hscore.expression
@@ -80,10 +81,12 @@ me.hsgamer.hscore.extra
 me.hsgamer.hscore.extra.consumer
 me.hsgamer.hscore.extra.function
 me.hsgamer.hscore.extra.supplier
+me.hsgamer.hscore.gson
 me.hsgamer.hscore.logger.common
 me.hsgamer.hscore.logger.jul
 me.hsgamer.hscore.logger.provider
 me.hsgamer.hscore.logger.service
+me.hsgamer.hscore.logger.slf4j
 me.hsgamer.hscore.logger.system
 me.hsgamer.hscore.minecraft.block
 me.hsgamer.hscore.minecraft.block.adapt
@@ -111,7 +114,6 @@ me.hsgamer.hscore.minestom.gui.object
 me.hsgamer.hscore.request
 me.hsgamer.hscore.task
 me.hsgamer.hscore.task.element
-me.hsgamer.hscore.task.exception
 me.hsgamer.hscore.ui
 me.hsgamer.hscore.ui.property
 me.hsgamer.hscore.variable
