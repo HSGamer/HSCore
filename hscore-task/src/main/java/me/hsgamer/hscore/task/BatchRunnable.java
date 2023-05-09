@@ -2,10 +2,13 @@ package me.hsgamer.hscore.task;
 
 import me.hsgamer.hscore.task.element.TaskPool;
 import me.hsgamer.hscore.task.element.TaskProcess;
-import me.hsgamer.hscore.task.exception.BatchRunnableException;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
@@ -16,6 +19,7 @@ import java.util.function.Consumer;
 public class BatchRunnable implements Runnable {
   private final Queue<TaskPool> tasks = new PriorityQueue<>(Comparator.comparingInt(TaskPool::getStage));
   private final Map<String, Object> data;
+  private final AtomicBoolean isTimeout = new AtomicBoolean(false);
   private long timeout = 0;
   private TimeUnit timeoutUnit = TimeUnit.MILLISECONDS;
 
@@ -39,7 +43,9 @@ public class BatchRunnable implements Runnable {
   public void run() {
     AtomicBoolean isRunning = new AtomicBoolean(true);
     AtomicReference<TaskPool> currentTaskPool = new AtomicReference<>();
-    AtomicReference<CompletableFuture<Void>> nextLock = new AtomicReference<>();
+    AtomicBoolean isLocked = new AtomicBoolean(false);
+    Object lock = new Object();
+
     TaskProcess process = new TaskProcess() {
       @Override
       public Map<String, Object> getData() {
@@ -48,7 +54,10 @@ public class BatchRunnable implements Runnable {
 
       @Override
       public void next() {
-        Optional.ofNullable(nextLock.get()).ifPresent(future -> future.complete(null));
+        synchronized (lock) {
+          isLocked.set(false);
+          lock.notify();
+        }
       }
 
       @Override
@@ -81,21 +90,31 @@ public class BatchRunnable implements Runnable {
         if (task == null) {
           break;
         }
-        CompletableFuture<Void> next = new CompletableFuture<>();
-        nextLock.set(next);
+
+        isLocked.set(true);
         task.accept(process);
-        try {
-          if (timeout > 0) {
-            next.get(timeout, timeoutUnit);
-          } else {
-            next.get();
+
+        synchronized (lock) {
+          if (isLocked.get()) {
+            try {
+              if (timeout <= 0) {
+                lock.wait();
+              } else {
+                lock.wait(timeoutUnit.toMillis(timeout));
+
+                // Stop the task if it's still locked after the timeout
+                if (isLocked.get()) {
+                  isTimeout.set(true);
+                  throw new InterruptedException();
+                }
+              }
+            } catch (InterruptedException e) {
+              Thread.currentThread().interrupt();
+              isRunning.set(false);
+              isLocked.set(false);
+              break;
+            }
           }
-        } catch (InterruptedException e) {
-          Thread.currentThread().interrupt();
-          isRunning.set(false);
-          break;
-        } catch (ExecutionException | TimeoutException e) {
-          throw new BatchRunnableException(e);
         }
       } while (isRunning.get());
     }
@@ -142,6 +161,15 @@ public class BatchRunnable implements Runnable {
   public void setTimeout(long timeout, TimeUnit unit) {
     this.timeout = timeout;
     this.timeoutUnit = unit;
+  }
+
+  /**
+   * Check if the task is interrupted by the timeout
+   *
+   * @return true if it is
+   */
+  public boolean isTimeout() {
+    return isTimeout.get();
   }
 
   /**
