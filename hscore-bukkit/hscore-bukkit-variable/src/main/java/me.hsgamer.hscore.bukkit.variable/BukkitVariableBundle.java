@@ -95,7 +95,7 @@ public final class BukkitVariableBundle {
     BUNDLE.register("ping", StringReplacer.of((original, uuid) -> Optional.ofNullable(Bukkit.getPlayer(uuid)).map(BukkitUtils::getPing).map(String::valueOf).orElse("")), true);
 
     // Random
-    BUNDLE.register("random_", StringReplacer.of((original, uuid) -> {
+    BUNDLE.register("random_", StringReplacer.of(original -> {
       original = original.trim();
       if (original.contains(":")) {
         String[] split = original.split(":", 2);
