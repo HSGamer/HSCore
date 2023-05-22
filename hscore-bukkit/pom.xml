@@ -34,6 +34,7 @@
     <module>hscore-bukkit-key</module>
     <module>hscore-bukkit-listener</module>
     <module>hscore-bukkit-block</module>
+    <module>hscore-bukkit-variable</module>
   </modules>
 
   <repositories>
