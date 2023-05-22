@@ -99,7 +99,7 @@ public interface StringReplacer {
    */
   @NotNull
   static StringReplacer of(@NotNull BiFunction<String, UUID, String> function) {
-    return of(UnaryOperator.identity(), function);
+    return of(s -> null, function);
   }
 
   /**
