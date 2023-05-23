@@ -9,7 +9,6 @@
     <version>4.3.5-SNAPSHOT</version>
   </parent>
 
-  <groupId>me.hsgamer.gamesinthebox</groupId>
   <artifactId>hscore-bukkit-variable</artifactId>
 
   <dependencies>
