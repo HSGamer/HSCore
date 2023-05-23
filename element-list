@@ -24,6 +24,7 @@ me.hsgamer.hscore.bukkit.scheduler.folia
 me.hsgamer.hscore.bukkit.simpleplugin
 me.hsgamer.hscore.bukkit.simpleplugin.listener
 me.hsgamer.hscore.bukkit.utils
+me.hsgamer.hscore.bukkit.variable
 me.hsgamer.hscore.bungeecord.channel
 me.hsgamer.hscore.bungeecord.config
 me.hsgamer.hscore.checker
