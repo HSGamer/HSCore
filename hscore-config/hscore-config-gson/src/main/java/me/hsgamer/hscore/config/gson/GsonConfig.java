@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonWriter;
 import me.hsgamer.hscore.config.Config;
 import me.hsgamer.hscore.config.PathString;
@@ -180,10 +181,9 @@ public class GsonConfig implements Config {
   public void save() {
     try (
       FileWriter writer = new FileWriter(file);
-      JsonWriter jsonWriter = new JsonWriter(writer)
+      JsonWriter jsonWriter = gson.newJsonWriter(writer)
     ) {
-      jsonWriter.setIndent("  ");
-      gson.toJson(this.root, jsonWriter);
+      Streams.write(this.root, jsonWriter);
     } catch (IOException e) {
       LOGGER.log(LogLevel.WARN, "Something wrong when saving " + file.getName(), e);
     }
