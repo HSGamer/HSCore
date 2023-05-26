@@ -42,21 +42,21 @@ public abstract class CachedValue<T> implements Supplier<T> {
    * @return the value
    */
   public T getValue() {
-    if (isCached.get()) {
-      return cache.get();
-    } else {
-      T value = generate();
-      cache.set(value);
-      isCached.set(true);
-      return value;
+    if (!isCached.get()) {
+      synchronized (this) {
+        if (!isCached.get()) {
+          cache.set(generate());
+          isCached.set(true);
+        }
+      }
     }
+    return cache.get();
   }
 
   /**
    * Clear the cached value
    */
   public void clearCache() {
-    cache.set(null);
     isCached.set(false);
   }
 
