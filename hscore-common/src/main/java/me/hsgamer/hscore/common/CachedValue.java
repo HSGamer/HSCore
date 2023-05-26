@@ -57,7 +57,14 @@ public abstract class CachedValue<T> implements Supplier<T> {
    * Clear the cached value
    */
   public void clearCache() {
-    isCached.set(false);
+    if (isCached.get()) {
+      synchronized (this) {
+        if (isCached.get()) {
+          cache.set(null);
+          isCached.set(false);
+        }
+      }
+    }
   }
 
   /**
