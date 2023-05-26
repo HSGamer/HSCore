@@ -1,7 +1,5 @@
 package me.hsgamer.hscore.common;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 /**
@@ -13,11 +11,11 @@ public abstract class CachedValue<T> implements Supplier<T> {
   /**
    * The cached value
    */
-  private final AtomicReference<T> cache = new AtomicReference<>();
-  /**
+  private volatile T cache;
+  /*
    * The status to check if the value is cached
    */
-  private final AtomicBoolean isCached = new AtomicBoolean(false);
+  private volatile boolean isCached = false;
 
   /**
    * Create a new cached value from a supplier
@@ -42,26 +40,26 @@ public abstract class CachedValue<T> implements Supplier<T> {
    * @return the value
    */
   public T getValue() {
-    if (!isCached.get()) {
+    if (!isCached) {
       synchronized (this) {
-        if (!isCached.get()) {
-          cache.set(generate());
-          isCached.set(true);
+        if (!isCached) {
+          cache = generate();
+          isCached = true;
         }
       }
     }
-    return cache.get();
+    return cache;
   }
 
   /**
    * Clear the cached value
    */
   public void clearCache() {
-    if (isCached.get()) {
+    if (isCached) {
       synchronized (this) {
-        if (isCached.get()) {
-          cache.set(null);
-          isCached.set(false);
+        if (isCached) {
+          cache = null;
+          isCached = false;
         }
       }
     }
