@@ -97,6 +97,17 @@ public final class GsonUtils {
   }
 
   /**
+   * Check if the {@link JsonArray} is empty
+   *
+   * @param array the array
+   *
+   * @return true if it is empty
+   */
+  public static boolean isEmpty(JsonArray array) {
+    return array == null || array.size() == 0;
+  }
+
+  /**
    * Get the elements from a {@link JsonObject}
    *
    * @param object the object

@@ -89,7 +89,7 @@ public class ModrinthVersionChecker implements VersionChecker {
           throw new IOException("Invalid JSON");
         }
         JsonArray array = element.getAsJsonArray();
-        if (array.isEmpty()) {
+        if (GsonUtils.isEmpty(array)) {
           throw new IOException("The response is empty");
         }
         JsonElement first = array.get(0);

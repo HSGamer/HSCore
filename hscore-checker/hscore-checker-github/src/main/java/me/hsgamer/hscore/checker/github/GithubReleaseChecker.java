@@ -52,7 +52,7 @@ public class GithubReleaseChecker implements VersionChecker {
           throw new IOException("The response is not a JSON array");
         }
         JsonArray array = element.getAsJsonArray();
-        if (array.isEmpty()) {
+        if (GsonUtils.isEmpty(array)) {
           throw new IOException("The response is empty");
         }
         JsonElement first = array.get(0);
