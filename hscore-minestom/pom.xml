@@ -32,7 +32,7 @@
     <dependency>
       <groupId>dev.hollowcube</groupId>
       <artifactId>minestom-ce</artifactId>
-      <version>381d89497a</version>
+      <version>197371a35e</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
