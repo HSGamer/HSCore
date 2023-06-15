@@ -161,8 +161,7 @@ public class ConfigurateConfig implements Config {
     CommentedConfigurationNode commentedNode = (CommentedConfigurationNode) node;
     if (type != CommentType.BLOCK) return Collections.emptyList();
     String comment = commentedNode.comment();
-    if (comment == null) return Collections.emptyList();
-    return Arrays.asList(comment.split("\\r?\\n"));
+    return comment == null || comment.isEmpty() ? null : Arrays.asList(comment.split("\\r?\\n"));
   }
 
   @Override
@@ -171,6 +170,6 @@ public class ConfigurateConfig implements Config {
     if (!(node instanceof CommentedConfigurationNode)) return;
     CommentedConfigurationNode commentedNode = (CommentedConfigurationNode) node;
     if (type != CommentType.BLOCK) return;
-    commentedNode.comment(String.join("\n", value));
+    commentedNode.comment(value == null || value.isEmpty() ? null : String.join("\n", value));
   }
 }

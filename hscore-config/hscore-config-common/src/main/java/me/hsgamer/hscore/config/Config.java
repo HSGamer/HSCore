@@ -306,10 +306,10 @@ public interface Config {
    * @param path the path
    * @param type the comment type
    *
-   * @return the comment
+   * @return the comment, null if not found or not available
    */
   default List<String> getComment(PathString path, CommentType type) {
-    return Collections.emptyList();
+    return null;
   }
 
   /**
@@ -329,7 +329,7 @@ public interface Config {
    *
    * @param path the path
    *
-   * @return the comment
+   * @return the comment, null if not found or not available
    *
    * @see #getComment(PathString, CommentType)
    */

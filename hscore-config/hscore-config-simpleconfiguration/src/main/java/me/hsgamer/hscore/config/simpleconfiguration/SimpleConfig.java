@@ -158,12 +158,12 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
         LOGGER.log(LogLevel.WARN, "Something wrong when getting comment of " + path, e);
       }
     }
-    return comment == null ? Collections.emptyList() : Arrays.asList(comment.split("\\r?\\n"));
+    return comment == null ? null : Arrays.asList(comment.split("\\r?\\n"));
   }
 
   @Override
   public void setComment(PathString path, List<String> value, CommentType type) {
-    String comment = String.join("\n", value);
+    String comment = value == null || value.isEmpty() ? null : String.join("\n", value);
     if (path.isRoot()) {
       configuration.options().header(comment).copyHeader(true);
     } else if (configuration instanceof org.simpleyaml.configuration.comments.Commentable) {
