@@ -6,9 +6,11 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -16,6 +18,33 @@ import java.util.stream.Collectors;
  * Methods on Bukkit
  */
 public final class BukkitUtils {
+  private static final Function<Player, Integer> PING_PLAYER;
+
+  static {
+    Function<Player, Integer> pingPlayer;
+    try {
+      Method pingMethod = Player.class.getDeclaredMethod("getPing");
+      pingPlayer = player -> {
+        try {
+          return (int) pingMethod.invoke(player);
+        } catch (Exception e) {
+          return -1;
+        }
+      };
+    } catch (NoSuchMethodException noSuchMethodException) {
+      pingPlayer = player -> {
+        try {
+          Object entityPlayer = player.getClass().getMethod("getHandle").invoke(player);
+          return entityPlayer.getClass().getField("ping").getInt(entityPlayer);
+        } catch (Exception e) {
+          Bukkit.getServer().getLogger().log(Level.WARNING, "Unexpected error when getting ping", e);
+          return -9;
+        }
+      };
+    }
+    PING_PLAYER = pingPlayer;
+  }
+
   private BukkitUtils() {
     // EMPTY
   }
@@ -28,24 +57,7 @@ public final class BukkitUtils {
    * @return the ping of the player
    */
   public static int getPing(@NotNull final Player player) {
-    Object entityPlayer;
-    int ping = -9;
-    try {
-      entityPlayer = player.getClass().getMethod("getHandle").invoke(player);
-    } catch (Exception e) {
-      Bukkit.getServer().getLogger().log(Level.WARNING, "Unexpected error when getting handle", e);
-      return ping;
-    }
-    try {
-      ping = entityPlayer.getClass().getField("ping").getInt(entityPlayer);
-    } catch (Exception e) {
-      try {
-        ping = entityPlayer.getClass().getField("e").getInt(entityPlayer);
-      } catch (Exception e1) {
-        Bukkit.getServer().getLogger().log(Level.WARNING, "Unexpected error when getting ping", e1);
-      }
-    }
-    return ping;
+    return PING_PLAYER.apply(player);
   }
 
   /**
