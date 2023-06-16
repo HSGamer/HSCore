@@ -6,7 +6,7 @@
   <parent>
     <groupId>me.hsgamer</groupId>
     <artifactId>hscore-config</artifactId>
-    <version>4.3.8-SNAPSHOT</version>
+    <version>4.3.8</version>
   </parent>
 
   <artifactId>hscore-config-gson</artifactId>
