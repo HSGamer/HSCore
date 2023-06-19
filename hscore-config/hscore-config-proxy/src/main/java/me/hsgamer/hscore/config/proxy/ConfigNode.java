@@ -52,7 +52,7 @@ public class ConfigNode {
    */
   public void addDefault() {
     config.addDefault(path, converter.convertToRaw(defaultValue));
-    if (comment != null && config.getComment(path) == null) {
+    if (comment != null && config.getComment(path).isEmpty()) {
       config.setComment(path, comment);
     }
   }

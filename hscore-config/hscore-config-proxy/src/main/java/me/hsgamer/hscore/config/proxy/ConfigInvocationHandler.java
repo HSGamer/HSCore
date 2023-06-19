@@ -89,7 +89,7 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
    * Set up the class comment
    */
   private void setupClassComment() {
-    if (clazz.isAnnotationPresent(Comment.class) && config.getComment(PathString.ROOT) == null) {
+    if (clazz.isAnnotationPresent(Comment.class) && config.getComment(PathString.ROOT).isEmpty()) {
       config.setComment(PathString.ROOT, Arrays.asList(clazz.getAnnotation(Comment.class).value()));
     }
   }

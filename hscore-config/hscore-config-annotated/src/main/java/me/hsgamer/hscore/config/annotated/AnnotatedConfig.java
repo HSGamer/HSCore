@@ -80,7 +80,7 @@ public class AnnotatedConfig extends DecorativeConfig {
   }
 
   private void setupClassComment() {
-    if (this.getClass().isAnnotationPresent(Comment.class) && this.getComment(PathString.ROOT) == null) {
+    if (this.getClass().isAnnotationPresent(Comment.class) && this.getComment(PathString.ROOT).isEmpty()) {
       this.setComment(PathString.ROOT, Arrays.asList(this.getClass().getAnnotation(Comment.class).value()));
     }
   }

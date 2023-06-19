@@ -158,7 +158,7 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
         LOGGER.log(LogLevel.WARN, "Something wrong when getting comment of " + path, e);
       }
     }
-    return comment == null ? null : Arrays.asList(comment.split("\\r?\\n"));
+    return comment == null ? Collections.emptyList() : Arrays.asList(comment.split("\\r?\\n"));
   }
 
   @Override

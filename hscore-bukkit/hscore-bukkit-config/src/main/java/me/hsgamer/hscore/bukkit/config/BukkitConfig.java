@@ -168,10 +168,10 @@ public class BukkitConfig implements Config {
   public List<String> getComment(PathString path, CommentType type) {
     if (path.isRoot()) {
       String header = this.configuration.options().header();
-      return header.isEmpty() ? null : Arrays.asList(header.split("\\r?\\n"));
+      return header.isEmpty() ? Collections.emptyList() : Arrays.asList(header.split("\\r?\\n"));
     }
 
-    if (!isCommentSupported) return null;
+    if (!isCommentSupported) return Collections.emptyList();
     List<String> comments;
     switch (type) {
       case BLOCK:
@@ -184,7 +184,7 @@ public class BukkitConfig implements Config {
         comments = Collections.emptyList();
         break;
     }
-    return comments.isEmpty() ? null : comments;
+    return comments;
   }
 
   @Override

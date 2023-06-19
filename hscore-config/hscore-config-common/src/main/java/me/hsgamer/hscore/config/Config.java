@@ -306,10 +306,10 @@ public interface Config {
    * @param path the path
    * @param type the comment type
    *
-   * @return the comment, null if not found or not available
+   * @return the comment
    */
   default List<String> getComment(PathString path, CommentType type) {
-    return null;
+    return Collections.emptyList();
   }
 
   /**
@@ -317,7 +317,7 @@ public interface Config {
    * This is a default empty method. The implementation can override this method to support comments.
    *
    * @param path  the path
-   * @param value the comment
+   * @param value the comment, can be null to remove the comment
    * @param type  the comment type
    */
   default void setComment(PathString path, List<String> value, CommentType type) {
@@ -329,7 +329,7 @@ public interface Config {
    *
    * @param path the path
    *
-   * @return the comment, null if not found or not available
+   * @return the comment
    *
    * @see #getComment(PathString, CommentType)
    */
@@ -341,7 +341,7 @@ public interface Config {
    * Set the block comment
    *
    * @param path  the path
-   * @param value the comment
+   * @param value the comment, can be null to remove the comment
    *
    * @see #setComment(PathString, List, CommentType)
    */

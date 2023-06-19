@@ -74,7 +74,7 @@ public class CommentablePath<T> implements ConfigPath<T> {
   public void setConfig(@NotNull final Config config) {
     originalPath.setConfig(config);
     defaultCommentMap.forEach((type, s) -> {
-      if (config.getComment(getPath(), type) == null) {
+      if (config.getComment(getPath(), type).isEmpty()) {
         config.setComment(getPath(), s, type);
       }
     });
@@ -115,6 +115,7 @@ public class CommentablePath<T> implements ConfigPath<T> {
   public List<String> getComment(@NotNull final CommentType commentType) {
     return Optional.ofNullable(getConfig())
       .map(config -> config.getComment(getPath(), commentType))
+      .filter(list -> !list.isEmpty())
       .orElseGet(() -> defaultCommentMap.get(commentType));
   }
 

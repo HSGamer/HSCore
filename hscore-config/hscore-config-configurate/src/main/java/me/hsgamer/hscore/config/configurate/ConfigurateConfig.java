@@ -157,11 +157,11 @@ public class ConfigurateConfig implements Config {
   @Override
   public List<String> getComment(PathString path, CommentType type) {
     ConfigurationNode node = this.rootNode.node(path.getPathAsObject());
-    if (!(node instanceof CommentedConfigurationNode)) return null;
+    if (!(node instanceof CommentedConfigurationNode)) return Collections.emptyList();
     CommentedConfigurationNode commentedNode = (CommentedConfigurationNode) node;
     if (type != CommentType.BLOCK) return Collections.emptyList();
     String comment = commentedNode.comment();
-    return comment == null || comment.isEmpty() ? null : Arrays.asList(comment.split("\\r?\\n"));
+    return comment == null || comment.isEmpty() ? Collections.emptyList() : Arrays.asList(comment.split("\\r?\\n"));
   }
 
   @Override
