@@ -25,7 +25,7 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>me.carleslc.Simple-YAML</groupId>
+      <groupId>com.github.Carleslc.Simple-YAML</groupId>
       <artifactId>Simple-Configuration</artifactId>
       <version>1.8.4</version>
     </dependency>
