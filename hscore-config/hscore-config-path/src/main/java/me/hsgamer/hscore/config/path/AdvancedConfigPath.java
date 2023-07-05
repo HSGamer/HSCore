@@ -106,6 +106,6 @@ public abstract class AdvancedConfigPath<F, T> implements ConfigPath<T> {
 
   @Override
   public void migrateConfig(@NotNull final Config config) {
-    config.addDefault(path, def != null ? convertToRaw(def) : null);
+    config.setIfAbsent(path, def != null ? convertToRaw(def) : null);
   }
 }

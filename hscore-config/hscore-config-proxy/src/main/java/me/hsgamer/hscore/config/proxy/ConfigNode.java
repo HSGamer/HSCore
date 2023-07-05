@@ -51,8 +51,8 @@ public class ConfigNode {
    * Add the default value to the config
    */
   public void addDefault() {
-    config.addDefault(path, converter.convertToRaw(defaultValue));
-    if (comment != null && config.getComment(path).isEmpty()) {
+    config.setIfAbsent(path, converter.convertToRaw(defaultValue));
+    if (!comment.isEmpty() && config.getComment(path).isEmpty()) {
       config.setComment(path, comment);
     }
   }

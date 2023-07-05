@@ -279,24 +279,24 @@ public interface Config {
   }
 
   /**
-   * Add a default value to the path
+   * Set the value to the path if it is not already set
    *
    * @param path  the path
    * @param value the value
    */
-  default void addDefault(PathString path, Object value) {
+  default void setIfAbsent(PathString path, Object value) {
     if (!contains(path)) {
       set(path, value);
     }
   }
 
   /**
-   * Add default values
+   * Set the values to the path if they are not already set
    *
-   * @param map the map of default values
+   * @param map the map of values
    */
-  default void addDefaults(Map<PathString, Object> map) {
-    map.forEach(this::addDefault);
+  default void setIfAbsent(Map<PathString, Object> map) {
+    map.forEach(this::setIfAbsent);
   }
 
   /**

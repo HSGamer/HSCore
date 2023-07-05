@@ -53,8 +53,8 @@ public abstract class DecorativeConfig implements Config {
   }
 
   @Override
-  public void addDefault(PathString path, Object value) {
-    this.config.addDefault(path, value);
+  public void setIfAbsent(PathString path, Object value) {
+    this.config.setIfAbsent(path, value);
   }
 
   @Override

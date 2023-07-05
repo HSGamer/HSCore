@@ -103,7 +103,7 @@ public class LightningConfig<F extends FlatFile> implements Config {
   }
 
   @Override
-  public void addDefault(PathString path, Object value) {
+  public void setIfAbsent(PathString path, Object value) {
     this.flatFile.setDefault(toPath(path), value);
   }
 

@@ -75,6 +75,6 @@ public class BaseConfigPath<T> implements ConfigPath<T> {
 
   @Override
   public void migrateConfig(@NotNull final Config config) {
-    config.addDefault(path, def);
+    config.setIfAbsent(path, def);
   }
 }
