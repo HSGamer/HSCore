@@ -98,6 +98,11 @@ public class BukkitConfig implements Config {
   }
 
   @Override
+  public void addDefault(PathString path, Object value) {
+    this.configuration.addDefault(toPath(path), value);
+  }
+
+  @Override
   public Map<PathString, Object> getValues(PathString path, boolean deep) {
     if (path.isRoot()) {
       return toPathStringMap(this.configuration.getValues(deep));
@@ -135,6 +140,7 @@ public class BukkitConfig implements Config {
         LOGGER.log(LogLevel.WARN, "Something wrong when creating " + this.file.getName(), e);
       }
     }
+    this.configuration.options().copyDefaults(true);
     try {
       this.configuration.load(this.file);
     } catch (IOException | InvalidConfigurationException e) {
