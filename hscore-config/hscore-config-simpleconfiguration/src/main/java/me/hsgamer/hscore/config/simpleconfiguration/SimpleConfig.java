@@ -83,11 +83,6 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
   }
 
   @Override
-  public void addDefault(PathString path, Object value) {
-    this.configuration.addDefault(toPath(path), value);
-  }
-
-  @Override
   public Map<PathString, Object> getValues(PathString path, boolean deep) {
     if (path.getPath().length == 0) {
       return toPathStringMap(this.configuration.getValues(deep));
@@ -112,7 +107,6 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
         LOGGER.log(LogLevel.WARN, "Something wrong when creating " + this.file.getName(), e);
       }
     }
-    this.configuration.options().copyDefaults(true);
     this.loader.accept(file, configuration);
   }
 
