@@ -83,20 +83,18 @@ public class BukkitScheduler implements Scheduler {
 
   static Task wrapTask(BukkitTask bukkitTask, boolean repeating) {
     return new Task() {
-      boolean cancelled = false;
-
       @Override
       public boolean isCancelled() {
         try {
           return bukkitTask.isCancelled();
         } catch (Throwable throwable) {
-          return cancelled; // For old versions that don't have isCancelled()
+          int taskId = bukkitTask.getTaskId();
+          return !(Bukkit.getScheduler().isQueued(taskId) || Bukkit.getScheduler().isCurrentlyRunning(taskId));
         }
       }
 
       @Override
       public void cancel() {
-        cancelled = true;
         bukkitTask.cancel();
       }
 
