@@ -3,7 +3,7 @@ package me.hsgamer.hscore.bukkit.scheduler;
 import java.util.function.BooleanSupplier;
 
 /**
- * An extension of {@link BooleanSupplier} that mimics {@link org.bukkit.scheduler.BukkitRunnable} so that it can be used in {@link Scheduler}.
+ * A runnable that mimics {@link org.bukkit.scheduler.BukkitRunnable} so that it can be used in {@link Scheduler} as a {@link BooleanSupplier}.
  * The runnable can be cancelled by {@link #cancel()}.
  */
 public abstract class CancellableRunnable implements BooleanSupplier {
