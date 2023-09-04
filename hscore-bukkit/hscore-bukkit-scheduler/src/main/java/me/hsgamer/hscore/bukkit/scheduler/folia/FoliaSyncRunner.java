@@ -10,7 +10,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
 import java.util.function.BooleanSupplier;
-import java.util.function.Consumer;
 
 import static me.hsgamer.hscore.bukkit.scheduler.folia.FoliaScheduler.*;
 
@@ -34,30 +33,15 @@ class FoliaSyncRunner implements Runner {
 
   @Override
   public Task runTaskLater(Runnable runnable, TaskTime delay) {
-    long time = delay.getTicks();
-    ScheduledTask task;
-    if (time > 0) {
-      task = Bukkit.getGlobalRegionScheduler().runDelayed(scheduler.getPlugin(), wrapRunnable(runnable), time);
-    } else {
-      task = Bukkit.getGlobalRegionScheduler().run(scheduler.getPlugin(), wrapRunnable(runnable));
-    }
+    ScheduledTask task = Bukkit.getGlobalRegionScheduler().runDelayed(scheduler.getPlugin(), wrapRunnable(runnable), delay.getNormalizedTicks());
     addTask(task);
     return wrapTask(task, false);
   }
 
   @Override
   public Task runTaskTimer(BooleanSupplier runnable, TimerTaskTime timerTaskTime) {
-    long delay = timerTaskTime.getDelayTicks();
-    long period = timerTaskTime.getNormalizedPeriodTicks();
-    Consumer<ScheduledTask> wrappedRunnable = wrapRunnable(runnable);
-
-    if (delay <= 0) {
-      addTask(Bukkit.getGlobalRegionScheduler().run(scheduler.getPlugin(), wrappedRunnable));
-    }
-
-    ScheduledTask task = Bukkit.getGlobalRegionScheduler().runAtFixedRate(scheduler.getPlugin(), wrappedRunnable, delay <= 0 ? period : delay, period);
+    ScheduledTask task = Bukkit.getGlobalRegionScheduler().runAtFixedRate(scheduler.getPlugin(), wrapRunnable(runnable), timerTaskTime.getNormalizedDelayTicks(), timerTaskTime.getNormalizedPeriodTicks());
     addTask(task);
-
     return wrapTask(task, false);
   }
 
@@ -76,14 +60,7 @@ class FoliaSyncRunner implements Runner {
     if (!isEntityValid(entity)) {
       return runTaskLater(retired, delay);
     }
-
-    long time = delay.getTicks();
-    ScheduledTask task;
-    if (time > 0) {
-      task = entity.getScheduler().runDelayed(scheduler.getPlugin(), wrapRunnable(runnable), retired, time);
-    } else {
-      task = entity.getScheduler().run(scheduler.getPlugin(), wrapRunnable(runnable), retired);
-    }
+    ScheduledTask task = entity.getScheduler().runDelayed(scheduler.getPlugin(), wrapRunnable(runnable), retired, delay.getNormalizedTicks());
     addTask(task);
     return wrapTask(task, false);
   }
@@ -93,18 +70,8 @@ class FoliaSyncRunner implements Runner {
     if (!isEntityValid(entity)) {
       return runTaskLater(retired, TaskTime.of(timerTaskTime.getDelayTicks()));
     }
-
-    long delay = timerTaskTime.getDelayTicks();
-    long period = timerTaskTime.getNormalizedPeriodTicks();
-    Consumer<ScheduledTask> wrappedRunnable = wrapRunnable(runnable);
-
-    if (delay <= 0) {
-      addTask(entity.getScheduler().run(scheduler.getPlugin(), wrappedRunnable, retired));
-    }
-
-    ScheduledTask task = entity.getScheduler().runAtFixedRate(scheduler.getPlugin(), wrappedRunnable, retired, delay <= 0 ? period : delay, period);
+    ScheduledTask task = entity.getScheduler().runAtFixedRate(scheduler.getPlugin(), wrapRunnable(runnable), retired, timerTaskTime.getNormalizedDelayTicks(), timerTaskTime.getNormalizedPeriodTicks());
     addTask(task);
-
     return wrapTask(task, false);
   }
 
@@ -117,30 +84,15 @@ class FoliaSyncRunner implements Runner {
 
   @Override
   public Task runLocationTaskLater(Location location, Runnable runnable, TaskTime delay) {
-    long time = delay.getTicks();
-    ScheduledTask task;
-    if (time > 0) {
-      task = Bukkit.getRegionScheduler().runDelayed(scheduler.getPlugin(), location, wrapRunnable(runnable), time);
-    } else {
-      task = Bukkit.getRegionScheduler().run(scheduler.getPlugin(), location, wrapRunnable(runnable));
-    }
+    ScheduledTask task = Bukkit.getRegionScheduler().runDelayed(scheduler.getPlugin(), location, wrapRunnable(runnable), delay.getNormalizedTicks());
     addTask(task);
     return wrapTask(task, false);
   }
 
   @Override
   public Task runLocationTaskTimer(Location location, BooleanSupplier runnable, TimerTaskTime timerTaskTime) {
-    long delay = timerTaskTime.getDelayTicks();
-    long period = timerTaskTime.getNormalizedPeriodTicks();
-    Consumer<ScheduledTask> wrappedRunnable = wrapRunnable(runnable);
-
-    if (delay <= 0) {
-      addTask(Bukkit.getRegionScheduler().run(scheduler.getPlugin(), location, wrappedRunnable));
-    }
-
-    ScheduledTask task = Bukkit.getRegionScheduler().runAtFixedRate(scheduler.getPlugin(), location, wrappedRunnable, delay <= 0 ? period : delay, period);
+    ScheduledTask task = Bukkit.getRegionScheduler().runAtFixedRate(scheduler.getPlugin(), location, wrapRunnable(runnable), timerTaskTime.getNormalizedDelayTicks(), timerTaskTime.getNormalizedPeriodTicks());
     addTask(task);
-
     return wrapTask(task, false);
   }
 }
