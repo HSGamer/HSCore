@@ -65,4 +65,14 @@ public class TaskTime {
   public long getTicks() {
     return ticks;
   }
+
+  /**
+   * Get the normalized ticks.
+   * This will return 1 if the ticks are less than 1.
+   *
+   * @return the normalized ticks
+   */
+  public long getNormalizedTicks() {
+    return Math.max(ticks, 1);
+  }
 }
