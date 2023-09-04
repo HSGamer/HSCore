@@ -22,37 +22,35 @@ public interface Runner {
    * Run a delayed task
    *
    * @param runnable the task
-   * @param delay    the delay in ticks before the task is run
+   * @param delay    the delay before the task is run
    *
    * @return the task
    */
-  Task runTaskLater(Runnable runnable, long delay);
+  Task runTaskLater(Runnable runnable, TaskTime delay);
 
   /**
    * Run a task repeatedly
    *
-   * @param runnable the task. Return true to continue, false to stop.
-   * @param delay    the delay in ticks before the task is run
-   * @param period   the period in ticks between each run
+   * @param runnable      the task. Return true to continue, false to stop.
+   * @param timerTaskTime the timer task time
    *
    * @return the task
    */
-  Task runTaskTimer(BooleanSupplier runnable, long delay, long period);
+  Task runTaskTimer(BooleanSupplier runnable, TimerTaskTime timerTaskTime);
 
   /**
    * Run a task repeatedly
    *
-   * @param runnable the task
-   * @param delay    the delay in ticks before the task is run
-   * @param period   the period in ticks between each run
+   * @param runnable      the task
+   * @param timerTaskTime the timer task time
    *
    * @return the task
    */
-  default Task runTaskTimer(Runnable runnable, long delay, long period) {
+  default Task runTaskTimer(Runnable runnable, TimerTaskTime timerTaskTime) {
     return runTaskTimer(() -> {
       runnable.run();
       return true;
-    }, delay, period);
+    }, timerTaskTime);
   }
 
   /**
@@ -72,11 +70,206 @@ public interface Runner {
    * @param entity   the entity that the task is related to
    * @param runnable the task
    * @param retired  the task when the entity is retired (e.g. removed, invalid)
+   * @param delay    the delay before the task is run
+   *
+   * @return the task
+   */
+  Task runEntityTaskLater(Entity entity, Runnable runnable, Runnable retired, TaskTime delay);
+
+  /**
+   * Run a task repeatedly related to an entity
+   *
+   * @param entity        the entity that the task is related to
+   * @param runnable      the task. Return true to continue, false to stop.
+   * @param retired       the task when the entity is retired (e.g. removed, invalid)
+   * @param timerTaskTime the timer task time
+   *
+   * @return the task
+   */
+  Task runEntityTaskTimer(Entity entity, BooleanSupplier runnable, Runnable retired, TimerTaskTime timerTaskTime);
+
+  /**
+   * Run a task repeatedly related to an entity
+   *
+   * @param entity        the entity that the task is related to
+   * @param runnable      the task
+   * @param retired       the task when the entity is retired (e.g. removed, invalid)
+   * @param timerTaskTime the timer task time
+   *
+   * @return the task
+   */
+  default Task runEntityTaskTimer(Entity entity, Runnable runnable, Runnable retired, TimerTaskTime timerTaskTime) {
+    return runEntityTaskTimer(entity, () -> {
+      runnable.run();
+      return true;
+    }, retired, timerTaskTime);
+  }
+
+  /**
+   * Run a delayed task related to an entity
+   *
+   * @param entity   the entity that the task is related to
+   * @param runnable the task
+   * @param delay    the delay before the task is run
+   *
+   * @return the task
+   */
+  default Task runEntityTaskLater(Entity entity, Runnable runnable, TaskTime delay) {
+    return runEntityTaskLater(entity, runnable, () -> {
+    }, delay);
+  }
+
+  /**
+   * Run a task repeatedly related to an entity
+   *
+   * @param entity        the entity that the task is related to
+   * @param runnable      the task. Return true to continue, false to stop.
+   * @param timerTaskTime the timer task time
+   *
+   * @return the task
+   */
+  default Task runEntityTaskTimer(Entity entity, BooleanSupplier runnable, TimerTaskTime timerTaskTime) {
+    return runEntityTaskTimer(entity, runnable, () -> {
+    }, timerTaskTime);
+  }
+
+  /**
+   * Run a task repeatedly related to an entity
+   *
+   * @param entity        the entity that the task is related to
+   * @param runnable      the task
+   * @param timerTaskTime the timer task time
+   *
+   * @return the task
+   */
+  default Task runEntityTaskTimer(Entity entity, Runnable runnable, TimerTaskTime timerTaskTime) {
+    return runEntityTaskTimer(entity, runnable, () -> {
+    }, timerTaskTime);
+  }
+
+  /**
+   * Run a delayed task related to an entity with a finalizer.
+   * The finalizer will be run both after the task is run and when the entity is retired.
+   *
+   * @param entity    the entity that the task is related to
+   * @param runnable  the task
+   * @param finalizer the finalizer
+   * @param delay     the delay before the task is run
+   *
+   * @return the task
+   */
+  default Task runEntityTaskLaterWithFinalizer(Entity entity, Runnable runnable, Runnable finalizer, TaskTime delay) {
+    return runEntityTaskLater(entity, () -> {
+      try {
+        runnable.run();
+      } finally {
+        finalizer.run();
+      }
+    }, finalizer, delay);
+  }
+
+  /**
+   * Run a task related to a location
+   *
+   * @param location the location that the task is related to
+   * @param runnable the task
+   *
+   * @return the task
+   */
+  Task runLocationTask(Location location, Runnable runnable);
+
+  /**
+   * Run a delayed task related to a location
+   *
+   * @param location the location that the task is related to
+   * @param runnable the task
+   * @param delay    the delay before the task is run
+   *
+   * @return the task
+   */
+  Task runLocationTaskLater(Location location, Runnable runnable, TaskTime delay);
+
+  /**
+   * Run a task repeatedly related to a location
+   *
+   * @param location      the location that the task is related to
+   * @param runnable      the task. Return true to continue, false to stop.
+   * @param timerTaskTime the timer task time
+   *
+   * @return the task
+   */
+  Task runLocationTaskTimer(Location location, BooleanSupplier runnable, TimerTaskTime timerTaskTime);
+
+  /**
+   * Run a task repeatedly related to a location
+   *
+   * @param location      the location that the task is related to
+   * @param runnable      the task
+   * @param timerTaskTime the timer task time
+   *
+   * @return the task
+   */
+  default Task runLocationTaskTimer(Location location, Runnable runnable, TimerTaskTime timerTaskTime) {
+    return runLocationTaskTimer(location, () -> {
+      runnable.run();
+      return true;
+    }, timerTaskTime);
+  }
+
+  /**
+   * Run a delayed task
+   *
+   * @param runnable the task
    * @param delay    the delay in ticks before the task is run
    *
    * @return the task
    */
-  Task runEntityTaskLater(Entity entity, Runnable runnable, Runnable retired, long delay);
+  default Task runTaskLater(Runnable runnable, long delay) {
+    return runTaskLater(runnable, TaskTime.of(delay));
+  }
+
+  /**
+   * Run a task repeatedly
+   *
+   * @param runnable the task. Return true to continue, false to stop.
+   * @param delay    the delay in ticks before the task is run
+   * @param period   the period in ticks between each run
+   *
+   * @return the task
+   */
+  default Task runTaskTimer(BooleanSupplier runnable, long delay, long period) {
+    return runTaskTimer(runnable, TimerTaskTime.of(delay, period));
+  }
+
+  /**
+   * Run a task repeatedly
+   *
+   * @param runnable the task
+   * @param delay    the delay in ticks before the task is run
+   * @param period   the period in ticks between each run
+   *
+   * @return the task
+   */
+  default Task runTaskTimer(Runnable runnable, long delay, long period) {
+    return runTaskTimer(() -> {
+      runnable.run();
+      return true;
+    }, delay, period);
+  }
+
+  /**
+   * Run a delayed task related to an entity
+   *
+   * @param entity   the entity that the task is related to
+   * @param runnable the task
+   * @param retired  the task when the entity is retired (e.g. removed, invalid)
+   * @param delay    the delay in ticks before the task is run
+   *
+   * @return the task
+   */
+  default Task runEntityTaskLater(Entity entity, Runnable runnable, Runnable retired, long delay) {
+    return runEntityTaskLater(entity, runnable, retired, TaskTime.of(delay));
+  }
 
   /**
    * Run a task repeatedly related to an entity
@@ -89,7 +282,9 @@ public interface Runner {
    *
    * @return the task
    */
-  Task runEntityTaskTimer(Entity entity, BooleanSupplier runnable, Runnable retired, long delay, long period);
+  default Task runEntityTaskTimer(Entity entity, BooleanSupplier runnable, Runnable retired, long delay, long period) {
+    return runEntityTaskTimer(entity, runnable, retired, TimerTaskTime.of(delay, period));
+  }
 
   /**
    * Run a task repeatedly related to an entity
@@ -127,6 +322,7 @@ public interface Runner {
    *
    * @param entity   the entity that the task is related to
    * @param runnable the task
+   * @param delay    the delay in ticks before the task is run
    *
    * @return the task
    */
@@ -155,6 +351,8 @@ public interface Runner {
    *
    * @param entity   the entity that the task is related to
    * @param runnable the task
+   * @param delay    the delay in ticks before the task is run
+   * @param period   the period in ticks between each run
    *
    * @return the task
    */
@@ -205,16 +403,6 @@ public interface Runner {
   }
 
   /**
-   * Run a task related to a location
-   *
-   * @param location the location that the task is related to
-   * @param runnable the task
-   *
-   * @return the task
-   */
-  Task runLocationTask(Location location, Runnable runnable);
-
-  /**
    * Run a delayed task related to a location
    *
    * @param location the location that the task is related to
@@ -223,7 +411,9 @@ public interface Runner {
    *
    * @return the task
    */
-  Task runLocationTaskLater(Location location, Runnable runnable, long delay);
+  default Task runLocationTaskLater(Location location, Runnable runnable, long delay) {
+    return runLocationTaskLater(location, runnable, TaskTime.of(delay));
+  }
 
   /**
    * Run a task repeatedly related to a location
@@ -235,7 +425,9 @@ public interface Runner {
    *
    * @return the task
    */
-  Task runLocationTaskTimer(Location location, BooleanSupplier runnable, long delay, long period);
+  default Task runLocationTaskTimer(Location location, BooleanSupplier runnable, long delay, long period) {
+    return runLocationTaskTimer(location, runnable, TimerTaskTime.of(delay, period));
+  }
 
   /**
    * Run a task repeatedly related to a location

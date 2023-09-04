@@ -29,24 +29,28 @@ public class FoliaScheduler implements Scheduler {
     this.asyncRunner = new FoliaAsyncRunner(this);
   }
 
-  static long normalizeTick(long tick) {
-    return Math.max(1, tick);
-  }
-
-  static long toMilliSecond(long tick) {
-    return normalizeTick(tick) * 50;
-  }
-
   static Consumer<ScheduledTask> wrapRunnable(BooleanSupplier runnable) {
-    return scheduledTask -> {
-      if (!runnable.getAsBoolean()) {
-        scheduledTask.cancel();
+    return new Consumer<ScheduledTask>() {
+      @Override
+      public void accept(ScheduledTask scheduledTask) {
+        synchronized (this) {
+          if (!runnable.getAsBoolean()) {
+            scheduledTask.cancel();
+          }
+        }
       }
     };
   }
 
   static Consumer<ScheduledTask> wrapRunnable(Runnable runnable) {
-    return scheduledTask -> runnable.run();
+    return new Consumer<ScheduledTask>() {
+      @Override
+      public void accept(ScheduledTask scheduledTask) {
+        synchronized (this) {
+          runnable.run();
+        }
+      }
+    };
   }
 
   static Task wrapTask(ScheduledTask scheduledTask, boolean async) {

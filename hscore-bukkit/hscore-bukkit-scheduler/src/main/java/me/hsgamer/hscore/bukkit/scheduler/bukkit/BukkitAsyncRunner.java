@@ -2,6 +2,8 @@ package me.hsgamer.hscore.bukkit.scheduler.bukkit;
 
 import me.hsgamer.hscore.bukkit.scheduler.Runner;
 import me.hsgamer.hscore.bukkit.scheduler.Task;
+import me.hsgamer.hscore.bukkit.scheduler.TaskTime;
+import me.hsgamer.hscore.bukkit.scheduler.TimerTaskTime;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
@@ -23,13 +25,13 @@ class BukkitAsyncRunner implements Runner {
   }
 
   @Override
-  public Task runTaskLater(Runnable runnable, long delay) {
-    return wrapTask(wrapRunnable(runnable).runTaskLaterAsynchronously(scheduler.getPlugin(), delay), false);
+  public Task runTaskLater(Runnable runnable, TaskTime delay) {
+    return wrapTask(wrapRunnable(runnable).runTaskLaterAsynchronously(scheduler.getPlugin(), delay.getTicks()), false);
   }
 
   @Override
-  public Task runTaskTimer(BooleanSupplier runnable, long delay, long period) {
-    return wrapTask(wrapRunnable(runnable).runTaskTimerAsynchronously(scheduler.getPlugin(), delay, period), true);
+  public Task runTaskTimer(BooleanSupplier runnable, TimerTaskTime timerTaskTime) {
+    return wrapTask(wrapRunnable(runnable).runTaskTimerAsynchronously(scheduler.getPlugin(), timerTaskTime.getDelayTicks(), timerTaskTime.getPeriodTicks()), true);
   }
 
   @Override
@@ -38,13 +40,13 @@ class BukkitAsyncRunner implements Runner {
   }
 
   @Override
-  public Task runEntityTaskLater(Entity entity, Runnable runnable, Runnable retired, long delay) {
-    return wrapTask(wrapRunnable(entity, runnable, retired).runTaskLaterAsynchronously(scheduler.getPlugin(), delay), false);
+  public Task runEntityTaskLater(Entity entity, Runnable runnable, Runnable retired, TaskTime delay) {
+    return wrapTask(wrapRunnable(entity, runnable, retired).runTaskLaterAsynchronously(scheduler.getPlugin(), delay.getTicks()), false);
   }
 
   @Override
-  public Task runEntityTaskTimer(Entity entity, BooleanSupplier runnable, Runnable retired, long delay, long period) {
-    return wrapTask(wrapRunnable(entity, runnable, retired).runTaskTimerAsynchronously(scheduler.getPlugin(), delay, period), true);
+  public Task runEntityTaskTimer(Entity entity, BooleanSupplier runnable, Runnable retired, TimerTaskTime timerTaskTime) {
+    return wrapTask(wrapRunnable(entity, runnable, retired).runTaskTimerAsynchronously(scheduler.getPlugin(), timerTaskTime.getDelayTicks(), timerTaskTime.getPeriodTicks()), true);
   }
 
   @Override
@@ -53,12 +55,12 @@ class BukkitAsyncRunner implements Runner {
   }
 
   @Override
-  public Task runLocationTaskLater(Location location, Runnable runnable, long delay) {
-    return wrapTask(wrapRunnable(runnable).runTaskLaterAsynchronously(scheduler.getPlugin(), delay), false);
+  public Task runLocationTaskLater(Location location, Runnable runnable, TaskTime delay) {
+    return wrapTask(wrapRunnable(runnable).runTaskLaterAsynchronously(scheduler.getPlugin(), delay.getTicks()), false);
   }
 
   @Override
-  public Task runLocationTaskTimer(Location location, BooleanSupplier runnable, long delay, long period) {
-    return wrapTask(wrapRunnable(runnable).runTaskTimerAsynchronously(scheduler.getPlugin(), delay, period), true);
+  public Task runLocationTaskTimer(Location location, BooleanSupplier runnable, TimerTaskTime timerTaskTime) {
+    return wrapTask(wrapRunnable(runnable).runTaskTimerAsynchronously(scheduler.getPlugin(), timerTaskTime.getDelayTicks(), timerTaskTime.getPeriodTicks()), true);
   }
 }
