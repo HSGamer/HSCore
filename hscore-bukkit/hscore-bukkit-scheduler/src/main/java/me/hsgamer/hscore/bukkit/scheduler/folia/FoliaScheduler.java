@@ -30,27 +30,15 @@ public class FoliaScheduler implements Scheduler {
   }
 
   static Consumer<ScheduledTask> wrapRunnable(BooleanSupplier runnable) {
-    return new Consumer<ScheduledTask>() {
-      @Override
-      public void accept(ScheduledTask scheduledTask) {
-        synchronized (this) {
-          if (!runnable.getAsBoolean()) {
-            scheduledTask.cancel();
-          }
-        }
+    return scheduledTask -> {
+      if (!runnable.getAsBoolean()) {
+        scheduledTask.cancel();
       }
     };
   }
 
   static Consumer<ScheduledTask> wrapRunnable(Runnable runnable) {
-    return new Consumer<ScheduledTask>() {
-      @Override
-      public void accept(ScheduledTask scheduledTask) {
-        synchronized (this) {
-          runnable.run();
-        }
-      }
-    };
+    return scheduledTask -> runnable.run();
   }
 
   static Task wrapTask(ScheduledTask scheduledTask, boolean async) {
