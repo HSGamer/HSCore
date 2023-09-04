@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
+import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
@@ -26,19 +27,14 @@ class FoliaAsyncRunner implements Runner {
   }
 
   private Consumer<ScheduledTask> wrapEntityRunnable(Entity entity, BooleanSupplier runnable, Runnable retired) {
-    return new Consumer<ScheduledTask>() {
-      @Override
-      public void accept(ScheduledTask scheduledTask) {
-        synchronized (this) {
-          if (isEntityValid(entity)) {
-            if (!runnable.getAsBoolean()) {
-              scheduledTask.cancel();
-            }
-          } else {
-            retired.run();
-            scheduledTask.cancel();
-          }
+    return scheduledTask -> {
+      if (isEntityValid(entity)) {
+        if (!runnable.getAsBoolean()) {
+          scheduledTask.cancel();
         }
+      } else {
+        retired.run();
+        scheduledTask.cancel();
       }
     };
   }
@@ -50,76 +46,65 @@ class FoliaAsyncRunner implements Runner {
     }, retired);
   }
 
-  @Override
-  public Task runTask(Runnable runnable) {
-    ScheduledTask task = Bukkit.getAsyncScheduler().runNow(scheduler.getPlugin(), wrapRunnable(runnable));
+  private Task scheduleTask(Consumer<ScheduledTask> consumer) {
+    ScheduledTask task = Bukkit.getAsyncScheduler().runNow(scheduler.getPlugin(), consumer);
     addTask(task);
     return wrapTask(task, true);
+  }
+
+  private Task scheduleTaskLater(Consumer<ScheduledTask> consumer, TaskTime delay) {
+    long time = delay.getTime();
+    ScheduledTask task;
+    if (time > 0) {
+      task = Bukkit.getAsyncScheduler().runDelayed(scheduler.getPlugin(), consumer, time, delay.getUnit());
+    } else {
+      task = Bukkit.getAsyncScheduler().runNow(scheduler.getPlugin(), consumer);
+    }
+    addTask(task);
+    return wrapTask(task, true);
+  }
+
+  private Task scheduleTaskTimer(Consumer<ScheduledTask> consumer, TimerTaskTime timerTaskTime) {
+    long delay = timerTaskTime.getDelay();
+    long period = timerTaskTime.getNormalizedPeriod();
+    ScheduledTask task;
+    if (delay > 0) {
+      task = Bukkit.getAsyncScheduler().runAtFixedRate(scheduler.getPlugin(), consumer, delay, period, timerTaskTime.getUnit());
+    } else {
+      task = Bukkit.getAsyncScheduler().runAtFixedRate(scheduler.getPlugin(), consumer, 1, timerTaskTime.getUnit().toMillis(period), TimeUnit.MILLISECONDS);
+    }
+    addTask(task);
+    return wrapTask(task, true);
+  }
+
+  @Override
+  public Task runTask(Runnable runnable) {
+    return scheduleTask(wrapRunnable(runnable));
   }
 
   @Override
   public Task runTaskLater(Runnable runnable, TaskTime delay) {
-    long time = delay.getTime();
-    ScheduledTask task;
-    if (time > 0) {
-      task = Bukkit.getAsyncScheduler().runDelayed(scheduler.getPlugin(), wrapRunnable(runnable), time, delay.getUnit());
-    } else {
-      task = Bukkit.getAsyncScheduler().runNow(scheduler.getPlugin(), wrapRunnable(runnable));
-    }
-    addTask(task);
-    return wrapTask(task, true);
+    return scheduleTaskLater(wrapRunnable(runnable), delay);
   }
 
   @Override
   public Task runTaskTimer(BooleanSupplier runnable, TimerTaskTime timerTaskTime) {
-    long delay = timerTaskTime.getDelay();
-    long period = timerTaskTime.getNormalizedPeriod();
-    Consumer<ScheduledTask> wrappedRunnable = wrapRunnable(runnable);
-
-    if (delay <= 0) {
-      addTask(Bukkit.getAsyncScheduler().runNow(scheduler.getPlugin(), wrappedRunnable));
-    }
-
-    ScheduledTask task = Bukkit.getAsyncScheduler().runAtFixedRate(scheduler.getPlugin(), wrappedRunnable, delay <= 0 ? period : delay, period, timerTaskTime.getUnit());
-    addTask(task);
-
-    return wrapTask(task, true);
+    return scheduleTaskTimer(wrapRunnable(runnable), timerTaskTime);
   }
 
   @Override
   public Task runEntityTask(Entity entity, Runnable runnable, Runnable retired) {
-    ScheduledTask task = Bukkit.getAsyncScheduler().runNow(scheduler.getPlugin(), wrapEntityRunnable(entity, runnable, retired));
-    addTask(task);
-    return wrapTask(task, true);
+    return scheduleTask(wrapEntityRunnable(entity, runnable, retired));
   }
 
   @Override
   public Task runEntityTaskLater(Entity entity, Runnable runnable, Runnable retired, TaskTime delay) {
-    long time = delay.getTime();
-    ScheduledTask task;
-    if (time > 0) {
-      task = Bukkit.getAsyncScheduler().runDelayed(scheduler.getPlugin(), wrapEntityRunnable(entity, runnable, retired), time, delay.getUnit());
-    } else {
-      task = Bukkit.getAsyncScheduler().runNow(scheduler.getPlugin(), wrapEntityRunnable(entity, runnable, retired));
-    }
-    addTask(task);
-    return wrapTask(task, true);
+    return scheduleTaskLater(wrapEntityRunnable(entity, runnable, retired), delay);
   }
 
   @Override
   public Task runEntityTaskTimer(Entity entity, BooleanSupplier runnable, Runnable retired, TimerTaskTime timerTaskTime) {
-    long delay = timerTaskTime.getDelay();
-    long period = timerTaskTime.getNormalizedPeriod();
-    Consumer<ScheduledTask> wrappedRunnable = wrapEntityRunnable(entity, runnable, retired);
-
-    if (delay <= 0) {
-      addTask(Bukkit.getAsyncScheduler().runNow(scheduler.getPlugin(), wrappedRunnable));
-    }
-
-    ScheduledTask task = Bukkit.getAsyncScheduler().runAtFixedRate(scheduler.getPlugin(), wrappedRunnable, delay <= 0 ? period : delay, period, timerTaskTime.getUnit());
-    addTask(task);
-
-    return wrapTask(task, true);
+    return scheduleTaskTimer(wrapEntityRunnable(entity, runnable, retired), timerTaskTime);
   }
 
   @Override
