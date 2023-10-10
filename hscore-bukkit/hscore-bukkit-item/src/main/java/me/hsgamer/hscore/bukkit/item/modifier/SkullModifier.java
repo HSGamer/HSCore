@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Objects;
@@ -27,6 +28,7 @@ import java.util.UUID;
 @SuppressWarnings("deprecation")
 public class SkullModifier implements ItemMetaModifier, ItemMetaComparator {
   private static final SkullMeta delegateSkullMeta;
+  private static final Method propertyGetValueMethod;
 
   static {
     ItemStack itemStack;
@@ -37,12 +39,26 @@ public class SkullModifier implements ItemMetaModifier, ItemMetaComparator {
       itemStack.setDurability((short) 3);
     }
     delegateSkullMeta = (SkullMeta) itemStack.getItemMeta();
+
+    Method method = null;
+    try {
+      //noinspection JavaReflectionMemberAccess
+      method = Property.class.getDeclaredMethod("value");
+    } catch (Exception e) {
+      try {
+        //noinspection JavaReflectionMemberAccess
+        method = Property.class.getDeclaredMethod("getValue");
+      } catch (NoSuchMethodException ex) {
+        // IGNORE
+      }
+    }
+    propertyGetValueMethod = method;
   }
 
   private String skullString = "";
 
   private static void setSkullValue(SkullMeta meta, String value) {
-    GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+    GameProfile profile = new GameProfile(UUID.randomUUID(), "");
     profile.getProperties().put("textures", new Property("textures", value));
     try {
       Field profileField = meta.getClass().getDeclaredField("profile");
@@ -106,7 +122,13 @@ public class SkullModifier implements ItemMetaModifier, ItemMetaComparator {
     }
 
     for (Property property : properties) {
-      String value = property.getValue();
+      String value;
+      try {
+        value = (String) propertyGetValueMethod.invoke(property);
+      } catch (Exception e) {
+        continue;
+      }
+
       if (!value.isEmpty()) {
         return value;
       }
