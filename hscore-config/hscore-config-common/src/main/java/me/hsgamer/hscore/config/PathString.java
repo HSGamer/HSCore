@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * The path string to use in {@link Config}
@@ -13,6 +14,10 @@ public class PathString {
    * The root path
    */
   public static final PathString ROOT = new PathString();
+  /**
+   * The default separator
+   */
+  public static final String DEFAULT_SEPARATOR = ".";
 
   private final String[] path;
 
@@ -58,9 +63,15 @@ public class PathString {
    * @return the map containing the joined path
    */
   public static Map<String, Object> toPathMap(String separator, Map<PathString, Object> map) {
-    Map<String, Object> result = new LinkedHashMap<>();
-    map.forEach((pathString, object) -> result.put(toPath(separator, pathString), object));
-    return result;
+    return map.entrySet().stream()
+      .collect(
+        Collectors.toMap(
+          entry -> toPath(separator, entry.getKey()),
+          Map.Entry::getValue,
+          (a, b) -> b,
+          LinkedHashMap::new
+        )
+      );
   }
 
   /**
@@ -72,9 +83,59 @@ public class PathString {
    * @return the map containing the path string
    */
   public static Map<PathString, Object> toPathStringMap(String separator, Map<String, Object> map) {
-    Map<PathString, Object> result = new LinkedHashMap<>();
-    map.forEach((path, object) -> result.put(toPathString(separator, path), object));
-    return result;
+    return map.entrySet().stream()
+      .collect(
+        Collectors.toMap(
+          entry -> toPathString(separator, entry.getKey()),
+          Map.Entry::getValue,
+          (a, b) -> b,
+          LinkedHashMap::new
+        )
+      );
+  }
+
+  /**
+   * Join the path with the default separator
+   *
+   * @param pathString the path string
+   *
+   * @return the joined path
+   */
+  public static String toPath(PathString pathString) {
+    return toPath(DEFAULT_SEPARATOR, pathString);
+  }
+
+  /**
+   * Split the path with the default separator
+   *
+   * @param path the path
+   *
+   * @return the path string
+   */
+  public static PathString toPathString(String path) {
+    return toPathString(DEFAULT_SEPARATOR, path);
+  }
+
+  /**
+   * Join the path with the default separator
+   *
+   * @param map the map containing the path string
+   *
+   * @return the map containing the joined path
+   */
+  public static Map<String, Object> toPathMap(Map<PathString, Object> map) {
+    return toPathMap(DEFAULT_SEPARATOR, map);
+  }
+
+  /**
+   * Split the path with the default separator
+   *
+   * @param map the map containing the path
+   *
+   * @return the map containing the path string
+   */
+  public static Map<PathString, Object> toPathStringMap(Map<String, Object> map) {
+    return toPathStringMap(DEFAULT_SEPARATOR, map);
   }
 
   /**
