@@ -21,6 +21,8 @@ import java.util.Base64;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
  * The skull modifier
@@ -29,6 +31,9 @@ import java.util.UUID;
 public class SkullModifier implements ItemMetaModifier, ItemMetaComparator {
   private static final SkullMeta delegateSkullMeta;
   private static final Method propertyGetValueMethod;
+  private static final boolean PROFILE_RECORD_FEATURE = VersionUtils.isAtLeast(20, 2);
+  private static final UUID IDENTITY_UUID = new UUID(0, 0);
+  private static final BiConsumer<SkullMeta, GameProfile> SKULL_META_GAME_PROFILE_CONSUMER;
 
   static {
     ItemStack itemStack;
@@ -38,35 +43,53 @@ public class SkullModifier implements ItemMetaModifier, ItemMetaComparator {
       itemStack = new ItemStack(Material.valueOf("SKULL_ITEM"));
       itemStack.setDurability((short) 3);
     }
-    delegateSkullMeta = (SkullMeta) itemStack.getItemMeta();
+    delegateSkullMeta = (SkullMeta) Objects.requireNonNull(itemStack.getItemMeta());
 
-    Method method = null;
     try {
-      //noinspection JavaReflectionMemberAccess
-      method = Property.class.getDeclaredMethod("value");
-    } catch (Exception e) {
-      try {
-        //noinspection JavaReflectionMemberAccess
-        method = Property.class.getDeclaredMethod("getValue");
-      } catch (NoSuchMethodException ex) {
-        // IGNORE
+      if (PROFILE_RECORD_FEATURE) {
+        propertyGetValueMethod = Property.class.getDeclaredMethod("value");
+      } else {
+        propertyGetValueMethod = Property.class.getDeclaredMethod("getValue");
       }
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
-    propertyGetValueMethod = method;
+
+    BiConsumer<SkullMeta, GameProfile> skullMetaGameProfileConsumer;
+    try {
+      Method setProfileMethod = delegateSkullMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
+      setProfileMethod.setAccessible(true);
+      skullMetaGameProfileConsumer = (meta, profile) -> {
+        try {
+          setProfileMethod.invoke(meta, profile);
+        } catch (Exception ignored) {
+          // IGNORE
+        }
+      };
+    } catch (NoSuchMethodException e) {
+      skullMetaGameProfileConsumer = (meta, profile) -> {
+        try {
+          Field profileField = meta.getClass().getDeclaredField("profile");
+          profileField.setAccessible(true);
+          profileField.set(meta, profile);
+        } catch (Exception ignored) {
+          // IGNORE
+        }
+      };
+    }
+    SKULL_META_GAME_PROFILE_CONSUMER = skullMetaGameProfileConsumer;
   }
 
   private String skullString = "";
 
   private static void setSkullValue(SkullMeta meta, String value) {
-    GameProfile profile = new GameProfile(UUID.randomUUID(), "");
+    GameProfile profile = new GameProfile(
+      PROFILE_RECORD_FEATURE ? IDENTITY_UUID : UUID.randomUUID(),
+      PROFILE_RECORD_FEATURE ? "" : null
+    );
     profile.getProperties().put("textures", new Property("textures", value));
-    try {
-      Field profileField = meta.getClass().getDeclaredField("profile");
-      profileField.setAccessible(true);
-      profileField.set(meta, profile);
-    } catch (Exception e) {
-      // IGNORE
-    }
+
+    SKULL_META_GAME_PROFILE_CONSUMER.accept(meta, profile);
   }
 
   private static void setSkullURL(SkullMeta meta, String url) {
