@@ -1,39 +1,33 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
+import me.hsgamer.hscore.bukkit.skull.SkullHandler;
 import me.hsgamer.hscore.bukkit.utils.BukkitUtils;
 import me.hsgamer.hscore.bukkit.utils.VersionUtils;
 import me.hsgamer.hscore.common.StringReplacer;
 import me.hsgamer.hscore.common.Validate;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Base64;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
+import java.util.regex.Pattern;
 
 /**
  * The skull modifier
  */
 @SuppressWarnings("deprecation")
 public class SkullModifier implements ItemMetaModifier, ItemMetaComparator {
+  /**
+   * <a href="https://github.com/CryptoMorin/XSeries/blob/f7e0e83de5c657229ece8ae5ca386cee581fb8e1/src/main/java/com/cryptomorin/xseries/SkullUtils.java#L95C5-L95C92">...</a>
+   */
+  private static final Pattern MOJANG_SHA256_APPROX = Pattern.compile("[a-z0-9]{60,70}");
   private static final SkullMeta delegateSkullMeta;
-  private static final Method propertyGetValueMethod;
-  private static final boolean PROFILE_RECORD_FEATURE = VersionUtils.isAtLeast(20, 2);
-  private static final UUID IDENTITY_UUID = new UUID(0, 0);
-  private static final BiConsumer<SkullMeta, GameProfile> SKULL_META_GAME_PROFILE_CONSUMER;
+  private static final SkullHandler skullHandler;
 
   static {
     ItemStack itemStack;
@@ -44,82 +38,20 @@ public class SkullModifier implements ItemMetaModifier, ItemMetaComparator {
       itemStack.setDurability((short) 3);
     }
     delegateSkullMeta = (SkullMeta) Objects.requireNonNull(itemStack.getItemMeta());
-
-    try {
-      if (PROFILE_RECORD_FEATURE) {
-        propertyGetValueMethod = Property.class.getDeclaredMethod("value");
-      } else {
-        propertyGetValueMethod = Property.class.getDeclaredMethod("getValue");
-      }
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-
-    BiConsumer<SkullMeta, GameProfile> skullMetaGameProfileConsumer;
-    try {
-      Method setProfileMethod = delegateSkullMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
-      setProfileMethod.setAccessible(true);
-      skullMetaGameProfileConsumer = (meta, profile) -> {
-        try {
-          setProfileMethod.invoke(meta, profile);
-        } catch (Exception ignored) {
-          // IGNORE
-        }
-      };
-    } catch (NoSuchMethodException e) {
-      skullMetaGameProfileConsumer = (meta, profile) -> {
-        try {
-          Field profileField = meta.getClass().getDeclaredField("profile");
-          profileField.setAccessible(true);
-          profileField.set(meta, profile);
-        } catch (Exception ignored) {
-          // IGNORE
-        }
-      };
-    }
-    SKULL_META_GAME_PROFILE_CONSUMER = skullMetaGameProfileConsumer;
+    skullHandler = SkullHandler.getInstance();
   }
 
   private String skullString = "";
 
-  private static void setSkullValue(SkullMeta meta, String value) {
-    GameProfile profile = new GameProfile(
-      PROFILE_RECORD_FEATURE ? IDENTITY_UUID : UUID.randomUUID(),
-      PROFILE_RECORD_FEATURE ? "" : null
-    );
-    profile.getProperties().put("textures", new Property("textures", value));
-
-    SKULL_META_GAME_PROFILE_CONSUMER.accept(meta, profile);
-  }
-
-  private static void setSkullURL(SkullMeta meta, String url) {
-    setSkullValue(meta, Base64.getEncoder().encodeToString(
-      String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes()
-    ));
-  }
-
-  private static void setSkull(SkullMeta meta, OfflinePlayer offlinePlayer) {
-    if (offlinePlayer == null) {
-      return;
-    }
-    if (VersionUtils.isAtLeast(12)) {
-      meta.setOwningPlayer(offlinePlayer);
-    } else {
-      meta.setOwner(offlinePlayer.getName());
-    }
-  }
-
   private static void setSkull(SkullMeta meta, String skull) {
     if (BukkitUtils.isUsername(skull)) {
-      setSkull(meta, Bukkit.getOfflinePlayer(skull));
+      skullHandler.setSkullByName(meta, skull);
     } else if (Validate.isValidUUID(skull)) {
-      setSkull(meta, Bukkit.getOfflinePlayer(UUID.fromString(skull)));
+      skullHandler.setSkullByUUID(meta, UUID.fromString(skull));
     } else if (Validate.isValidURL(skull)) {
-      setSkullURL(meta, skull);
-    } else if (skull.length() > 100 && Validate.isValidBase64(skull)) {
-      setSkullValue(meta, skull);
-    } else {
-      setSkullURL(meta, "https://textures.minecraft.net/texture/" + skull);
+      skullHandler.setSkullByURL(meta, skull);
+    } else if (MOJANG_SHA256_APPROX.matcher(skull).matches()) {
+      skullHandler.setSkullByURL(meta, "https://textures.minecraft.net/texture/" + skull);
     }
   }
 
@@ -127,40 +59,6 @@ public class SkullModifier implements ItemMetaModifier, ItemMetaComparator {
     SkullMeta meta = delegateSkullMeta.clone();
     setSkull(meta, skull);
     return meta;
-  }
-
-  private static String getSkullValue(SkullMeta meta) {
-    GameProfile profile;
-    try {
-      Field profileField = meta.getClass().getDeclaredField("profile");
-      profileField.setAccessible(true);
-      profile = (GameProfile) profileField.get(meta);
-    } catch (Exception e) {
-      return "";
-    }
-
-    Collection<Property> properties = profile.getProperties().get("textures");
-    if (properties == null || properties.isEmpty()) {
-      return "";
-    }
-
-    for (Property property : properties) {
-      String value;
-      try {
-        value = (String) propertyGetValueMethod.invoke(property);
-      } catch (Exception e) {
-        continue;
-      }
-
-      if (!value.isEmpty()) {
-        return value;
-      }
-    }
-    return "";
-  }
-
-  private static String getSkullValue(String rawSkullValue) {
-    return getSkullValue(getSkullMeta(rawSkullValue));
   }
 
   private String getFinalSkullString(UUID uuid, Collection<StringReplacer> replacers) {
@@ -179,7 +77,7 @@ public class SkullModifier implements ItemMetaModifier, ItemMetaComparator {
   @Override
   public boolean loadFromItemMeta(ItemMeta meta) {
     if (meta instanceof SkullMeta) {
-      skullString = getSkullValue((SkullMeta) meta);
+      skullString = skullHandler.getSkullValue((SkullMeta) meta);
       return true;
     }
     return false;
@@ -190,9 +88,9 @@ public class SkullModifier implements ItemMetaModifier, ItemMetaComparator {
     if (!(meta instanceof SkullMeta)) {
       return false;
     }
-    return Objects.equals(
-      getSkullValue(getFinalSkullString(uuid, stringReplacers)),
-      getSkullValue((SkullMeta) meta)
+    return skullHandler.compareSkull(
+      getSkullMeta(getFinalSkullString(uuid, stringReplacers)),
+      (SkullMeta) meta
     );
   }
 
