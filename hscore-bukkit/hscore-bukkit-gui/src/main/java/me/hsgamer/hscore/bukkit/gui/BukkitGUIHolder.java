@@ -2,7 +2,6 @@ package me.hsgamer.hscore.bukkit.gui;
 
 import me.hsgamer.hscore.bukkit.gui.event.BukkitDragEvent;
 import me.hsgamer.hscore.minecraft.gui.GUIHolder;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -21,14 +20,7 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
   private final Plugin plugin;
   private InventoryType inventoryType = InventoryType.CHEST;
   private int size = InventoryType.CHEST.getDefaultSize();
-  private Function<BukkitGUIDisplay, Inventory> inventoryFunction = display -> {
-    BukkitGUIHolder holder = display.getHolder();
-    InventoryType type = holder.getInventoryType();
-    int size = holder.getSize();
-    return type == InventoryType.CHEST && size > 0
-      ? Bukkit.createInventory(display, BukkitGUIUtils.normalizeToChestSize(size))
-      : Bukkit.createInventory(display, type);
-  };
+  private Function<BukkitGUIDisplay, Inventory> inventoryFunction = BukkitGUIUtils.getDefaultInventoryFunction();
 
   /**
    * Create a new holder
@@ -108,15 +100,7 @@ public class BukkitGUIHolder extends GUIHolder<BukkitGUIDisplay> {
    * @param titleFunction the title function
    */
   public void setTitleFunction(Function<UUID, String> titleFunction) {
-    setInventoryFunction(display -> {
-      BukkitGUIHolder holder = display.getHolder();
-      InventoryType type = holder.getInventoryType();
-      int size = holder.getSize();
-      String title = titleFunction.apply(display.getUniqueId());
-      return type == InventoryType.CHEST && size > 0
-        ? Bukkit.createInventory(display, BukkitGUIUtils.normalizeToChestSize(size), title)
-        : Bukkit.createInventory(display, type, title);
-    });
+    setInventoryFunction(BukkitGUIUtils.getInventoryFunctionFromTitle(titleFunction));
   }
 
   /**
