@@ -28,10 +28,10 @@ public class HibernateClient extends BaseClient<MetadataSources> {
     super(setting);
     Driver driver = setting.getDriver();
     ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-      .applySetting(AvailableSettings.DRIVER, driver.getDriverClass().getName())
-      .applySetting(AvailableSettings.URL, driver.convertURL(setting))
-      .applySetting(AvailableSettings.USER, setting.getUsername())
-      .applySetting(AvailableSettings.PASS, setting.getPassword())
+      .applySetting(AvailableSettings.JAKARTA_JDBC_DRIVER, driver.getDriverClass().getName())
+      .applySetting(AvailableSettings.JAKARTA_JDBC_URL, driver.convertURL(setting))
+      .applySetting(AvailableSettings.JAKARTA_JDBC_USER, setting.getUsername())
+      .applySetting(AvailableSettings.JAKARTA_JDBC_PASSWORD, setting.getPassword())
       .applySettings(setting.getClientProperties())
       .build();
     this.metadataSources = new MetadataSources(serviceRegistry);
