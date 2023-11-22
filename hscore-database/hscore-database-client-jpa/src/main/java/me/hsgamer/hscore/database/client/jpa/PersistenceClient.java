@@ -1,12 +1,12 @@
 package me.hsgamer.hscore.database.client.jpa;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import me.hsgamer.hscore.database.BaseClient;
 import me.hsgamer.hscore.database.Driver;
 import me.hsgamer.hscore.database.Setting;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,10 +26,10 @@ public class PersistenceClient extends BaseClient<EntityManagerFactory> {
     super(setting);
     Driver driver = setting.getDriver();
     Map<String, Object> properties = new HashMap<>();
-    properties.put("javax.persistence.jdbc.url", driver.convertURL(setting));
-    properties.put("javax.persistence.jdbc.user", setting.getUsername());
-    properties.put("javax.persistence.jdbc.password", setting.getPassword());
-    properties.put("javax.persistence.jdbc.driver", driver.getDriverClass());
+    properties.put("jakarta.persistence.jdbc.url", driver.convertURL(setting));
+    properties.put("jakarta.persistence.jdbc.user", setting.getUsername());
+    properties.put("jakarta.persistence.jdbc.password", setting.getPassword());
+    properties.put("jakarta.persistence.jdbc.driver", driver.getDriverClass());
     properties.putAll(setting.getClientProperties());
     this.entityManagerFactory = Persistence.createEntityManagerFactory(name, properties);
   }
