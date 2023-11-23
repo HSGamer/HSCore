@@ -22,7 +22,7 @@ public class SqlServerDriver implements Driver {
       builder.append(";databaseName=");
       builder.append(setting.getDatabaseName());
     }
-    for (String key : setting.getClientPropertyStrings()) {
+    for (String key : setting.getDriverPropertyStrings()) {
       builder.append(";");
       builder.append(key);
     }
