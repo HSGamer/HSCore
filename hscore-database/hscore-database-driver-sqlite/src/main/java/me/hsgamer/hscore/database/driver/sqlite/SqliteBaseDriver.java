@@ -15,7 +15,7 @@ public interface SqliteBaseDriver extends Driver {
 
   @Override
   default String convertURL(Setting setting) {
-    return JDBC.PREFIX + createConnectionString(setting);
+    return JDBC.PREFIX + createConnectionString(setting) + Driver.createPropertyString(setting);
   }
 
   String createConnectionString(Setting setting);
