@@ -18,13 +18,9 @@ public class SqlServerDriver implements Driver {
     StringBuilder builder = new StringBuilder();
     builder.append("jdbc:sqlserver://");
     builder.append(setting.getNormalizedHost());
+    builder.append(Driver.createPropertyString(setting, ";", ";"));
     if (!setting.getDatabaseName().isEmpty()) {
-      builder.append(";databaseName=");
-      builder.append(setting.getDatabaseName());
-    }
-    for (String key : setting.getDriverPropertyStrings()) {
-      builder.append(";");
-      builder.append(key);
+      builder.append(";databaseName=").append(setting.getDatabaseName());
     }
     return builder.toString();
   }
