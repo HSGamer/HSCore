@@ -6,6 +6,8 @@ import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
+import java.math.BigDecimal;
+
 /**
  * Get the length of the string <br> Ex: STRLEN("Hello World")
  */
@@ -13,6 +15,6 @@ import com.ezylang.evalex.parser.Token;
 public class Length extends AbstractFunction {
   @Override
   public EvaluationValue evaluate(Expression expression, Token token, EvaluationValue... evaluationValues) {
-    return new EvaluationValue(evaluationValues[0].getStringValue().length());
+    return EvaluationValue.numberValue(BigDecimal.valueOf(evaluationValues[0].getStringValue().length()));
   }
 }

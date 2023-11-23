@@ -22,6 +22,6 @@ public abstract class StringComparator extends AbstractFunction {
 
   @Override
   public EvaluationValue evaluate(Expression expression, Token token, EvaluationValue... evaluationValues) {
-    return new EvaluationValue(compare(evaluationValues[0].getStringValue(), evaluationValues[1].getStringValue()));
+    return EvaluationValue.booleanValue(compare(evaluationValues[0].getStringValue(), evaluationValues[1].getStringValue()));
   }
 }

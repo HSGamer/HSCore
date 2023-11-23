@@ -20,6 +20,6 @@ public class Average extends AbstractFunction {
       .map(EvaluationValue::getNumberValue)
       .reduce(BigDecimal.ZERO, BigDecimal::add)
       .divide(new BigDecimal(evaluationValues.length), expression.getConfiguration().getMathContext().getRoundingMode());
-    return new EvaluationValue(averageNumber);
+    return EvaluationValue.numberValue(averageNumber);
   }
 }
