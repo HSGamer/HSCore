@@ -22,8 +22,9 @@
     <module>hscore-database-client-java</module>
     <module>hscore-database-client-hibernate</module>
     <module>hscore-database-client-jpa</module>
-    <module>hscore-database-h2</module>
+    <module>hscore-database-driver-h2</module>
     <module>hscore-database-driver-sqlserver</module>
+    <module>hscore-database-client-h2</module>
   </modules>
 
 </project>
