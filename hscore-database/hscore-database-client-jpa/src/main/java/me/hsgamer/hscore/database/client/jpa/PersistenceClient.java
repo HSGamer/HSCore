@@ -29,7 +29,7 @@ public class PersistenceClient extends BaseClient<EntityManagerFactory> {
     properties.put("jakarta.persistence.jdbc.url", driver.convertURL(setting));
     properties.put("jakarta.persistence.jdbc.user", setting.getUsername());
     properties.put("jakarta.persistence.jdbc.password", setting.getPassword());
-    properties.put("jakarta.persistence.jdbc.driver", driver.getDriverClass());
+    properties.put("jakarta.persistence.jdbc.driver", driver.getDriverClassName());
     properties.putAll(setting.getClientProperties());
     this.entityManagerFactory = Persistence.createEntityManagerFactory(name, properties);
   }

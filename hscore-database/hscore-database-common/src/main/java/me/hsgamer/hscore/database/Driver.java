@@ -61,4 +61,13 @@ public interface Driver {
   default void applyDefaultSetting(Setting setting) {
     // EMPTY
   }
+
+  /**
+   * Get the driver class name
+   *
+   * @return the driver class name
+   */
+  default String getDriverClassName() {
+    return getDriverClass().getName();
+  }
 }

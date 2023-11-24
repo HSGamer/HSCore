@@ -28,7 +28,7 @@ public class HibernateClient extends BaseClient<Configuration> {
     //noinspection deprecation
     this.configuration = new Configuration()
       .setProperty(AvailableSettings.URL, driver.convertURL(setting))
-      .setProperty(AvailableSettings.DRIVER, driver.getDriverClass().getName())
+      .setProperty(AvailableSettings.DRIVER, driver.getDriverClassName())
       .setProperty(AvailableSettings.USER, setting.getUsername())
       .setProperty(AvailableSettings.PASS, setting.getPassword());
 

@@ -25,7 +25,7 @@ public class HikariSqlClient extends BaseSqlClient<HikariDataSource> {
     super(setting);
     Driver driver = setting.getDriver();
     final HikariConfig config = new HikariConfig();
-    config.setDriverClassName(driver.getDriverClass().getName());
+    config.setDriverClassName(driver.getDriverClassName());
     config.setJdbcUrl(driver.convertURL(setting));
     if (driver instanceof LocalDriver) {
       config.setPoolName("LOCALDB-" + setting.getDatabaseName());
