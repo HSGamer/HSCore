@@ -49,6 +49,7 @@
     <module>hscore-expression</module>
     <module>hscore-web</module>
     <module>hscore-request</module>
+    <module>hscore-serializer</module>
     <module>hscore-config</module>
     <module>hscore-expansion</module>
     <module>hscore-checker</module>
