@@ -46,7 +46,8 @@ public abstract class Serializer<I, O, D> {
   }
 
   /**
-   * Register a new data type
+   * Register a new data type, without specifying the type.
+   * The type will be the class name, or the value of {@link SerializerType} if the class is annotated with it.
    *
    * @param dataClass    the data class
    * @param dataFunction the data function
@@ -62,9 +63,13 @@ public abstract class Serializer<I, O, D> {
   }
 
   /**
-   * Register a new data type
+   * Register a new data type, without specifying the type and the data function.
+   * The type will be the class name, or the value of {@link SerializerType} if the class is annotated with it.
+   * The data function will be the static method annotated with {@link SerializerFunction}.
    *
    * @param dataClass the data class
+   *
+   * @throws IllegalArgumentException if the data function is not found
    */
   public void register(Class<? extends D> dataClass) {
     Function<I, D> dataFunction;
