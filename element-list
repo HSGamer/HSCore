@@ -114,6 +114,7 @@ me.hsgamer.hscore.minestom.gui.event
 me.hsgamer.hscore.minestom.gui.inventory
 me.hsgamer.hscore.minestom.gui.object
 me.hsgamer.hscore.request
+me.hsgamer.hscore.serializer
 me.hsgamer.hscore.task
 me.hsgamer.hscore.task.element
 me.hsgamer.hscore.ui
