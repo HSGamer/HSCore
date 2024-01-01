@@ -1,217 +1,231 @@
 package me.hsgamer.hscore.serializer;
 
+import me.hsgamer.hscore.serializer.annotation.SerializerInputFunction;
+import me.hsgamer.hscore.serializer.annotation.SerializerOutputFunction;
+import me.hsgamer.hscore.serializer.annotation.SerializerType;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * The serializer
  *
  * @param <I> the type of the input object
  * @param <O> the type of the output object
- * @param <D> the type of the data
  */
-public abstract class Serializer<I, O, D> {
+public class Serializer<I, O> {
   private final Class<I> inputClass;
   private final Class<O> outputClass;
-  private final Class<D> dataClass;
 
-  private final List<Entry<I, D>> entryList = new ArrayList<>();
+  private final List<Entry<I, O>> entryList = new ArrayList<>();
 
   /**
    * Create a new serializer
    *
    * @param inputClass  the class of the input
    * @param outputClass the class of the output
-   * @param dataClass   the class of the data
    */
-  protected Serializer(Class<I> inputClass, Class<O> outputClass, Class<D> dataClass) {
+  public Serializer(Class<I> inputClass, Class<O> outputClass) {
     this.inputClass = inputClass;
     this.outputClass = outputClass;
-    this.dataClass = dataClass;
   }
 
   /**
-   * Register a new data type
+   * Register a new entry
    *
-   * @param type         the type
-   * @param dataClass    the data class
-   * @param dataFunction the data function
+   * @param type           the type
+   * @param outputClass    the class of the output
+   * @param outputFunction the output function
+   * @param inputFunction  the input function
+   * @param <T>            the type of the output
+   *
+   * @return the serializer
    */
-  public void register(String type, Class<? extends D> dataClass, Function<I, D> dataFunction) {
-    entryList.add(new Entry<>(type, dataClass, dataFunction));
+  public <T extends O> Serializer<I, O> register(String type, Class<T> outputClass, Function<I, T> outputFunction, Function<T, I> inputFunction) {
+    entryList.add(new Entry<>(type, outputClass, input -> outputFunction.apply(inputClass.cast(input)), input -> inputClass.cast(inputFunction.apply(outputClass.cast(input)))));
+    return this;
   }
 
   /**
-   * Register a new data type, without specifying the type.
-   * The type will be the class name, or the value of {@link SerializerType} if the class is annotated with it.
+   * Register a new entry, without specifying the type.
+   * The type will be the class name of the output, or the value of {@link SerializerType} if the class is annotated with it.
    *
-   * @param dataClass    the data class
-   * @param dataFunction the data function
+   * @param outputClass    the class of the output
+   * @param outputFunction the output function
+   * @param inputFunction  the input function
+   * @param <T>            the type of the output
+   *
+   * @return the serializer
    */
-  public void register(Class<? extends D> dataClass, Function<I, D> dataFunction) {
+  public <T extends O> Serializer<I, O> register(Class<T> outputClass, Function<I, T> outputFunction, Function<T, I> inputFunction) {
     String type;
-    if (dataClass.isAnnotationPresent(SerializerType.class)) {
-      type = dataClass.getAnnotation(SerializerType.class).value();
+    if (outputClass.isAnnotationPresent(SerializerType.class)) {
+      type = outputClass.getAnnotation(SerializerType.class).value();
     } else {
-      type = dataClass.getName();
+      type = outputClass.getName();
     }
-    register(type, dataClass, dataFunction);
+    return register(type, outputClass, outputFunction, inputFunction);
   }
 
   /**
-   * Register a new data type, without specifying the type and the data function.
-   * The type will be the class name, or the value of {@link SerializerType} if the class is annotated with it.
-   * The data function will be the static method annotated with {@link SerializerFunction}.
+   * Register a new entry, without specifying the type and the input function.
+   * The type will be the class name of the output, or the value of {@link SerializerType} if the class is annotated with it.
+   * The input function will be the method annotated with {@link SerializerInputFunction} in the output class, which must be public and non-static.
+   * The output function will be the method annotated with {@link SerializerOutputFunction} in the output class, which must be public and static.
    *
-   * @param dataClass the data class
+   * @param outputClass the class of the output
+   * @param <T>         the type of the output
    *
-   * @throws IllegalArgumentException if the data function is not found
+   * @return the serializer
+   *
+   * @throws IllegalArgumentException if the output class does not have the required methods
    */
-  public void register(Class<? extends D> dataClass) {
-    Function<I, D> dataFunction;
-    try {
-      Method method = null;
-      for (Method m : dataClass.getDeclaredMethods()) {
-        if (m.isAnnotationPresent(SerializerFunction.class)) {
-          method = m;
-          break;
-        }
-      }
+  public <T extends O> Serializer<I, O> register(Class<T> outputClass) {
+    Method outputMethod = null;
+    Method inputMethod = null;
 
-      if (method == null) {
-        throw new IllegalArgumentException("Cannot find data function in " + dataClass.getName());
+    for (Method method : outputClass.getDeclaredMethods()) {
+      if (method.isAnnotationPresent(SerializerInputFunction.class)) {
+        inputMethod = method;
+      } else if (method.isAnnotationPresent(SerializerOutputFunction.class)) {
+        outputMethod = method;
       }
-
-      if (!Modifier.isStatic(method.getModifiers()) || !Modifier.isPublic(method.getModifiers())) {
-        throw new IllegalArgumentException("The data function in " + dataClass.getName() + " must be static and public");
-      }
-
-      if (!dataClass.isAssignableFrom(method.getReturnType())) {
-        throw new IllegalArgumentException("The data function in " + dataClass.getName() + " must return " + dataClass.getName());
-      }
-
-      if (method.getParameterCount() != 1 || !inputClass.isAssignableFrom(method.getParameterTypes()[0])) {
-        throw new IllegalArgumentException("The data function in " + dataClass.getName() + " must have 1 parameter and the type must be " + inputClass.getName());
-      }
-
-      Method finalMethod = method;
-      dataFunction = from -> {
-        try {
-          return dataClass.cast(finalMethod.invoke(null, from));
-        } catch (Exception e) {
-          throw new IllegalArgumentException(e);
-        }
-      };
-    } catch (Exception e) {
-      throw new IllegalArgumentException(e);
     }
 
-    register(dataClass, dataFunction);
+    if (outputMethod == null) {
+      throw new IllegalArgumentException("Cannot find the output method");
+    }
+    if (outputMethod.getParameterCount() != 1 || !outputMethod.getParameterTypes()[0].isAssignableFrom(inputClass)) {
+      throw new IllegalArgumentException("The output method must have 1 parameter and the type must be assignable from " + inputClass.getName());
+    }
+    if (!outputClass.isAssignableFrom(outputMethod.getReturnType())) {
+      throw new IllegalArgumentException("The output method must return a type that is an instance of " + outputClass.getName());
+    }
+    if (!Modifier.isPublic(outputMethod.getModifiers())) {
+      throw new IllegalArgumentException("The output method must be public");
+    }
+    if (!Modifier.isStatic(outputMethod.getModifiers())) {
+      throw new IllegalArgumentException("The output method must be static");
+    }
+
+    if (inputMethod == null) {
+      throw new IllegalArgumentException("Cannot find the input method");
+    }
+    if (inputMethod.getParameterCount() != 0) {
+      throw new IllegalArgumentException("The input method must have 0 parameter");
+    }
+    if (!inputClass.isAssignableFrom(inputMethod.getReturnType())) {
+      throw new IllegalArgumentException("The input method must return a type that is an instance of " + inputClass.getName());
+    }
+    if (!Modifier.isPublic(inputMethod.getModifiers())) {
+      throw new IllegalArgumentException("The input method must be public");
+    }
+    if (Modifier.isStatic(inputMethod.getModifiers())) {
+      throw new IllegalArgumentException("The input method must not be static");
+    }
+
+    Method finalOutputMethod = outputMethod;
+    Method finalInputMethod = inputMethod;
+
+    Function<I, T> outputFunction = input -> {
+      try {
+        return outputClass.cast(finalOutputMethod.invoke(null, input));
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    };
+    Function<T, I> inputFunction = output -> {
+      try {
+        return inputClass.cast(finalInputMethod.invoke(output));
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    };
+
+    return register(outputClass, outputFunction, inputFunction);
   }
 
   /**
-   * Unregister a data type
+   * Unregister an entry
    *
    * @param type the type
+   *
+   * @return the serializer
    */
-  public void unregister(String type) {
-    entryList.removeIf(entry -> Objects.equals(entry.type, type));
+  public Serializer<I, O> unregister(String type) {
+    entryList.removeIf(entry -> entry.type.equals(type));
+    return this;
   }
 
   /**
-   * Unregister a data type
+   * Unregister an entry
    *
-   * @param dataClass the data class
+   * @param outputClass the class of the output
+   *
+   * @return the serializer
    */
-  public void unregister(Class<? extends D> dataClass) {
-    entryList.removeIf(entry -> Objects.equals(entry.dataClass, dataClass));
+  public Serializer<I, O> unregister(Class<? extends O> outputClass) {
+    entryList.removeIf(entry -> entry.outputClass.equals(outputClass));
+    return this;
   }
-
-  /**
-   * Convert the data to the output
-   *
-   * @param data  the data
-   * @param input the input
-   *
-   * @return the output
-   */
-  protected abstract O convertOut(D data, I input);
-
-  /**
-   * Convert the data to the input
-   *
-   * @param data   the data
-   * @param type   the type
-   * @param output the output
-   *
-   * @return the input
-   */
-  protected abstract I convert(D data, String type, O output);
-
-  /**
-   * Get the data from the output
-   *
-   * @param output the output
-   *
-   * @return the data
-   */
-  protected abstract D getData(O output);
-
-  /**
-   * Get the type from the input
-   *
-   * @param input the input
-   *
-   * @return the type
-   */
-  protected abstract String getType(I input);
 
   /**
    * Deserialize the input
    *
+   * @param type  the type
    * @param input the input
    *
    * @return the output
    */
-  public O deserialize(I input) {
-    String type = getType(input);
-    D data = entryList.stream()
-      .filter(entry -> Objects.equals(entry.type, type))
+  public O deserialize(String type, I input) {
+    return entryList.stream()
+      .filter(entry -> entry.type.equals(type))
       .findFirst()
-      .map(entry -> entry.dataFunction.apply(input))
-      .orElseThrow(() -> new IllegalArgumentException("Cannot find data type: " + type));
-    return convertOut(data, input);
+      .map(entry -> entry.outputFunction.apply(input))
+      .orElseThrow(() -> new IllegalArgumentException("Cannot find the type: " + type));
   }
 
   /**
    * Serialize the output
    *
-   * @param to the output
+   * @param output the output
    *
-   * @return the input
+   * @return the entry of the type and the input
    */
-  public I serialize(O to) {
-    D data = getData(to);
-    Entry<I, D> entry = entryList.stream()
-      .filter(e -> e.dataClass.isInstance(data))
+  public Map.Entry<String, I> serialize(O output) {
+    return entryList.stream()
+      .filter(entry -> entry.outputClass.isInstance(output))
       .findFirst()
-      .orElseThrow(() -> new IllegalArgumentException("Cannot find data class: " + data.getClass().getName()));
-    return convert(data, entry.type, to);
+      .map(entry -> new AbstractMap.SimpleEntry<>(entry.type, entry.inputFunction.apply(output)))
+      .orElseThrow(() -> new IllegalArgumentException("Cannot find the type for class: " + output.getClass().getName()));
   }
 
-  private static class Entry<F, D> {
-    private final String type;
-    private final Class<? extends D> dataClass;
-    private final Function<F, D> dataFunction;
+  /**
+   * Get the registered types
+   *
+   * @return the registered types
+   */
+  public Map<String, Class<? extends O>> getRegisteredTypes() {
+    return entryList.stream().collect(Collectors.toMap(entry -> entry.type, entry -> entry.outputClass, (a, b) -> a));
+  }
 
-    private Entry(String type, Class<? extends D> dataClass, Function<F, D> dataFunction) {
+  private static class Entry<I, O> {
+    private final String type;
+    private final Class<? extends O> outputClass;
+    private final Function<I, O> outputFunction;
+    private final Function<O, I> inputFunction;
+
+    private Entry(String type, Class<? extends O> outputClass, Function<I, O> outputFunction, Function<O, I> inputFunction) {
       this.type = type;
-      this.dataClass = dataClass;
-      this.dataFunction = dataFunction;
+      this.outputClass = outputClass;
+      this.outputFunction = outputFunction;
+      this.inputFunction = inputFunction;
     }
   }
 }
