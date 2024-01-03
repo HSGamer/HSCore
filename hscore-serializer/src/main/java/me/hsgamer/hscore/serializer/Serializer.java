@@ -20,21 +20,7 @@ import java.util.stream.Collectors;
  * @param <O> the type of the output object
  */
 public class Serializer<I, O> {
-  private final Class<I> inputClass;
-  private final Class<O> outputClass;
-
   private final List<Entry<I, O>> entryList = new ArrayList<>();
-
-  /**
-   * Create a new serializer
-   *
-   * @param inputClass  the class of the input
-   * @param outputClass the class of the output
-   */
-  public Serializer(Class<I> inputClass, Class<O> outputClass) {
-    this.inputClass = inputClass;
-    this.outputClass = outputClass;
-  }
 
   /**
    * Register a new entry
@@ -48,7 +34,7 @@ public class Serializer<I, O> {
    * @return the serializer
    */
   public <T extends O> Serializer<I, O> register(String type, Class<T> outputClass, Function<I, T> outputFunction, Function<T, I> inputFunction) {
-    entryList.add(new Entry<>(type, outputClass, input -> outputFunction.apply(inputClass.cast(input)), input -> inputClass.cast(inputFunction.apply(outputClass.cast(input)))));
+    entryList.add(new Entry<>(type, outputClass, outputFunction::apply, input -> inputFunction.apply(outputClass.cast(input))));
     return this;
   }
 
@@ -101,8 +87,8 @@ public class Serializer<I, O> {
     if (outputMethod == null) {
       throw new IllegalArgumentException("Cannot find the output method");
     }
-    if (outputMethod.getParameterCount() != 1 || !outputMethod.getParameterTypes()[0].isAssignableFrom(inputClass)) {
-      throw new IllegalArgumentException("The output method must have 1 parameter and the type must be assignable from " + inputClass.getName());
+    if (outputMethod.getParameterCount() != 1) {
+      throw new IllegalArgumentException("The output method must have 1 parameter");
     }
     if (!outputClass.isAssignableFrom(outputMethod.getReturnType())) {
       throw new IllegalArgumentException("The output method must return a type that is an instance of " + outputClass.getName());
@@ -119,9 +105,6 @@ public class Serializer<I, O> {
     }
     if (inputMethod.getParameterCount() != 0) {
       throw new IllegalArgumentException("The input method must have 0 parameter");
-    }
-    if (!inputClass.isAssignableFrom(inputMethod.getReturnType())) {
-      throw new IllegalArgumentException("The input method must return a type that is an instance of " + inputClass.getName());
     }
     if (!Modifier.isPublic(inputMethod.getModifiers())) {
       throw new IllegalArgumentException("The input method must be public");
@@ -142,7 +125,8 @@ public class Serializer<I, O> {
     };
     Function<T, I> inputFunction = output -> {
       try {
-        return inputClass.cast(finalInputMethod.invoke(output));
+        //noinspection unchecked
+        return (I) finalInputMethod.invoke(output);
       } catch (Exception e) {
         throw new RuntimeException(e);
       }
