@@ -6,10 +6,7 @@ import me.hsgamer.hscore.serializer.annotation.SerializerType;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -20,7 +17,8 @@ import java.util.stream.Collectors;
  * @param <O> the type of the output object
  */
 public class Serializer<I, O> {
-  private final List<Entry<I, O>> entryList = new ArrayList<>();
+  private final Map<String, Entry<I, O>> typeEntryMap = new HashMap<>();
+  private final Map<Class<? extends O>, Entry<I, O>> classEntryMap = new IdentityHashMap<>();
 
   /**
    * Register a new entry
@@ -32,9 +30,20 @@ public class Serializer<I, O> {
    * @param <T>            the type of the output
    *
    * @return the serializer
+   *
+   * @throws IllegalArgumentException if the type or the class is already registered
    */
   public <T extends O> Serializer<I, O> register(String type, Class<T> outputClass, Function<I, T> outputFunction, Function<T, I> inputFunction) {
-    entryList.add(new Entry<>(type, outputClass, outputFunction::apply, input -> inputFunction.apply(outputClass.cast(input))));
+    if (typeEntryMap.containsKey(type)) {
+      throw new IllegalArgumentException("The type is already registered: " + type);
+    }
+    if (classEntryMap.containsKey(outputClass)) {
+      throw new IllegalArgumentException("The class is already registered: " + outputClass.getName());
+    }
+
+    Entry<I, O> entry = new Entry<>(type, outputClass, outputFunction::apply, input -> inputFunction.apply(outputClass.cast(input)));
+    typeEntryMap.put(type, entry);
+    classEntryMap.put(outputClass, entry);
     return this;
   }
 
@@ -143,7 +152,10 @@ public class Serializer<I, O> {
    * @return the serializer
    */
   public Serializer<I, O> unregister(String type) {
-    entryList.removeIf(entry -> entry.type.equals(type));
+    Entry<I, O> entry = typeEntryMap.remove(type);
+    if (entry != null) {
+      classEntryMap.remove(entry.outputClass);
+    }
     return this;
   }
 
@@ -155,7 +167,10 @@ public class Serializer<I, O> {
    * @return the serializer
    */
   public Serializer<I, O> unregister(Class<? extends O> outputClass) {
-    entryList.removeIf(entry -> entry.outputClass.equals(outputClass));
+    Entry<I, O> entry = classEntryMap.remove(outputClass);
+    if (entry != null) {
+      typeEntryMap.remove(entry.type);
+    }
     return this;
   }
 
@@ -168,11 +183,11 @@ public class Serializer<I, O> {
    * @return the output
    */
   public O deserialize(String type, I input) {
-    return entryList.stream()
-      .filter(entry -> entry.type.equals(type))
-      .findFirst()
-      .map(entry -> entry.outputFunction.apply(input))
-      .orElseThrow(() -> new IllegalArgumentException("Cannot find the type: " + type));
+    Entry<I, O> entry = typeEntryMap.get(type);
+    if (entry == null) {
+      throw new IllegalArgumentException("Cannot find the type: " + type);
+    }
+    return entry.outputFunction.apply(input);
   }
 
   /**
@@ -183,11 +198,12 @@ public class Serializer<I, O> {
    * @return the entry of the type and the input
    */
   public Map.Entry<String, I> serialize(O output) {
-    return entryList.stream()
-      .filter(entry -> entry.outputClass.isInstance(output))
-      .findFirst()
-      .map(entry -> new AbstractMap.SimpleEntry<>(entry.type, entry.inputFunction.apply(output)))
-      .orElseThrow(() -> new IllegalArgumentException("Cannot find the type for class: " + output.getClass().getName()));
+    Class<?> outputClass = output.getClass();
+    Entry<I, O> entry = classEntryMap.get(outputClass);
+    if (entry == null) {
+      throw new IllegalArgumentException("Cannot find the type for class: " + output.getClass().getName());
+    }
+    return new AbstractMap.SimpleEntry<>(entry.type, entry.inputFunction.apply(output));
   }
 
   /**
@@ -196,7 +212,7 @@ public class Serializer<I, O> {
    * @return the registered types
    */
   public Map<String, Class<? extends O>> getRegisteredTypes() {
-    return entryList.stream().collect(Collectors.toMap(entry -> entry.type, entry -> entry.outputClass, (a, b) -> a));
+    return Collections.unmodifiableMap(typeEntryMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().outputClass)));
   }
 
   private static class Entry<I, O> {
