@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * The path string to use in {@link Config}
@@ -63,15 +62,11 @@ public class PathString {
    * @return the map containing the joined path
    */
   public static Map<String, Object> toPathMap(String separator, Map<PathString, Object> map) {
-    return map.entrySet().stream()
-      .collect(
-        Collectors.toMap(
-          entry -> toPath(separator, entry.getKey()),
-          Map.Entry::getValue,
-          (a, b) -> b,
-          LinkedHashMap::new
-        )
-      );
+      LinkedHashMap<String, Object> result = new LinkedHashMap<>();
+      for (Map.Entry<PathString, Object> entry : map.entrySet()) {
+          result.put(toPath(separator, entry.getKey()), entry.getValue());
+      }
+      return result;
   }
 
   /**
@@ -83,15 +78,11 @@ public class PathString {
    * @return the map containing the path string
    */
   public static Map<PathString, Object> toPathStringMap(String separator, Map<String, Object> map) {
-    return map.entrySet().stream()
-      .collect(
-        Collectors.toMap(
-          entry -> toPathString(separator, entry.getKey()),
-          Map.Entry::getValue,
-          (a, b) -> b,
-          LinkedHashMap::new
-        )
-      );
+      LinkedHashMap<PathString, Object> result = new LinkedHashMap<>();
+      for (Map.Entry<String, Object> entry : map.entrySet()) {
+          result.put(toPathString(separator, entry.getKey()), entry.getValue());
+      }
+      return result;
   }
 
   /**
