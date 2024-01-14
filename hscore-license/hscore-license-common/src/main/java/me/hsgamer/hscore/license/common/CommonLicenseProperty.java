@@ -4,6 +4,7 @@ public enum CommonLicenseProperty {
   USER("user"),
   RESOURCE("resource"),
   NONCE("nonce"),
+  TYPE("type"),
   ;
   private final String key;
 
