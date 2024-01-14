@@ -2,6 +2,7 @@ package me.hsgamer.hscore.license.spigotmc;
 
 import me.hsgamer.hscore.license.common.LicenseChecker;
 import me.hsgamer.hscore.license.common.LicenseResult;
+import me.hsgamer.hscore.license.common.LicenseStatus;
 
 public class SpigotLicenseChecker implements LicenseChecker {
   private final String resource;
@@ -19,6 +20,16 @@ public class SpigotLicenseChecker implements LicenseChecker {
   @Override
   public LicenseResult checkLicense() {
     SpigotLicenseEntry entry = fetcher.fetchLicense();
-    return new LicenseResult(entry.isValid() && resource.equals(entry.getResource()), entry.toProperties());
+
+    LicenseStatus status;
+    if (!entry.isValid()) {
+      status = LicenseStatus.INVALID;
+    } else if (entry.getResource().equals(resource)) {
+      status = LicenseStatus.VALID;
+    } else {
+      status = LicenseStatus.UNKNOWN;
+    }
+
+    return new LicenseResult(status, entry.toProperties());
   }
 }
