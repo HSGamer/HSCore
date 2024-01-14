@@ -20,6 +20,14 @@ public class PolymartLicenseChecker implements LicenseChecker {
     this(resource, isPaid, PolymartLicenseFetcher.defaultFetcher());
   }
 
+  public static boolean isAvailable(String identifier) {
+    return "1".equals(identifier);
+  }
+
+  public static boolean isAvailable() {
+    return isAvailable("%%__POLYMART__%%");
+  }
+
   @Override
   public LicenseResult checkLicense() {
     PolymartLicenseEntry entry = fetcher.fetchLicense();
