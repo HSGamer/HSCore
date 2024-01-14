@@ -4,26 +4,14 @@ import me.hsgamer.hscore.license.common.CommonLicenseProperty;
 import me.hsgamer.hscore.license.common.LicenseProperties;
 
 public class SpigotLicenseEntry {
-  private final String user;
-  private final String resource;
-  private final String nonce;
+  public final String user;
+  public final String resource;
+  public final String nonce;
 
   public SpigotLicenseEntry(String user, String resource, String nonce) {
     this.user = user;
     this.resource = resource;
     this.nonce = nonce;
-  }
-
-  public String getUser() {
-    return user;
-  }
-
-  public String getResource() {
-    return resource;
-  }
-
-  public String getNonce() {
-    return nonce;
   }
 
   public boolean isValid() {
@@ -35,6 +23,7 @@ public class SpigotLicenseEntry {
 
   public LicenseProperties toProperties() {
     LicenseProperties properties = new LicenseProperties();
+    properties.setProperty(CommonLicenseProperty.TYPE, "spigotmc");
     properties.setProperty(CommonLicenseProperty.USER, user);
     properties.setProperty(CommonLicenseProperty.RESOURCE, resource);
     properties.setProperty(CommonLicenseProperty.NONCE, nonce);

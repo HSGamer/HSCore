@@ -1,28 +1,31 @@
-package me.hsgamer.hscore.license.spigotmc;
+package me.hsgamer.hscore.license.polymart;
 
 import me.hsgamer.hscore.license.common.LicenseChecker;
 import me.hsgamer.hscore.license.common.LicenseResult;
 import me.hsgamer.hscore.license.common.LicenseStatus;
 
-public class SpigotLicenseChecker implements LicenseChecker {
+// TODO: Use Polymart API to check the license
+public class PolymartLicenseChecker implements LicenseChecker {
   private final String resource;
-  private final SpigotLicenseFetcher fetcher;
+  private final boolean isPaid;
+  private final PolymartLicenseFetcher fetcher;
 
-  public SpigotLicenseChecker(String resource, SpigotLicenseFetcher fetcher) {
+  public PolymartLicenseChecker(String resource, boolean isPaid, PolymartLicenseFetcher fetcher) {
     this.resource = resource;
+    this.isPaid = isPaid;
     this.fetcher = fetcher;
   }
 
-  public SpigotLicenseChecker(String resource) {
-    this(resource, SpigotLicenseFetcher.defaultFetcher());
+  public PolymartLicenseChecker(String resource, boolean isPaid) {
+    this(resource, isPaid, PolymartLicenseFetcher.defaultFetcher());
   }
 
   @Override
   public LicenseResult checkLicense() {
-    SpigotLicenseEntry entry = fetcher.fetchLicense();
+    PolymartLicenseEntry entry = fetcher.fetchLicense();
 
     LicenseStatus status;
-    if (!entry.isValid()) {
+    if (!entry.isValid(isPaid)) {
       status = LicenseStatus.INVALID;
     } else if (resource.equals(entry.resource)) {
       status = LicenseStatus.VALID;

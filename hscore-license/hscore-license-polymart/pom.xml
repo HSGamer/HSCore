@@ -9,12 +9,17 @@
     <version>4.3.27-SNAPSHOT</version>
   </parent>
 
-  <artifactId>hscore-license-spigotmc</artifactId>
+  <artifactId>hscore-license-polymart</artifactId>
 
   <dependencies>
     <dependency>
       <groupId>me.hsgamer</groupId>
       <artifactId>hscore-license-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-web</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
