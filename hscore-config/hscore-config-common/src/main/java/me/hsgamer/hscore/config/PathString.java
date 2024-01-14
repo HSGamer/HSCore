@@ -62,11 +62,11 @@ public class PathString {
    * @return the map containing the joined path
    */
   public static Map<String, Object> toPathMap(String separator, Map<PathString, Object> map) {
-      LinkedHashMap<String, Object> result = new LinkedHashMap<>();
-      for (Map.Entry<PathString, Object> entry : map.entrySet()) {
-          result.put(toPath(separator, entry.getKey()), entry.getValue());
-      }
-      return result;
+    LinkedHashMap<String, Object> result = new LinkedHashMap<>();
+    for (Map.Entry<PathString, Object> entry : map.entrySet()) {
+      result.put(toPath(separator, entry.getKey()), entry.getValue());
+    }
+    return result;
   }
 
   /**
@@ -78,11 +78,11 @@ public class PathString {
    * @return the map containing the path string
    */
   public static Map<PathString, Object> toPathStringMap(String separator, Map<String, Object> map) {
-      LinkedHashMap<PathString, Object> result = new LinkedHashMap<>();
-      for (Map.Entry<String, Object> entry : map.entrySet()) {
-          result.put(toPathString(separator, entry.getKey()), entry.getValue());
-      }
-      return result;
+    LinkedHashMap<PathString, Object> result = new LinkedHashMap<>();
+    for (Map.Entry<String, Object> entry : map.entrySet()) {
+      result.put(toPathString(separator, entry.getKey()), entry.getValue());
+    }
+    return result;
   }
 
   /**
