@@ -62,6 +62,7 @@
     <module>hscore-bukkit</module>
     <module>hscore-bungeecord</module>
     <module>hscore-minestom</module>
+      <module>hscore-license</module>
   </modules>
 
   <properties>
