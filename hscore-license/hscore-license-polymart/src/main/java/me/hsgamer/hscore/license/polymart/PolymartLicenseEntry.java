@@ -3,6 +3,9 @@ package me.hsgamer.hscore.license.polymart;
 import me.hsgamer.hscore.license.common.CommonLicenseProperty;
 import me.hsgamer.hscore.license.common.LicenseProperties;
 
+/**
+ * The license entry for Polymart
+ */
 public class PolymartLicenseEntry {
   public final String user;
   public final String username;
@@ -26,6 +29,13 @@ public class PolymartLicenseEntry {
     this.timestamp = timestamp;
   }
 
+  /**
+   * Check if the entry is valid
+   *
+   * @param isPaid if the resource is paid
+   *
+   * @return true if it is
+   */
   public boolean isValid(boolean isPaid) {
     boolean valid =
       user != null && !user.isEmpty() && !user.contains("__USER__")
@@ -44,6 +54,11 @@ public class PolymartLicenseEntry {
     return valid;
   }
 
+  /**
+   * Convert to properties
+   *
+   * @return the properties
+   */
   public LicenseProperties toProperties() {
     LicenseProperties properties = new LicenseProperties();
     properties.put(CommonLicenseProperty.TYPE, "polymart");
