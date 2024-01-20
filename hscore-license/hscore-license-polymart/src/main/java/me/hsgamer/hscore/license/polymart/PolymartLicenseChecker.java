@@ -66,7 +66,8 @@ public class PolymartLicenseChecker implements LicenseChecker {
    * @return true if it can be used
    */
   public static boolean isAvailable() {
-    return isAvailable("%%__POLYMART__%%");
+    String identifier = "%%__POLYMART__%%"; // Will be replaced by Polymart
+    return isAvailable(identifier);
   }
 
   /**
