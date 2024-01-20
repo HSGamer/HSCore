@@ -24,13 +24,11 @@ public class HibernateClient extends BaseClient<Configuration> {
     super(setting);
     Driver driver = setting.getDriver();
 
-    // TODO: Use JPA-standard properties when the weird error is fixed
-    //noinspection deprecation
     this.configuration = new Configuration()
-      .setProperty(AvailableSettings.URL, driver.convertURL(setting))
-      .setProperty(AvailableSettings.DRIVER, driver.getDriverClassName())
-      .setProperty(AvailableSettings.USER, setting.getUsername())
-      .setProperty(AvailableSettings.PASS, setting.getPassword());
+      .setProperty(AvailableSettings.JAKARTA_JDBC_URL, driver.convertURL(setting))
+      .setProperty(AvailableSettings.JAKARTA_JDBC_DRIVER, driver.getDriverClassName())
+      .setProperty(AvailableSettings.JAKARTA_JDBC_USER, setting.getUsername())
+      .setProperty(AvailableSettings.JAKARTA_JDBC_PASSWORD, setting.getPassword());
 
     setting.getClientProperties().forEach((key, value) -> configuration.setProperty(key, value.toString()));
   }
