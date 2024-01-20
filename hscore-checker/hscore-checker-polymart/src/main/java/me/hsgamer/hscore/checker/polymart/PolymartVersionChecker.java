@@ -38,6 +38,26 @@ public class PolymartVersionChecker implements VersionChecker {
     this(resourceId, UserAgent.FIREFOX);
   }
 
+  /**
+   * Check whether the checker can be used
+   *
+   * @param identifier the identifier
+   *
+   * @return true if it can be used
+   */
+  public static boolean isAvailable(String identifier) {
+    return "1".equals(identifier);
+  }
+
+  /**
+   * Check whether the checker can be used
+   *
+   * @return true if it can be used
+   */
+  public static boolean isAvailable() {
+    return isAvailable("%%__POLYMART__%%");
+  }
+
   @Override
   public @NotNull CompletableFuture<String> getVersion() {
     return CompletableFuture.supplyAsync(() -> {
