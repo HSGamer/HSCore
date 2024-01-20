@@ -4,9 +4,9 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -119,5 +119,58 @@ public final class WebUtils {
     HttpsURLConnection connection = createHttpsConnection(address);
     connectionConsumer.accept(connection);
     return connection;
+  }
+
+  /**
+   * Encode the string
+   *
+   * @param string the string
+   *
+   * @return the encoded string
+   */
+  @NotNull
+  public static String encodeUrl(@NotNull String string) {
+    try {
+      return URLEncoder.encode(string, StandardCharsets.UTF_8.toString());
+    } catch (Exception e) {
+      throw new IllegalStateException(e);
+    }
+  }
+
+  /**
+   * Decode the string
+   *
+   * @param string the string
+   *
+   * @return the decoded string
+   */
+  @NotNull
+  public static String decodeUrl(@NotNull String string) {
+    try {
+      return URLDecoder.decode(string, StandardCharsets.UTF_8.toString());
+    } catch (Exception e) {
+      throw new IllegalStateException(e);
+    }
+  }
+
+  /**
+   * Make a URL with the address & the query map
+   *
+   * @param address  the address
+   * @param queryMap the query map
+   *
+   * @return the URL
+   */
+  @NotNull
+  public static String makeUrl(@NotNull String address, @NotNull Map<String, String> queryMap) {
+    if (queryMap.isEmpty()) {
+      return address;
+    }
+
+    String query = queryMap.entrySet().stream()
+      .map(entry -> entry.getKey() + "=" + encodeUrl(entry.getValue()))
+      .reduce((s1, s2) -> s1 + "&" + s2)
+      .orElse("");
+    return address + "?" + query;
   }
 }
