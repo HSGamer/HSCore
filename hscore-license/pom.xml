@@ -15,5 +15,6 @@
   <modules>
     <module>hscore-license-common</module>
     <module>hscore-license-spigotmc</module>
+    <module>hscore-license-polymart</module>
   </modules>
 </project>
