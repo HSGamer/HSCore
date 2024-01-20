@@ -11,14 +11,7 @@ public interface SpigotLicenseFetcher {
    * @return the default fetcher
    */
   static SpigotLicenseFetcher defaultFetcher() {
-    // Will be replaced by SpigotMC
-    String string = "%%__USER__%%||%%__RESOURCE__%%||%%__NONCE__%%";
-    String[] split = string.split("\\|\\|");
-    return () -> new SpigotLicenseEntry(
-      split[0],
-      split[1],
-      split[2]
-    );
+    return new DefaultSpigotLicenseFetcher();
   }
 
   /**
