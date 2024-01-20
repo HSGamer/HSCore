@@ -154,7 +154,7 @@ public final class WebUtils {
   }
 
   /**
-   * Make a URL with the address & the query map
+   * Make a URL with the address and the query map
    *
    * @param address  the address
    * @param queryMap the query map
