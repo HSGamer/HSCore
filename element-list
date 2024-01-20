@@ -84,6 +84,9 @@ me.hsgamer.hscore.extra.consumer
 me.hsgamer.hscore.extra.function
 me.hsgamer.hscore.extra.supplier
 me.hsgamer.hscore.gson
+me.hsgamer.hscore.license.common
+me.hsgamer.hscore.license.polymart
+me.hsgamer.hscore.license.spigotmc
 me.hsgamer.hscore.logger.common
 me.hsgamer.hscore.logger.jul
 me.hsgamer.hscore.logger.provider
