@@ -22,5 +22,10 @@
       <artifactId>hscore-web</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-gson</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>

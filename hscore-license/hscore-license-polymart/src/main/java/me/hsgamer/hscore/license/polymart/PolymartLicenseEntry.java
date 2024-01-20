@@ -3,6 +3,9 @@ package me.hsgamer.hscore.license.polymart;
 import me.hsgamer.hscore.license.common.CommonLicenseProperty;
 import me.hsgamer.hscore.license.common.LicenseProperties;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The license entry for Polymart
  */
@@ -72,5 +75,22 @@ public class PolymartLicenseEntry {
     properties.put("agent", agent);
     properties.put("timestamp", timestamp);
     return properties;
+  }
+
+  /**
+   * Convert to a query map
+   *
+   * @return the query map
+   */
+  public Map<String, String> toQueryMap() {
+    Map<String, String> map = new HashMap<>();
+    map.put("license", license);
+    map.put("resource_id", resource);
+    map.put("user_id", user);
+    map.put("nonce", nonce);
+    map.put("download_agent", agent);
+    map.put("download_time", timestamp);
+    map.put("download_token", verifyToken);
+    return map;
   }
 }
