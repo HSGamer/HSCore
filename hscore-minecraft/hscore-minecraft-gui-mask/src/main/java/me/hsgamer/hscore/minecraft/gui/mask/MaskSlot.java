@@ -4,11 +4,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * The slot for the mask
+ * The slot for the mask.
+ * Used to get the slots for the unique id.
  */
 public interface MaskSlot {
   /**
@@ -20,7 +22,7 @@ public interface MaskSlot {
    */
   @NotNull
   static MaskSlot of(@NotNull List<@NotNull Integer> slots) {
-    return () -> slots;
+    return uuid -> slots;
   }
 
   /**
@@ -33,7 +35,7 @@ public interface MaskSlot {
   @NotNull
   static MaskSlot of(@NotNull Integer... slots) {
     List<Integer> slotList = Arrays.asList(slots);
-    return () -> slotList;
+    return uuid -> slotList;
   }
 
   /**
@@ -51,8 +53,10 @@ public interface MaskSlot {
   /**
    * Get the slots
    *
+   * @param uuid the unique id
+   *
    * @return the slots
    */
   @NotNull
-  List<Integer> getSlots();
+  List<Integer> getSlots(UUID uuid);
 }

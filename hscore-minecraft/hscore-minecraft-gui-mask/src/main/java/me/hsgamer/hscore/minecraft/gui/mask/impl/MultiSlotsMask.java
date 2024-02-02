@@ -75,7 +75,7 @@ public class MultiSlotsMask extends BaseMask {
   @Override
   public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid, int size) {
     Map<Integer, Button> map = new HashMap<>();
-    List<Integer> slots = this.maskSlot.getSlots();
+    List<Integer> slots = this.maskSlot.getSlots(uuid);
     if (!this.buttons.isEmpty() && !slots.isEmpty()) {
       int slotsSize = slots.size();
       int buttonsSize = this.buttons.size();
