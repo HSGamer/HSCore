@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.minecraft.gui.mask.impl;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
+import me.hsgamer.hscore.minecraft.gui.mask.MaskSlot;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,11 +16,11 @@ public class StaticButtonPaginatedMask extends ButtonPaginatedMask {
   /**
    * Create a new mask
    *
-   * @param name  the name of the mask
-   * @param slots the slots
+   * @param name     the name of the mask
+   * @param maskSlot the mask slot
    */
-  public StaticButtonPaginatedMask(@NotNull String name, @NotNull List<@NotNull Integer> slots) {
-    super(name, slots);
+  public StaticButtonPaginatedMask(@NotNull String name, @NotNull MaskSlot maskSlot) {
+    super(name, maskSlot);
   }
 
   /**

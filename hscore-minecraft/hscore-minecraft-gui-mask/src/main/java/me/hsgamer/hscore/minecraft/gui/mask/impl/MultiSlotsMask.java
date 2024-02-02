@@ -2,6 +2,7 @@ package me.hsgamer.hscore.minecraft.gui.mask.impl;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.BaseMask;
+import me.hsgamer.hscore.minecraft.gui.mask.MaskSlot;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,18 +12,18 @@ import java.util.*;
  * The masks with multiple slot
  */
 public class MultiSlotsMask extends BaseMask {
-  protected final List<Integer> slots = new ArrayList<>();
+  protected final MaskSlot maskSlot;
   protected final List<Button> buttons = new ArrayList<>();
 
   /**
    * Create a new mask
    *
-   * @param name  the name of the mask
-   * @param slots the slots
+   * @param name     the name of the mask
+   * @param maskSlot the mask slot
    */
-  public MultiSlotsMask(@NotNull String name, @NotNull List<@NotNull Integer> slots) {
+  public MultiSlotsMask(@NotNull String name, @NotNull MaskSlot maskSlot) {
     super(name);
-    this.slots.addAll(slots);
+    this.maskSlot = maskSlot;
   }
 
   /**
@@ -52,13 +53,13 @@ public class MultiSlotsMask extends BaseMask {
   }
 
   /**
-   * Get the slots
+   * Get the mask slot
    *
-   * @return the slots
+   * @return the mask slot
    */
   @NotNull
-  public List<@NotNull Integer> getSlots() {
-    return Collections.unmodifiableList(slots);
+  public MaskSlot getMaskSlot() {
+    return maskSlot;
   }
 
   /**
@@ -74,11 +75,12 @@ public class MultiSlotsMask extends BaseMask {
   @Override
   public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid, int size) {
     Map<Integer, Button> map = new HashMap<>();
-    if (!this.buttons.isEmpty()) {
-      int slotsSize = this.slots.size();
+    List<Integer> slots = this.maskSlot.getSlots();
+    if (!this.buttons.isEmpty() && !slots.isEmpty()) {
+      int slotsSize = slots.size();
       int buttonsSize = this.buttons.size();
       for (int i = 0; i < slotsSize; i++) {
-        map.put(this.slots.get(i), this.buttons.get(i % buttonsSize));
+        map.put(slots.get(i), this.buttons.get(i % buttonsSize));
       }
     }
     return map;

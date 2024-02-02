@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.minecraft.gui.mask.impl;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
+import me.hsgamer.hscore.minecraft.gui.mask.MaskSlot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -9,27 +10,27 @@ import java.util.*;
  * A button paginated mask, where each {@link Button} is a page
  */
 public abstract class SequencePaginatedMask extends PaginatedMask {
-  protected final List<Integer> slots = new ArrayList<>();
+  protected final MaskSlot maskSlot;
 
   /**
    * Create a new mask
    *
-   * @param name  the name of the mask
-   * @param slots the slots
+   * @param name     the name of the mask
+   * @param maskSlot the mask slot
    */
-  protected SequencePaginatedMask(@NotNull String name, @NotNull List<@NotNull Integer> slots) {
+  protected SequencePaginatedMask(@NotNull String name, @NotNull MaskSlot maskSlot) {
     super(name);
-    this.slots.addAll(slots);
+    this.maskSlot = maskSlot;
   }
 
   /**
-   * Get the slots
+   * Get the mask slot
    *
-   * @return the slots
+   * @return the mask slot
    */
   @NotNull
-  public List<@NotNull Integer> getSlots() {
-    return Collections.unmodifiableList(slots);
+  public MaskSlot getMaskSlot() {
+    return this.maskSlot;
   }
 
   /**
@@ -45,14 +46,15 @@ public abstract class SequencePaginatedMask extends PaginatedMask {
   @Override
   public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid, int size) {
     List<Button> buttons = getButtons(uuid);
-    if (buttons.isEmpty() || this.slots.isEmpty()) {
+    List<Integer> slots = this.maskSlot.getSlots();
+    if (buttons.isEmpty() || slots.isEmpty()) {
       return Collections.emptyMap();
     }
 
     Map<Integer, Button> map = new HashMap<>();
     int basePage = this.getPage(uuid);
     int buttonsSize = buttons.size();
-    int slotsSize = this.slots.size();
+    int slotsSize = slots.size();
 
     for (int i = 0; i < slotsSize; i++) {
       int index = i + basePage;
@@ -61,7 +63,7 @@ public abstract class SequencePaginatedMask extends PaginatedMask {
       } else if (index >= buttonsSize) {
         break;
       }
-      map.put(this.slots.get(i), buttons.get(index));
+      map.put(slots.get(i), buttons.get(index));
     }
     return map;
   }
@@ -73,7 +75,6 @@ public abstract class SequencePaginatedMask extends PaginatedMask {
 
   @Override
   public void stop() {
-    this.slots.clear();
     this.pageNumberMap.clear();
   }
 }
