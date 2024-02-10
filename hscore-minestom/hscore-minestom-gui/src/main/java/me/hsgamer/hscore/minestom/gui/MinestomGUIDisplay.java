@@ -57,7 +57,7 @@ public class MinestomGUIDisplay extends InventoryGUIDisplay<MinestomGUIHolder> {
 
   @Override
   public void open() {
-    Player player = MinecraftServer.getConnectionManager().getPlayer(uuid);
+    Player player = MinecraftServer.getConnectionManager().getOnlinePlayerByUuid(uuid);
     if (player != null) {
       player.openInventory(inventory);
     }
