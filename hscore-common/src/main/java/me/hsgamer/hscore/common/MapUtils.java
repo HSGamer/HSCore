@@ -50,6 +50,21 @@ public class MapUtils {
   }
 
   /**
+   * Get the value given the key from the map
+   *
+   * @param map the map
+   * @param key the key
+   * @param <K> the key type
+   * @param <V> the value type
+   *
+   * @return the value, or empty optional if not found
+   */
+  @SafeVarargs
+  public static <K, V> Optional<V> getOptional(Map<K, V> map, K... key) {
+    return Optional.ofNullable(getIfFound(map, key));
+  }
+
+  /**
    * Check if the map contains any of the keys
    *
    * @param map the map
