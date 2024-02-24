@@ -18,4 +18,4 @@ jobs:
       - name: Unshallow
         run: git fetch --unshallow --quiet
       - name: Build
-        run: mvn clean package
+        run: mvn clean verify
