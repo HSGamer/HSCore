@@ -155,7 +155,7 @@
               <publishingServerId>central</publishingServerId>
               <tokenAuth>true</tokenAuth>
               <autoPublish>true</autoPublish>
-              <deploymentName>MineLib</deploymentName>
+              <deploymentName>HSCore</deploymentName>
             </configuration>
           </plugin>
         </plugins>
