@@ -118,14 +118,13 @@ public class OneTimeAnimatedMask extends BaseMask implements IdentifiedUpdatable
   }
 
   @Override
-  public boolean canView(@NotNull UUID uuid) {
+  public Optional<Map<@NotNull Integer, @NotNull Button>> generateButtons(@NotNull UUID uuid, int size) {
     update(uuid);
-    return !getRunner(uuid).maxed || viewLast;
-  }
-
-  @Override
-  public @NotNull Map<@NotNull Integer, @NotNull Button> generateButtons(@NotNull UUID uuid, int size) {
-    return masks.get(getRunner(uuid).index).generateButtons(uuid, size);
+    SequenceRunner runner = getRunner(uuid);
+    if (runner.maxed && !viewLast) {
+      return Optional.empty();
+    }
+    return masks.get(runner.index).generateButtons(uuid, size);
   }
 
   @Override

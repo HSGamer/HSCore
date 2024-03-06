@@ -7,14 +7,12 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The mask with a list of child masks
  */
 public class ListMask extends BaseMask {
   private final List<Mask> masks = new ArrayList<>();
-  private final Map<UUID, Integer> currentIndexMap = new ConcurrentHashMap<>();
 
   /**
    * Create a new mask
@@ -62,23 +60,14 @@ public class ListMask extends BaseMask {
   }
 
   @Override
-  public boolean canView(@NotNull UUID uuid) {
-    for (int i = 0; i < masks.size(); i++) {
-      Mask mask = masks.get(i);
-      if (mask.canView(uuid)) {
-        currentIndexMap.put(uuid, i);
-        return true;
+  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, int size) {
+    for (Mask mask : masks) {
+      Optional<Map<Integer, Button>> buttons = mask.generateButtons(uuid, size);
+      if (buttons.isPresent()) {
+        return buttons;
       }
     }
-    return false;
-  }
-
-  @Override
-  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid, int size) {
-    return Optional.ofNullable(currentIndexMap.get(uuid))
-      .map(masks::get)
-      .map(mask -> mask.generateButtons(uuid, size))
-      .orElseGet(Collections::emptyMap);
+    return Optional.empty();
   }
 
   @Override

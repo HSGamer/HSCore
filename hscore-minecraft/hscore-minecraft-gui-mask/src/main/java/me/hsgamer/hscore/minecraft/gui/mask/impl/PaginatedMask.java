@@ -1,9 +1,11 @@
 package me.hsgamer.hscore.minecraft.gui.mask.impl;
 
+import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.BaseMask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,13 +23,64 @@ public abstract class PaginatedMask extends BaseMask {
   }
 
   /**
-   * Get the amount of pages for the unique id
+   * Generate the buttons for the unique id
    *
-   * @param uuid the unique id
+   * @param uuid       the unique id
+   * @param size       the size of the inventory
+   * @param pageNumber the page number
    *
-   * @return the amount of pages
+   * @return the map contains the slots and the buttons
+   *
+   * @see me.hsgamer.hscore.minecraft.gui.mask.Mask#generateButtons(UUID, int)
    */
-  public abstract int getPageAmount(@NotNull UUID uuid);
+  protected abstract Optional<Map<@NotNull Integer, @NotNull Button>> generateButtons(@NotNull UUID uuid, int size, int pageNumber);
+
+  /**
+   * Get the exact page from the input page
+   *
+   * @param page       the input page
+   * @param pageAmount the amount of pages
+   *
+   * @return the exact page
+   */
+  protected int getExactPage(int page, int pageAmount) {
+    if (pageAmount <= 0) {
+      return 0;
+    }
+
+    int exactPage = page;
+    if (this.cycle) {
+      while (exactPage < 0) {
+        exactPage += pageAmount;
+      }
+      exactPage = exactPage % pageAmount;
+    } else if (exactPage < 0) {
+      exactPage = 0;
+    } else if (exactPage >= pageAmount) {
+      exactPage = pageAmount - 1;
+    }
+
+    return exactPage;
+  }
+
+  /**
+   * Get the exact page from the input page and set it if it's not the same
+   *
+   * @param uuid       the unique id
+   * @param page       the input page
+   * @param pageAmount the amount of pages
+   *
+   * @return the exact page
+   */
+  protected int getAndSetExactPage(UUID uuid, int page, int pageAmount) {
+    int exactPage = getExactPage(page, pageAmount);
+
+    if (exactPage != page) {
+      this.setPage(uuid, exactPage);
+    }
+
+    return exactPage;
+  }
 
   /**
    * Set the page for the unique id
@@ -36,33 +89,7 @@ public abstract class PaginatedMask extends BaseMask {
    * @param page the page
    */
   public void setPage(@NotNull UUID uuid, int page) {
-    this.pageNumberMap.put(uuid, this.getExactPage(page, uuid));
-  }
-
-  /**
-   * Get the exact page from the input page for the unique id
-   *
-   * @param page the input page
-   * @param uuid the unique id
-   *
-   * @return the exact page
-   */
-  public int getExactPage(int page, @NotNull UUID uuid) {
-    int pageAmount = this.getPageAmount(uuid);
-    if (pageAmount <= 0) {
-      return 0;
-    }
-    if (this.cycle) {
-      while (page < 0) {
-        page += pageAmount;
-      }
-      page = page % pageAmount;
-    } else if (page < 0) {
-      page = 0;
-    } else if (page >= pageAmount) {
-      page = pageAmount - 1;
-    }
-    return page;
+    this.pageNumberMap.put(uuid, page);
   }
 
   /**
@@ -110,5 +137,10 @@ public abstract class PaginatedMask extends BaseMask {
    */
   public void setCycle(boolean cycle) {
     this.cycle = cycle;
+  }
+
+  @Override
+  public Optional<Map<@NotNull Integer, @NotNull Button>> generateButtons(@NotNull UUID uuid, int size) {
+    return generateButtons(uuid, size, this.getPage(uuid));
   }
 }

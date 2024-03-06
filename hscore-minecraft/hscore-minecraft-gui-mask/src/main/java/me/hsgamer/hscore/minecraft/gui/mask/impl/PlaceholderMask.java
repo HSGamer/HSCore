@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -31,13 +32,8 @@ public class PlaceholderMask extends BaseMask {
   }
 
   @Override
-  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid, int size) {
+  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, int size) {
     return this.userMasks.getOrDefault(uuid, this.defaultMask).generateButtons(uuid, size);
-  }
-
-  @Override
-  public boolean canView(@NotNull UUID uuid) {
-    return this.userMasks.getOrDefault(uuid, this.defaultMask).canView(uuid);
   }
 
   @Override

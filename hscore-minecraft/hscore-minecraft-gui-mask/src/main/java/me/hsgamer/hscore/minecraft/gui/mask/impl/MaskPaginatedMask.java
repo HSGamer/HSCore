@@ -4,9 +4,9 @@ import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.Mask;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -34,20 +34,14 @@ public abstract class MaskPaginatedMask extends PaginatedMask {
   public abstract List<@NotNull Mask> getMasks(@NotNull UUID uuid);
 
   @Override
-  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid, int size) {
+  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, int size, int pageNumber) {
     List<Mask> masks = getMasks(uuid);
-    return masks.isEmpty() ? Collections.emptyMap() : masks.get(this.getPage(uuid)).generateButtons(uuid, size);
-  }
-
-  @Override
-  public boolean canView(@NotNull UUID uuid) {
-    List<Mask> masks = getMasks(uuid);
-    return !masks.isEmpty() && masks.get(this.getPage(uuid)).canView(uuid);
-  }
-
-  @Override
-  public int getPageAmount(@NotNull UUID uuid) {
-    return getMasks(uuid).size();
+    if (masks.isEmpty()) {
+      return Optional.empty();
+    }
+    int pageAmount = masks.size();
+    pageNumber = getAndSetExactPage(uuid, pageNumber, pageAmount);
+    return masks.get(pageNumber).generateButtons(uuid, size);
   }
 
   @Override

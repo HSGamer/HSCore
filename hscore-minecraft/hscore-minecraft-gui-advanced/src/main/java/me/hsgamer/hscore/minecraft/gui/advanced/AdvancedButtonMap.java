@@ -77,9 +77,9 @@ public class AdvancedButtonMap implements ButtonMap {
   public @NotNull Map<@NotNull Integer, @NotNull ViewedButton> getButtons(@NotNull UUID uuid, int size) {
     Map<Integer, ViewedButton> map = new HashMap<>();
     for (Mask mask : masks) {
-      if (!mask.canView(uuid)) continue;
-      Map<Integer, Button> buttons = mask.generateButtons(uuid, size);
-      buttons.forEach((slot, button) -> {
+      Optional<Map<Integer, Button>> buttons = mask.generateButtons(uuid, size);
+      if (!buttons.isPresent()) continue;
+      buttons.get().forEach((slot, button) -> {
         if (slot < 0 || slot >= size) {
           return;
         }

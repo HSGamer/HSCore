@@ -73,7 +73,7 @@ public class MultiSlotsMask extends BaseMask {
   }
 
   @Override
-  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid, int size) {
+  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, int size) {
     Map<Integer, Button> map = new HashMap<>();
     List<Integer> slots = this.maskSlot.getSlots(uuid);
     if (!this.buttons.isEmpty() && !slots.isEmpty()) {
@@ -83,7 +83,7 @@ public class MultiSlotsMask extends BaseMask {
         map.put(slots.get(i), this.buttons.get(i % buttonsSize));
       }
     }
-    return map;
+    return Optional.of(map);
   }
 
   @Override

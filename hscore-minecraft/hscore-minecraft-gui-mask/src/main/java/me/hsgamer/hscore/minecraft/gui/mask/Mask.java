@@ -4,8 +4,8 @@ import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.ui.property.Initializable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -22,8 +22,8 @@ public interface Mask extends Initializable {
   static Mask empty(String name) {
     return new Mask() {
       @Override
-      public @NotNull Map<@NotNull Integer, @NotNull Button> generateButtons(@NotNull UUID uuid, int size) {
-        return Collections.emptyMap();
+      public Optional<Map<@NotNull Integer, @NotNull Button>> generateButtons(@NotNull UUID uuid, int size) {
+        return Optional.empty();
       }
 
       @Override
@@ -34,17 +34,6 @@ public interface Mask extends Initializable {
   }
 
   /**
-   * Check if the target can view the mask
-   *
-   * @param uuid the unique id of the target
-   *
-   * @return true if the target can view the mask
-   */
-  default boolean canView(@NotNull UUID uuid) {
-    return true;
-  }
-
-  /**
    * Generate the buttons for the unique id
    *
    * @param uuid the unique id
@@ -52,8 +41,7 @@ public interface Mask extends Initializable {
    *
    * @return the map contains the slots and the buttons
    */
-  @NotNull
-  Map<@NotNull Integer, @NotNull Button> generateButtons(@NotNull UUID uuid, int size);
+  Optional<Map<@NotNull Integer, @NotNull Button>> generateButtons(@NotNull UUID uuid, int size);
 
   /**
    * Get the name of the mask

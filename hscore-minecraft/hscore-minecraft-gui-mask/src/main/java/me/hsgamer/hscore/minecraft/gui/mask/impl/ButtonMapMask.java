@@ -76,8 +76,8 @@ public class ButtonMapMask extends BaseMask {
   }
 
   @Override
-  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid, int size) {
-    return buttonMap;
+  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, int size) {
+    return Optional.of(buttonMap);
   }
 
   @Override

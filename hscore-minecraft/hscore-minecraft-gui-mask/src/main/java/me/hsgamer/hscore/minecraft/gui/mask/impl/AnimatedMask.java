@@ -98,14 +98,9 @@ public class AnimatedMask extends BaseMask implements IdentifiedUpdatable {
   }
 
   @Override
-  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid, int size) {
-    return masks.get(getCurrentIndex(uuid)).generateButtons(uuid, size);
-  }
-
-  @Override
-  public boolean canView(@NotNull UUID uuid) {
+  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, int size) {
     update(uuid);
-    return masks.get(getCurrentIndex(uuid)).canView(uuid);
+    return masks.get(getCurrentIndex(uuid)).generateButtons(uuid, size);
   }
 
   @Override

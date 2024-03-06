@@ -44,12 +44,15 @@ public abstract class SequencePaginatedMask extends PaginatedMask {
   public abstract List<@NotNull Button> getButtons(UUID uuid);
 
   @Override
-  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid, int size) {
-    List<Button> buttons = getButtons(uuid);
+  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, int size, int pageNumber) {
     List<Integer> slots = this.maskSlot.getSlots(uuid);
+    List<Button> buttons = getButtons(uuid);
     if (buttons.isEmpty() || slots.isEmpty()) {
-      return Collections.emptyMap();
+      return Optional.empty();
     }
+
+    int pageAmount = buttons.size();
+    pageAmount = this.getAndSetExactPage(uuid, pageNumber, pageAmount);
 
     Map<Integer, Button> map = new HashMap<>();
     int basePage = this.getPage(uuid);
@@ -59,18 +62,14 @@ public abstract class SequencePaginatedMask extends PaginatedMask {
     for (int i = 0; i < slotsSize; i++) {
       int index = i + basePage;
       if (this.cycle) {
-        index = this.getExactPage(index, uuid);
+        index = this.getExactPage(index, pageAmount);
       } else if (index >= buttonsSize) {
         break;
       }
       map.put(slots.get(i), buttons.get(index));
     }
-    return map;
-  }
 
-  @Override
-  public int getPageAmount(@NotNull UUID uuid) {
-    return getButtons(uuid).size();
+    return Optional.of(map);
   }
 
   @Override

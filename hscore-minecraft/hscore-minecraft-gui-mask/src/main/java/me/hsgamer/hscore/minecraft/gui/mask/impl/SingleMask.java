@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -29,8 +30,8 @@ public class SingleMask extends BaseMask {
   }
 
   @Override
-  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid, int size) {
-    return Collections.singletonMap(this.slot, this.button);
+  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, int size) {
+    return Optional.of(Collections.singletonMap(this.slot, this.button));
   }
 
   @Override

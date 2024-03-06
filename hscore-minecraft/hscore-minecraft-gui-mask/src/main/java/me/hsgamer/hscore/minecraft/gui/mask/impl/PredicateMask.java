@@ -6,18 +6,15 @@ import me.hsgamer.hscore.minecraft.gui.mask.Mask;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.function.Predicate;
 
 /**
  * The mask with predicate
  */
 public class PredicateMask extends BaseMask {
-  private final Set<UUID> failToViewList = new ConcurrentSkipListSet<>();
   private Predicate<UUID> viewPredicate = uuid -> true;
   private Mask mask;
   private Mask fallbackMask;
@@ -93,22 +90,11 @@ public class PredicateMask extends BaseMask {
   }
 
   @Override
-  public boolean canView(@NotNull UUID uuid) {
+  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, int size) {
     if (viewPredicate.test(uuid)) {
-      failToViewList.remove(uuid);
-      return mask != null && mask.canView(uuid);
+      return mask != null ? mask.generateButtons(uuid, size) : Optional.empty();
     } else {
-      failToViewList.add(uuid);
-      return fallbackMask != null && fallbackMask.canView(uuid);
-    }
-  }
-
-  @Override
-  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid, int size) {
-    if (failToViewList.contains(uuid)) {
-      return fallbackMask != null ? fallbackMask.generateButtons(uuid, size) : Collections.emptyMap();
-    } else {
-      return mask != null ? mask.generateButtons(uuid, size) : Collections.emptyMap();
+      return fallbackMask != null ? fallbackMask.generateButtons(uuid, size) : Optional.empty();
     }
   }
 

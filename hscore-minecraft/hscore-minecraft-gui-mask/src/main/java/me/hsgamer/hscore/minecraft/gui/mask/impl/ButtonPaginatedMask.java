@@ -44,15 +44,17 @@ public abstract class ButtonPaginatedMask extends PaginatedMask {
   public abstract List<@NotNull Button> getButtons(@NotNull UUID uuid);
 
   @Override
-  public @NotNull Map<Integer, Button> generateButtons(@NotNull UUID uuid, int size) {
-    List<Button> buttons = getButtons(uuid);
+  protected Optional<Map<@NotNull Integer, @NotNull Button>> generateButtons(@NotNull UUID uuid, int size, int pageNumber) {
     List<Integer> slots = this.maskSlot.getSlots(uuid);
+    List<Button> buttons = getButtons(uuid);
     if (buttons.isEmpty() || slots.isEmpty()) {
-      return Collections.emptyMap();
+      return Optional.empty();
     }
 
+    int pageAmount = (int) Math.ceil((double) getButtons(uuid).size() / slots.size());
+    pageNumber = this.getAndSetExactPage(uuid, pageNumber, pageAmount);
+
     Map<Integer, Button> map = new HashMap<>();
-    int pageNumber = this.getPage(uuid);
     int slotsSize = slots.size();
     int offset = pageNumber * slotsSize;
     int buttonsSize = buttons.size();
@@ -64,17 +66,12 @@ public abstract class ButtonPaginatedMask extends PaginatedMask {
       }
       map.put(slots.get(i), buttons.get(index));
     }
-    return map;
+
+    return Optional.of(map);
   }
 
   @Override
   public void stop() {
     this.pageNumberMap.clear();
-  }
-
-  @Override
-  public int getPageAmount(@NotNull UUID uuid) {
-    List<Integer> slots = this.maskSlot.getSlots(uuid);
-    return slots.isEmpty() ? 0 : (int) Math.ceil((double) getButtons(uuid).size() / slots.size());
   }
 }
