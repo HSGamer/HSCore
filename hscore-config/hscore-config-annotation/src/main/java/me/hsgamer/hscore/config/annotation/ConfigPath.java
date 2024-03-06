@@ -1,7 +1,7 @@
 package me.hsgamer.hscore.config.annotation;
 
 import me.hsgamer.hscore.config.annotation.converter.Converter;
-import me.hsgamer.hscore.config.annotation.converter.DefaultConverter;
+import me.hsgamer.hscore.config.annotation.converter.impl.DefaultConverter;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.ElementType;

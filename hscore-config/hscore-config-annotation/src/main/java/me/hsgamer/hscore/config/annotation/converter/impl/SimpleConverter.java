@@ -1,4 +1,6 @@
-package me.hsgamer.hscore.config.annotation.converter;
+package me.hsgamer.hscore.config.annotation.converter.impl;
+
+import me.hsgamer.hscore.config.annotation.converter.Converter;
 
 import java.util.function.UnaryOperator;
 

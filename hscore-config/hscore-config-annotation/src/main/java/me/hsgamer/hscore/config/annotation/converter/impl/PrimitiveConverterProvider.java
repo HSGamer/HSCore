@@ -1,4 +1,7 @@
-package me.hsgamer.hscore.config.annotation.converter;
+package me.hsgamer.hscore.config.annotation.converter.impl;
+
+import me.hsgamer.hscore.config.annotation.converter.Converter;
+import me.hsgamer.hscore.config.annotation.converter.ConverterProvider;
 
 import java.util.Objects;
 import java.util.Optional;
