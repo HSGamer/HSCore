@@ -1,8 +1,7 @@
 name: Build & Check
 
 on:
-  push:
-    branches: [ master ]
+  - push
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
