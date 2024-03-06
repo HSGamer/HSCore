@@ -28,4 +28,11 @@ public @interface ConfigPath {
    * @return the converter
    */
   @NotNull Class<? extends Converter> converter() default DefaultConverter.class;
+
+  /**
+   * Get the priority
+   *
+   * @return the priority
+   */
+  int priority() default 0;
 }

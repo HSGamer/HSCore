@@ -48,7 +48,7 @@ public class AnnotatedConfig extends DecorativeConfig {
     List<Field> validFields = new ArrayList<>();
     Arrays.stream(this.getClass().getDeclaredFields())
       .filter(this::checkPathField)
-      .sorted(Comparator.comparingInt(Field::hashCode))
+      .sorted(this::compareField)
       .forEach(field -> {
         ConfigPath configPath = field.getAnnotation(ConfigPath.class);
         pathFieldMap.put(new PathString(configPath.value()), field);
@@ -95,6 +95,20 @@ public class AnnotatedConfig extends DecorativeConfig {
       return false;
     }
     return true;
+  }
+
+  /**
+   * Compare the fields
+   *
+   * @param field1 the first field
+   * @param field2 the second field
+   *
+   * @return the comparison result
+   */
+  private int compareField(Field field1, Field field2) {
+    ConfigPath configPath1 = field1.getAnnotation(ConfigPath.class);
+    ConfigPath configPath2 = field2.getAnnotation(ConfigPath.class);
+    return Integer.compare(configPath1.priority(), configPath2.priority());
   }
 
   private void setupField(Field field) {

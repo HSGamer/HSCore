@@ -12,7 +12,10 @@ import me.hsgamer.hscore.config.proxy.defaulthandler.OldJavaDefaultMethodHandler
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The internal invocation handler to map the interface to the config
@@ -50,7 +53,7 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
     this.stickyValue = stickyValue;
 
     Arrays.stream(this.clazz.getDeclaredMethods())
-      .sorted(Comparator.comparingInt(Method::hashCode))
+      .sorted(ConfigInvocationHandler::compareMethod)
       .forEach(this::setupMethod);
 
     if (addDefault) {
@@ -58,6 +61,15 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
       this.setupClassComment();
       this.config.save();
     }
+  }
+
+  private static int compareMethod(Method method1, Method method2) {
+    if (method1.equals(method2) || !method1.isAnnotationPresent(ConfigPath.class) || !method2.isAnnotationPresent(ConfigPath.class)) {
+      return 0;
+    }
+    ConfigPath configPath1 = method1.getAnnotation(ConfigPath.class);
+    ConfigPath configPath2 = method2.getAnnotation(ConfigPath.class);
+    return Integer.compare(configPath1.priority(), configPath2.priority());
   }
 
   /**
