@@ -21,7 +21,6 @@
     <module>hscore-bukkit-utils</module>
     <module>hscore-bukkit-command</module>
     <module>hscore-bukkit-command-sub</module>
-    <module>hscore-bukkit-scheduler</module>
     <module>hscore-bukkit-config</module>
     <module>hscore-bukkit-config-extra</module>
     <module>hscore-bukkit-click-type</module>
@@ -29,8 +28,6 @@
     <module>hscore-bukkit-item</module>
     <module>hscore-bukkit-gui</module>
     <module>hscore-bukkit-gui-button</module>
-    <module>hscore-bukkit-simpleplugin</module>
-    <module>hscore-bukkit-baseplugin</module>
     <module>hscore-bukkit-channel</module>
     <module>hscore-bukkit-key</module>
     <module>hscore-bukkit-listener</module>
