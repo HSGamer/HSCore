@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Methods to validate
@@ -25,7 +26,6 @@ public final class Validate {
    *
    * @return the number
    */
-  @NotNull
   public static Optional<BigDecimal> getNumber(@NotNull String input) {
     try {
       return Optional.of(new BigDecimal(input));
@@ -35,26 +35,48 @@ public final class Validate {
   }
 
   /**
-   * Check if it's a positive number
+   * Convert to URL
    *
    * @param input the string
    *
-   * @return whether it's positive
+   * @return the URL
    */
-  public static boolean isValidPositiveNumber(@NotNull String input) {
-    Optional<BigDecimal> number = getNumber(input);
-    return number.filter(bigDecimal -> bigDecimal.compareTo(BigDecimal.ZERO) > 0).isPresent();
+  public static Optional<URL> getURL(@NotNull String input) {
+    try {
+      return Optional.of(new URL(input));
+    } catch (Exception e) {
+      return Optional.empty();
+    }
   }
 
   /**
-   * Check if the string is a valid number
+   * Convert to Base64
    *
-   * @param input the string
+   * @param input the input
    *
-   * @return whether it's valid
+   * @return the Base64
    */
-  public static boolean isValidInteger(@NotNull String input) {
-    return getNumber(input).isPresent();
+  public static Optional<byte[]> getBase64(@NotNull String input) {
+    try {
+      return Optional.of(Base64.getDecoder().decode(input));
+    } catch (Exception e) {
+      return Optional.empty();
+    }
+  }
+
+  /**
+   * Convert to UUID
+   *
+   * @param input the input
+   *
+   * @return the UUID
+   */
+  public static Optional<UUID> getUUID(@NotNull String input) {
+    try {
+      return Optional.of(UUID.fromString(input));
+    } catch (Exception e) {
+      return Optional.empty();
+    }
   }
 
   /**
@@ -128,48 +150,5 @@ public final class Validate {
    */
   public static boolean isNullOrEmpty(@Nullable String string) {
     return string == null || string.isEmpty();
-  }
-
-  /**
-   * Check if the string is a valid URL
-   *
-   * @param string the input string
-   *
-   * @return true if it is
-   */
-  public static boolean isValidURL(String string) {
-    try {
-      new URL(string).toURI();
-      return true;
-    } catch (Exception e) {
-      return false;
-    }
-  }
-
-  /**
-   * Check if the string is a valid {@link java.util.UUID}
-   *
-   * @param string the input string
-   *
-   * @return true if it is
-   */
-  public static boolean isValidUUID(String string) {
-    return string.matches("[\\da-f]{8}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{12}");
-  }
-
-  /**
-   * Check if the string is a valid Base64 string
-   *
-   * @param string the input string
-   *
-   * @return true if it is
-   */
-  public static boolean isValidBase64(String string) {
-    try {
-      Base64.getDecoder().decode(string);
-      return true;
-    } catch (Exception e) {
-      return false;
-    }
   }
 }

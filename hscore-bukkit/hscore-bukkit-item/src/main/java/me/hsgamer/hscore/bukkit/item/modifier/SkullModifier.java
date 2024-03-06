@@ -11,8 +11,10 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.net.URL;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -43,15 +45,24 @@ public class SkullModifier implements ItemMetaModifier, ItemMetaComparator {
   private String skullString = "";
 
   private static void setSkull(SkullMeta meta, String skull) {
-    if (Validate.isValidUUID(skull)) {
-      skullHandler.setSkullByUUID(meta, UUID.fromString(skull));
-    } else if (Validate.isValidURL(skull)) {
-      skullHandler.setSkullByURL(meta, skull);
-    } else if (MOJANG_SHA256_APPROX.matcher(skull).matches()) {
-      skullHandler.setSkullByURL(meta, "https://textures.minecraft.net/texture/" + skull);
-    } else {
-      skullHandler.setSkullByName(meta, skull);
+    Optional<URL> url = Validate.getURL(skull);
+    if (url.isPresent()) {
+      skullHandler.setSkullByURL(meta, url.get());
+      return;
     }
+
+    if (MOJANG_SHA256_APPROX.matcher(skull).matches()) {
+      skullHandler.setSkullByURL(meta, "https://textures.minecraft.net/texture/" + skull);
+      return;
+    }
+
+    Optional<UUID> uuid = Validate.getUUID(skull);
+    if (uuid.isPresent()) {
+      skullHandler.setSkullByUUID(meta, uuid.get());
+      return;
+    }
+
+    skullHandler.setSkullByName(meta, skull);
   }
 
   private static SkullMeta getSkullMeta(String skull) {
