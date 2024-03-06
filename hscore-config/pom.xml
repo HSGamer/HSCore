@@ -13,7 +13,6 @@
 
   <modules>
     <module>hscore-config-common</module>
-    <module>hscore-config-path</module>
     <module>hscore-config-annotation</module>
     <module>hscore-config-annotated</module>
     <module>hscore-config-proxy</module>
