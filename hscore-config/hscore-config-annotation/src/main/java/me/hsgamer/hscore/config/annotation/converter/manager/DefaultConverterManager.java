@@ -1,9 +1,6 @@
 package me.hsgamer.hscore.config.annotation.converter.manager;
 
-import me.hsgamer.hscore.config.annotation.converter.Converter;
-import me.hsgamer.hscore.config.annotation.converter.DefaultConverter;
-import me.hsgamer.hscore.config.annotation.converter.PrimitiveConverter;
-import me.hsgamer.hscore.config.annotation.converter.SimpleConverter;
+import me.hsgamer.hscore.config.annotation.converter.*;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -11,34 +8,18 @@ import java.math.BigInteger;
 import java.net.URI;
 import java.net.URL;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * A manager to specify a default {@link Converter} for a type
  */
 public final class DefaultConverterManager {
+  private static final List<ConverterProvider> PROVIDERS = new ArrayList<>();
   private static final Map<Type, Converter> CONVERTER_MAP = new HashMap<>();
 
   static {
+    registerProvider(new PrimitiveConverterProvider());
     registerConverter(String.class, new SimpleConverter(Objects::toString));
-    registerConverter(boolean.class, new PrimitiveConverter(boolean.class));
-    registerConverter(Boolean.class, new PrimitiveConverter(Boolean.class));
-    registerConverter(byte.class, new PrimitiveConverter(byte.class));
-    registerConverter(Byte.class, new PrimitiveConverter(Byte.class));
-    registerConverter(short.class, new PrimitiveConverter(short.class));
-    registerConverter(Short.class, new PrimitiveConverter(Short.class));
-    registerConverter(int.class, new PrimitiveConverter(int.class));
-    registerConverter(Integer.class, new PrimitiveConverter(Integer.class));
-    registerConverter(long.class, new PrimitiveConverter(long.class));
-    registerConverter(Long.class, new PrimitiveConverter(Long.class));
-    registerConverter(float.class, new PrimitiveConverter(float.class));
-    registerConverter(Float.class, new PrimitiveConverter(Float.class));
-    registerConverter(double.class, new PrimitiveConverter(double.class));
-    registerConverter(Double.class, new PrimitiveConverter(Double.class));
-    registerConverter(char.class, new PrimitiveConverter(char.class));
-    registerConverter(Character.class, new PrimitiveConverter(Character.class));
     registerConverter(URI.class, new Converter() {
       @Override
       public Object convert(Object raw) {
@@ -132,6 +113,15 @@ public final class DefaultConverterManager {
   }
 
   /**
+   * Register a converter provider
+   *
+   * @param provider the provider
+   */
+  public static void registerProvider(ConverterProvider provider) {
+    PROVIDERS.add(provider);
+  }
+
+  /**
    * Register the converter for the type
    *
    * @param type      the type class
@@ -160,7 +150,18 @@ public final class DefaultConverterManager {
    */
   public static Converter getConverterIfDefault(Type type, Converter converter) {
     if (converter instanceof DefaultConverter) {
-      return CONVERTER_MAP.getOrDefault(type, converter);
+      return CONVERTER_MAP.computeIfAbsent(type, key -> {
+        if (key instanceof Class) {
+          Class<?> clazz = (Class<?>) key;
+          for (ConverterProvider provider : PROVIDERS) {
+            Optional<Converter> optionalConverter = provider.getConverter(clazz);
+            if (optionalConverter.isPresent()) {
+              return optionalConverter.get();
+            }
+          }
+        }
+        return converter;
+      });
     }
     return converter;
   }
