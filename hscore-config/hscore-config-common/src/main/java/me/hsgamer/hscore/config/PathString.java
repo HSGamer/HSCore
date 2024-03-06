@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.config;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -8,7 +10,7 @@ import java.util.regex.Pattern;
 /**
  * The path string to use in {@link Config}
  */
-public class PathString {
+public class PathString implements Comparable<PathString> {
   /**
    * The root path
    */
@@ -204,5 +206,17 @@ public class PathString {
   @Override
   public int hashCode() {
     return Arrays.hashCode(path);
+  }
+
+  @Override
+  public int compareTo(@NotNull PathString o) {
+    int length = Math.min(path.length, o.path.length);
+    for (int i = 0; i < length; i++) {
+      int compare = path[i].compareTo(o.path[i]);
+      if (compare != 0) {
+        return compare;
+      }
+    }
+    return Integer.compare(path.length, o.path.length);
   }
 }
