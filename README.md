@@ -11,6 +11,7 @@
 ## Affiliated Libraries
 
 Part of the code in this repository was moved to the following repositories:
+
 - [MineLib](https://github.com/ProjectUnified/MineLib)
 
 ## Add as a dependency
