@@ -18,7 +18,6 @@
   <modules>
     <module>hscore-bukkit-expansion</module>
     <module>hscore-bukkit-utils</module>
-    <module>hscore-bukkit-command</module>
     <module>hscore-bukkit-command-sub</module>
     <module>hscore-bukkit-config</module>
     <module>hscore-bukkit-config-extra</module>
