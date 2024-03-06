@@ -101,42 +101,6 @@ public final class BukkitUtils {
   }
 
   /**
-   * Check if the string is the username
-   *
-   * @param string            the input string
-   * @param allowedCharacters the allowed characters
-   *
-   * @return true if it is
-   *
-   * @see <a href="https://github.com/CryptoMorin/XSeries/blob/30544507ad1dd1322936caa41cc1fc28c80c4565/src/main/java/com/cryptomorin/xseries/SkullUtils.java#L301-L317">XSeries's Code</a>
-   */
-  public static boolean isUsername(@NotNull String string, List<Character> allowedCharacters) {
-    int len = string.length();
-    if (len > 16) return false;
-
-    for (int i = 0; i < string.length(); i++) {
-      char ch = string.charAt(i);
-      if (!Character.isLetterOrDigit(ch) && !allowedCharacters.contains(ch)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  /**
-   * Check if the string is the username
-   *
-   * @param string the input string
-   *
-   * @return true if it is
-   *
-   * @see #isUsername(String, List)
-   */
-  public static boolean isUsername(@NotNull String string) {
-    return isUsername(string, Arrays.asList('_', '-', '.'));
-  }
-
-  /**
    * Center the location
    *
    * @param location the location

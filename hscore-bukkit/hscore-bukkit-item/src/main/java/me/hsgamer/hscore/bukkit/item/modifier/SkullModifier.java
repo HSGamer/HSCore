@@ -1,7 +1,6 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
 import me.hsgamer.hscore.bukkit.skull.SkullHandler;
-import me.hsgamer.hscore.bukkit.utils.BukkitUtils;
 import me.hsgamer.hscore.bukkit.utils.VersionUtils;
 import me.hsgamer.hscore.common.StringReplacer;
 import me.hsgamer.hscore.common.Validate;
@@ -44,14 +43,14 @@ public class SkullModifier implements ItemMetaModifier, ItemMetaComparator {
   private String skullString = "";
 
   private static void setSkull(SkullMeta meta, String skull) {
-    if (BukkitUtils.isUsername(skull)) {
-      skullHandler.setSkullByName(meta, skull);
-    } else if (Validate.isValidUUID(skull)) {
+    if (Validate.isValidUUID(skull)) {
       skullHandler.setSkullByUUID(meta, UUID.fromString(skull));
     } else if (Validate.isValidURL(skull)) {
       skullHandler.setSkullByURL(meta, skull);
     } else if (MOJANG_SHA256_APPROX.matcher(skull).matches()) {
       skullHandler.setSkullByURL(meta, "https://textures.minecraft.net/texture/" + skull);
+    } else {
+      skullHandler.setSkullByName(meta, skull);
     }
   }
 
