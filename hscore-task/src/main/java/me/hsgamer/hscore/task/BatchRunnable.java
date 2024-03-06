@@ -1,13 +1,12 @@
 package me.hsgamer.hscore.task;
 
+import me.hsgamer.hscore.task.element.TaskData;
 import me.hsgamer.hscore.task.element.TaskPool;
 import me.hsgamer.hscore.task.element.TaskProcess;
 
 import java.util.Comparator;
-import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -18,7 +17,7 @@ import java.util.function.Consumer;
  */
 public class BatchRunnable implements Runnable {
   private final Queue<TaskPool> tasks = new PriorityQueue<>(Comparator.comparingInt(TaskPool::getStage));
-  private final Map<String, Object> data;
+  private final TaskData data;
   private final AtomicBoolean isTimeout = new AtomicBoolean(false);
   private long timeout = 0;
   private TimeUnit timeoutUnit = TimeUnit.MILLISECONDS;
@@ -26,17 +25,19 @@ public class BatchRunnable implements Runnable {
   /**
    * Create a new batch runnable
    *
-   * @param data the initial data
+   * @param data the data
    */
-  public BatchRunnable(Map<String, Object> data) {
+  public BatchRunnable(TaskData data) {
     this.data = data;
   }
 
   /**
-   * Create a new batch runnable with no initial data
+   * Create a new batch runnable with the default data storage
+   *
+   * @see TaskData#create()
    */
   public BatchRunnable() {
-    this(new ConcurrentHashMap<>());
+    this(TaskData.create());
   }
 
   @Override
@@ -48,7 +49,7 @@ public class BatchRunnable implements Runnable {
 
     TaskProcess process = new TaskProcess() {
       @Override
-      public Map<String, Object> getData() {
+      public TaskData getData() {
         return data;
       }
 
@@ -177,7 +178,7 @@ public class BatchRunnable implements Runnable {
    *
    * @return the data
    */
-  public Map<String, Object> getData() {
+  public TaskData getData() {
     return data;
   }
 }

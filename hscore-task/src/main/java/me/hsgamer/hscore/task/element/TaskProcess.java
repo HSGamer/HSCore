@@ -2,7 +2,6 @@ package me.hsgamer.hscore.task.element;
 
 import me.hsgamer.hscore.task.BatchRunnable;
 
-import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -15,7 +14,7 @@ public interface TaskProcess {
    *
    * @return the data
    */
-  Map<String, Object> getData();
+  TaskData getData();
 
   /**
    * Notify the next task
