@@ -22,9 +22,9 @@ import java.util.regex.Pattern;
 @SuppressWarnings("deprecation")
 public class SkullModifier implements ItemMetaModifier, ItemMetaComparator {
   /**
-   * <a href="https://github.com/CryptoMorin/XSeries/blob/f7e0e83de5c657229ece8ae5ca386cee581fb8e1/src/main/java/com/cryptomorin/xseries/SkullUtils.java#L95C5-L95C92">...</a>
+   * @see <a href="https://github.com/CryptoMorin/XSeries/blob/eaaa6dedbf542ea8a38c6a4726538508d9e4f8e7/src/main/java/com/cryptomorin/xseries/SkullUtils.java#L96C74-L96C89">XSeries</a>
    */
-  private static final Pattern MOJANG_SHA256_APPROX = Pattern.compile("[a-z0-9]{60,70}");
+  private static final Pattern MOJANG_SHA256_APPROX = Pattern.compile("[0-9a-z]{55,70}");
   private static final SkullMeta delegateSkullMeta;
   private static final SkullHandler skullHandler;
 
