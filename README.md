@@ -8,6 +8,11 @@
 * I created this core because I am too lazy to change/fix/update the same code over and over again.
 * This also includes some simple/useful/complex/dumb/... features used mainly in my projects.
 
+## Affiliated Libraries
+
+Part of the code in this repository was moved to the following repositories:
+- [MineLib](https://github.com/ProjectUnified/MineLib)
+
 ## Add as a dependency
 
 ### Maven
