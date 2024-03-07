@@ -19,38 +19,51 @@ public interface StringReplacer {
   StringReplacer DUMMY = original -> null;
 
   /**
-   * Replace a string based on the unique id
+   * Combine multiple string replacers
    *
-   * @param original        the original string
-   * @param uuid            the unique id
-   * @param stringReplacers the list of string replacer
+   * @param stringReplacers the string replacers
    *
-   * @return the replaced string
+   * @return the combined string replacer
    */
   @NotNull
-  static String replace(@NotNull String original, @Nullable UUID uuid, @NotNull Collection<? extends StringReplacer> stringReplacers) {
-    String replaced = original;
-    for (StringReplacer replacer : stringReplacers) {
-      String newReplaced = replacer.tryReplace(replaced, uuid);
-      if (newReplaced != null) {
-        replaced = newReplaced;
+  static StringReplacer combine(@NotNull Collection<? extends StringReplacer> stringReplacers) {
+    return new StringReplacer() {
+      @Override
+      public @NotNull String replace(@NotNull String original) {
+        String replaced = original;
+        for (StringReplacer replacer : stringReplacers) {
+          String newReplaced = replacer.replace(replaced);
+          if (newReplaced != null) {
+            replaced = newReplaced;
+          }
+        }
+        return replaced;
       }
-    }
-    return replaced;
+
+      @Override
+      public @NotNull String replace(@NotNull String original, @NotNull UUID uuid) {
+        String replaced = original;
+        for (StringReplacer replacer : stringReplacers) {
+          String newReplaced = replacer.replace(replaced, uuid);
+          if (newReplaced != null) {
+            replaced = newReplaced;
+          }
+        }
+        return replaced;
+      }
+    };
   }
 
   /**
-   * Replace a string based on the unique id
+   * Combine multiple string replacers
    *
-   * @param original        the original string
-   * @param uuid            the unique id
-   * @param stringReplacers the list of string replacer
+   * @param stringReplacers the string replacers
    *
-   * @return the replaced string
+   * @return the combined string replacer
    */
   @NotNull
-  static String replace(@NotNull String original, @Nullable UUID uuid, @NotNull StringReplacer... stringReplacers) {
-    return replace(original, uuid, Arrays.asList(stringReplacers));
+  static StringReplacer combine(@NotNull StringReplacer... stringReplacers) {
+    return combine(Arrays.asList(stringReplacers));
   }
 
   /**
