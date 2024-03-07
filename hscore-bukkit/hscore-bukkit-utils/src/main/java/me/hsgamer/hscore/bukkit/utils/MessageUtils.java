@@ -4,14 +4,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 /**
  * Methods on messages on Bukkit
  */
 public final class MessageUtils {
-  private static final Map<Object, Supplier<String>> objectPrefixMap = new HashMap<>();
   private static Supplier<String> defaultPrefix = () -> "&7[&cHSCore&7] &f";
 
   private MessageUtils() {
@@ -53,17 +54,6 @@ public final class MessageUtils {
   }
 
   /**
-   * Send message with the prefix from the object
-   *
-   * @param receiver the receiver
-   * @param message  the message
-   * @param object   the object
-   */
-  public static void sendMessage(@NotNull final CommandSender receiver, @NotNull final String message, @NotNull final Object object) {
-    sendMessage(receiver, message, getPrefix(object).orElse(getPrefix()));
-  }
-
-  /**
    * Send message
    *
    * @param receivers the collection of receivers
@@ -93,17 +83,6 @@ public final class MessageUtils {
    */
   public static void sendMessage(@NotNull final Collection<CommandSender> receivers, @NotNull final String message, @NotNull final Supplier<String> prefix) {
     receivers.forEach(player -> sendMessage(player, message, prefix));
-  }
-
-  /**
-   * Send message with the prefix from the plugin
-   *
-   * @param receivers the collection of receivers
-   * @param message   the message
-   * @param object    the object
-   */
-  public static void sendMessage(@NotNull Collection<CommandSender> receivers, @NotNull final String message, @NotNull final Object object) {
-    receivers.forEach(player -> sendMessage(player, message, object));
   }
 
   /**
@@ -139,17 +118,6 @@ public final class MessageUtils {
   }
 
   /**
-   * Send message with the prefix from the plugin
-   *
-   * @param uuid    the unique id of the receiver
-   * @param message the message
-   * @param object  the object
-   */
-  public static void sendMessage(@NotNull final UUID uuid, @NotNull final String message, @NotNull final Object object) {
-    sendMessage(uuid, message, getPrefix(object).orElse(getPrefix()));
-  }
-
-  /**
    * Get the default prefix
    *
    * @return the prefix
@@ -175,45 +143,5 @@ public final class MessageUtils {
    */
   public static void setPrefix(@NotNull final String prefix) {
     setPrefix(() -> prefix);
-  }
-
-  /**
-   * Get prefix of an object
-   *
-   * @param object the object
-   *
-   * @return the prefix
-   */
-  public static Optional<String> getPrefix(@NotNull final Object object) {
-    return Optional.ofNullable(objectPrefixMap.get(object)).map(Supplier::get);
-  }
-
-  /**
-   * Set the prefix of an object
-   *
-   * @param object the object
-   * @param prefix the prefix
-   */
-  public static void setPrefix(@NotNull final Object object, @NotNull final Supplier<String> prefix) {
-    objectPrefixMap.put(object, prefix);
-  }
-
-  /**
-   * Set the prefix of an object
-   *
-   * @param object the object
-   * @param prefix the prefix
-   */
-  public static void setPrefix(@NotNull final Object object, @NotNull final String prefix) {
-    setPrefix(object, () -> prefix);
-  }
-
-  /**
-   * Remove the prefix of an object
-   *
-   * @param object the object
-   */
-  public static void removePrefix(@NotNull final Object object) {
-    objectPrefixMap.remove(object);
   }
 }
