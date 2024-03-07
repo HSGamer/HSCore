@@ -145,10 +145,18 @@ public interface StringReplacer {
    * @param original the original string
    * @param uuid     the unique id
    *
-   * @return the replaced string
+   * @return the replaced string, or an empty string if the replaced string is null
    */
-  @Nullable
+  @NotNull
   default String tryReplace(@NotNull String original, @Nullable UUID uuid) {
-    return uuid == null ? replace(original) : replace(original, uuid);
+    if (uuid != null) {
+      String replaced = replace(original, uuid);
+      if (replaced != null) {
+        return replaced;
+      }
+    }
+
+    String replaced = replace(original);
+    return replaced != null ? replaced : "";
   }
 }
