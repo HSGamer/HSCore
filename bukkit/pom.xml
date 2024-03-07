@@ -16,21 +16,21 @@
   </properties>
 
   <modules>
-    <module>hscore-bukkit-expansion</module>
-    <module>hscore-bukkit-utils</module>
-    <module>hscore-bukkit-command-sub</module>
-    <module>hscore-bukkit-config</module>
-    <module>hscore-bukkit-config-converter</module>
-    <module>hscore-bukkit-click-type</module>
-    <module>hscore-bukkit-skull</module>
-    <module>hscore-bukkit-item</module>
-    <module>hscore-bukkit-gui</module>
-    <module>hscore-bukkit-gui-button</module>
-    <module>hscore-bukkit-channel</module>
-    <module>hscore-bukkit-key</module>
-    <module>hscore-bukkit-listener</module>
-    <module>hscore-bukkit-block</module>
-    <module>hscore-bukkit-variable</module>
+    <module>bukkit-expansion</module>
+    <module>bukkit-utils</module>
+    <module>bukkit-command-sub</module>
+    <module>bukkit-config</module>
+    <module>bukkit-config-converter</module>
+    <module>bukkit-click-type</module>
+    <module>bukkit-skull</module>
+    <module>bukkit-item</module>
+    <module>bukkit-gui</module>
+    <module>bukkit-gui-button</module>
+    <module>bukkit-channel</module>
+    <module>bukkit-key</module>
+    <module>bukkit-listener</module>
+    <module>bukkit-block</module>
+    <module>bukkit-variable</module>
   </modules>
 
   <repositories>

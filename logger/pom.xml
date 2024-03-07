@@ -4,22 +4,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>hscore</artifactId>
     <groupId>me.hsgamer</groupId>
+    <artifactId>hscore</artifactId>
     <version>4.4.0-SNAPSHOT</version>
   </parent>
   <packaging>pom</packaging>
-  <artifactId>hscore-config</artifactId>
+
+  <artifactId>hscore-logger</artifactId>
 
   <modules>
-    <module>hscore-config-common</module>
-    <module>hscore-config-annotation</module>
-    <module>hscore-config-annotated</module>
-    <module>hscore-config-proxy</module>
-    <module>hscore-config-simplixstorage</module>
-    <module>hscore-config-simpleconfiguration</module>
-    <module>hscore-config-configurate</module>
-    <module>hscore-config-gson</module>
+    <module>logger-common</module>
+    <module>logger-provider</module>
+    <module>logger-service</module>
+    <module>logger-jul</module>
+    <module>logger-system</module>
+    <module>logger-slf4j</module>
   </modules>
-
 </project>

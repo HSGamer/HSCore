@@ -12,15 +12,15 @@
   <artifactId>hscore-minecraft</artifactId>
   <packaging>pom</packaging>
   <modules>
-    <module>hscore-minecraft-gui</module>
-    <module>hscore-minecraft-gui-button</module>
-    <module>hscore-minecraft-gui-mask</module>
-    <module>hscore-minecraft-gui-simple</module>
-    <module>hscore-minecraft-gui-advanced</module>
-    <module>hscore-minecraft-block</module>
-    <module>hscore-minecraft-block-impl</module>
-    <module>hscore-minecraft-block-utils</module>
-    <module>hscore-minecraft-click-type</module>
-    <module>hscore-minecraft-item</module>
+    <module>minecraft-gui</module>
+    <module>minecraft-gui-button</module>
+    <module>minecraft-gui-mask</module>
+    <module>minecraft-gui-simple</module>
+    <module>minecraft-gui-advanced</module>
+    <module>minecraft-block</module>
+    <module>minecraft-block-impl</module>
+    <module>minecraft-block-utils</module>
+    <module>minecraft-click-type</module>
+    <module>minecraft-item</module>
   </modules>
 </project>

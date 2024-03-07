@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>hscore</artifactId>
+    <groupId>me.hsgamer</groupId>
+    <version>4.4.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>hscore-database</artifactId>
+  <packaging>pom</packaging>
+  <modules>
+    <module>database-common</module>
+    <module>database-driver-mysql</module>
+    <module>database-driver-sqlite</module>
+    <module>database-driver-mariadb</module>
+    <module>database-driver-postgresql</module>
+    <module>database-client-sql</module>
+    <module>database-client-hikari</module>
+    <module>database-client-java</module>
+    <module>database-client-hibernate</module>
+    <module>database-client-jpa</module>
+    <module>database-driver-h2</module>
+    <module>database-driver-sqlserver</module>
+    <module>database-client-h2</module>
+  </modules>
+
+</project>

@@ -39,30 +39,30 @@
   </scm>
 
   <modules>
-    <module>hscore-common</module>
-    <module>hscore-gson</module>
-    <module>hscore-logger</module>
-    <module>hscore-extra</module>
-    <module>hscore-variable</module>
-    <module>hscore-builder</module>
-    <module>hscore-collections</module>
-    <module>hscore-expression</module>
-    <module>hscore-web</module>
-    <module>hscore-request</module>
-    <module>hscore-serializer</module>
-    <module>hscore-config</module>
-    <module>hscore-expansion</module>
-    <module>hscore-checker</module>
-    <module>hscore-database</module>
-    <module>hscore-ui</module>
-    <module>hscore-downloader</module>
-    <module>hscore-crontime</module>
-    <module>hscore-task</module>
-    <module>hscore-minecraft</module>
-    <module>hscore-bukkit</module>
-    <module>hscore-bungeecord</module>
-    <module>hscore-minestom</module>
-    <module>hscore-license</module>
+    <module>common</module>
+    <module>gson</module>
+    <module>logger</module>
+    <module>extra</module>
+    <module>variable</module>
+    <module>builder</module>
+    <module>collections</module>
+    <module>expression</module>
+    <module>web</module>
+    <module>request</module>
+    <module>serializer</module>
+    <module>config</module>
+    <module>expansion</module>
+    <module>checker</module>
+    <module>database</module>
+    <module>ui</module>
+    <module>downloader</module>
+    <module>crontime</module>
+    <module>task</module>
+    <module>minecraft</module>
+    <module>bukkit</module>
+    <module>bungeecord</module>
+    <module>minestom</module>
+    <module>license</module>
   </modules>
 
   <properties>

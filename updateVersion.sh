@@ -1,16 +1,16 @@
 #!/bin/bash
 UPDATE_DIR="
-hscore-bukkit
-hscore-config
-hscore-database
-hscore-checker
-hscore-bungeecord
-hscore-minestom
-hscore-downloader
-hscore-minecraft
-hscore-expansion
-hscore-logger
-hscore-license
+bukkit
+config
+database
+checker
+bungeecord
+minestom
+downloader
+minecraft
+expansion
+logger
+license
 "
 
 BASE_DIR="$(pwd)"

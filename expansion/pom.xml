@@ -2,18 +2,20 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>hscore</artifactId>
     <groupId>me.hsgamer</groupId>
+    <artifactId>hscore</artifactId>
     <version>4.4.0-SNAPSHOT</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
-
-  <artifactId>hscore-downloader</artifactId>
   <packaging>pom</packaging>
+  <artifactId>hscore-expansion</artifactId>
+
   <modules>
-    <module>hscore-downloader-core</module>
-    <module>hscore-downloader-json</module>
-    <module>hscore-downloader-web-stream</module>
+    <module>expansion-common</module>
+    <module>expansion-manifest</module>
+    <module>expansion-properties</module>
+    <module>expansion-extra</module>
+    <module>expansion-gson</module>
   </modules>
 </project>
