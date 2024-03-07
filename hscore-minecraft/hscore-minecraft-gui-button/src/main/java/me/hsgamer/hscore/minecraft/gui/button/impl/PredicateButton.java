@@ -134,7 +134,7 @@ public class PredicateButton implements Button {
   }
 
   @Override
-  public void handleAction(ClickEvent event) {
+  public void handleAction(@NotNull ClickEvent event) {
     UUID uuid = event.getViewerID();
     if (failToViewList.contains(uuid)) {
       fallbackButton.handleAction(event);

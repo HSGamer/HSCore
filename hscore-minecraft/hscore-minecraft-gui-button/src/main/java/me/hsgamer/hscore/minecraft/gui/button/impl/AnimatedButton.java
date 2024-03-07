@@ -94,7 +94,7 @@ public class AnimatedButton implements Button, IdentifiedUpdatable {
   }
 
   @Override
-  public void handleAction(ClickEvent event) {
+  public void handleAction(@NotNull ClickEvent event) {
     buttons.get(getCurrentIndex(event.getViewerID())).handleAction(event);
   }
 

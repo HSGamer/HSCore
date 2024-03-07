@@ -102,7 +102,7 @@ public class ListButton implements Button {
   }
 
   @Override
-  public void handleAction(ClickEvent event) {
+  public void handleAction(@NotNull ClickEvent event) {
     Optional.ofNullable(currentIndexMap.get(event.getViewerID()))
       .map(buttons::get)
       .ifPresent(button -> button.handleAction(event));
