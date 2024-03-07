@@ -16,10 +16,10 @@ import java.util.stream.Collectors;
 public class ItemFlagModifier implements ItemMetaModifier, ItemMetaComparator {
   private List<String> flagList = Collections.emptyList();
 
-  private Set<ItemFlag> getParsed(UUID uuid, Collection<StringReplacer> stringReplacers) {
+  private Set<ItemFlag> getParsed(UUID uuid, StringReplacer stringReplacer) {
     Set<ItemFlag> flags = new HashSet<>();
     flagList.forEach(string -> {
-      string = StringReplacer.replace(string, uuid, stringReplacers).trim();
+      string = stringReplacer.tryReplace(string, uuid).trim();
       if (string.equalsIgnoreCase("all")) {
         Collections.addAll(flags, ItemFlag.values());
         return;
@@ -34,8 +34,8 @@ public class ItemFlagModifier implements ItemMetaModifier, ItemMetaComparator {
   }
 
   @Override
-  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
-    for (ItemFlag flag : getParsed(uuid, stringReplacers)) {
+  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull StringReplacer stringReplacer) {
+    for (ItemFlag flag : getParsed(uuid, stringReplacer)) {
       meta.addItemFlags(flag);
     }
     return meta;
@@ -48,8 +48,8 @@ public class ItemFlagModifier implements ItemMetaModifier, ItemMetaComparator {
   }
 
   @Override
-  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
-    Set<ItemFlag> list1 = getParsed(uuid, stringReplacers);
+  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull StringReplacer stringReplacer) {
+    Set<ItemFlag> list1 = getParsed(uuid, stringReplacer);
     Set<ItemFlag> list2 = meta.getItemFlags();
     return list1.size() == list2.size() && list1.containsAll(list2);
   }

@@ -6,7 +6,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -29,9 +28,9 @@ public class NameModifier implements ItemMetaModifier, ItemMetaComparator {
   }
 
   @Override
-  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
+  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull StringReplacer stringReplacer) {
     if (this.name != null) {
-      meta.setDisplayName(StringReplacer.replace(name, uuid, stringReplacers));
+      meta.setDisplayName(stringReplacer.tryReplace(name, uuid));
     }
     return meta;
   }
@@ -46,11 +45,11 @@ public class NameModifier implements ItemMetaModifier, ItemMetaComparator {
   }
 
   @Override
-  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
+  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull StringReplacer stringReplacer) {
     if (!meta.hasDisplayName() && this.name == null) {
       return true;
     }
-    String replaced = this.name == null ? "" : StringReplacer.replace(this.name, uuid, stringReplacers);
+    String replaced = this.name == null ? "" : stringReplacer.tryReplace(this.name, uuid);
     return replaced.equals(meta.getDisplayName());
   }
 

@@ -4,8 +4,6 @@ import me.hsgamer.hscore.common.StringReplacer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.UUID;
 
 /**
@@ -17,13 +15,13 @@ public interface ItemComparator<T> {
   /**
    * Compare the modifier of an item
    *
-   * @param item            the item
-   * @param uuid            the unique id
-   * @param stringReplacers the string replacers
+   * @param item           the item
+   * @param uuid           the unique id
+   * @param stringReplacer the string replacer
    *
    * @return true if it matches, otherwise false
    */
-  boolean compare(@NotNull T item, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers);
+  boolean compare(@NotNull T item, @Nullable UUID uuid, StringReplacer stringReplacer);
 
   /**
    * Compare the modifier of an item
@@ -34,7 +32,7 @@ public interface ItemComparator<T> {
    * @return true if it matches, otherwise false
    */
   default boolean compare(@NotNull T item, @Nullable UUID uuid) {
-    return compare(item, uuid, Collections.emptyList());
+    return compare(item, uuid, StringReplacer.DUMMY);
   }
 
   /**
@@ -45,6 +43,6 @@ public interface ItemComparator<T> {
    * @return true if it matches, otherwise false
    */
   default boolean compare(@NotNull T item) {
-    return compare(item, null, Collections.emptyList());
+    return compare(item, null, StringReplacer.DUMMY);
   }
 }

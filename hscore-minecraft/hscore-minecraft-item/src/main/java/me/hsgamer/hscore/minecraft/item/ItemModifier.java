@@ -4,8 +4,6 @@ import me.hsgamer.hscore.common.StringReplacer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.UUID;
 
 /**
@@ -17,14 +15,14 @@ public interface ItemModifier<T> {
   /**
    * Modify the item
    *
-   * @param original        the original item
-   * @param uuid            the unique id
-   * @param stringReplacers the string replacers
+   * @param original       the original item
+   * @param uuid           the unique id
+   * @param stringReplacer the string replacer
    *
    * @return the modified item
    */
   @NotNull
-  T modify(@NotNull T original, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers);
+  T modify(@NotNull T original, @Nullable UUID uuid, @NotNull StringReplacer stringReplacer);
 
   /**
    * Serialize the modifier to an object
@@ -61,7 +59,7 @@ public interface ItemModifier<T> {
    */
   @NotNull
   default T modify(@NotNull T original, @Nullable UUID uuid) {
-    return modify(original, uuid, Collections.emptyList());
+    return modify(original, uuid, StringReplacer.DUMMY);
   }
 
   /**

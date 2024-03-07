@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.URL;
-import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -71,16 +70,12 @@ public class SkullModifier implements ItemMetaModifier, ItemMetaComparator {
     return meta;
   }
 
-  private String getFinalSkullString(UUID uuid, Collection<StringReplacer> replacers) {
-    return StringReplacer.replace(skullString, uuid, replacers);
-  }
-
   @Override
-  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
+  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull StringReplacer stringReplacer) {
     if (!(meta instanceof SkullMeta)) {
       return meta;
     }
-    setSkull((SkullMeta) meta, getFinalSkullString(uuid, stringReplacers));
+    setSkull((SkullMeta) meta, stringReplacer.tryReplace(skullString, uuid));
     return meta;
   }
 
@@ -94,12 +89,12 @@ public class SkullModifier implements ItemMetaModifier, ItemMetaComparator {
   }
 
   @Override
-  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
+  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull StringReplacer stringReplacer) {
     if (!(meta instanceof SkullMeta)) {
       return false;
     }
     return skullHandler.compareSkull(
-      getSkullMeta(getFinalSkullString(uuid, stringReplacers)),
+      getSkullMeta(stringReplacer.tryReplace(skullString, uuid)),
       (SkullMeta) meta
     );
   }

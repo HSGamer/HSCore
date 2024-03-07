@@ -54,9 +54,9 @@ public class PotionEffectModifier implements ItemMetaModifier, ItemMetaComparato
     return potionEffect.getType().getName() + ", " + potionEffect.getDuration() + ", " + potionEffect.getAmplifier();
   }
 
-  private List<PotionEffect> getParsed(UUID uuid, Collection<StringReplacer> stringReplacers) {
+  private List<PotionEffect> getParsed(UUID uuid, StringReplacer stringReplacer) {
     List<String> list = new ArrayList<>(potionEffectList);
-    list.replaceAll(s -> StringReplacer.replace(s, uuid, stringReplacers));
+    list.replaceAll(s -> stringReplacer.tryReplace(s, uuid));
     return list.stream()
       .map(PotionEffectModifier::pastePotionEffect)
       .flatMap(optional -> optional.map(Stream::of).orElseGet(Stream::empty))
@@ -64,10 +64,10 @@ public class PotionEffectModifier implements ItemMetaModifier, ItemMetaComparato
   }
 
   @Override
-  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
+  public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull StringReplacer stringReplacer) {
     if (meta instanceof PotionMeta) {
       PotionMeta potionMeta = (PotionMeta) meta;
-      getParsed(uuid, stringReplacers).forEach(potionEffect -> potionMeta.addCustomEffect(potionEffect, true));
+      getParsed(uuid, stringReplacer).forEach(potionEffect -> potionMeta.addCustomEffect(potionEffect, true));
       return potionMeta;
     }
     return meta;
@@ -86,11 +86,11 @@ public class PotionEffectModifier implements ItemMetaModifier, ItemMetaComparato
   }
 
   @Override
-  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
+  public boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull StringReplacer stringReplacer) {
     if (!(meta instanceof PotionMeta)) {
       return false;
     }
-    Set<PotionEffect> list1 = new HashSet<>(getParsed(uuid, stringReplacers));
+    Set<PotionEffect> list1 = new HashSet<>(getParsed(uuid, stringReplacer));
     List<PotionEffect> list2 = ((PotionMeta) meta).getCustomEffects();
     return list1.size() == list2.size() && list1.containsAll(list2);
   }

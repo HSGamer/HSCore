@@ -106,8 +106,9 @@ public abstract class ItemBuilder<T> {
    */
   public T build(@Nullable UUID uuid) {
     T item = getDefaultItem();
+    StringReplacer stringReplacer = StringReplacer.combine(stringReplacers);
     for (ItemModifier<T> modifier : itemModifiers) {
-      item = modifier.modify(item, uuid, getStringReplacers());
+      item = modifier.modify(item, uuid, stringReplacer);
     }
     return item;
   }

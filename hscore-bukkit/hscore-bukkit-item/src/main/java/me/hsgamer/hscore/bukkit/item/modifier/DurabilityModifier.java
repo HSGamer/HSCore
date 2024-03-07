@@ -8,7 +8,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -19,9 +18,9 @@ public class DurabilityModifier implements ItemComparator<ItemStack>, ItemModifi
   private String durability = "1";
 
   @Override
-  public @NotNull ItemStack modify(@NotNull ItemStack original, UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
+  public @NotNull ItemStack modify(@NotNull ItemStack original, UUID uuid, @NotNull StringReplacer stringReplacer) {
     Validate
-      .getNumber(StringReplacer.replace(durability, uuid, stringReplacers))
+      .getNumber(stringReplacer.tryReplace(durability, uuid))
       .ifPresent(bigDecimal -> original.setDurability(bigDecimal.shortValue()));
     return original;
   }
@@ -43,8 +42,8 @@ public class DurabilityModifier implements ItemComparator<ItemStack>, ItemModifi
   }
 
   @Override
-  public boolean compare(@NotNull ItemStack item, UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
-    return Validate.getNumber(StringReplacer.replace(durability, uuid, stringReplacers))
+  public boolean compare(@NotNull ItemStack item, UUID uuid, @NotNull StringReplacer stringReplacer) {
+    return Validate.getNumber(stringReplacer.tryReplace(durability, uuid))
       .map(bigDecimal -> bigDecimal.shortValue() == item.getDurability())
       .orElse(false);
   }

@@ -7,7 +7,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -17,18 +16,18 @@ public interface ItemMetaComparator extends me.hsgamer.hscore.minecraft.item.Ite
   /**
    * Compare the modifier of an item meta
    *
-   * @param meta            the item meta
-   * @param uuid            the unique id
-   * @param stringReplacers the string replacers
+   * @param meta           the item meta
+   * @param uuid           the unique id
+   * @param stringReplacer the string replacer
    *
    * @return true if it matches, otherwise false
    *
-   * @see #compare(ItemStack, UUID, Collection)
+   * @see #compare(ItemStack, UUID, StringReplacer)
    */
-  boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers);
+  boolean compare(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull StringReplacer stringReplacer);
 
   @Override
-  default boolean compare(@NotNull ItemStack item, @Nullable UUID uuid, @NotNull Collection<StringReplacer> stringReplacers) {
+  default boolean compare(@NotNull ItemStack item, @Nullable UUID uuid, @NotNull StringReplacer stringReplacer) {
     ItemMeta itemMeta;
     try {
       itemMeta = item.getItemMeta();
@@ -39,6 +38,6 @@ public interface ItemMetaComparator extends me.hsgamer.hscore.minecraft.item.Ite
     if (itemMeta == null) {
       return false;
     }
-    return compare(itemMeta, uuid, stringReplacers);
+    return compare(itemMeta, uuid, stringReplacer);
   }
 }
