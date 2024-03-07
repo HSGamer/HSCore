@@ -75,7 +75,7 @@ public class SkullModifier implements ItemMetaModifier, ItemMetaComparator {
     if (!(meta instanceof SkullMeta)) {
       return meta;
     }
-    setSkull((SkullMeta) meta, stringReplacer.tryReplace(skullString, uuid));
+    setSkull((SkullMeta) meta, stringReplacer.replaceOrOriginal(skullString, uuid));
     return meta;
   }
 
@@ -94,7 +94,7 @@ public class SkullModifier implements ItemMetaModifier, ItemMetaComparator {
       return false;
     }
     return skullHandler.compareSkull(
-      getSkullMeta(stringReplacer.tryReplace(skullString, uuid)),
+      getSkullMeta(stringReplacer.replaceOrOriginal(skullString, uuid)),
       (SkullMeta) meta
     );
   }

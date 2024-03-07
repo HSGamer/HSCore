@@ -20,7 +20,7 @@ public class DurabilityModifier implements ItemComparator<ItemStack>, ItemModifi
   @Override
   public @NotNull ItemStack modify(@NotNull ItemStack original, UUID uuid, @NotNull StringReplacer stringReplacer) {
     Validate
-      .getNumber(stringReplacer.tryReplace(durability, uuid))
+      .getNumber(stringReplacer.replaceOrOriginal(durability, uuid))
       .ifPresent(bigDecimal -> original.setDurability(bigDecimal.shortValue()));
     return original;
   }
@@ -43,7 +43,7 @@ public class DurabilityModifier implements ItemComparator<ItemStack>, ItemModifi
 
   @Override
   public boolean compare(@NotNull ItemStack item, UUID uuid, @NotNull StringReplacer stringReplacer) {
-    return Validate.getNumber(stringReplacer.tryReplace(durability, uuid))
+    return Validate.getNumber(stringReplacer.replaceOrOriginal(durability, uuid))
       .map(bigDecimal -> bigDecimal.shortValue() == item.getDurability())
       .orElse(false);
   }

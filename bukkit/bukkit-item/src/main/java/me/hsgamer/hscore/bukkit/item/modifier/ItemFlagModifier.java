@@ -19,7 +19,7 @@ public class ItemFlagModifier implements ItemMetaModifier, ItemMetaComparator {
   private Set<ItemFlag> getParsed(UUID uuid, StringReplacer stringReplacer) {
     Set<ItemFlag> flags = new HashSet<>();
     flagList.forEach(string -> {
-      string = stringReplacer.tryReplace(string, uuid).trim();
+      string = stringReplacer.replaceOrOriginal(string, uuid).trim();
       if (string.equalsIgnoreCase("all")) {
         Collections.addAll(flags, ItemFlag.values());
         return;

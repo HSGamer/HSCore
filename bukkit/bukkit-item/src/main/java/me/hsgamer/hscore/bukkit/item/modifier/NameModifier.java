@@ -30,7 +30,7 @@ public class NameModifier implements ItemMetaModifier, ItemMetaComparator {
   @Override
   public @NotNull ItemMeta modifyMeta(@NotNull ItemMeta meta, @Nullable UUID uuid, @NotNull StringReplacer stringReplacer) {
     if (this.name != null) {
-      meta.setDisplayName(stringReplacer.tryReplace(name, uuid));
+      meta.setDisplayName(stringReplacer.replaceOrOriginal(name, uuid));
     }
     return meta;
   }
@@ -49,7 +49,7 @@ public class NameModifier implements ItemMetaModifier, ItemMetaComparator {
     if (!meta.hasDisplayName() && this.name == null) {
       return true;
     }
-    String replaced = this.name == null ? "" : stringReplacer.tryReplace(this.name, uuid);
+    String replaced = this.name == null ? "" : stringReplacer.replaceOrOriginal(this.name, uuid);
     return replaced.equals(meta.getDisplayName());
   }
 

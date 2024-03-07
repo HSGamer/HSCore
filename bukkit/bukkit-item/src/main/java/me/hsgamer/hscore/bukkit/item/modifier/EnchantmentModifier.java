@@ -35,7 +35,7 @@ public class EnchantmentModifier implements ItemMetaModifier, ItemMetaComparator
   private Map<Enchantment, Integer> getParsed(UUID uuid, StringReplacer stringReplacer) {
     Map<Enchantment, Integer> enchantments = new LinkedHashMap<>();
     for (String string : enchantmentList) {
-      String replaced = stringReplacer.tryReplace(string, uuid);
+      String replaced = stringReplacer.replaceOrOriginal(string, uuid);
       String[] split;
       if (replaced.indexOf(',') != -1) {
         split = replaced.split(",", 2);

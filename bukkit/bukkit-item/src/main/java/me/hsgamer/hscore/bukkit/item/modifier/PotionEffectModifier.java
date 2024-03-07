@@ -56,7 +56,7 @@ public class PotionEffectModifier implements ItemMetaModifier, ItemMetaComparato
 
   private List<PotionEffect> getParsed(UUID uuid, StringReplacer stringReplacer) {
     List<String> list = new ArrayList<>(potionEffectList);
-    list.replaceAll(s -> stringReplacer.tryReplace(s, uuid));
+    list.replaceAll(s -> stringReplacer.replaceOrOriginal(s, uuid));
     return list.stream()
       .map(PotionEffectModifier::pastePotionEffect)
       .flatMap(optional -> optional.map(Stream::of).orElseGet(Stream::empty))

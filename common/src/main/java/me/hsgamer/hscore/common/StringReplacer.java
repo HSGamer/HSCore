@@ -145,18 +145,35 @@ public interface StringReplacer {
    * @param original the original string
    * @param uuid     the unique id
    *
-   * @return the replaced string, or an empty string if the replaced string is null
+   * @return the replaced string
    */
-  @NotNull
+  @Nullable
   default String tryReplace(@NotNull String original, @Nullable UUID uuid) {
-    if (uuid != null) {
-      String replaced = replace(original, uuid);
-      if (replaced != null) {
-        return replaced;
-      }
-    }
+    return uuid == null ? replace(original) : replace(original, uuid);
+  }
 
-    String replaced = replace(original);
-    return replaced != null ? replaced : "";
+  /**
+   * Replace a string or return the default value
+   *
+   * @param original the original string
+   * @param uuid     the unique id
+   * @param def      the default value
+   *
+   * @return the replaced string or the default value
+   */
+  default String replaceOrDefault(@NotNull String original, @Nullable UUID uuid, @NotNull String def) {
+    String replaced = tryReplace(original, uuid);
+    return replaced != null ? replaced : def;
+  }
+
+  /**
+   * Replace a string or return the original value
+   *
+   * @param original the original string
+   *
+   * @return the replaced string or the original value
+   */
+  default String replaceOrOriginal(@NotNull String original, @Nullable UUID uuid) {
+    return replaceOrDefault(original, uuid, original);
   }
 }

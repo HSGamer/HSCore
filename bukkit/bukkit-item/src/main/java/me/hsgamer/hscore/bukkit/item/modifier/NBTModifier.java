@@ -40,7 +40,7 @@ public class NBTModifier implements ItemModifier<ItemStack> {
       return original;
     }
     try {
-      return Bukkit.getUnsafe().modifyItemStack(original, stringReplacer.tryReplace(nbtData, uuid));
+      return Bukkit.getUnsafe().modifyItemStack(original, stringReplacer.replaceOrOriginal(nbtData, uuid));
     } catch (Throwable throwable) {
       return original;
     }

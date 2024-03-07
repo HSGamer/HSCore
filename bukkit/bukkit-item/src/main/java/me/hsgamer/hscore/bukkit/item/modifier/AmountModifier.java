@@ -19,7 +19,7 @@ public class AmountModifier implements ItemComparator<ItemStack>, ItemModifier<I
   @Override
   public @NotNull ItemStack modify(@NotNull ItemStack original, UUID uuid, @NotNull StringReplacer stringReplacer) {
     Validate
-      .getNumber(stringReplacer.tryReplace(amount, uuid))
+      .getNumber(stringReplacer.replaceOrOriginal(amount, uuid))
       .ifPresent(bigDecimal -> original.setAmount(bigDecimal.intValue()));
     return original;
   }
@@ -42,7 +42,7 @@ public class AmountModifier implements ItemComparator<ItemStack>, ItemModifier<I
 
   @Override
   public boolean compare(@NotNull ItemStack item, UUID uuid, @NotNull StringReplacer stringReplacer) {
-    return Validate.getNumber(stringReplacer.tryReplace(amount, uuid))
+    return Validate.getNumber(stringReplacer.replaceOrOriginal(amount, uuid))
       .map(bigDecimal -> bigDecimal.intValue() >= item.getAmount())
       .orElse(false);
   }
