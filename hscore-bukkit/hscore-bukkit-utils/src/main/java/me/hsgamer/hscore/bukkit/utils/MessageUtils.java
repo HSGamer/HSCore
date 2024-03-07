@@ -37,7 +37,7 @@ public final class MessageUtils {
    */
   public static void sendMessage(@NotNull final CommandSender receiver, @NotNull final String message, @NotNull final String prefix) {
     if (!message.isEmpty()) {
-      receiver.sendMessage(ColorUtils.colorize(receiver, prefix + message));
+      receiver.sendMessage(ColorUtils.colorize(prefix + message));
     }
   }
 
