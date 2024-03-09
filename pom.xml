@@ -63,6 +63,7 @@
     <module>bungeecord</module>
     <module>minestom</module>
     <module>license</module>
+    <module>action</module>
   </modules>
 
   <properties>

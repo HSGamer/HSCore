@@ -11,6 +11,7 @@ minecraft
 expansion
 logger
 license
+action
 "
 
 BASE_DIR="$(pwd)"
