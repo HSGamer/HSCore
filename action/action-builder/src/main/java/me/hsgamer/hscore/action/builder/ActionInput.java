@@ -9,23 +9,55 @@ import java.util.stream.Stream;
 /**
  * The input for the {@link ActionBuilder}
  */
-public class ActionInput {
-  public final String type;
-  public final String value;
-  public final String option;
+public interface ActionInput {
+  /**
+   * Create an instance of {@link ActionInput}
+   *
+   * @param type   the type
+   * @param option the option
+   * @param value  the value
+   *
+   * @return the instance
+   */
+  static ActionInput create(String type, String option, String value) {
+    return new ActionInput() {
+      @Override
+      public String getType() {
+        return type;
+      }
+
+      @Override
+      public String getOption() {
+        return option;
+      }
+
+      @Override
+      public String getValue() {
+        return value;
+      }
+    };
+  }
 
   /**
-   * Create a new input
+   * Get the type
    *
-   * @param type   the type of the action
-   * @param value  the value of the action
-   * @param option the option of the action
+   * @return the type
    */
-  public ActionInput(String type, String value, String option) {
-    this.type = type;
-    this.value = value;
-    this.option = option;
-  }
+  String getType();
+
+  /**
+   * Get the option
+   *
+   * @return the option
+   */
+  String getOption();
+
+  /**
+   * Get the value
+   *
+   * @return the value
+   */
+  String getValue();
 
   /**
    * Get the option as a stream
@@ -34,7 +66,8 @@ public class ActionInput {
    *
    * @return the list
    */
-  public Stream<String> getOptionStream(String separator) {
+  default Stream<String> getOptionStream(String separator) {
+    String option = getOption();
     return option.isEmpty() ? Stream.empty() : Arrays.stream(option.split(separator)).map(String::trim);
   }
 
@@ -46,7 +79,7 @@ public class ActionInput {
    *
    * @see #getOptionStream(String)
    */
-  public Stream<String> getOptionStream() {
+  default Stream<String> getOptionStream() {
     return getOptionStream(",");
   }
 
@@ -59,7 +92,7 @@ public class ActionInput {
    *
    * @see #getOptionStream(String)
    */
-  public List<String> getOptionAsList(String separator) {
+  default List<String> getOptionAsList(String separator) {
     return getOptionStream(separator).collect(Collectors.toList());
   }
 
@@ -71,7 +104,7 @@ public class ActionInput {
    *
    * @see #getOptionStream()
    */
-  public List<String> getOptionAsList() {
+  default List<String> getOptionAsList() {
     return getOptionStream().collect(Collectors.toList());
   }
 
@@ -81,7 +114,7 @@ public class ActionInput {
    *
    * @return the map
    */
-  public Map<String, String> getOptionAsMap() {
+  default Map<String, String> getOptionAsMap() {
     return getOptionStream()
       .map(s -> s.split("="))
       .collect(Collectors.toMap(strings -> strings[0].trim(), strings -> strings.length > 1 ? strings[1].trim() : ""));
