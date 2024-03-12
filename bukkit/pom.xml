@@ -31,6 +31,8 @@
     <module>bukkit-listener</module>
     <module>bukkit-block</module>
     <module>bukkit-variable</module>
+    <module>bukkit-action</module>
+    <module>bukkit-action-builder</module>
   </modules>
 
   <repositories>
