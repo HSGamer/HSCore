@@ -3,6 +3,9 @@ package me.hsgamer.hscore.action.builder;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -10,6 +13,14 @@ import java.util.stream.Stream;
  * The input for the {@link ActionBuilder}
  */
 public interface ActionInput {
+  /**
+   * The pattern to parse the input from the string.
+   * The format is: {@code <type>(<option>): <value>}. Note that the {@code <option>} and {@code <value>} are optional.
+   * Also, the allowed characters of the {@code <type>} are alphanumeric, {@code _}, {@code -} and {@code $}.
+   * To get the {@code <type>}, {@code <option>} and {@code <value>}, use {@link Matcher#group(int)} with the index 1, 3 and 5 respectively.
+   */
+  Pattern PATTERN = Pattern.compile("\\s*([\\w\\-$]+)\\s*(\\((.*)\\))?\\s*(:\\s*(.*)\\s*)?");
+
   /**
    * Create an instance of {@link ActionInput}
    *
@@ -36,6 +47,29 @@ public interface ActionInput {
         return value;
       }
     };
+  }
+
+  /**
+   * Create an instance of {@link ActionInput} from the input.
+   * It will use the {@link #PATTERN} to parse the input.
+   * If the input doesn't match the pattern, it will use the input as the value.
+   *
+   * @param input the input
+   *
+   * @return the instance
+   *
+   * @see #PATTERN
+   */
+  static ActionInput create(String input) {
+    Matcher matcher = PATTERN.matcher(input);
+    if (matcher.matches()) {
+      String type = matcher.group(1);
+      String option = Optional.ofNullable(matcher.group(3)).orElse("");
+      String value = Optional.ofNullable(matcher.group(5)).orElse("");
+      return create(type, option, value);
+    } else {
+      return create("", "", input);
+    }
   }
 
   /**
