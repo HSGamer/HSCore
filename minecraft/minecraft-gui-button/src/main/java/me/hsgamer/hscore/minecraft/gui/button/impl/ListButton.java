@@ -43,7 +43,7 @@ public class ListButton implements Button {
   }
 
   /**
-   * Should the button keep the current index for the unique id on every {@link #view(UUID)} times?
+   * Should the button keep the current index for the unique id on every {@link #display(UUID)} times?
    *
    * @return true if it should
    */
@@ -52,7 +52,7 @@ public class ListButton implements Button {
   }
 
   /**
-   * Should the button keep the current index for the unique id on every {@link #view(UUID)} times?
+   * Should the button keep the current index for the unique id on every {@link #display(UUID)} times?
    *
    * @param keepCurrentIndex true if it should
    *
@@ -93,14 +93,14 @@ public class ListButton implements Button {
   }
 
   @Override
-  public DisplayButton view(@NotNull UUID uuid) {
+  public DisplayButton display(@NotNull UUID uuid) {
     if (keepCurrentIndex && currentIndexMap.containsKey(uuid)) {
-      return buttons.get(currentIndexMap.get(uuid)).view(uuid);
+      return buttons.get(currentIndexMap.get(uuid)).display(uuid);
     }
 
     for (int i = 0; i < buttons.size(); i++) {
       Button button = buttons.get(i);
-      DisplayButton item = button.view(uuid);
+      DisplayButton item = button.display(uuid);
       if (item != null) {
         currentIndexMap.put(uuid, i);
         return item;

@@ -105,7 +105,7 @@ public class SimpleButtonMap implements ButtonMap {
     List<Integer> emptyActionSlots = IntStream.range(0, size).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 
     buttonSlotMap.forEach((button, slots) -> {
-      DisplayButton displayButton = button.view(uuid);
+      DisplayButton displayButton = button.display(uuid);
       if (displayButton == null) return;
 
       slots.forEach(slot -> {
@@ -125,7 +125,7 @@ public class SimpleButtonMap implements ButtonMap {
     });
 
     Button defaultButton = getDefaultButton();
-    DisplayButton defaultDisplayButton = defaultButton.view(uuid);
+    DisplayButton defaultDisplayButton = defaultButton.display(uuid);
     if (defaultDisplayButton != null) {
       Item defaultItem = defaultDisplayButton.getDisplayItem();
       if (defaultItem != null) {

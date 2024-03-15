@@ -24,7 +24,7 @@ public class OutputButton implements Button {
   private BiFunction<@NotNull UUID, @Nullable ItemStack, @Nullable ItemStack> displayItemFunction = (uuid, item) -> item;
 
   @Override
-  public @Nullable DisplayButton view(@NotNull UUID uuid) {
+  public @Nullable DisplayButton display(@NotNull UUID uuid) {
     return new DisplayButton(
       new BukkitItem(displayItemFunction.apply(uuid, getOutputItem(uuid))),
       this,

@@ -87,9 +87,9 @@ public class AnimatedButton implements Button, IdentifiedUpdatable {
   }
 
   @Override
-  public DisplayButton view(@NotNull UUID uuid) {
+  public DisplayButton display(@NotNull UUID uuid) {
     update(uuid);
-    return buttons.get(getCurrentIndex(uuid)).view(uuid);
+    return buttons.get(getCurrentIndex(uuid)).display(uuid);
   }
 
   @Override

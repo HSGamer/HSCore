@@ -34,7 +34,7 @@ public class DummyButton implements Button {
   }
 
   @Override
-  public @NotNull DisplayButton view(@NotNull UUID uuid) {
+  public @NotNull DisplayButton display(@NotNull UUID uuid) {
     return new DisplayButton(itemFunction.apply(uuid), this, null);
   }
 }

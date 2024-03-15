@@ -86,7 +86,7 @@ public class AdvancedButtonMap implements ButtonMap {
           return;
         }
 
-        DisplayButton displayButton = button.view(uuid);
+        DisplayButton displayButton = button.display(uuid);
         if (displayButton == null) {
           return;
         }

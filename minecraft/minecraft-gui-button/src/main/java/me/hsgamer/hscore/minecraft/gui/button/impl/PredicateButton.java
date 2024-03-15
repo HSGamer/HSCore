@@ -124,12 +124,12 @@ public class PredicateButton implements Button {
   }
 
   @Override
-  public DisplayButton view(@NotNull UUID uuid) {
+  public DisplayButton display(@NotNull UUID uuid) {
     DisplayButton displayButton;
     if (viewPredicate.test(uuid)) {
-      displayButton = button.view(uuid);
+      displayButton = button.display(uuid);
     } else {
-      displayButton = fallbackButton.view(uuid);
+      displayButton = fallbackButton.display(uuid);
     }
 
     if (displayButton == null) {

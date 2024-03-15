@@ -24,7 +24,7 @@ public class NullButton implements Button {
   }
 
   @Override
-  public @NotNull DisplayButton view(@NotNull UUID uuid) {
+  public @NotNull DisplayButton display(@NotNull UUID uuid) {
     return new DisplayButton(null, this, consumer);
   }
 }

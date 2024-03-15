@@ -40,7 +40,7 @@ public class SimpleButton implements Button {
   }
 
   @Override
-  public DisplayButton view(@NotNull UUID uuid) {
+  public DisplayButton display(@NotNull UUID uuid) {
     return new DisplayButton(itemFunction.apply(uuid), this, consumer);
   }
 }

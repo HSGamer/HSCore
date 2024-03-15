@@ -16,12 +16,12 @@ public interface Button extends Initializable {
   Button EMPTY = uuid -> null;
 
   /**
-   * Get the display button
+   * Display the button
    *
    * @param uuid the unique id
    *
    * @return the display button
    */
   @Nullable
-  DisplayButton view(@NotNull final UUID uuid);
+  DisplayButton display(@NotNull final UUID uuid);
 }
