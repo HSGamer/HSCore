@@ -12,7 +12,7 @@ import java.util.UUID;
 /**
  * An extension of {@link ItemComparator} for {@link ItemMeta}
  */
-public interface ItemMetaComparator extends me.hsgamer.hscore.minecraft.item.ItemComparator<ItemStack> {
+public interface ItemMetaComparator extends ItemComparator<ItemStack> {
   /**
    * Compare the modifier of an item meta
    *
