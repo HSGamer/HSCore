@@ -4,8 +4,8 @@ import me.hsgamer.hscore.ui.property.Initializable;
 import me.hsgamer.hscore.ui.property.Updatable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * The holder for all displays
@@ -40,27 +40,6 @@ public interface Holder<D extends Display> extends Initializable, Updatable {
   Optional<@NotNull D> getDisplay(@NotNull UUID uuid);
 
   /**
-   * Add an event consumer
-   *
-   * @param eventClass    the event class
-   * @param eventConsumer the event consumer
-   * @param <T>           the type of the event
-   */
-  <T> void addEventConsumer(@NotNull Class<T> eventClass, @NotNull Consumer<T> eventConsumer);
-
-  /**
-   * Clear all event consumers
-   *
-   * @param eventClass the event class
-   */
-  void clearEventConsumer(@NotNull Class<?> eventClass);
-
-  /**
-   * Clear all event consumers of all events
-   */
-  void clearAllEventConsumer();
-
-  /**
    * Remove all displays
    */
   void removeAllDisplay();
@@ -68,29 +47,9 @@ public interface Holder<D extends Display> extends Initializable, Updatable {
   /**
    * Handle the event
    *
-   * @param eventClass the event class
-   * @param event      the event
-   */
-  void handleEvent(@NotNull Class<?> eventClass, @NotNull Object event);
-
-  /**
-   * Handle the event
-   *
    * @param event the event
    */
-  default <E> void handleEvent(@NotNull E event) {
-    Set<Class<?>> eventClassSet = new HashSet<>();
-    Queue<Class<?>> eventClassQueue = new LinkedList<>();
-    eventClassQueue.add(event.getClass());
-    while (true) {
-      Class<?> currentClass = eventClassQueue.poll();
-      if (currentClass == null) break;
-      if (!eventClassSet.add(currentClass)) continue;
-      handleEvent(currentClass, event);
-      Optional.ofNullable(currentClass.getSuperclass()).ifPresent(eventClassQueue::add);
-      eventClassQueue.addAll(Arrays.asList(currentClass.getInterfaces()));
-    }
-  }
+  <E> void handleEvent(@NotNull E event);
 
   /**
    * Update the display for the unique id

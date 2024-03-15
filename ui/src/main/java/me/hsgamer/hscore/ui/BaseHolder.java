@@ -72,34 +72,66 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
   }
 
   @Override
+  public void stop() {
+    clearAllEventConsumer();
+    removeAllDisplay();
+  }
+
+  /**
+   * Add an event consumer
+   *
+   * @param eventClass    the class of the event
+   * @param eventConsumer the consumer
+   * @param <T>           the type of the event
+   */
   public <T> void addEventConsumer(@NotNull Class<T> eventClass, @NotNull Consumer<T> eventConsumer) {
     classListMap
       .computeIfAbsent(eventClass, clazz -> new ArrayList<>())
       .add(o -> eventConsumer.accept(eventClass.cast(o)));
   }
 
-  @Override
-  public void stop() {
-    clearAllEventConsumer();
-    removeAllDisplay();
-  }
-
-  @Override
+  /**
+   * Clear the event consumer
+   *
+   * @param eventClass the class of the event
+   */
   public void clearEventConsumer(@NotNull Class<?> eventClass) {
     classListMap.remove(eventClass);
   }
 
-  @Override
+  /**
+   * Clear all event consumers
+   */
   public void clearAllEventConsumer() {
     classListMap.clear();
   }
 
-  @Override
+  /**
+   * Handle the event
+   *
+   * @param eventClass the class of the event
+   * @param event      the event
+   */
   public void handleEvent(@NotNull Class<?> eventClass, @NotNull Object event) {
     if (!classListMap.containsKey(eventClass)) return;
     if (!eventClass.isInstance(event)) {
       throw new IllegalArgumentException("The event is not an instance of " + eventClass.getName());
     }
     classListMap.get(eventClass).forEach(consumer -> consumer.accept(event));
+  }
+
+  @Override
+  public <E> void handleEvent(@NotNull E event) {
+    Set<Class<?>> eventClassSet = new HashSet<>();
+    Queue<Class<?>> eventClassQueue = new LinkedList<>();
+    eventClassQueue.add(event.getClass());
+    while (true) {
+      Class<?> currentClass = eventClassQueue.poll();
+      if (currentClass == null) break;
+      if (!eventClassSet.add(currentClass)) continue;
+      handleEvent(currentClass, event);
+      Optional.ofNullable(currentClass.getSuperclass()).ifPresent(eventClassQueue::add);
+      eventClassQueue.addAll(Arrays.asList(currentClass.getInterfaces()));
+    }
   }
 }
