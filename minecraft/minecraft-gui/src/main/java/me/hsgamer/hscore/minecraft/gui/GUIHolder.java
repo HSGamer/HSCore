@@ -43,7 +43,7 @@ public abstract class GUIHolder<D extends GUIDisplay<?>> extends BaseHolder<D> {
     addEventConsumer(ClickEvent.class, this::onClick);
     addEventConsumer(ClickEvent.class, event -> {
       if (event.isButtonExecute()) {
-        getDisplay(event.getViewerID()).ifPresent(guiDisplay -> guiDisplay.handleClickEvent(event));
+        getDisplay(event.getViewerID()).ifPresent(guiDisplay -> guiDisplay.handleEvent(event));
       }
     });
 
