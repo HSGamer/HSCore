@@ -3,7 +3,7 @@ package me.hsgamer.hscore.bukkit.gui.button.impl;
 import me.hsgamer.hscore.bukkit.gui.event.BukkitClickEvent;
 import me.hsgamer.hscore.bukkit.gui.object.BukkitItem;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
-import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
+import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -25,27 +25,23 @@ public class InputButton implements Button {
   private BiFunction<@NotNull UUID, @Nullable ItemStack, @Nullable ItemStack> displayItemFunction = (uuid, item) -> item;
 
   @Override
-  public BukkitItem getItem(@NotNull UUID uuid) {
-    return new BukkitItem(displayItemFunction.apply(uuid, getInputItem(uuid)));
-  }
-
-  @Override
-  public void handleAction(@NotNull ClickEvent wrappedEvent) {
-    if (!(wrappedEvent instanceof BukkitClickEvent)) return;
-    UUID uuid = wrappedEvent.getViewerID();
-    InventoryClickEvent event = ((BukkitClickEvent) wrappedEvent).getEvent();
-    ItemStack cursorItem = Optional.ofNullable(event.getCursor())
-      .filter(itemStack -> itemStack.getType() != Material.AIR)
-      .map(ItemStack::clone)
-      .orElse(null);
-    ItemStack storeItem = getInputItem(uuid);
-    event.getWhoClicked().setItemOnCursor(storeItem);
-    setInputItem(uuid, cursorItem);
-  }
-
-  @Override
-  public boolean forceSetAction(@NotNull UUID uuid) {
-    return true;
+  public @Nullable DisplayButton view(@NotNull UUID uuid) {
+    return new DisplayButton(
+      new BukkitItem(displayItemFunction.apply(uuid, getInputItem(uuid))),
+      this,
+      event -> {
+        if (!(event instanceof BukkitClickEvent)) return;
+        UUID viewerID = event.getViewerID();
+        InventoryClickEvent bukkitEvent = ((BukkitClickEvent) event).getEvent();
+        ItemStack cursorItem = Optional.ofNullable(bukkitEvent.getCursor())
+          .filter(itemStack -> itemStack.getType() != Material.AIR)
+          .map(ItemStack::clone)
+          .orElse(null);
+        ItemStack storeItem = getInputItem(viewerID);
+        bukkitEvent.getWhoClicked().setItemOnCursor(storeItem);
+        setInputItem(viewerID, cursorItem);
+      }
+    );
   }
 
   @Override

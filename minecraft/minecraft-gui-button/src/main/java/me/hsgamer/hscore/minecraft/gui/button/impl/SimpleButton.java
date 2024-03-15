@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.minecraft.gui.button.impl;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
+import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.jetbrains.annotations.NotNull;
@@ -39,12 +40,7 @@ public class SimpleButton implements Button {
   }
 
   @Override
-  public @Nullable Item getItem(@NotNull UUID uuid) {
-    return itemFunction.apply(uuid);
-  }
-
-  @Override
-  public void handleAction(@NotNull ClickEvent event) {
-    consumer.accept(event);
+  public DisplayButton view(@NotNull UUID uuid) {
+    return new DisplayButton(itemFunction.apply(uuid), this, consumer);
   }
 }

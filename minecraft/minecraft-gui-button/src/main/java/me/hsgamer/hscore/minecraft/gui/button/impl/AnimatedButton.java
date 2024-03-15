@@ -2,8 +2,7 @@ package me.hsgamer.hscore.minecraft.gui.button.impl;
 
 import me.hsgamer.hscore.minecraft.gui.GUIProperties;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
-import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
-import me.hsgamer.hscore.minecraft.gui.object.Item;
+import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
 import me.hsgamer.hscore.ui.property.IdentifiedUpdatable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -88,19 +87,9 @@ public class AnimatedButton implements Button, IdentifiedUpdatable {
   }
 
   @Override
-  public Item getItem(@NotNull UUID uuid) {
+  public DisplayButton view(@NotNull UUID uuid) {
     update(uuid);
-    return buttons.get(getCurrentIndex(uuid)).getItem(uuid);
-  }
-
-  @Override
-  public void handleAction(@NotNull ClickEvent event) {
-    buttons.get(getCurrentIndex(event.getViewerID())).handleAction(event);
-  }
-
-  @Override
-  public boolean forceSetAction(@NotNull UUID uuid) {
-    return buttons.get(getCurrentIndex(uuid)).forceSetAction(uuid);
+    return buttons.get(getCurrentIndex(uuid)).view(uuid);
   }
 
   @Override

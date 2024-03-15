@@ -2,12 +2,14 @@ package me.hsgamer.hscore.minecraft.gui.advanced;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.button.ButtonMap;
-import me.hsgamer.hscore.minecraft.gui.button.ViewedButton;
+import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
+import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.mask.Mask;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -74,8 +76,8 @@ public class AdvancedButtonMap implements ButtonMap {
   }
 
   @Override
-  public @NotNull Map<@NotNull Integer, @NotNull ViewedButton> getButtons(@NotNull UUID uuid, int size) {
-    Map<Integer, ViewedButton> map = new HashMap<>();
+  public @NotNull Map<@NotNull Integer, @NotNull DisplayButton> getButtons(@NotNull UUID uuid, int size) {
+    Map<Integer, DisplayButton> map = new HashMap<>();
     for (Mask mask : masks) {
       Optional<Map<Integer, Button>> buttons = mask.generateButtons(uuid, size);
       if (!buttons.isPresent()) continue;
@@ -84,16 +86,21 @@ public class AdvancedButtonMap implements ButtonMap {
           return;
         }
 
-        Item item = button.getItem(uuid);
-        if (item == null && !button.forceSetAction(uuid)) {
+        DisplayButton displayButton = button.view(uuid);
+        if (displayButton == null) {
           return;
         }
 
-        ViewedButton viewedButton = map.computeIfAbsent(slot, s -> new ViewedButton());
+        DisplayButton currentDisplayButton = map.computeIfAbsent(slot, s -> new DisplayButton());
+        Item item = displayButton.getDisplayItem();
         if (item != null) {
-          viewedButton.setDisplayItem(item);
+          currentDisplayButton.setDisplayItem(item);
         }
-        viewedButton.setButton(button);
+        Consumer<ClickEvent> action = displayButton.getAction();
+        if (action != null) {
+          currentDisplayButton.setAction(action);
+        }
+        currentDisplayButton.setButton(button);
       });
     }
     return map;

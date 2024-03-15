@@ -2,11 +2,13 @@ package me.hsgamer.hscore.minecraft.gui.simple;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.button.ButtonMap;
-import me.hsgamer.hscore.minecraft.gui.button.ViewedButton;
+import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
+import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -95,35 +97,45 @@ public class SimpleButtonMap implements ButtonMap {
   }
 
   @Override
-  public @NotNull Map<@NotNull Integer, @NotNull ViewedButton> getButtons(@NotNull UUID uuid, int size) {
-    Map<Integer, ViewedButton> map = new HashMap<>();
-    IntFunction<ViewedButton> getViewedButton = i -> map.computeIfAbsent(i, s -> new ViewedButton());
+  public @NotNull Map<@NotNull Integer, @NotNull DisplayButton> getButtons(@NotNull UUID uuid, int size) {
+    Map<Integer, DisplayButton> map = new HashMap<>();
+    IntFunction<DisplayButton> getDisplayButton = i -> map.computeIfAbsent(i, s -> new DisplayButton());
 
     List<Integer> emptyItemSlots = IntStream.range(0, size).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
     List<Integer> emptyActionSlots = IntStream.range(0, size).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 
     buttonSlotMap.forEach((button, slots) -> {
-      Item item = button.getItem(uuid);
-      if (item == null && !button.forceSetAction(uuid)) {
-        return;
-      }
+      DisplayButton displayButton = button.view(uuid);
+      if (displayButton == null) return;
+
       slots.forEach(slot -> {
-        ViewedButton viewedButton = getViewedButton.apply(slot);
+        DisplayButton currentDisplayButton = getDisplayButton.apply(slot);
+        Item item = displayButton.getDisplayItem();
         if (item != null) {
-          viewedButton.setDisplayItem(item);
+          currentDisplayButton.setDisplayItem(item);
           emptyItemSlots.remove(slot);
         }
-        viewedButton.setButton(button);
-        emptyActionSlots.remove(slot);
+        Consumer<ClickEvent> action = displayButton.getAction();
+        if (action != null) {
+          currentDisplayButton.setAction(action);
+          emptyActionSlots.remove(slot);
+        }
+        currentDisplayButton.setButton(button);
       });
     });
 
     Button defaultButton = getDefaultButton();
-    Item defaultItem = defaultButton.getItem(uuid);
-    if (defaultItem != null) {
-      emptyItemSlots.forEach(slot -> getViewedButton.apply(slot).setDisplayItem(defaultItem));
+    DisplayButton defaultDisplayButton = defaultButton.view(uuid);
+    if (defaultDisplayButton != null) {
+      Item defaultItem = defaultDisplayButton.getDisplayItem();
+      if (defaultItem != null) {
+        emptyItemSlots.forEach(slot -> getDisplayButton.apply(slot).setDisplayItem(defaultItem));
+      }
+      Consumer<ClickEvent> defaultAction = defaultDisplayButton.getAction();
+      if (defaultAction != null) {
+        emptyActionSlots.forEach(slot -> getDisplayButton.apply(slot).setAction(defaultAction));
+      }
     }
-    emptyActionSlots.forEach(slot -> getViewedButton.apply(slot).setButton(defaultButton));
 
     return map;
   }

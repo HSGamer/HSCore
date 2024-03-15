@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.minecraft.gui.button.impl;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
+import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +34,7 @@ public class DummyButton implements Button {
   }
 
   @Override
-  public @Nullable Item getItem(@NotNull UUID uuid) {
-    return itemFunction.apply(uuid);
+  public @NotNull DisplayButton view(@NotNull UUID uuid) {
+    return new DisplayButton(itemFunction.apply(uuid), this, null);
   }
 }

@@ -1,15 +1,17 @@
 package me.hsgamer.hscore.minecraft.gui.button.impl;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
+import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
-import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -17,7 +19,6 @@ import java.util.function.Predicate;
  * The button with predicates
  */
 public class PredicateButton implements Button {
-  private final Set<UUID> failToViewList = new ConcurrentSkipListSet<>();
   private final Set<UUID> clickCheckList = new ConcurrentSkipListSet<>();
 
   private Button button = EMPTY;
@@ -123,43 +124,34 @@ public class PredicateButton implements Button {
   }
 
   @Override
-  public Item getItem(@NotNull UUID uuid) {
+  public DisplayButton view(@NotNull UUID uuid) {
+    DisplayButton displayButton;
     if (viewPredicate.test(uuid)) {
-      failToViewList.remove(uuid);
-      return button.getItem(uuid);
+      displayButton = button.view(uuid);
     } else {
-      failToViewList.add(uuid);
-      return fallbackButton.getItem(uuid);
-    }
-  }
-
-  @Override
-  public void handleAction(@NotNull ClickEvent event) {
-    UUID uuid = event.getViewerID();
-    if (failToViewList.contains(uuid)) {
-      fallbackButton.handleAction(event);
-      return;
+      displayButton = fallbackButton.view(uuid);
     }
 
-    if (preventSpamClick && clickCheckList.contains(uuid)) {
-      return;
+    if (displayButton == null) {
+      return null;
     }
-    clickCheckList.add(uuid);
-    clickFuturePredicate.apply(event).thenAccept(result -> {
-      clickCheckList.remove(uuid);
-      if (Boolean.TRUE.equals(result)) {
-        button.handleAction(event);
-      }
-    });
-  }
 
-  @Override
-  public boolean forceSetAction(@NotNull UUID uuid) {
-    if (failToViewList.contains(uuid)) {
-      return fallbackButton.forceSetAction(uuid);
-    } else {
-      return button.forceSetAction(uuid);
-    }
+    Consumer<ClickEvent> action = Optional.ofNullable(displayButton.getAction())
+      .map(displayButtonAction -> (Consumer<ClickEvent>) event -> {
+        if (preventSpamClick && clickCheckList.contains(uuid)) {
+          return;
+        }
+        clickCheckList.add(uuid);
+        clickFuturePredicate.apply(event).thenAccept(result -> {
+          clickCheckList.remove(uuid);
+          if (Boolean.TRUE.equals(result)) {
+            displayButtonAction.accept(event);
+          }
+        });
+      })
+      .orElse(null);
+
+    return new DisplayButton(displayButton.getDisplayItem(), this, action);
   }
 
   @Override

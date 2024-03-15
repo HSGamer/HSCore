@@ -5,17 +5,39 @@ import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Consumer;
+
 /**
  * A button that is displayed on the inventory
  */
-public class ViewedButton {
+public class DisplayButton {
   /**
    * The empty button
    */
-  public static final ViewedButton EMPTY = new ViewedButton();
+  public static final DisplayButton EMPTY = new DisplayButton();
 
   private Item displayItem;
   private Button button = Button.EMPTY;
+  private Consumer<ClickEvent> action = null;
+
+  /**
+   * Create a new instance
+   */
+  public DisplayButton() {
+  }
+
+  /**
+   * Create a new instance
+   *
+   * @param displayItem the item to display
+   * @param button      the button
+   * @param action      the action
+   */
+  public DisplayButton(@Nullable Item displayItem, @NotNull Button button, @Nullable Consumer<ClickEvent> action) {
+    this.displayItem = displayItem;
+    this.button = button;
+    this.action = action;
+  }
 
   /**
    * Get the item to display
@@ -56,11 +78,21 @@ public class ViewedButton {
   }
 
   /**
-   * Handle the action
+   * Get the action
    *
-   * @param event the event
+   * @return the action
    */
-  public void handleAction(@NotNull ClickEvent event) {
-    button.handleAction(event);
+  @Nullable
+  public Consumer<ClickEvent> getAction() {
+    return action;
+  }
+
+  /**
+   * Set the action
+   *
+   * @param action the action
+   */
+  public void setAction(@Nullable Consumer<ClickEvent> action) {
+    this.action = action;
   }
 }

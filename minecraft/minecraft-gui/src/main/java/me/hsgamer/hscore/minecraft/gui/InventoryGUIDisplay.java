@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.minecraft.gui;
 
-import me.hsgamer.hscore.minecraft.gui.button.ViewedButton;
+import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +21,7 @@ public abstract class InventoryGUIDisplay<H extends GUIHolder<?>> extends GUIDis
   /**
    * The viewed buttons reference
    */
-  private final AtomicReference<Map<Integer, ViewedButton>> viewedButtonsRef = new AtomicReference<>(Collections.emptyMap());
+  private final AtomicReference<Map<Integer, DisplayButton>> viewedButtonsRef = new AtomicReference<>(Collections.emptyMap());
 
   /**
    * Create a new display
@@ -60,7 +60,7 @@ public abstract class InventoryGUIDisplay<H extends GUIHolder<?>> extends GUIDis
 
   @Override
   public void handleClickEvent(@NotNull ClickEvent event) {
-    getViewedButton(event.getSlot()).ifPresent(button -> button.handleAction(event));
+    getViewedButton(event.getSlot()).map(DisplayButton::getAction).ifPresent(consumer -> consumer.accept(event));
   }
 
   @Override
@@ -78,10 +78,10 @@ public abstract class InventoryGUIDisplay<H extends GUIHolder<?>> extends GUIDis
   @Override
   public void update() {
     int size = getInventorySize();
-    Map<Integer, ViewedButton> viewedButtons = holder.getButtonMap().getButtons(uuid, size);
+    Map<Integer, DisplayButton> viewedButtons = holder.getButtonMap().getButtons(uuid, size);
     viewedButtonsRef.set(viewedButtons);
     for (int i = 0; i < size; i++) {
-      setButton(i, viewedButtons.getOrDefault(i, ViewedButton.EMPTY).getDisplayItem());
+      setButton(i, viewedButtons.getOrDefault(i, DisplayButton.EMPTY).getDisplayItem());
     }
   }
 
@@ -92,7 +92,7 @@ public abstract class InventoryGUIDisplay<H extends GUIHolder<?>> extends GUIDis
    *
    * @return the viewed button
    */
-  public Optional<ViewedButton> getViewedButton(int slot) {
+  public Optional<DisplayButton> getViewedButton(int slot) {
     return Optional.ofNullable(viewedButtonsRef.get()).map(viewedButtons -> viewedButtons.get(slot));
   }
 
@@ -101,7 +101,7 @@ public abstract class InventoryGUIDisplay<H extends GUIHolder<?>> extends GUIDis
    *
    * @return the viewed buttons
    */
-  public Map<Integer, ViewedButton> getViewedButtons() {
+  public Map<Integer, DisplayButton> getViewedButtons() {
     return Optional.ofNullable(viewedButtonsRef.get()).map(Collections::unmodifiableMap).orElse(Collections.emptyMap());
   }
 }

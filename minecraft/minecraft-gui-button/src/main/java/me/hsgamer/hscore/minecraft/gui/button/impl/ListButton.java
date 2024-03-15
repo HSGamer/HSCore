@@ -1,8 +1,7 @@
 package me.hsgamer.hscore.minecraft.gui.button.impl;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
-import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
-import me.hsgamer.hscore.minecraft.gui.object.Item;
+import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,7 +43,7 @@ public class ListButton implements Button {
   }
 
   /**
-   * Should the button keep the current index for the unique id on every {@link #getItem(UUID)} times?
+   * Should the button keep the current index for the unique id on every {@link #view(UUID)} times?
    *
    * @return true if it should
    */
@@ -53,7 +52,7 @@ public class ListButton implements Button {
   }
 
   /**
-   * Should the button keep the current index for the unique id on every {@link #getItem(UUID)} times?
+   * Should the button keep the current index for the unique id on every {@link #view(UUID)} times?
    *
    * @param keepCurrentIndex true if it should
    *
@@ -84,39 +83,6 @@ public class ListButton implements Button {
   }
 
   @Override
-  public Item getItem(@NotNull UUID uuid) {
-    if (keepCurrentIndex && currentIndexMap.containsKey(uuid)) {
-      return buttons.get(currentIndexMap.get(uuid)).getItem(uuid);
-    }
-
-    for (int i = 0; i < buttons.size(); i++) {
-      Button button = buttons.get(i);
-      Item item = button.getItem(uuid);
-      if (item != null || button.forceSetAction(uuid)) {
-        currentIndexMap.put(uuid, i);
-        return item;
-      }
-    }
-
-    return null;
-  }
-
-  @Override
-  public void handleAction(@NotNull ClickEvent event) {
-    Optional.ofNullable(currentIndexMap.get(event.getViewerID()))
-      .map(buttons::get)
-      .ifPresent(button -> button.handleAction(event));
-  }
-
-  @Override
-  public boolean forceSetAction(@NotNull UUID uuid) {
-    return Optional.ofNullable(currentIndexMap.get(uuid))
-      .map(buttons::get)
-      .map(button -> button.forceSetAction(uuid))
-      .orElse(false);
-  }
-
-  @Override
   public void init() {
     this.buttons.forEach(Button::init);
   }
@@ -124,5 +90,23 @@ public class ListButton implements Button {
   @Override
   public void stop() {
     this.buttons.forEach(Button::stop);
+  }
+
+  @Override
+  public DisplayButton view(@NotNull UUID uuid) {
+    if (keepCurrentIndex && currentIndexMap.containsKey(uuid)) {
+      return buttons.get(currentIndexMap.get(uuid)).view(uuid);
+    }
+
+    for (int i = 0; i < buttons.size(); i++) {
+      Button button = buttons.get(i);
+      DisplayButton item = button.view(uuid);
+      if (item != null) {
+        currentIndexMap.put(uuid, i);
+        return item;
+      }
+    }
+
+    return null;
   }
 }

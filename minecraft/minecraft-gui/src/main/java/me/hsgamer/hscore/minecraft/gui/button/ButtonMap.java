@@ -19,5 +19,5 @@ public interface ButtonMap extends Initializable {
    * @return the button map
    */
   @NotNull
-  Map<@NotNull Integer, @NotNull ViewedButton> getButtons(@NotNull final UUID uuid, int size);
+  Map<@NotNull Integer, @NotNull DisplayButton> getButtons(@NotNull final UUID uuid, int size);
 }
