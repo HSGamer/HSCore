@@ -2,7 +2,6 @@ package me.hsgamer.hscore.minecraft.gui.button;
 
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -16,28 +15,8 @@ public class DisplayButton {
    */
   public static final DisplayButton EMPTY = new DisplayButton();
 
-  private Item displayItem;
-  private Button button = Button.EMPTY;
-  private Consumer<ClickEvent> action = null;
-
-  /**
-   * Create a new instance
-   */
-  public DisplayButton() {
-  }
-
-  /**
-   * Create a new instance
-   *
-   * @param displayItem the item to display
-   * @param button      the button
-   * @param action      the action
-   */
-  public DisplayButton(@Nullable Item displayItem, @NotNull Button button, @Nullable Consumer<ClickEvent> action) {
-    this.displayItem = displayItem;
-    this.button = button;
-    this.action = action;
-  }
+  private Item item;
+  private Consumer<ClickEvent> clickAction;
 
   /**
    * Get the item to display
@@ -45,54 +24,41 @@ public class DisplayButton {
    * @return the item
    */
   @Nullable
-  public Item getDisplayItem() {
-    return displayItem;
+  public Item getItem() {
+    return item;
   }
 
   /**
    * Set the item to display
    *
-   * @param displayItem the item
-   */
-  public void setDisplayItem(@Nullable Item displayItem) {
-    this.displayItem = displayItem;
-  }
-
-  /**
-   * Get the button
+   * @param item the item
    *
-   * @return the button
+   * @return the current instance
    */
-  @NotNull
-  public Button getButton() {
-    return button;
+  public DisplayButton setItem(@Nullable Item item) {
+    this.item = item;
+    return this;
   }
 
   /**
-   * Set the button
-   *
-   * @param button the button
-   */
-  public void setButton(@NotNull Button button) {
-    this.button = button;
-  }
-
-  /**
-   * Get the action
+   * Get the click action
    *
    * @return the action
    */
   @Nullable
-  public Consumer<ClickEvent> getAction() {
-    return action;
+  public Consumer<ClickEvent> getClickAction() {
+    return clickAction;
   }
 
   /**
-   * Set the action
+   * Set the click action
    *
-   * @param action the action
+   * @param clickAction the action
+   *
+   * @return the current instance
    */
-  public void setAction(@Nullable Consumer<ClickEvent> action) {
-    this.action = action;
+  public DisplayButton setClickAction(@Nullable Consumer<ClickEvent> clickAction) {
+    this.clickAction = clickAction;
+    return this;
   }
 }

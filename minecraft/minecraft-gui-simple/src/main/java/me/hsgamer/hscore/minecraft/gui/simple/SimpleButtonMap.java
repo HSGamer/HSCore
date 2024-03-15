@@ -110,30 +110,29 @@ public class SimpleButtonMap implements ButtonMap {
 
       slots.forEach(slot -> {
         DisplayButton currentDisplayButton = getDisplayButton.apply(slot);
-        Item item = displayButton.getDisplayItem();
+        Item item = displayButton.getItem();
         if (item != null) {
-          currentDisplayButton.setDisplayItem(item);
+          currentDisplayButton.setItem(item);
           emptyItemSlots.remove(slot);
         }
-        Consumer<ClickEvent> action = displayButton.getAction();
+        Consumer<ClickEvent> action = displayButton.getClickAction();
         if (action != null) {
-          currentDisplayButton.setAction(action);
+          currentDisplayButton.setClickAction(action);
           emptyActionSlots.remove(slot);
         }
-        currentDisplayButton.setButton(button);
       });
     });
 
     Button defaultButton = getDefaultButton();
     DisplayButton defaultDisplayButton = defaultButton.display(uuid);
     if (defaultDisplayButton != null) {
-      Item defaultItem = defaultDisplayButton.getDisplayItem();
+      Item defaultItem = defaultDisplayButton.getItem();
       if (defaultItem != null) {
-        emptyItemSlots.forEach(slot -> getDisplayButton.apply(slot).setDisplayItem(defaultItem));
+        emptyItemSlots.forEach(slot -> getDisplayButton.apply(slot).setItem(defaultItem));
       }
-      Consumer<ClickEvent> defaultAction = defaultDisplayButton.getAction();
+      Consumer<ClickEvent> defaultAction = defaultDisplayButton.getClickAction();
       if (defaultAction != null) {
-        emptyActionSlots.forEach(slot -> getDisplayButton.apply(slot).setAction(defaultAction));
+        emptyActionSlots.forEach(slot -> getDisplayButton.apply(slot).setClickAction(defaultAction));
       }
     }
 

@@ -2,6 +2,7 @@ package me.hsgamer.hscore.minecraft.gui;
 
 import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
+import me.hsgamer.hscore.minecraft.gui.event.ViewerEvent;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,8 +60,11 @@ public abstract class InventoryGUIDisplay<H extends GUIHolder<?>> extends GUIDis
   protected abstract void setButton(int slot, @Nullable Item item);
 
   @Override
-  public void handleClickEvent(@NotNull ClickEvent event) {
-    getViewedButton(event.getSlot()).map(DisplayButton::getAction).ifPresent(consumer -> consumer.accept(event));
+  public void handleEvent(ViewerEvent event) {
+    if (event instanceof ClickEvent) {
+      ClickEvent clickEvent = (ClickEvent) event;
+      getViewedButton(clickEvent.getSlot()).map(DisplayButton::getClickAction).ifPresent(consumer -> consumer.accept(clickEvent));
+    }
   }
 
   @Override
@@ -81,7 +85,7 @@ public abstract class InventoryGUIDisplay<H extends GUIHolder<?>> extends GUIDis
     Map<Integer, DisplayButton> viewedButtons = holder.getButtonMap().getButtons(uuid, size);
     viewedButtonsRef.set(viewedButtons);
     for (int i = 0; i < size; i++) {
-      setButton(i, viewedButtons.getOrDefault(i, DisplayButton.EMPTY).getDisplayItem());
+      setButton(i, viewedButtons.getOrDefault(i, DisplayButton.EMPTY).getItem());
     }
   }
 

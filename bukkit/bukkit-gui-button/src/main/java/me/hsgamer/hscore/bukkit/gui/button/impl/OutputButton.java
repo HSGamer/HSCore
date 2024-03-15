@@ -25,10 +25,9 @@ public class OutputButton implements Button {
 
   @Override
   public @Nullable DisplayButton display(@NotNull UUID uuid) {
-    return new DisplayButton(
-      new BukkitItem(displayItemFunction.apply(uuid, getOutputItem(uuid))),
-      this,
-      event -> {
+    return new DisplayButton()
+      .setItem(new BukkitItem(displayItemFunction.apply(uuid, getOutputItem(uuid))))
+      .setClickAction(event -> {
         if (!(event instanceof BukkitClickEvent)) return;
         UUID viewerID = event.getViewerID();
         InventoryClickEvent bukkitEvent = ((BukkitClickEvent) event).getEvent();
@@ -39,8 +38,7 @@ public class OutputButton implements Button {
         ItemStack storeItem = getOutputItem(viewerID);
         bukkitEvent.getWhoClicked().setItemOnCursor(storeItem);
         setOutputItem(viewerID, null);
-      }
-    );
+      });
   }
 
   @Override

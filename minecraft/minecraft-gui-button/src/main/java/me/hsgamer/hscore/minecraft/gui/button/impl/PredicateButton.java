@@ -136,7 +136,7 @@ public class PredicateButton implements Button {
       return null;
     }
 
-    Consumer<ClickEvent> action = Optional.ofNullable(displayButton.getAction())
+    Optional.ofNullable(displayButton.getClickAction())
       .map(displayButtonAction -> (Consumer<ClickEvent>) event -> {
         if (preventSpamClick && clickCheckList.contains(uuid)) {
           return;
@@ -149,9 +149,9 @@ public class PredicateButton implements Button {
           }
         });
       })
-      .orElse(null);
+      .ifPresent(displayButton::setClickAction);
 
-    return new DisplayButton(displayButton.getDisplayItem(), this, action);
+    return displayButton;
   }
 
   @Override

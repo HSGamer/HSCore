@@ -25,6 +25,6 @@ public class NullButton implements Button {
 
   @Override
   public @NotNull DisplayButton display(@NotNull UUID uuid) {
-    return new DisplayButton(null, this, consumer);
+    return new DisplayButton().setClickAction(consumer);
   }
 }

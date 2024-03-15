@@ -41,6 +41,8 @@ public class SimpleButton implements Button {
 
   @Override
   public DisplayButton display(@NotNull UUID uuid) {
-    return new DisplayButton(itemFunction.apply(uuid), this, consumer);
+    return new DisplayButton()
+      .setItem(itemFunction.apply(uuid))
+      .setClickAction(consumer);
   }
 }

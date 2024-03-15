@@ -92,15 +92,14 @@ public class AdvancedButtonMap implements ButtonMap {
         }
 
         DisplayButton currentDisplayButton = map.computeIfAbsent(slot, s -> new DisplayButton());
-        Item item = displayButton.getDisplayItem();
+        Item item = displayButton.getItem();
         if (item != null) {
-          currentDisplayButton.setDisplayItem(item);
+          currentDisplayButton.setItem(item);
         }
-        Consumer<ClickEvent> action = displayButton.getAction();
+        Consumer<ClickEvent> action = displayButton.getClickAction();
         if (action != null) {
-          currentDisplayButton.setAction(action);
+          currentDisplayButton.setClickAction(action);
         }
-        currentDisplayButton.setButton(button);
       });
     }
     return map;

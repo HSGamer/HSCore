@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.minecraft.gui;
 
-import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
+import me.hsgamer.hscore.minecraft.gui.event.ViewerEvent;
 import me.hsgamer.hscore.ui.BaseDisplay;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,9 +29,9 @@ public abstract class GUIDisplay<H extends GUIHolder<?>> extends BaseDisplay<H> 
   public abstract void open();
 
   /**
-   * Handle the click event
+   * Handle the event
    *
-   * @param event the click event
+   * @param event the event
    */
-  public abstract void handleClickEvent(@NotNull final ClickEvent event);
+  public abstract void handleEvent(ViewerEvent event);
 }

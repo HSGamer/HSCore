@@ -26,10 +26,9 @@ public class InputButton implements Button {
 
   @Override
   public @Nullable DisplayButton display(@NotNull UUID uuid) {
-    return new DisplayButton(
-      new BukkitItem(displayItemFunction.apply(uuid, getInputItem(uuid))),
-      this,
-      event -> {
+    return new DisplayButton()
+      .setItem(new BukkitItem(displayItemFunction.apply(uuid, getInputItem(uuid))))
+      .setClickAction(event -> {
         if (!(event instanceof BukkitClickEvent)) return;
         UUID viewerID = event.getViewerID();
         InventoryClickEvent bukkitEvent = ((BukkitClickEvent) event).getEvent();
@@ -40,8 +39,7 @@ public class InputButton implements Button {
         ItemStack storeItem = getInputItem(viewerID);
         bukkitEvent.getWhoClicked().setItemOnCursor(storeItem);
         setInputItem(viewerID, cursorItem);
-      }
-    );
+      });
   }
 
   @Override
