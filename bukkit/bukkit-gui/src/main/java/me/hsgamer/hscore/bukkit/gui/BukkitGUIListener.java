@@ -74,7 +74,7 @@ public class BukkitGUIListener implements Listener {
       boolean wasCancelled = event.isCancelled();
       event.setCancelled(true);
 
-      display.handleEvent(new BukkitClickEvent(event));
+      display.getHolder().handleEvent(new BukkitClickEvent(event));
 
       if (!wasCancelled && !event.isCancelled()) {
         event.setCancelled(false);
@@ -83,15 +83,15 @@ public class BukkitGUIListener implements Listener {
   }
 
   private void onInventoryOpen(InventoryOpenEvent event) {
-    handleIfDisplay(event, display -> display.handleEvent(new BukkitOpenEvent(event)));
+    handleIfDisplay(event, display -> display.getHolder().handleEvent(new BukkitOpenEvent(event)));
   }
 
   private void onInventoryClose(InventoryCloseEvent event) {
-    handleIfDisplay(event, display -> display.handleEvent(new BukkitCloseEvent(event)));
+    handleIfDisplay(event, display -> display.getHolder().handleEvent(new BukkitCloseEvent(event)));
   }
 
   private void onInventoryDrag(InventoryDragEvent event) {
-    handleIfDisplay(event, display -> display.handleEvent(new BukkitDragEvent(event)));
+    handleIfDisplay(event, display -> display.getHolder().handleEvent(new BukkitDragEvent(event)));
   }
 
   private void onPluginDisable(PluginDisableEvent event) {
