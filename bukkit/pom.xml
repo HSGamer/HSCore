@@ -26,7 +26,6 @@
     <module>bukkit-gui</module>
     <module>bukkit-gui-button</module>
     <module>bukkit-channel</module>
-    <module>bukkit-key</module>
     <module>bukkit-block</module>
     <module>bukkit-variable</module>
     <module>bukkit-action</module>
