@@ -3,13 +3,10 @@ package me.hsgamer.hscore.minecraft.gui.advanced;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.button.ButtonMap;
 import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
-import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.mask.Mask;
-import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -90,16 +87,7 @@ public class AdvancedButtonMap implements ButtonMap {
         if (displayButton == null) {
           return;
         }
-
-        DisplayButton currentDisplayButton = map.computeIfAbsent(slot, s -> new DisplayButton());
-        Item item = displayButton.getItem();
-        if (item != null) {
-          currentDisplayButton.setItem(item);
-        }
-        Consumer<ClickEvent> action = displayButton.getClickAction();
-        if (action != null) {
-          currentDisplayButton.setClickAction(action);
-        }
+        map.computeIfAbsent(slot, s -> new DisplayButton()).apply(displayButton);
       });
     }
     return map;

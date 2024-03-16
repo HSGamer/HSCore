@@ -61,4 +61,18 @@ public class DisplayButton {
     this.clickAction = clickAction;
     return this;
   }
+
+  /**
+   * Apply the display button to this instance
+   *
+   * @param displayButton the display button
+   */
+  public void apply(DisplayButton displayButton) {
+    if (displayButton.item != null) {
+      this.item = displayButton.item;
+    }
+    if (displayButton.clickAction != null) {
+      this.clickAction = displayButton.clickAction;
+    }
+  }
 }

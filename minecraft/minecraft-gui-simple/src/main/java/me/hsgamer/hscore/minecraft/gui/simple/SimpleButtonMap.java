@@ -3,15 +3,11 @@ package me.hsgamer.hscore.minecraft.gui.simple;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.button.ButtonMap;
 import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
-import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
-import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * A simple {@link ButtonMap} with a list of {@link Button}s
@@ -101,38 +97,17 @@ public class SimpleButtonMap implements ButtonMap {
     Map<Integer, DisplayButton> map = new HashMap<>();
     IntFunction<DisplayButton> getDisplayButton = i -> map.computeIfAbsent(i, s -> new DisplayButton());
 
-    List<Integer> emptyItemSlots = IntStream.range(0, size).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-    List<Integer> emptyActionSlots = IntStream.range(0, size).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-
     buttonSlotMap.forEach((button, slots) -> {
       DisplayButton displayButton = button.display(uuid);
       if (displayButton == null) return;
-
-      slots.forEach(slot -> {
-        DisplayButton currentDisplayButton = getDisplayButton.apply(slot);
-        Item item = displayButton.getItem();
-        if (item != null) {
-          currentDisplayButton.setItem(item);
-          emptyItemSlots.remove(slot);
-        }
-        Consumer<ClickEvent> action = displayButton.getClickAction();
-        if (action != null) {
-          currentDisplayButton.setClickAction(action);
-          emptyActionSlots.remove(slot);
-        }
-      });
+      slots.forEach(slot -> getDisplayButton.apply(slot).apply(displayButton));
     });
 
     Button defaultButton = getDefaultButton();
     DisplayButton defaultDisplayButton = defaultButton.display(uuid);
     if (defaultDisplayButton != null) {
-      Item defaultItem = defaultDisplayButton.getItem();
-      if (defaultItem != null) {
-        emptyItemSlots.forEach(slot -> getDisplayButton.apply(slot).setItem(defaultItem));
-      }
-      Consumer<ClickEvent> defaultAction = defaultDisplayButton.getClickAction();
-      if (defaultAction != null) {
-        emptyActionSlots.forEach(slot -> getDisplayButton.apply(slot).setClickAction(defaultAction));
+      for (int i = 0; i < size; i++) {
+        getDisplayButton.apply(i).apply(defaultDisplayButton);
       }
     }
 
