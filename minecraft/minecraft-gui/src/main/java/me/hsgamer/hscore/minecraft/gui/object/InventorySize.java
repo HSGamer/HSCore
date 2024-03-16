@@ -20,7 +20,7 @@ public interface InventorySize {
    * @return the slot per row
    */
   default int getSlotPerRow() {
-    return 9;
+    return getSize();
   }
 
   /**

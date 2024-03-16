@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.bukkit.gui;
 
+import me.hsgamer.hscore.bukkit.gui.object.BukkitInventorySize;
 import me.hsgamer.hscore.bukkit.gui.object.BukkitItem;
 import me.hsgamer.hscore.minecraft.gui.InventoryGUIDisplay;
 import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
@@ -34,7 +35,7 @@ public class BukkitGUIDisplay extends InventoryGUIDisplay<BukkitGUIHolder> imple
   @Override
   protected void initInventory() {
     this.inventory = holder.getInventoryFunction().apply(this);
-    this.inventorySize = BukkitGUIUtils.getInventorySize(inventory);
+    this.inventorySize = new BukkitInventorySize(inventory);
   }
 
   @Override
