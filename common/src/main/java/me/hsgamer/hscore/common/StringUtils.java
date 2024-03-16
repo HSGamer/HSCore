@@ -3,9 +3,10 @@ package me.hsgamer.hscore.common;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -190,5 +191,28 @@ public final class StringUtils {
       }
     }
     return chars;
+  }
+
+  /**
+   * Replace the string in the object
+   *
+   * @param object   the object
+   * @param replacer the replacer
+   *
+   * @return the replaced object
+   */
+  public static Object deepReplace(Object object, UnaryOperator<String> replacer) {
+    if (object instanceof String) {
+      return replacer.apply((String) object);
+    } else if (object instanceof Collection) {
+      List<Object> replaceList = new ArrayList<>();
+      ((Collection<?>) object).forEach(o -> replaceList.add(deepReplace(o, replacer)));
+      return replaceList;
+    } else if (object instanceof Map) {
+      Map<Object, Object> replaceMap = new LinkedHashMap<>();
+      ((Map<?, ?>) object).forEach((k, v) -> replaceMap.put(k, deepReplace(v, replacer)));
+      return replaceMap;
+    }
+    return object;
   }
 }
