@@ -3,6 +3,7 @@ package me.hsgamer.hscore.minecraft.gui.simple;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.button.ButtonMap;
 import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
+import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -93,7 +94,7 @@ public class SimpleButtonMap implements ButtonMap {
   }
 
   @Override
-  public @NotNull Map<@NotNull Integer, @NotNull DisplayButton> getButtons(@NotNull UUID uuid, int size) {
+  public @NotNull Map<@NotNull Integer, @NotNull DisplayButton> getButtons(@NotNull UUID uuid, InventorySize inventorySize) {
     Map<Integer, DisplayButton> map = new HashMap<>();
     IntFunction<DisplayButton> getDisplayButton = i -> map.computeIfAbsent(i, s -> new DisplayButton());
 
@@ -106,9 +107,7 @@ public class SimpleButtonMap implements ButtonMap {
     Button defaultButton = getDefaultButton();
     DisplayButton defaultDisplayButton = defaultButton.display(uuid);
     if (defaultDisplayButton != null) {
-      for (int i = 0; i < size; i++) {
-        getDisplayButton.apply(i).apply(defaultDisplayButton);
-      }
+      inventorySize.getSlots().forEach(i -> getDisplayButton.apply(i).apply(defaultDisplayButton));
     }
 
     return map;

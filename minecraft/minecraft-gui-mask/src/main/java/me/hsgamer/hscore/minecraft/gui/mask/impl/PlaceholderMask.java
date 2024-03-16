@@ -3,6 +3,7 @@ package me.hsgamer.hscore.minecraft.gui.mask.impl;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.BaseMask;
 import me.hsgamer.hscore.minecraft.gui.mask.Mask;
+import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,8 +33,8 @@ public class PlaceholderMask extends BaseMask {
   }
 
   @Override
-  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, int size) {
-    return this.userMasks.getOrDefault(uuid, this.defaultMask).generateButtons(uuid, size);
+  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, @NotNull InventorySize inventorySize) {
+    return this.userMasks.getOrDefault(uuid, this.defaultMask).generateButtons(uuid, inventorySize);
   }
 
   @Override

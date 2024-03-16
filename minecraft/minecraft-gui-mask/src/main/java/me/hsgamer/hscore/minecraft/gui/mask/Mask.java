@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.minecraft.gui.mask;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
+import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
 import me.hsgamer.hscore.ui.property.Initializable;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +23,7 @@ public interface Mask extends Initializable {
   static Mask empty(String name) {
     return new Mask() {
       @Override
-      public Optional<Map<@NotNull Integer, @NotNull Button>> generateButtons(@NotNull UUID uuid, int size) {
+      public Optional<Map<@NotNull Integer, @NotNull Button>> generateButtons(@NotNull UUID uuid, @NotNull InventorySize inventorySize) {
         return Optional.empty();
       }
 
@@ -36,12 +37,12 @@ public interface Mask extends Initializable {
   /**
    * Generate the buttons for the unique id
    *
-   * @param uuid the unique id
-   * @param size the size of the inventory
+   * @param uuid          the unique id
+   * @param inventorySize the size of the inventory
    *
    * @return the map contains the slots and the buttons
    */
-  Optional<Map<@NotNull Integer, @NotNull Button>> generateButtons(@NotNull UUID uuid, int size);
+  Optional<Map<@NotNull Integer, @NotNull Button>> generateButtons(@NotNull UUID uuid, @NotNull InventorySize inventorySize);
 
   /**
    * Get the name of the mask

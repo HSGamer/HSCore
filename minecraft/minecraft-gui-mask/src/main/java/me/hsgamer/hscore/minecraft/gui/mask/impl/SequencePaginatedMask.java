@@ -2,6 +2,7 @@ package me.hsgamer.hscore.minecraft.gui.mask.impl;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.MaskSlot;
+import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -44,8 +45,8 @@ public abstract class SequencePaginatedMask extends PaginatedMask {
   public abstract List<@NotNull Button> getButtons(UUID uuid);
 
   @Override
-  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, int size, int pageNumber) {
-    List<Integer> slots = this.maskSlot.getSlots(uuid);
+  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, @NotNull InventorySize inventorySize, int pageNumber) {
+    List<Integer> slots = this.maskSlot.getSlots(uuid, inventorySize);
     List<Button> buttons = getButtons(uuid);
     if (buttons.isEmpty() || slots.isEmpty()) {
       return Optional.empty();

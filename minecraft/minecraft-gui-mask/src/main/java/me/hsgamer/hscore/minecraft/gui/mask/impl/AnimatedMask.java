@@ -4,6 +4,7 @@ import me.hsgamer.hscore.minecraft.gui.GUIProperties;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.BaseMask;
 import me.hsgamer.hscore.minecraft.gui.mask.Mask;
+import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
 import me.hsgamer.hscore.ui.property.IdentifiedUpdatable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -98,9 +99,9 @@ public class AnimatedMask extends BaseMask implements IdentifiedUpdatable {
   }
 
   @Override
-  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, int size) {
+  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, @NotNull InventorySize inventorySize) {
     update(uuid);
-    return masks.get(getCurrentIndex(uuid)).generateButtons(uuid, size);
+    return masks.get(getCurrentIndex(uuid)).generateButtons(uuid, inventorySize);
   }
 
   @Override

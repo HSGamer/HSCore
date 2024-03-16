@@ -4,6 +4,7 @@ import me.hsgamer.hscore.minecraft.gui.GUIProperties;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.BaseMask;
 import me.hsgamer.hscore.minecraft.gui.mask.Mask;
+import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
 import me.hsgamer.hscore.ui.property.IdentifiedUpdatable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -118,13 +119,13 @@ public class OneTimeAnimatedMask extends BaseMask implements IdentifiedUpdatable
   }
 
   @Override
-  public Optional<Map<@NotNull Integer, @NotNull Button>> generateButtons(@NotNull UUID uuid, int size) {
+  public Optional<Map<@NotNull Integer, @NotNull Button>> generateButtons(@NotNull UUID uuid, @NotNull InventorySize inventorySize) {
     update(uuid);
     SequenceRunner runner = getRunner(uuid);
     if (runner.maxed && !viewLast) {
       return Optional.empty();
     }
-    return masks.get(runner.index).generateButtons(uuid, size);
+    return masks.get(runner.index).generateButtons(uuid, inventorySize);
   }
 
   @Override

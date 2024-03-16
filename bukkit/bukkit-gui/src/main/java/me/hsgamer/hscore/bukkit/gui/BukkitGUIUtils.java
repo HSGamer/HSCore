@@ -2,6 +2,7 @@ package me.hsgamer.hscore.bukkit.gui;
 
 import me.hsgamer.hscore.bukkit.gui.event.BukkitClickEvent;
 import me.hsgamer.hscore.bukkit.gui.event.BukkitDragEvent;
+import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -114,6 +115,38 @@ public final class BukkitGUIUtils {
       return type == InventoryType.CHEST && size > 0
         ? Bukkit.createInventory(display, normalizeToChestSize(size), title)
         : Bukkit.createInventory(display, type, title);
+    };
+  }
+
+  /**
+   * Get the inventory size from the inventory
+   *
+   * @param inventory the inventory
+   *
+   * @return the inventory size
+   */
+  public static InventorySize getInventorySize(Inventory inventory) {
+    return new InventorySize() {
+      @Override
+      public int getSize() {
+        return inventory.getSize();
+      }
+
+      @Override
+      public int getSlotPerRow() {
+        switch (inventory.getType()) {
+          case CHEST:
+          case ENDER_CHEST:
+          case SHULKER_BOX:
+            return 9;
+          case DISPENSER:
+          case DROPPER:
+          case HOPPER:
+            return 3;
+          default:
+            return getSize();
+        }
+      }
     };
   }
 }

@@ -3,6 +3,7 @@ package me.hsgamer.hscore.minecraft.gui;
 import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.event.ViewerEvent;
+import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,7 +50,7 @@ public abstract class InventoryGUIDisplay<H extends GUIHolder<?>> extends GUIDis
    *
    * @return the size
    */
-  protected abstract int getInventorySize();
+  protected abstract InventorySize getInventorySize();
 
   /**
    * Get the title of the inventory
@@ -81,12 +82,10 @@ public abstract class InventoryGUIDisplay<H extends GUIHolder<?>> extends GUIDis
 
   @Override
   public void update() {
-    int size = getInventorySize();
+    InventorySize size = getInventorySize();
     Map<Integer, DisplayButton> viewedButtons = holder.getButtonMap().getButtons(uuid, size);
     viewedButtonsRef.set(viewedButtons);
-    for (int i = 0; i < size; i++) {
-      setButton(i, viewedButtons.getOrDefault(i, DisplayButton.EMPTY).getItem());
-    }
+    size.getSlots().forEach(slot -> setButton(slot, viewedButtons.getOrDefault(slot, DisplayButton.EMPTY).getItem()));
   }
 
   /**

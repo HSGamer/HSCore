@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.minestom.gui;
 
 import me.hsgamer.hscore.minecraft.gui.InventoryGUIDisplay;
+import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
 import me.hsgamer.hscore.minestom.gui.inventory.DelegatingInventory;
 import me.hsgamer.hscore.minestom.gui.object.MinestomItem;
@@ -17,6 +18,7 @@ import java.util.UUID;
  */
 public class MinestomGUIDisplay extends InventoryGUIDisplay<MinestomGUIHolder> {
   private DelegatingInventory inventory;
+  private InventorySize inventorySize;
 
   /**
    * Create a new display
@@ -32,6 +34,17 @@ public class MinestomGUIDisplay extends InventoryGUIDisplay<MinestomGUIHolder> {
   protected void initInventory() {
     this.inventory = new DelegatingInventory(holder.getInventoryType(), holder.getTitleFunction().apply(uuid), this);
     this.inventory.init();
+    this.inventorySize = new InventorySize() {
+      @Override
+      public int getSize() {
+        return inventory.getSize();
+      }
+
+      @Override
+      public int getSlotPerRow() {
+        return inventory.getSlotPerRow();
+      }
+    };
   }
 
   @Override
@@ -42,8 +55,8 @@ public class MinestomGUIDisplay extends InventoryGUIDisplay<MinestomGUIHolder> {
   }
 
   @Override
-  protected int getInventorySize() {
-    return inventory == null ? 0 : inventory.getSize();
+  protected InventorySize getInventorySize() {
+    return inventorySize;
   }
 
   @Override

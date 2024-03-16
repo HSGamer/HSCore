@@ -2,6 +2,7 @@ package me.hsgamer.hscore.minecraft.gui.mask.impl;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.BaseMask;
+import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -30,7 +31,7 @@ public class SingleMask extends BaseMask {
   }
 
   @Override
-  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, int size) {
+  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, @NotNull InventorySize inventorySize) {
     return Optional.of(Collections.singletonMap(this.slot, this.button));
   }
 

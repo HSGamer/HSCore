@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.minecraft.gui.button;
 
+import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
 import me.hsgamer.hscore.ui.property.Initializable;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,11 +14,11 @@ public interface ButtonMap extends Initializable {
   /**
    * Get the button map that is ready to be displayed to the unique id
    *
-   * @param uuid the unique id
-   * @param size the size of the inventory
+   * @param uuid          the unique id
+   * @param inventorySize the size of the inventory
    *
    * @return the button map
    */
   @NotNull
-  Map<@NotNull Integer, @NotNull DisplayButton> getButtons(@NotNull final UUID uuid, int size);
+  Map<@NotNull Integer, @NotNull DisplayButton> getButtons(@NotNull final UUID uuid, InventorySize inventorySize);
 }

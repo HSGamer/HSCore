@@ -3,6 +3,7 @@ package me.hsgamer.hscore.minecraft.gui.mask.impl;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.BaseMask;
 import me.hsgamer.hscore.minecraft.gui.mask.Mask;
+import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -90,11 +91,11 @@ public class PredicateMask extends BaseMask {
   }
 
   @Override
-  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, int size) {
+  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, @NotNull InventorySize inventorySize) {
     if (viewPredicate.test(uuid)) {
-      return mask != null ? mask.generateButtons(uuid, size) : Optional.empty();
+      return mask != null ? mask.generateButtons(uuid, inventorySize) : Optional.empty();
     } else {
-      return fallbackMask != null ? fallbackMask.generateButtons(uuid, size) : Optional.empty();
+      return fallbackMask != null ? fallbackMask.generateButtons(uuid, inventorySize) : Optional.empty();
     }
   }
 

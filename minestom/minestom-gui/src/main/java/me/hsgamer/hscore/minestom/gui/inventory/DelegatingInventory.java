@@ -78,4 +78,23 @@ public class DelegatingInventory extends Inventory implements Initializable {
   public MinestomGUIDisplay getDisplay() {
     return display;
   }
+
+  /**
+   * Get the slot per row of the inventory
+   *
+   * @return the slot per row
+   */
+  public int getSlotPerRow() {
+    switch (getInventoryType()) {
+      case CHEST_1_ROW, CHEST_2_ROW, CHEST_3_ROW, CHEST_4_ROW, CHEST_5_ROW, CHEST_6_ROW, SHULKER_BOX -> {
+        return 9;
+      }
+      case WINDOW_3X3, CRAFTER_3X3 -> {
+        return 3;
+      }
+      default -> {
+        return getSize();
+      }
+    }
+  }
 }

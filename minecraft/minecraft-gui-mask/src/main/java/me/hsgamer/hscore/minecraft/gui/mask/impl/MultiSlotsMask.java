@@ -3,6 +3,7 @@ package me.hsgamer.hscore.minecraft.gui.mask.impl;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.BaseMask;
 import me.hsgamer.hscore.minecraft.gui.mask.MaskSlot;
+import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -73,9 +74,9 @@ public class MultiSlotsMask extends BaseMask {
   }
 
   @Override
-  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, int size) {
+  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, @NotNull InventorySize inventorySize) {
     Map<Integer, Button> map = new HashMap<>();
-    List<Integer> slots = this.maskSlot.getSlots(uuid);
+    List<Integer> slots = this.maskSlot.getSlots(uuid, inventorySize);
     if (!this.buttons.isEmpty() && !slots.isEmpty()) {
       int slotsSize = slots.size();
       int buttonsSize = this.buttons.size();

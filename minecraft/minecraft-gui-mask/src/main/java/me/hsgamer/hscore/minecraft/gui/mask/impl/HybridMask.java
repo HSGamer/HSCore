@@ -3,6 +3,7 @@ package me.hsgamer.hscore.minecraft.gui.mask.impl;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.BaseMask;
 import me.hsgamer.hscore.minecraft.gui.mask.Mask;
+import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,10 +60,10 @@ public class HybridMask extends BaseMask {
   }
 
   @Override
-  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, int size) {
+  public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, @NotNull InventorySize inventorySize) {
     Map<Integer, Button> buttonMap = new HashMap<>();
     for (Mask mask : maskList) {
-      mask.generateButtons(uuid, size).ifPresent(buttonMap::putAll);
+      mask.generateButtons(uuid, inventorySize).ifPresent(buttonMap::putAll);
     }
     return Optional.of(buttonMap);
   }

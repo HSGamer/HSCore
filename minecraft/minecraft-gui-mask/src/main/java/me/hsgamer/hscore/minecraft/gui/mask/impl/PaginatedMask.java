@@ -2,6 +2,7 @@ package me.hsgamer.hscore.minecraft.gui.mask.impl;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.BaseMask;
+import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -25,15 +26,15 @@ public abstract class PaginatedMask extends BaseMask {
   /**
    * Generate the buttons for the unique id
    *
-   * @param uuid       the unique id
-   * @param size       the size of the inventory
-   * @param pageNumber the page number
+   * @param uuid          the unique id
+   * @param inventorySize the size of the inventory
+   * @param pageNumber    the page number
    *
    * @return the map contains the slots and the buttons
    *
-   * @see me.hsgamer.hscore.minecraft.gui.mask.Mask#generateButtons(UUID, int)
+   * @see me.hsgamer.hscore.minecraft.gui.mask.Mask#generateButtons(UUID, InventorySize)
    */
-  protected abstract Optional<Map<@NotNull Integer, @NotNull Button>> generateButtons(@NotNull UUID uuid, int size, int pageNumber);
+  protected abstract Optional<Map<@NotNull Integer, @NotNull Button>> generateButtons(@NotNull UUID uuid, @NotNull InventorySize inventorySize, int pageNumber);
 
   /**
    * Get the exact page from the input page
@@ -140,7 +141,7 @@ public abstract class PaginatedMask extends BaseMask {
   }
 
   @Override
-  public Optional<Map<@NotNull Integer, @NotNull Button>> generateButtons(@NotNull UUID uuid, int size) {
-    return generateButtons(uuid, size, this.getPage(uuid));
+  public Optional<Map<@NotNull Integer, @NotNull Button>> generateButtons(@NotNull UUID uuid, @NotNull InventorySize inventorySize) {
+    return generateButtons(uuid, inventorySize, this.getPage(uuid));
   }
 }

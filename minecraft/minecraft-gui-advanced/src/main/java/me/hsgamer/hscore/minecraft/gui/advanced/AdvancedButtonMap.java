@@ -4,6 +4,7 @@ import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.button.ButtonMap;
 import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
 import me.hsgamer.hscore.minecraft.gui.mask.Mask;
+import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -73,13 +74,13 @@ public class AdvancedButtonMap implements ButtonMap {
   }
 
   @Override
-  public @NotNull Map<@NotNull Integer, @NotNull DisplayButton> getButtons(@NotNull UUID uuid, int size) {
+  public @NotNull Map<@NotNull Integer, @NotNull DisplayButton> getButtons(@NotNull UUID uuid, InventorySize inventorySize) {
     Map<Integer, DisplayButton> map = new HashMap<>();
     for (Mask mask : masks) {
-      Optional<Map<Integer, Button>> buttons = mask.generateButtons(uuid, size);
+      Optional<Map<Integer, Button>> buttons = mask.generateButtons(uuid, inventorySize);
       if (!buttons.isPresent()) continue;
       buttons.get().forEach((slot, button) -> {
-        if (slot < 0 || slot >= size) {
+        if (slot < 0 || slot >= inventorySize.getSize()) {
           return;
         }
 

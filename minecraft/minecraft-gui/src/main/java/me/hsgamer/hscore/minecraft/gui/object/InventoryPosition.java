@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.minecraft.gui.object;
 
+import java.util.Objects;
+
 /**
  * The position of the inventory
  */
@@ -96,5 +98,29 @@ public class InventoryPosition {
    */
   public int getY() {
     return y;
+  }
+
+  /**
+   * Convert to slot
+   *
+   * @param size the size of the inventory
+   *
+   * @return the slot
+   */
+  public int toSlot(InventorySize size) {
+    return y * size.getSlotPerRow() + x;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    InventoryPosition that = (InventoryPosition) o;
+    return x == that.x && y == that.y;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(x, y);
   }
 }
