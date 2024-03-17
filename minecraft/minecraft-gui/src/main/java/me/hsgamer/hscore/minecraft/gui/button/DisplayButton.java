@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.minecraft.gui.button;
 
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
+import me.hsgamer.hscore.minecraft.gui.event.ViewerEvent;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,7 +17,7 @@ public class DisplayButton {
   public static final DisplayButton EMPTY = new DisplayButton();
 
   private Item item;
-  private Consumer<ClickEvent> clickAction;
+  private Consumer<ViewerEvent> action;
 
   /**
    * Get the item to display
@@ -41,24 +42,40 @@ public class DisplayButton {
   }
 
   /**
-   * Get the click action
+   * Get the action to handle the event
    *
    * @return the action
    */
   @Nullable
-  public Consumer<ClickEvent> getClickAction() {
-    return clickAction;
+  public Consumer<ViewerEvent> getAction() {
+    return action;
   }
 
   /**
-   * Set the click action
+   * Set the action to handle the event
    *
-   * @param clickAction the action
+   * @param action the action
    *
    * @return the current instance
    */
-  public DisplayButton setClickAction(@Nullable Consumer<ClickEvent> clickAction) {
-    this.clickAction = clickAction;
+  public DisplayButton setAction(@Nullable Consumer<ViewerEvent> action) {
+    this.action = action;
+    return this;
+  }
+
+  /**
+   * Set the action to handle the click event
+   *
+   * @param action the action
+   *
+   * @return the current instance
+   */
+  public DisplayButton setClickAction(@Nullable Consumer<ClickEvent> action) {
+    this.action = action == null ? null : event -> {
+      if (event instanceof ClickEvent) {
+        action.accept((ClickEvent) event);
+      }
+    };
     return this;
   }
 
@@ -71,8 +88,8 @@ public class DisplayButton {
     if (displayButton.item != null) {
       this.item = displayButton.item;
     }
-    if (displayButton.clickAction != null) {
-      this.clickAction = displayButton.clickAction;
+    if (displayButton.action != null) {
+      this.action = displayButton.action;
     }
   }
 }

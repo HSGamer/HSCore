@@ -64,7 +64,7 @@ public abstract class InventoryGUIDisplay<H extends GUIHolder<?>> extends GUIDis
   public void handleEvent(ViewerEvent event) {
     if (event instanceof ClickEvent) {
       ClickEvent clickEvent = (ClickEvent) event;
-      getViewedButton(clickEvent.getSlot()).map(DisplayButton::getClickAction).ifPresent(consumer -> consumer.accept(clickEvent));
+      getViewedButton(clickEvent.getSlot()).map(DisplayButton::getAction).ifPresent(consumer -> consumer.accept(clickEvent));
     }
   }
 

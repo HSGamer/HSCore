@@ -3,6 +3,7 @@ package me.hsgamer.hscore.minecraft.gui.button.impl;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
+import me.hsgamer.hscore.minecraft.gui.event.ViewerEvent;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -136,20 +137,25 @@ public class PredicateButton implements Button {
       return null;
     }
 
-    Optional.ofNullable(displayButton.getClickAction())
-      .map(displayButtonAction -> (Consumer<ClickEvent>) event -> {
-        if (preventSpamClick && clickCheckList.contains(uuid)) {
-          return;
-        }
-        clickCheckList.add(uuid);
-        clickFuturePredicate.apply(event).thenAccept(result -> {
-          clickCheckList.remove(uuid);
-          if (Boolean.TRUE.equals(result)) {
-            displayButtonAction.accept(event);
+    Optional.ofNullable(displayButton.getAction())
+      .map(displayButtonAction -> (Consumer<ViewerEvent>) event -> {
+        if (event instanceof ClickEvent) {
+          ClickEvent clickEvent = (ClickEvent) event;
+          if (preventSpamClick && clickCheckList.contains(uuid)) {
+            return;
           }
-        });
+          clickCheckList.add(uuid);
+          clickFuturePredicate.apply(clickEvent).thenAccept(result -> {
+            clickCheckList.remove(uuid);
+            if (Boolean.TRUE.equals(result)) {
+              displayButtonAction.accept(event);
+            }
+          });
+        } else {
+          displayButtonAction.accept(event);
+        }
       })
-      .ifPresent(displayButton::setClickAction);
+      .ifPresent(displayButton::setAction);
 
     return displayButton;
   }
