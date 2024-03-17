@@ -12,10 +12,8 @@ import me.hsgamer.hscore.config.proxy.defaulthandler.OldJavaDefaultMethodHandler
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * The internal invocation handler to map the interface to the config
@@ -52,12 +50,12 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
     this.config = config;
     this.stickyValue = stickyValue;
 
-    Arrays.stream(this.clazz.getDeclaredMethods())
+    Stream<ConfigNode> configNodes = Arrays.stream(this.clazz.getDeclaredMethods())
       .sorted(ConfigInvocationHandler::compareMethod)
-      .forEach(this::setupMethod);
+      .flatMap(method -> this.setupMethod(method).map(Stream::of).orElseGet(Stream::empty));
 
     if (addDefault) {
-      nodes.values().forEach(ConfigNode::addDefault);
+      configNodes.forEach(ConfigNode::addDefault);
       this.setupClassComment();
       this.config.save();
     }
@@ -111,9 +109,9 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
    *
    * @param method The method
    */
-  private void setupMethod(Method method) {
+  private Optional<ConfigNode> setupMethod(Method method) {
     if (!method.isDefault() || method.getParameterCount() != 0) {
-      return;
+      return Optional.empty();
     }
 
     String name = method.getName();
@@ -126,11 +124,11 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
       methodName = name;
     }
     if (methodName.isEmpty()) {
-      return;
+      return Optional.empty();
     }
 
     if (!method.isAnnotationPresent(ConfigPath.class)) {
-      return;
+      return Optional.empty();
     }
     ConfigPath configPath = method.getAnnotation(ConfigPath.class);
     String[] path = configPath.value();
@@ -143,6 +141,7 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
         stickyValue || method.isAnnotationPresent(StickyValue.class)
       );
       nodes.put(methodName, node);
+      return Optional.of(node);
     } catch (Throwable e) {
       throw new IllegalStateException("Failed to setup method " + method.getName(), e);
     }
