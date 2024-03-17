@@ -144,13 +144,29 @@ public interface ActionInput {
 
   /**
    * Get the option as a map.
+   * The map format is {@code key=value}
+   *
+   * @param separator the separator
+   *
+   * @return the map
+   *
+   * @see #getOptionStream(String)
+   */
+  default Map<String, String> getOptionAsMap(String separator) {
+    return getOptionStream(separator)
+      .map(s -> s.split("="))
+      .collect(Collectors.toMap(strings -> strings[0].trim(), strings -> strings.length > 1 ? strings[1].trim() : ""));
+  }
+
+  /**
+   * Get the option as a map.
    * The format is {@code key=value,key=value}
    *
    * @return the map
+   *
+   * @see #getOptionAsMap()
    */
   default Map<String, String> getOptionAsMap() {
-    return getOptionStream()
-      .map(s -> s.split("="))
-      .collect(Collectors.toMap(strings -> strings[0].trim(), strings -> strings.length > 1 ? strings[1].trim() : ""));
+    return getOptionAsMap(",");
   }
 }
