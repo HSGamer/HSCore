@@ -135,7 +135,6 @@ public class AnnotatedConfig extends DecorativeConfig {
     this.setValue(field, value);
   }
 
-  @SuppressWarnings("deprecation")
   private void setValue(Field field, Object value) {
     boolean accessible = field.isAccessible();
     field.setAccessible(true);
@@ -148,7 +147,6 @@ public class AnnotatedConfig extends DecorativeConfig {
     }
   }
 
-  @SuppressWarnings("deprecation")
   private Object getValue(Field field) {
     boolean accessible = field.isAccessible();
     field.setAccessible(true);
