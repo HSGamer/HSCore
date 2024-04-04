@@ -91,4 +91,50 @@ public final class VersionUtils {
   public static boolean isAt(int majorVersion, int minorVersion) {
     return MAJOR_VERSION == majorVersion && MINOR_VERSION == minorVersion;
   }
+
+  /**
+   * Check if the server version is newer than the given version
+   *
+   * @param majorVersion the major version to check
+   *
+   * @return true if it is
+   */
+  public static boolean isNewerThan(int majorVersion) {
+    return MAJOR_VERSION > majorVersion;
+  }
+
+  /**
+   * Check if the server version is newer than the given version
+   *
+   * @param majorVersion the major version to check
+   * @param minorVersion the minor version to check
+   *
+   * @return true if it is
+   */
+  public static boolean isNewerThan(int majorVersion, int minorVersion) {
+    return MAJOR_VERSION > majorVersion || (MAJOR_VERSION == majorVersion && MINOR_VERSION > minorVersion);
+  }
+
+  /**
+   * Check if the server version is lower than the given version
+   *
+   * @param majorVersion the major version to check
+   *
+   * @return true if it is
+   */
+  public static boolean isLowerThan(int majorVersion) {
+    return MAJOR_VERSION < majorVersion;
+  }
+
+  /**
+   * Check if the server version is lower than the given version
+   *
+   * @param majorVersion the major version to check
+   * @param minorVersion the minor version to check
+   *
+   * @return true if it is
+   */
+  public static boolean isLowerThan(int majorVersion, int minorVersion) {
+    return MAJOR_VERSION < majorVersion || (MAJOR_VERSION == majorVersion && MINOR_VERSION < minorVersion);
+  }
 }
