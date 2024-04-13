@@ -25,11 +25,11 @@ public class DefaultArrayConverterProvider implements ConverterProvider {
           if (raw instanceof Object[]) {
             return Arrays.stream((Object[]) raw)
               .map(converter::convert)
-              .toArray(Object[]::new);
+              .toArray();
           } else if (raw instanceof Collection) {
             return ((Collection<?>) raw).stream()
               .map(converter::convert)
-              .toArray(Object[]::new);
+              .toArray();
           } else {
             return null;
           }
