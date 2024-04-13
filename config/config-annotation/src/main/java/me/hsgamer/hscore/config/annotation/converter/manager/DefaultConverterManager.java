@@ -2,10 +2,7 @@ package me.hsgamer.hscore.config.annotation.converter.manager;
 
 import me.hsgamer.hscore.config.annotation.converter.Converter;
 import me.hsgamer.hscore.config.annotation.converter.ConverterProvider;
-import me.hsgamer.hscore.config.annotation.converter.impl.DefaultArrayConverterProvider;
-import me.hsgamer.hscore.config.annotation.converter.impl.DefaultConverter;
-import me.hsgamer.hscore.config.annotation.converter.impl.PrimitiveConverterProvider;
-import me.hsgamer.hscore.config.annotation.converter.impl.SimpleConverter;
+import me.hsgamer.hscore.config.annotation.converter.impl.*;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -26,92 +23,17 @@ public final class DefaultConverterManager {
     registerProvider(new PrimitiveConverterProvider());
     registerProvider(new DefaultArrayConverterProvider());
     registerConverter(String.class, new SimpleConverter(Objects::toString));
-    registerConverter(URI.class, new Converter() {
-      @Override
-      public Object convert(Object raw) {
-        if (raw == null) {
-          return null;
-        }
-        return URI.create(Objects.toString(raw));
+    registerConverter(URI.class, StringConverter.of(URI::create, URI::toString));
+    registerConverter(URL.class, StringConverter.of(s -> {
+      try {
+        return new URL(s);
+      } catch (Exception e) {
+        return null;
       }
-
-      @Override
-      public Object convertToRaw(Object value) {
-        return value == null ? null : value.toString();
-      }
-    });
-    registerConverter(URL.class, new Converter() {
-      @Override
-      public Object convert(Object raw) {
-        if (raw == null) {
-          return null;
-        }
-        try {
-          return new URL(Objects.toString(raw));
-        } catch (Exception e) {
-          return null;
-        }
-      }
-
-      @Override
-      public Object convertToRaw(Object value) {
-        return value == null ? null : value.toString();
-      }
-    });
-    registerConverter(BigInteger.class, new Converter() {
-      @Override
-      public Object convert(Object raw) {
-        if (raw == null) {
-          return null;
-        }
-        try {
-          return new BigInteger(Objects.toString(raw));
-        } catch (Exception e) {
-          return null;
-        }
-      }
-
-      @Override
-      public Object convertToRaw(Object value) {
-        return value == null ? null : value.toString();
-      }
-    });
-    registerConverter(BigDecimal.class, new Converter() {
-      @Override
-      public Object convert(Object raw) {
-        if (raw == null) {
-          return null;
-        }
-        try {
-          return new BigDecimal(Objects.toString(raw));
-        } catch (Exception e) {
-          return null;
-        }
-      }
-
-      @Override
-      public Object convertToRaw(Object value) {
-        return value == null ? null : value.toString();
-      }
-    });
-    registerConverter(Instant.class, new Converter() {
-      @Override
-      public Object convert(Object raw) {
-        if (raw == null) {
-          return null;
-        }
-        try {
-          return Instant.parse(Objects.toString(raw));
-        } catch (Exception e) {
-          return null;
-        }
-      }
-
-      @Override
-      public Object convertToRaw(Object value) {
-        return value == null ? null : value.toString();
-      }
-    });
+    }, URL::toString));
+    registerConverter(BigInteger.class, StringConverter.of(BigInteger::new, BigInteger::toString));
+    registerConverter(BigDecimal.class, StringConverter.of(BigDecimal::new, BigDecimal::toString));
+    registerConverter(Instant.class, StringConverter.of(Instant::parse, Instant::toString));
   }
 
   private DefaultConverterManager() {
