@@ -31,7 +31,7 @@ public class DefaultArrayConverterProvider implements ConverterProvider {
               .map(converter::convert)
               .toArray(Object[]::new);
           } else {
-            return new Object[0];
+            return null;
           }
         }
 
@@ -45,7 +45,7 @@ public class DefaultArrayConverterProvider implements ConverterProvider {
               .map(converter::convertToRaw)
               .toArray();
           } else {
-            return new Object[0];
+            return null;
           }
         }
       });
