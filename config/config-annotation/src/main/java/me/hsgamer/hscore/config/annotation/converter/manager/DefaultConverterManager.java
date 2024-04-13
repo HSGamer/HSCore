@@ -2,6 +2,7 @@ package me.hsgamer.hscore.config.annotation.converter.manager;
 
 import me.hsgamer.hscore.config.annotation.converter.Converter;
 import me.hsgamer.hscore.config.annotation.converter.ConverterProvider;
+import me.hsgamer.hscore.config.annotation.converter.impl.DefaultArrayConverterProvider;
 import me.hsgamer.hscore.config.annotation.converter.impl.DefaultConverter;
 import me.hsgamer.hscore.config.annotation.converter.impl.PrimitiveConverterProvider;
 import me.hsgamer.hscore.config.annotation.converter.impl.SimpleConverter;
@@ -23,6 +24,7 @@ public final class DefaultConverterManager {
 
   static {
     registerProvider(new PrimitiveConverterProvider());
+    registerProvider(new DefaultArrayConverterProvider());
     registerConverter(String.class, new SimpleConverter(Objects::toString));
     registerConverter(URI.class, new Converter() {
       @Override
