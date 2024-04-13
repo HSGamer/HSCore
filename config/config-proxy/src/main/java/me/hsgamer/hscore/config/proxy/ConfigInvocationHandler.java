@@ -173,7 +173,8 @@ public class ConfigInvocationHandler<T> implements InvocationHandler {
       }
       if (nodes.containsKey(methodName)) {
         Object value = nodes.get(methodName).getValue();
-        if ((isPrimitiveOrWrapper(method.getReturnType()) && isPrimitiveOrWrapper(value.getClass())) || method.getReturnType().isInstance(value)) {
+        if ((isPrimitiveOrWrapper(method.getReturnType()) && isPrimitiveOrWrapper(value.getClass())) || method.getReturnType().isInstance(value)
+        ) {
           return value;
         }
       }
