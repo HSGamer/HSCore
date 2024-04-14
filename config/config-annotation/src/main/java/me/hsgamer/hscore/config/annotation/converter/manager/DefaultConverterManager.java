@@ -78,18 +78,21 @@ public final class DefaultConverterManager {
    */
   public static Converter getConverterIfDefault(Type type, Converter converter) {
     if (converter instanceof DefaultConverter) {
-      return CONVERTER_MAP.computeIfAbsent(type, key -> {
-        if (key instanceof Class) {
-          Class<?> clazz = (Class<?>) key;
-          for (ConverterProvider provider : PROVIDERS) {
-            Optional<Converter> optionalConverter = provider.getConverter(clazz);
-            if (optionalConverter.isPresent()) {
-              return optionalConverter.get();
-            }
+      if (CONVERTER_MAP.containsKey(type)) {
+        return CONVERTER_MAP.get(type);
+      }
+
+      if (type instanceof Class) {
+        Class<?> clazz = (Class<?>) type;
+        for (ConverterProvider provider : PROVIDERS) {
+          Optional<Converter> optionalConverter = provider.getConverter(clazz);
+          if (optionalConverter.isPresent()) {
+            Converter finalConverter = optionalConverter.get();
+            CONVERTER_MAP.put(type, finalConverter);
+            return finalConverter;
           }
         }
-        return converter;
-      });
+      }
     }
     return converter;
   }
