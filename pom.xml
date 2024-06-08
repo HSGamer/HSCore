@@ -64,6 +64,7 @@
     <module>minestom</module>
     <module>license</module>
     <module>action</module>
+    <module>animate</module>
   </modules>
 
   <properties>
