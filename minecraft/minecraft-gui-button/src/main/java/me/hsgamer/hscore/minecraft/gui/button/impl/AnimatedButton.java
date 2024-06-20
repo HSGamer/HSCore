@@ -100,6 +100,7 @@ public class AnimatedButton implements Button {
 
   @Override
   public void stop() {
+    this.animationMap.clear();
     this.buttons.forEach(Button::stop);
   }
 }

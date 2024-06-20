@@ -141,8 +141,7 @@ public class OneTimeAnimatedMask extends BaseMask {
 
   @Override
   public void stop() {
-    animationMap.clear();
-    masks.forEach(Mask::stop);
-    masks.clear();
+    this.animationMap.clear();
+    this.masks.forEach(Mask::stop);
   }
 }

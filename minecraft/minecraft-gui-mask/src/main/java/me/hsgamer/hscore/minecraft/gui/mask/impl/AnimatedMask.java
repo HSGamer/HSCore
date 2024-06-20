@@ -112,6 +112,7 @@ public class AnimatedMask extends BaseMask {
 
   @Override
   public void stop() {
+    this.animationMap.clear();
     this.masks.forEach(Mask::stop);
   }
 }
