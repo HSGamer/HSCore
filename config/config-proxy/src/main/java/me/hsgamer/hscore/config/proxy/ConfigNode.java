@@ -1,7 +1,6 @@
 package me.hsgamer.hscore.config.proxy;
 
 import me.hsgamer.hscore.config.Config;
-import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.annotation.converter.Converter;
 
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * The config node for a method in the interface
  */
 public class ConfigNode {
-  private final PathString path;
+  private final String[] path;
   private final Config config;
   private final Converter converter;
   private final Object defaultValue;
@@ -30,7 +29,7 @@ public class ConfigNode {
    * @param stickyValue  true if the value should be sticky
    */
   ConfigNode(String[] path, Config config, Converter converter, Object defaultValue, List<String> comment, boolean stickyValue) {
-    this.path = new PathString(path);
+    this.path = path;
     this.config = config;
     this.converter = converter;
     this.defaultValue = defaultValue;
@@ -43,7 +42,7 @@ public class ConfigNode {
    *
    * @return the config path
    */
-  public PathString getPath() {
+  public String[] getPath() {
     return path;
   }
 
@@ -51,9 +50,9 @@ public class ConfigNode {
    * Add the default value to the config
    */
   public void addDefault() {
-    config.setIfAbsent(path, converter.convertToRaw(defaultValue));
+    config.setIfAbsent(converter.convertToRaw(defaultValue), path);
     if (!comment.isEmpty() && config.getComment(path).isEmpty()) {
-      config.setComment(path, comment);
+      config.setComment(comment, path);
     }
   }
 
@@ -84,7 +83,7 @@ public class ConfigNode {
    * @param value the value
    */
   public void setValue(Object value) {
-    config.set(path, converter.convertToRaw(value));
+    config.set(converter.convertToRaw(value), path);
     this.cachedValue.set(null);
   }
 

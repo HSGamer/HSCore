@@ -64,12 +64,12 @@ public class BukkitConfig implements Config {
     this(plugin, "config.yml");
   }
 
-  private String toPath(PathString pathString) {
-    return PathString.toPath(String.valueOf(configuration.options().pathSeparator()), pathString);
+  private String toPath(String... path) {
+    return PathString.join(String.valueOf(configuration.options().pathSeparator()), path);
   }
 
-  private Map<PathString, Object> toPathStringMap(Map<String, Object> map) {
-    return PathString.toPathStringMap(String.valueOf(configuration.options().pathSeparator()), map);
+  private Map<String[], Object> toPathStringMap(Map<String, Object> map) {
+    return PathString.split(String.valueOf(configuration.options().pathSeparator()), map);
   }
 
   @Override
@@ -78,17 +78,17 @@ public class BukkitConfig implements Config {
   }
 
   @Override
-  public Object get(PathString path, Object def) {
+  public Object get(Object def, String... path) {
     return this.configuration.get(toPath(path), def);
   }
 
   @Override
-  public void set(PathString path, Object value) {
+  public void set(Object value, String... path) {
     this.configuration.set(toPath(path), value);
   }
 
   @Override
-  public boolean contains(PathString path) {
+  public boolean contains(String... path) {
     return this.configuration.isSet(toPath(path));
   }
 
@@ -98,8 +98,8 @@ public class BukkitConfig implements Config {
   }
 
   @Override
-  public Map<PathString, Object> getValues(PathString path, boolean deep) {
-    if (path.isRoot()) {
+  public Map<String[], Object> getValues(boolean deep, String... path) {
+    if (path.length == 0) {
       return toPathStringMap(this.configuration.getValues(deep));
     } else {
       return Optional.ofNullable(this.configuration.getConfigurationSection(toPath(path)))
@@ -159,8 +159,8 @@ public class BukkitConfig implements Config {
   }
 
   @Override
-  public List<String> getComment(PathString path, CommentType type) {
-    if (path.isRoot()) {
+  public List<String> getComment(CommentType type, String... path) {
+    if (path.length == 0) {
       String header = this.configuration.options().header();
       return header.isEmpty() ? Collections.emptyList() : Arrays.asList(header.split("\\r?\\n"));
     }
@@ -182,8 +182,8 @@ public class BukkitConfig implements Config {
   }
 
   @Override
-  public void setComment(PathString path, List<String> value, CommentType type) {
-    if (path.isRoot()) {
+  public void setComment(CommentType type, List<String> value, String... path) {
+    if (path.length == 0) {
       this.configuration.options()
         .copyHeader(true)
         .header(value == null || value.isEmpty() ? null : String.join(System.lineSeparator(), value));

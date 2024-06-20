@@ -2,7 +2,6 @@ package me.hsgamer.hscore.config.configurate;
 
 import me.hsgamer.hscore.config.CommentType;
 import me.hsgamer.hscore.config.Config;
-import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.logger.common.LogLevel;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -13,6 +12,9 @@ import org.spongepowered.configurate.serialize.SerializationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+
+import static me.hsgamer.hscore.config.PathString.asArray;
+import static me.hsgamer.hscore.config.PathString.concat;
 
 /**
  * The {@link Config} implementation for Configurate
@@ -40,19 +42,19 @@ public class ConfigurateConfig implements Config {
   }
 
   @Override
-  public Object get(PathString path, Object def) {
-    ConfigurationNode node = this.rootNode.node(path.getPathAsObject());
+  public Object get(Object def, String... path) {
+    ConfigurationNode node = this.rootNode.node((Object[]) path);
     Object value = node.raw();
     return value == null ? def : value;
   }
 
   @Override
-  public void set(PathString path, Object value) {
-    ConfigurationNode node = this.rootNode.node(path.getPathAsObject());
+  public void set(Object value, String... path) {
+    ConfigurationNode node = this.rootNode.node((Object[]) path);
     try {
       node.set(value);
     } catch (SerializationException e) {
-      LOGGER.log(LogLevel.WARN, "Something wrong when setting " + path, e);
+      LOGGER.log(LogLevel.WARN, "Something wrong when setting " + Arrays.toString(path), e);
     }
   }
 
@@ -62,26 +64,25 @@ public class ConfigurateConfig implements Config {
   }
 
   @Override
-  public Map<PathString, Object> getValues(PathString path, boolean deep) {
+  public Map<String[], Object> getValues(boolean deep, String... path) {
     ConfigurationNode node;
-    if (path.isRoot()) {
+    if (path.length == 0) {
       node = this.rootNode;
     } else {
-      node = this.rootNode.node(path.getPathAsObject());
+      node = this.rootNode.node((Object[]) path);
     }
     if (!node.isMap()) {
       return Collections.emptyMap();
     }
-    Map<PathString, Object> map = new LinkedHashMap<>();
+    Map<String[], Object> map = new LinkedHashMap<>();
     for (Map.Entry<Object, ? extends ConfigurationNode> entry : node.childrenMap().entrySet()) {
-      PathString key = new PathString(Objects.toString(entry.getKey()));
+      String[] key = asArray(Objects.toString(entry.getKey()));
       ConfigurationNode value = entry.getValue();
       map.put(key, value.raw());
       if (value.isMap() && deep) {
-        PathString newPath = path.append(key);
-        Map<PathString, Object> subMap = getValues(newPath, true);
-        for (Map.Entry<PathString, Object> subEntry : subMap.entrySet()) {
-          map.put(key.append(subEntry.getKey()), subEntry.getValue());
+        Map<String[], Object> subMap = getValues(true, concat(path, key));
+        for (Map.Entry<String[], Object> subEntry : subMap.entrySet()) {
+          map.put(concat(key, subEntry.getKey()), subEntry.getValue());
         }
       }
     }
@@ -155,8 +156,8 @@ public class ConfigurateConfig implements Config {
   }
 
   @Override
-  public List<String> getComment(PathString path, CommentType type) {
-    ConfigurationNode node = this.rootNode.node(path.getPathAsObject());
+  public List<String> getComment(CommentType type, String... path) {
+    ConfigurationNode node = this.rootNode.node((Object[]) path);
     if (!(node instanceof CommentedConfigurationNode)) return Collections.emptyList();
     CommentedConfigurationNode commentedNode = (CommentedConfigurationNode) node;
     if (type != CommentType.BLOCK) return Collections.emptyList();
@@ -165,8 +166,8 @@ public class ConfigurateConfig implements Config {
   }
 
   @Override
-  public void setComment(PathString path, List<String> value, CommentType type) {
-    ConfigurationNode node = this.rootNode.node(path.getPathAsObject());
+  public void setComment(CommentType type, List<String> value, String... path) {
+    ConfigurationNode node = this.rootNode.node((Object[]) path);
     if (!(node instanceof CommentedConfigurationNode)) return;
     CommentedConfigurationNode commentedNode = (CommentedConfigurationNode) node;
     if (type != CommentType.BLOCK) return;
