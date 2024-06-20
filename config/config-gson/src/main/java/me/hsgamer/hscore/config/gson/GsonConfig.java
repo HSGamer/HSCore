@@ -21,6 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static me.hsgamer.hscore.config.PathString.asArray;
+import static me.hsgamer.hscore.config.PathString.concat;
+
 /**
  * The {@link Config} implementation for Gson
  */
@@ -49,16 +52,16 @@ public class GsonConfig implements Config {
     this(file, new Gson());
   }
 
-  private static Map<PathString, Object> getValues(JsonObject object, boolean deep) {
-    Map<PathString, Object> values = new HashMap<>();
+  private static Map<String[], Object> getValues(JsonObject object, boolean deep) {
+    Map<String[], Object> values = new HashMap<>();
     for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
-      PathString key = new PathString(entry.getKey());
+      String[] key = asArray(entry.getKey());
       JsonElement element = entry.getValue();
       values.put(key, element);
       if (element.isJsonObject() && deep) {
-        Map<PathString, Object> subValues = getValues(element.getAsJsonObject(), true);
-        for (Map.Entry<PathString, Object> subEntry : subValues.entrySet()) {
-          values.put(key.append(subEntry.getKey()), subEntry.getValue());
+        Map<String[], Object> subValues = getValues(element.getAsJsonObject(), true);
+        for (Map.Entry<String[], Object> subEntry : subValues.entrySet()) {
+          values.put(concat(key, subEntry.getKey()), subEntry.getValue());
         }
       }
     }
@@ -70,15 +73,14 @@ public class GsonConfig implements Config {
     return this.root;
   }
 
-  private Optional<JsonObject> getJsonObject(PathString path, boolean createIfNotFound) {
+  private Optional<JsonObject> getJsonObject(boolean createIfNotFound, String... path) {
     JsonObject currentObject = this.root;
-    if (path.isRoot()) {
+    if (path.length == 0) {
       return Optional.of(currentObject);
     }
-    String[] pathArray = path.getPath();
-    for (int i = 0; i < pathArray.length; i++) {
-      String key = pathArray[i];
-      if (i == pathArray.length - 1) {
+    for (int i = 0; i < path.length; i++) {
+      String key = path[i];
+      if (i == path.length - 1) {
         return Optional.of(currentObject);
       } else {
         JsonElement element = currentObject.has(key) ? currentObject.get(key) : JsonNull.INSTANCE;
@@ -97,12 +99,12 @@ public class GsonConfig implements Config {
   }
 
   @Override
-  public Object get(PathString path, Object def) {
-    if (path.isRoot()) {
+  public Object get(Object def, String... path) {
+    if (path.length == 0) {
       return this.root;
     }
-    return getJsonObject(path, false).<Object>map(object -> {
-      String lastPath = path.getLastPath();
+    return getJsonObject(false, path).<Object>map(object -> {
+      String lastPath = path[path.length - 1];
       if (object.has(lastPath)) {
         return object.get(lastPath);
       }
@@ -119,19 +121,20 @@ public class GsonConfig implements Config {
   }
 
   @Override
-  public void set(PathString path, Object value) {
+  public void set(Object value, String... path) {
     JsonElement element = value instanceof JsonElement ? (JsonElement) value : gson.toJsonTree(value);
-    if (path.isRoot()) {
+    if (path.length == 0) {
       if (element.isJsonObject()) {
         this.root = element.getAsJsonObject();
       }
       return;
     }
-    getJsonObject(path, true).ifPresent(object -> {
+    getJsonObject(true, path).ifPresent(object -> {
+      String lastPath = path[path.length - 1];
       if (element.isJsonNull()) {
-        object.remove(path.getLastPath());
+        object.remove(lastPath);
       } else {
-        object.add(path.getLastPath(), element);
+        object.add(lastPath, element);
       }
     });
   }
@@ -147,11 +150,11 @@ public class GsonConfig implements Config {
   }
 
   @Override
-  public Map<PathString, Object> getValues(PathString path, boolean deep) {
-    if (path.isRoot()) {
+  public Map<String[], Object> getValues(boolean deep, String... path) {
+    if (path.length == 0) {
       return getValues(this.root, deep);
     }
-    return getJsonObject(path, false).map(object -> getValues(object, deep)).orElse(Collections.emptyMap());
+    return getJsonObject(false, path).map(object -> getValues(object, deep)).orElse(Collections.emptyMap());
   }
 
   @Override

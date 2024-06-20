@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.bungeecord.config;
 
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.logger.common.LogLevel;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -10,6 +11,9 @@ import net.md_5.bungee.config.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+
+import static me.hsgamer.hscore.config.PathString.joinDefault;
+import static me.hsgamer.hscore.config.PathString.splitDefault;
 
 /**
  * The BungeeCord Configuration
@@ -37,32 +41,24 @@ public class BungeeConfig implements Config {
     this(new File(plugin.getDataFolder(), filename));
   }
 
-  private String toPath(PathString pathString) {
-    return PathString.toPath(".", pathString);
-  }
-
-  private Map<PathString, Object> toPathStringMap(Map<String, Object> map) {
-    return PathString.toPathStringMap(".", map);
-  }
-
   @Override
   public Configuration getOriginal() {
     return this.configuration;
   }
 
   @Override
-  public Object get(PathString path, Object def) {
-    return this.configuration.get(toPath(path), def);
+  public Object get(Object def, String... path) {
+    return this.configuration.get(joinDefault(path), def);
   }
 
   @Override
-  public void set(PathString path, Object value) {
-    this.configuration.set(toPath(path), value);
+  public void set(Object value, String... path) {
+    this.configuration.set(joinDefault(path), value);
   }
 
   @Override
-  public boolean contains(PathString path) {
-    return this.configuration.contains(toPath(path));
+  public boolean contains(String... path) {
+    return this.configuration.contains(joinDefault(path));
   }
 
   @Override
@@ -71,13 +67,13 @@ public class BungeeConfig implements Config {
   }
 
   @Override
-  public Map<PathString, Object> getValues(PathString path, boolean deep) {
-    if (path.isRoot()) {
-      return toPathStringMap(this.getValues(configuration, deep));
+  public Map<String[], Object> getValues(boolean deep, String... path) {
+    if (path.length == 0) {
+      return splitDefault(this.getValues(configuration, deep));
     } else {
-      return Optional.ofNullable(configuration.getSection(toPath(path)))
+      return Optional.ofNullable(configuration.getSection(joinDefault(path)))
         .map(section -> this.getValues(section, deep))
-        .map(this::toPathStringMap)
+        .map(PathString::splitDefault)
         .orElse(Collections.emptyMap());
     }
   }

@@ -41,6 +41,18 @@ public class AnnotatedConfig extends DecorativeConfig {
     super(config);
   }
 
+  private Field getField(String... path) {
+    return pathFieldMap.get(new PathString(path));
+  }
+
+  private void setField(Field field, String... path) {
+    pathFieldMap.put(new PathString(path), field);
+  }
+
+  private boolean containsField(String... path) {
+    return pathFieldMap.containsKey(new PathString(path));
+  }
+
   @Override
   public void setup() {
     super.setup();
@@ -50,7 +62,7 @@ public class AnnotatedConfig extends DecorativeConfig {
       .sorted(this::compareField)
       .forEach(field -> {
         ConfigPath configPath = field.getAnnotation(ConfigPath.class);
-        pathFieldMap.put(new PathString(configPath.value()), field);
+        setField(field, configPath.value());
         validFields.add(field);
       });
     validFields.forEach(this::setupField);
@@ -59,10 +71,10 @@ public class AnnotatedConfig extends DecorativeConfig {
   }
 
   @Override
-  public void set(PathString path, Object value) {
-    Field field = pathFieldMap.get(path);
+  public void set(Object value, String... path) {
+    Field field = getField(path);
     if (field == null) {
-      super.set(path, value);
+      super.set(value, path);
       return;
     }
     checkAndSetField(field, value);
@@ -79,8 +91,8 @@ public class AnnotatedConfig extends DecorativeConfig {
   }
 
   private void setupClassComment() {
-    if (this.getClass().isAnnotationPresent(Comment.class) && this.getComment(PathString.ROOT).isEmpty()) {
-      this.setComment(PathString.ROOT, Arrays.asList(this.getClass().getAnnotation(Comment.class).value()));
+    if (this.getClass().isAnnotationPresent(Comment.class) && this.getComment().isEmpty()) {
+      this.setComment(Arrays.asList(this.getClass().getAnnotation(Comment.class).value()));
     }
   }
 
@@ -112,14 +124,14 @@ public class AnnotatedConfig extends DecorativeConfig {
 
   private void setupField(Field field) {
     ConfigPath configPath = field.getAnnotation(ConfigPath.class);
-    PathString path = new PathString(configPath.value());
+    String[] path = configPath.value();
     Converter converter = DefaultConverterManager.getConverterIfDefault(field.getGenericType(), configPath.converter());
     Object defaultValue = this.getValue(field);
 
     if (!contains(path)) {
-      super.set(path, converter.convertToRaw(defaultValue));
+      super.set(converter.convertToRaw(defaultValue), path);
       if (field.isAnnotationPresent(Comment.class)) {
-        super.setComment(path, Arrays.asList(field.getAnnotation(Comment.class).value()));
+        super.setComment(Arrays.asList(field.getAnnotation(Comment.class).value()), path);
       }
     } else {
       this.setValue(field, converter.convert(this.getNormalized(path)));
@@ -128,9 +140,9 @@ public class AnnotatedConfig extends DecorativeConfig {
 
   private void checkAndSetField(Field field, Object value) {
     ConfigPath configPath = field.getAnnotation(ConfigPath.class);
-    PathString path = new PathString(configPath.value());
+    String[] path = configPath.value();
     Converter converter = DefaultConverterManager.getConverterIfDefault(field.getGenericType(), configPath.converter());
-    super.set(path, converter.convertToRaw(value));
+    super.set(converter.convertToRaw(value), path);
     this.setValue(field, value);
   }
 
@@ -158,5 +170,26 @@ public class AnnotatedConfig extends DecorativeConfig {
       field.setAccessible(accessible);
     }
     return value;
+  }
+
+  private static class PathString {
+    private final String[] path;
+
+    private PathString(String[] path) {
+      this.path = path;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+      if (this == object) return true;
+      if (object == null || getClass() != object.getClass()) return false;
+      PathString that = (PathString) object;
+      return Objects.deepEquals(path, that.path);
+    }
+
+    @Override
+    public int hashCode() {
+      return Arrays.hashCode(path);
+    }
   }
 }

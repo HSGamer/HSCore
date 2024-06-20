@@ -2,6 +2,7 @@ package me.hsgamer.hscore.config.simpleconfiguration;
 
 import me.hsgamer.hscore.config.CommentType;
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.logger.common.LogLevel;
 import org.simpleyaml.configuration.ConfigurationSection;
 import org.simpleyaml.configuration.file.FileConfiguration;
@@ -48,12 +49,12 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
     });
   }
 
-  private String toPath(PathString pathString) {
-    return PathString.toPath(String.valueOf(configuration.options().pathSeparator()), pathString);
+  private String toPath(String... path) {
+    return PathString.join(String.valueOf(configuration.options().pathSeparator()), path);
   }
 
-  private Map<PathString, Object> toPathStringMap(Map<String, Object> map) {
-    return PathString.toPathStringMap(String.valueOf(configuration.options().pathSeparator()), map);
+  private Map<String[], Object> toPathStringMap(Map<String, Object> map) {
+    return PathString.split(String.valueOf(configuration.options().pathSeparator()), map);
   }
 
   @Override
@@ -62,17 +63,17 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
   }
 
   @Override
-  public Object get(PathString path, Object def) {
+  public Object get(Object def, String... path) {
     return this.configuration.get(toPath(path), def);
   }
 
   @Override
-  public void set(PathString path, Object value) {
+  public void set(Object value, String... path) {
     this.configuration.set(toPath(path), value);
   }
 
   @Override
-  public boolean contains(PathString path) {
+  public boolean contains(String... path) {
     return this.configuration.isSet(toPath(path));
   }
 
@@ -82,8 +83,8 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
   }
 
   @Override
-  public Map<PathString, Object> getValues(PathString path, boolean deep) {
-    if (path.getPath().length == 0) {
+  public Map<String[], Object> getValues(boolean deep, String... path) {
+    if (path.length == 0) {
       return toPathStringMap(this.configuration.getValues(deep));
     } else {
       return Optional.ofNullable(this.configuration.getConfigurationSection(toPath(path)))
@@ -139,25 +140,25 @@ public class SimpleConfig<T extends FileConfiguration> implements Config {
   }
 
   @Override
-  public List<String> getComment(PathString path, CommentType type) {
+  public List<String> getComment(CommentType type, String... path) {
     String comment = null;
-    if (path.isRoot()) {
+    if (path.length == 0) {
       comment = configuration.options().header();
     } else if (configuration instanceof org.simpleyaml.configuration.comments.Commentable) {
       try {
         org.simpleyaml.configuration.comments.CommentType commentType = org.simpleyaml.configuration.comments.CommentType.valueOf(type.name());
         comment = ((org.simpleyaml.configuration.comments.Commentable) configuration).getComment(toPath(path), commentType);
       } catch (Exception e) {
-        LOGGER.log(LogLevel.WARN, "Something wrong when getting comment of " + path, e);
+        LOGGER.log(LogLevel.WARN, "Something wrong when getting comment of " + Arrays.toString(path), e);
       }
     }
     return comment == null ? Collections.emptyList() : Arrays.asList(comment.split("\\r?\\n"));
   }
 
   @Override
-  public void setComment(PathString path, List<String> value, CommentType type) {
+  public void setComment(CommentType type, List<String> value, String... path) {
     String comment = value == null || value.isEmpty() ? null : String.join("\n", value);
-    if (path.isRoot()) {
+    if (path.length == 0) {
       configuration.options().header(comment).copyHeader(true);
     } else if (configuration instanceof org.simpleyaml.configuration.comments.Commentable) {
       try {

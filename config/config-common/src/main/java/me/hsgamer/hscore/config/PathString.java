@@ -13,6 +13,32 @@ public interface PathString {
   String DEFAULT_SEPARATOR = ".";
 
   /**
+   * Get the path as array
+   *
+   * @param path the path
+   *
+   * @return the path as array
+   */
+  static String[] asArray(String path) {
+    return new String[]{path};
+  }
+
+  /**
+   * Concatenate two paths
+   *
+   * @param a1 the first path
+   * @param a2 the second path
+   *
+   * @return the concatenated path
+   */
+  static String[] concat(String[] a1, String[] a2) {
+    String[] result = new String[a1.length + a2.length];
+    System.arraycopy(a1, 0, result, 0, a1.length);
+    System.arraycopy(a2, 0, result, a1.length, a2.length);
+    return result;
+  }
+
+  /**
    * Join the path with the separator
    *
    * @param separator the separator
