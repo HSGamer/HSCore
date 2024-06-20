@@ -1,7 +1,6 @@
 package me.hsgamer.hscore.config.proxy;
 
 import me.hsgamer.hscore.config.Config;
-import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.annotation.converter.Converter;
 
 import java.util.List;

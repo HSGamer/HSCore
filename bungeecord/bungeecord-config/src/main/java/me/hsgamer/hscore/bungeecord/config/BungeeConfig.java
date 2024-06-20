@@ -1,7 +1,6 @@
 package me.hsgamer.hscore.bungeecord.config;
 
 import me.hsgamer.hscore.config.Config;
-import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.logger.common.LogLevel;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;

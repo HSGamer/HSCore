@@ -2,7 +2,6 @@ package me.hsgamer.hscore.config.simpleconfiguration;
 
 import me.hsgamer.hscore.config.CommentType;
 import me.hsgamer.hscore.config.Config;
-import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.logger.common.LogLevel;
 import org.simpleyaml.configuration.ConfigurationSection;
 import org.simpleyaml.configuration.file.FileConfiguration;

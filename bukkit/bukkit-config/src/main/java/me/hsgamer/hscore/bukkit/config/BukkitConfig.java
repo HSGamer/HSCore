@@ -2,7 +2,6 @@ package me.hsgamer.hscore.bukkit.config;
 
 import me.hsgamer.hscore.config.CommentType;
 import me.hsgamer.hscore.config.Config;
-import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.logger.common.LogLevel;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;

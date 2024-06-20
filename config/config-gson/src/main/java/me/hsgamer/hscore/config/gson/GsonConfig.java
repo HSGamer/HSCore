@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonWriter;
 import me.hsgamer.hscore.config.Config;
-import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.gson.GsonUtils;
 import me.hsgamer.hscore.logger.common.LogLevel;
 

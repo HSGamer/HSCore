@@ -24,20 +24,20 @@ public interface Config {
   /**
    * Get the value from the path
    *
-   * @param path the path
    * @param def  the default value if the value is not found
+   * @param path the path
    *
    * @return the value
    */
-  Object get(PathString path, Object def);
+  Object get(Object def, String... path);
 
   /**
    * Set the value to the path
    *
-   * @param path  the path
    * @param value the value
+   * @param path  the path
    */
-  void set(PathString path, Object value);
+  void set(Object value, String... path);
 
   /**
    * Check if the configuration contains the path
@@ -46,8 +46,8 @@ public interface Config {
    *
    * @return true if it does
    */
-  default boolean contains(PathString path) {
-    return get(path, null) != null;
+  default boolean contains(String... path) {
+    return get(null, path) != null;
   }
 
   /**
@@ -60,12 +60,12 @@ public interface Config {
   /**
    * Get all values from the path
    *
-   * @param path the path
    * @param deep should we go deeper from the path?
+   * @param path the path
    *
    * @return the values
    */
-  Map<PathString, Object> getValues(PathString path, boolean deep);
+  Map<String[], Object> getValues(boolean deep, String... path);
 
   /**
    * Set up the configuration
@@ -105,11 +105,11 @@ public interface Config {
    *
    * @param path the path
    */
-  default void remove(PathString path) {
-    if (path.isRoot()) {
+  default void remove(String... path) {
+    if (path.length == 0) {
       clear();
     } else {
-      set(path, null);
+      set(null, path);
     }
   }
 
@@ -127,20 +127,20 @@ public interface Config {
    *
    * @return the value
    */
-  default Object get(PathString path) {
-    return get(path, null);
+  default Object get(String... path) {
+    return get(null, path);
   }
 
   /**
    * Get the normalized value from the path
    *
-   * @param path the path
    * @param def  the default value the default value if the value is not found
+   * @param path the path
    *
    * @return the value
    */
-  default Object getNormalized(PathString path, Object def) {
-    return normalizeObject(get(path, def));
+  default Object getNormalized(Object def, String... path) {
+    return normalizeObject(get(def, path));
   }
 
   /**
@@ -150,22 +150,22 @@ public interface Config {
    *
    * @return the value
    */
-  default Object getNormalized(PathString path) {
-    return getNormalized(path, null);
+  default Object getNormalized(String... path) {
+    return getNormalized(null, path);
   }
 
   /**
    * Get the value from the path
    *
-   * @param path the path
-   * @param def  the default value if the value is not found
    * @param type the type class of the value
+   * @param def  the default value if the value is not found
+   * @param path the path
    * @param <T>  the type of the value
    *
    * @return the value
    */
-  default <T> T getInstance(PathString path, T def, Class<T> type) {
-    Object value = getNormalized(path, def);
+  default <T> T getInstance(Class<T> type, T def, String... path) {
+    Object value = getNormalized(def, path);
     if (type == String.class) {
       // noinspection unchecked
       return value != null ? (T) String.valueOf(value) : def;
@@ -176,73 +176,51 @@ public interface Config {
   /**
    * Get the value from the path
    *
-   * @param path the path
    * @param type the type class of the value
+   * @param path the path
    * @param <T>  the type of the value
    *
    * @return the value
    */
-  default <T> T getInstance(PathString path, Class<T> type) {
-    return getInstance(path, null, type);
+  default <T> T getInstance(Class<T> type, String... path) {
+    return getInstance(type, null, path);
   }
 
   /**
    * Check if the value of the path matches the type
    *
-   * @param path the path
    * @param type the type class of the value
+   * @param path the path
    *
    * @return true if it does
    */
-  default boolean isInstance(PathString path, Class<?> type) {
+  default boolean isInstance(Class<?> type, String... path) {
     return type.isInstance(get(path));
-  }
-
-  /**
-   * Get all values from the root path
-   *
-   * @param deep should we go deeper from the path?
-   *
-   * @return the values
-   */
-  default Map<PathString, Object> getValues(boolean deep) {
-    return getValues(PathString.ROOT, deep);
   }
 
   /**
    * Get all keys from the path
    *
+   * @param deep should we go deeper from the path?
    * @param path the path
-   * @param deep should we go deeper from the path?
    *
    * @return the keys
    */
-  default Set<PathString> getKeys(PathString path, boolean deep) {
-    return getValues(path, deep).keySet();
-  }
-
-  /**
-   * Get all keys from the root path
-   *
-   * @param deep should we go deeper from the path?
-   *
-   * @return the keys
-   */
-  default Set<PathString> getKeys(boolean deep) {
-    return getKeys(PathString.ROOT, deep);
+  default Set<String[]> getKeys(boolean deep, String... path) {
+    return getValues(deep, path).keySet();
   }
 
   /**
    * Get all normalized values from the path
    *
-   * @param path the path
    * @param deep should we go deeper from the path?
+   * @param path the path
    *
    * @return the values
    */
-  default Map<PathString, Object> getNormalizedValues(PathString path, boolean deep) {
-    Map<PathString, Object> normalized = new LinkedHashMap<>();
-    getValues(path, deep).forEach((k, v) -> normalized.put(k, normalizeObject(v)));
+  default Map<String[], Object> getNormalizedValues(boolean deep, String... path) {
+    Map<String[], Object> normalized = new LinkedHashMap<>();
+    getValues(deep, path).forEach((k, v) -> normalized.put(k, normalizeObject(v)));
     return normalized;
   }
 
@@ -268,25 +246,14 @@ public interface Config {
   }
 
   /**
-   * Get all values from the root path
-   *
-   * @param deep should we go deeper from the path?
-   *
-   * @return the values
-   */
-  default Map<PathString, Object> getNormalizedValues(boolean deep) {
-    return getNormalizedValues(PathString.ROOT, deep);
-  }
-
-  /**
    * Set the value to the path if it is not already set
    *
-   * @param path  the path
    * @param value the value
+   * @param path  the path
    */
-  default void setIfAbsent(PathString path, Object value) {
+  default void setIfAbsent(Object value, String... path) {
     if (!contains(path)) {
-      set(path, value);
+      set(value, path);
     }
   }
 
@@ -295,20 +262,20 @@ public interface Config {
    *
    * @param map the map of values
    */
-  default void setIfAbsent(Map<PathString, Object> map) {
-    map.forEach(this::setIfAbsent);
+  default void setIfAbsent(Map<String[], Object> map) {
+    map.forEach((k, v) -> setIfAbsent(v, k));
   }
 
   /**
    * Get the comment.
    * This is a default empty method. The implementation can override this method to support comments.
    *
-   * @param path the path
    * @param type the comment type
+   * @param path the path
    *
    * @return the comment
    */
-  default List<String> getComment(PathString path, CommentType type) {
+  default List<String> getComment(CommentType type, String... path) {
     return Collections.emptyList();
   }
 
@@ -316,11 +283,11 @@ public interface Config {
    * Set the comment
    * This is a default empty method. The implementation can override this method to support comments.
    *
-   * @param path  the path
-   * @param value the comment, can be null to remove the comment
    * @param type  the comment type
+   * @param value the comment, can be null to remove the comment
+   * @param path  the path
    */
-  default void setComment(PathString path, List<String> value, CommentType type) {
+  default void setComment(CommentType type, List<String> value, String... path) {
     // EMPTY
   }
 
@@ -331,10 +298,10 @@ public interface Config {
    *
    * @return the comment
    *
-   * @see #getComment(PathString, CommentType)
+   * @see #getComment(CommentType, String[])
    */
-  default List<String> getComment(PathString path) {
-    return getComment(path, CommentType.BLOCK);
+  default List<String> getComment(String... path) {
+    return getComment(CommentType.BLOCK, path);
   }
 
   /**
@@ -343,9 +310,9 @@ public interface Config {
    * @param path  the path
    * @param value the comment, can be null to remove the comment
    *
-   * @see #setComment(PathString, List, CommentType)
+   * @see #setComment(CommentType, List, String[])
    */
-  default void setComment(PathString path, List<String> value) {
-    setComment(path, value, CommentType.BLOCK);
+  default void setComment(List<String> value, String... path) {
+    setComment(CommentType.BLOCK, value, path);
   }
 }

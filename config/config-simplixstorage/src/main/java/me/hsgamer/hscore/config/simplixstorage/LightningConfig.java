@@ -6,7 +6,6 @@ import de.leonhard.storage.Yaml;
 import de.leonhard.storage.internal.DataStorage;
 import de.leonhard.storage.internal.FlatFile;
 import me.hsgamer.hscore.config.Config;
-import me.hsgamer.hscore.config.PathString;
 
 import java.io.File;
 import java.util.*;

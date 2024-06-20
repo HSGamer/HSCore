@@ -2,7 +2,6 @@ package me.hsgamer.hscore.config.annotated;
 
 import me.hsgamer.hscore.config.Config;
 import me.hsgamer.hscore.config.DecorativeConfig;
-import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.annotation.Comment;
 import me.hsgamer.hscore.config.annotation.ConfigPath;
 import me.hsgamer.hscore.config.annotation.converter.Converter;
