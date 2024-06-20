@@ -2,6 +2,7 @@ package me.hsgamer.hscore.animate;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * The animation that gets the frame based on the period
@@ -11,7 +12,7 @@ import java.util.List;
 public class Animation<T> {
   private final List<T> frames;
   private final long periodMillis;
-  private Long startMillis;
+  private final AtomicLong startMillis = new AtomicLong(-1);
 
   /**
    * Create a new animation
@@ -48,8 +49,10 @@ public class Animation<T> {
    * @return the frame
    */
   public T getCurrentFrame(long currentMillis) {
-    if (startMillis == null) {
+    long startMillis = this.startMillis.get();
+    if (startMillis < 0) {
       startMillis = currentMillis;
+      this.startMillis.set(startMillis);
     }
     long diff = currentMillis - startMillis;
     int index = (int) (diff / periodMillis) % frames.size();
@@ -69,7 +72,7 @@ public class Animation<T> {
    * Reset the animation
    */
   public void reset() {
-    startMillis = null;
+    this.startMillis.set(-1);
   }
 
   /**
@@ -80,7 +83,8 @@ public class Animation<T> {
    * @return true if it's the first run
    */
   public boolean isFirstRun(long currentMillis) {
-    return startMillis == null || currentMillis - startMillis < periodMillis * frames.size();
+    long startMillis = this.startMillis.get();
+    return startMillis < 0 || currentMillis - startMillis < periodMillis * frames.size();
   }
 
   /**
