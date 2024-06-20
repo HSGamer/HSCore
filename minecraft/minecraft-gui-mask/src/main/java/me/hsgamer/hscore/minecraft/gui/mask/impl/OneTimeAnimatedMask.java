@@ -1,11 +1,11 @@
 package me.hsgamer.hscore.minecraft.gui.mask.impl;
 
+import me.hsgamer.hscore.animate.Animation;
 import me.hsgamer.hscore.minecraft.gui.GUIProperties;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.BaseMask;
 import me.hsgamer.hscore.minecraft.gui.mask.Mask;
 import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
-import me.hsgamer.hscore.ui.property.IdentifiedUpdatable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,9 +15,9 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * The animated mask with child masks as frames, but only run once
  */
-public class OneTimeAnimatedMask extends BaseMask implements IdentifiedUpdatable {
+public class OneTimeAnimatedMask extends BaseMask {
   private final List<Mask> masks = new ArrayList<>();
-  private final Map<UUID, SequenceRunner> runnerMap = new ConcurrentHashMap<>();
+  private final Map<UUID, Animation<Mask>> animationMap = new ConcurrentHashMap<>();
   private boolean viewLast = false;
   private long periodMillis = 50L;
 
@@ -111,28 +111,23 @@ public class OneTimeAnimatedMask extends BaseMask implements IdentifiedUpdatable
    * @param uuid the unique id
    */
   public void reset(@NotNull UUID uuid) {
-    getRunner(uuid).reset();
+    getAnimation(uuid).reset();
   }
 
-  private SequenceRunner getRunner(@NotNull UUID uuid) {
-    return runnerMap.computeIfAbsent(uuid, k -> new SequenceRunner());
+  private Animation<Mask> getAnimation(@NotNull UUID uuid) {
+    return animationMap.computeIfAbsent(uuid, key -> new Animation<>(masks, periodMillis));
   }
 
   @Override
   public Optional<Map<@NotNull Integer, @NotNull Button>> generateButtons(@NotNull UUID uuid, @NotNull InventorySize inventorySize) {
-    update(uuid);
-    SequenceRunner runner = getRunner(uuid);
-    if (runner.maxed && !viewLast) {
+    Animation<Mask> animation = getAnimation(uuid);
+    long currentMillis = System.currentTimeMillis();
+    if (animation.isFirstRun()) {
+      return animation.getCurrentFrame(currentMillis).generateButtons(uuid, inventorySize);
+    } else if (viewLast) {
+      return masks.get(masks.size() - 1).generateButtons(uuid, inventorySize);
+    } else {
       return Optional.empty();
-    }
-    return masks.get(runner.index).generateButtons(uuid, inventorySize);
-  }
-
-  @Override
-  public void update(@NotNull UUID uuid) {
-    SequenceRunner runner = getRunner(uuid);
-    if (!runner.maxed) {
-      runner.updateIndex();
     }
   }
 
@@ -146,40 +141,8 @@ public class OneTimeAnimatedMask extends BaseMask implements IdentifiedUpdatable
 
   @Override
   public void stop() {
-    runnerMap.clear();
+    animationMap.clear();
     masks.forEach(Mask::stop);
     masks.clear();
-  }
-
-  private class SequenceRunner {
-    private int index = 0;
-    private long lastTickMillis = System.currentTimeMillis();
-    private boolean maxed = false;
-
-    private void updateIndex() {
-      long currentTick = System.currentTimeMillis();
-      long diff = currentTick - lastTickMillis;
-      if (diff < periodMillis) {
-        return;
-      }
-
-      int passed = (int) (diff / periodMillis);
-      long remainder = diff % periodMillis;
-      lastTickMillis = currentTick - remainder;
-
-      int max = masks.size();
-      if (index + passed >= max) {
-        index = max - 1;
-        maxed = true;
-      } else {
-        index += passed;
-      }
-    }
-
-    private void reset() {
-      index = 0;
-      lastTickMillis = System.currentTimeMillis();
-      maxed = false;
-    }
   }
 }

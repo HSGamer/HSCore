@@ -1,9 +1,9 @@
 package me.hsgamer.hscore.minecraft.gui.button.impl;
 
+import me.hsgamer.hscore.animate.Animation;
 import me.hsgamer.hscore.minecraft.gui.GUIProperties;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
-import me.hsgamer.hscore.ui.property.IdentifiedUpdatable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,10 +13,9 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * The animated button with child buttons as frames
  */
-public class AnimatedButton implements Button, IdentifiedUpdatable {
+public class AnimatedButton implements Button {
   private final List<Button> buttons = new ArrayList<>();
-  private final Map<UUID, Integer> currentIndexMap = new ConcurrentHashMap<>();
-  private final Map<UUID, Long> lastUpdateMap = new ConcurrentHashMap<>();
+  private final Map<UUID, Animation<Button>> animationMap = new ConcurrentHashMap<>();
   private long periodMillis = 50L;
 
   /**
@@ -82,14 +81,13 @@ public class AnimatedButton implements Button, IdentifiedUpdatable {
     return buttons;
   }
 
-  private int getCurrentIndex(UUID uuid) {
-    return currentIndexMap.getOrDefault(uuid, 0);
+  private Animation<Button> getAnimation(UUID uuid) {
+    return animationMap.computeIfAbsent(uuid, key -> new Animation<>(buttons, periodMillis));
   }
 
   @Override
   public DisplayButton display(@NotNull UUID uuid) {
-    update(uuid);
-    return buttons.get(getCurrentIndex(uuid)).display(uuid);
+    return getAnimation(uuid).getCurrentFrame().display(uuid);
   }
 
   @Override
@@ -103,18 +101,5 @@ public class AnimatedButton implements Button, IdentifiedUpdatable {
   @Override
   public void stop() {
     this.buttons.forEach(Button::stop);
-  }
-
-  @Override
-  public void update(@NotNull UUID uuid) {
-    long currentTimeMillis = System.currentTimeMillis();
-    long lastUpdate = lastUpdateMap.computeIfAbsent(uuid, k -> currentTimeMillis);
-    if (currentTimeMillis - lastUpdate < periodMillis) return;
-    long diff = currentTimeMillis - lastUpdate;
-    long remainder = diff % periodMillis;
-    int skip = (int) (diff / periodMillis);
-    int currentIndex = getCurrentIndex(uuid);
-    currentIndexMap.put(uuid, (currentIndex + skip) % buttons.size());
-    lastUpdateMap.put(uuid, currentTimeMillis - remainder);
   }
 }

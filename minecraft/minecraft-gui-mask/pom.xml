@@ -17,5 +17,10 @@
       <artifactId>hscore-minecraft-gui</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-animate</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>

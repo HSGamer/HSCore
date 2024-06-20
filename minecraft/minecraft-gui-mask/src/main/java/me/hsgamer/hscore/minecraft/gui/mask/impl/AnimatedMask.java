@@ -1,11 +1,11 @@
 package me.hsgamer.hscore.minecraft.gui.mask.impl;
 
+import me.hsgamer.hscore.animate.Animation;
 import me.hsgamer.hscore.minecraft.gui.GUIProperties;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
 import me.hsgamer.hscore.minecraft.gui.mask.BaseMask;
 import me.hsgamer.hscore.minecraft.gui.mask.Mask;
 import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
-import me.hsgamer.hscore.ui.property.IdentifiedUpdatable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,10 +15,9 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * The animated mask with child masks as frames
  */
-public class AnimatedMask extends BaseMask implements IdentifiedUpdatable {
+public class AnimatedMask extends BaseMask {
   private final List<Mask> masks = new ArrayList<>();
-  private final Map<UUID, Integer> currentIndexMap = new ConcurrentHashMap<>();
-  private final Map<UUID, Long> lastUpdateMap = new ConcurrentHashMap<>();
+  private final Map<UUID, Animation<Mask>> animationMap = new ConcurrentHashMap<>();
   private long periodMillis = 50;
 
   /**
@@ -94,14 +93,13 @@ public class AnimatedMask extends BaseMask implements IdentifiedUpdatable {
     return masks;
   }
 
-  private int getCurrentIndex(@NotNull UUID uuid) {
-    return currentIndexMap.getOrDefault(uuid, 0);
+  private Animation<Mask> getAnimation(@NotNull UUID uuid) {
+    return animationMap.computeIfAbsent(uuid, k -> new Animation<>(masks, periodMillis));
   }
 
   @Override
   public Optional<Map<Integer, Button>> generateButtons(@NotNull UUID uuid, @NotNull InventorySize inventorySize) {
-    update(uuid);
-    return masks.get(getCurrentIndex(uuid)).generateButtons(uuid, inventorySize);
+    return getAnimation(uuid).getCurrentFrame().generateButtons(uuid, inventorySize);
   }
 
   @Override
@@ -115,18 +113,5 @@ public class AnimatedMask extends BaseMask implements IdentifiedUpdatable {
   @Override
   public void stop() {
     this.masks.forEach(Mask::stop);
-  }
-
-  @Override
-  public void update(@NotNull UUID uuid) {
-    long currentTimeMillis = System.currentTimeMillis();
-    long lastUpdate = lastUpdateMap.computeIfAbsent(uuid, k -> currentTimeMillis);
-    if (currentTimeMillis - lastUpdate < periodMillis) return;
-    long diff = currentTimeMillis - lastUpdate;
-    long remainder = diff % periodMillis;
-    int skip = (int) (diff / periodMillis);
-    int currentIndex = getCurrentIndex(uuid);
-    currentIndexMap.put(uuid, (currentIndex + skip) % masks.size());
-    lastUpdateMap.put(uuid, currentTimeMillis - remainder);
   }
 }
