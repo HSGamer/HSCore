@@ -21,7 +21,6 @@
     <module>bukkit-config</module>
     <module>bukkit-config-converter</module>
     <module>bukkit-click-type</module>
-    <module>bukkit-skull</module>
     <module>bukkit-item</module>
     <module>bukkit-gui</module>
     <module>bukkit-gui-button</module>
