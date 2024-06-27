@@ -1,6 +1,5 @@
 package me.hsgamer.hscore.bukkit.item.modifier;
 
-import me.hsgamer.hscore.bukkit.utils.VersionUtils;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.common.StringReplacer;
 import me.hsgamer.hscore.minecraft.item.ItemComparator;
@@ -35,14 +34,7 @@ public class MaterialModifier implements ItemComparator<ItemStack>, ItemModifier
     materialString = materialString.replace(" ", "_");
     Material material;
     try {
-      if (VersionUtils.isAtLeast(13)) {
-        material = Material.matchMaterial(materialString, false);
-        if (material == null) {
-          material = Material.matchMaterial(materialString, true);
-        }
-      } else {
-        material = Material.matchMaterial(materialString);
-      }
+      material = Material.matchMaterial(materialString);
     } catch (Exception ignored) {
       material = null;
     }
