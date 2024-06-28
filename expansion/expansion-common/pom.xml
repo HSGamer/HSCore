@@ -6,7 +6,7 @@
   <parent>
     <groupId>me.hsgamer</groupId>
     <artifactId>hscore-expansion</artifactId>
-    <version>4.5.1-SNAPSHOT</version>
+    <version>4.5.1</version>
   </parent>
   <artifactId>hscore-expansion-common</artifactId>
 </project>
