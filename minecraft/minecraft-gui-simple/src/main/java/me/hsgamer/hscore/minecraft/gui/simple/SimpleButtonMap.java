@@ -98,17 +98,17 @@ public class SimpleButtonMap implements ButtonMap {
     Map<Integer, DisplayButton> map = new HashMap<>();
     IntFunction<DisplayButton> getDisplayButton = i -> map.computeIfAbsent(i, s -> new DisplayButton());
 
-    buttonSlotMap.forEach((button, slots) -> {
-      DisplayButton displayButton = button.display(uuid);
-      if (displayButton == null) return;
-      slots.forEach(slot -> getDisplayButton.apply(slot).apply(displayButton));
-    });
-
     Button defaultButton = getDefaultButton();
     DisplayButton defaultDisplayButton = defaultButton.display(uuid);
     if (defaultDisplayButton != null) {
       inventorySize.getSlots().forEach(i -> getDisplayButton.apply(i).apply(defaultDisplayButton));
     }
+
+    buttonSlotMap.forEach((button, slots) -> {
+      DisplayButton displayButton = button.display(uuid);
+      if (displayButton == null) return;
+      slots.forEach(slot -> getDisplayButton.apply(slot).apply(displayButton));
+    });
 
     return map;
   }
