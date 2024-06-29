@@ -2,6 +2,7 @@ package me.hsgamer.hscore.config;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * The utility class for path in {@link Config}
@@ -59,7 +60,7 @@ public interface PathString {
    * @return the split path
    */
   static String[] split(String separator, String path) {
-    return path.split(separator);
+    return path.split(Pattern.quote(separator));
   }
 
   /**
