@@ -5,10 +5,12 @@ import me.hsgamer.hscore.builder.FunctionalMassBuilder;
 
 /**
  * The builder for the {@link Action}
+ *
+ * @param <I> the type of the input
  */
-public class ActionBuilder extends FunctionalMassBuilder<ActionInput, Action> {
+public class ActionBuilder<I extends ActionInput> extends FunctionalMassBuilder<I, Action> {
   @Override
-  protected String getType(ActionInput input) {
+  protected String getType(I input) {
     return input.getType();
   }
 }

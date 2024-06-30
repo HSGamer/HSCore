@@ -1,6 +1,7 @@
 package me.hsgamer.hscore.bukkit.action.builder;
 
 import me.hsgamer.hscore.action.builder.ActionBuilder;
+import me.hsgamer.hscore.action.builder.ActionInput;
 import me.hsgamer.hscore.bukkit.action.*;
 import org.bukkit.plugin.Plugin;
 
@@ -17,8 +18,9 @@ public final class BukkitActionBuilder {
    *
    * @param actionBuilder the action builder
    * @param plugin        the plugin
+   * @param <I>           the type of the input
    */
-  public static void register(ActionBuilder actionBuilder, Plugin plugin) {
+  public static <I extends ActionInput> void register(ActionBuilder<I> actionBuilder, Plugin plugin) {
     actionBuilder.register(input -> new BroadcastAction(input.getValue()), "broadcast");
     actionBuilder.register(input -> new ConsoleAction(plugin, input.getValue()), "console");
     actionBuilder.register(input -> new DelayAction(plugin, input.getValue()), "delay");
