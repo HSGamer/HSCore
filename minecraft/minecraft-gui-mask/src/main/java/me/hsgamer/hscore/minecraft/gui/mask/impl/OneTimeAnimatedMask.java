@@ -122,7 +122,7 @@ public class OneTimeAnimatedMask extends BaseMask {
   public Optional<Map<@NotNull Integer, @NotNull Button>> generateButtons(@NotNull UUID uuid, @NotNull InventorySize inventorySize) {
     Animation<Mask> animation = getAnimation(uuid);
     long currentMillis = System.currentTimeMillis();
-    if (animation.isFirstRun()) {
+    if (animation.isFirstRun(currentMillis)) {
       return animation.getCurrentFrame(currentMillis).generateButtons(uuid, inventorySize);
     } else if (viewLast) {
       return masks.get(masks.size() - 1).generateButtons(uuid, inventorySize);
