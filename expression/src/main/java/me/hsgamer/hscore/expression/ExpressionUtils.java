@@ -2,8 +2,11 @@ package me.hsgamer.hscore.expression;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.functions.FunctionIfc;
+import com.ezylang.evalex.functions.basic.AverageFunction;
+import com.ezylang.evalex.functions.string.StringContains;
+import com.ezylang.evalex.functions.string.StringEndsWithFunction;
+import com.ezylang.evalex.functions.string.StringStartsWithFunction;
 import com.ezylang.evalex.operators.OperatorIfc;
-import me.hsgamer.hscore.expression.number.Average;
 import me.hsgamer.hscore.expression.string.*;
 
 import java.util.Map;
@@ -18,14 +21,14 @@ public final class ExpressionUtils {
   static {
     expressionConfigurationModifier = configuration ->
       configuration.withAdditionalFunctions(
-        Map.entry("AVG", new Average()),
-        Map.entry("STRCT", new Contains()),
-        Map.entry("STREDW", new EndsWith()),
+        Map.entry("AVG", new AverageFunction()),
+        Map.entry("STRCT", new StringContains()),
+        Map.entry("STREDW", new StringEndsWithFunction()),
         Map.entry("STREQ", new Equals()),
         Map.entry("STREQIC", new EqualsIgnoreCase()),
         Map.entry("STRLEN", new Length()),
         Map.entry("STRMP", new MatchPattern()),
-        Map.entry("STRSTW", new StartsWith())
+        Map.entry("STRSTW", new StringStartsWithFunction())
       );
   }
 
