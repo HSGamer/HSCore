@@ -11,6 +11,10 @@
 
   <artifactId>hscore-database-client-h2</artifactId>
 
+  <properties>
+    <java.version>11</java.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>me.hsgamer</groupId>
