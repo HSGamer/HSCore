@@ -13,6 +13,7 @@ public final class VersionUtils {
   private static final int MAJOR_VERSION;
   private static final int MINOR_VERSION;
   private static final boolean IS_CRAFTBUKKIT_MAPPED;
+  private static final String CRAFTBUKKIT_PACKAGE_VERSION;
 
   static {
     Matcher versionMatcher = Pattern.compile("MC: \\d\\.(\\d+)(\\.(\\d+))?").matcher(Bukkit.getVersion());
@@ -26,6 +27,11 @@ public final class VersionUtils {
 
     Matcher packageMatcher = Pattern.compile("v\\d+_\\d+_R\\d+").matcher(Bukkit.getServer().getClass().getPackage().getName());
     IS_CRAFTBUKKIT_MAPPED = packageMatcher.find();
+    if (IS_CRAFTBUKKIT_MAPPED) {
+      CRAFTBUKKIT_PACKAGE_VERSION = packageMatcher.group();
+    } else {
+      CRAFTBUKKIT_PACKAGE_VERSION = "";
+    }
   }
 
   private VersionUtils() {
@@ -152,5 +158,14 @@ public final class VersionUtils {
    */
   public static boolean isCraftBukkitMapped() {
     return IS_CRAFTBUKKIT_MAPPED;
+  }
+
+  /**
+   * Get the CraftBukkit package version
+   *
+   * @return the CraftBukkit package version, or empty if {@link #isCraftBukkitMapped()} returns false
+   */
+  public static String getCraftBukkitPackageVersion() {
+    return CRAFTBUKKIT_PACKAGE_VERSION;
   }
 }
