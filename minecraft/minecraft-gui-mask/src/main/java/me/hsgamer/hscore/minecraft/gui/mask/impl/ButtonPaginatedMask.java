@@ -52,7 +52,7 @@ public abstract class ButtonPaginatedMask extends PaginatedMask {
       return Optional.empty();
     }
 
-    int pageAmount = (int) Math.ceil((double) getButtons(uuid).size() / slots.size());
+    int pageAmount = (int) Math.ceil((double) buttons.size() / slots.size());
     pageNumber = this.getAndSetExactPage(uuid, pageNumber, pageAmount);
 
     Map<Integer, Button> map = new HashMap<>();
