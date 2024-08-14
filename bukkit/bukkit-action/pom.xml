@@ -12,7 +12,7 @@
   <artifactId>hscore-bukkit-action</artifactId>
 
   <properties>
-    <minelib.version>1.2.2</minelib.version>
+    <minelib.version>1.2.3</minelib.version>
   </properties>
 
   <dependencies>
