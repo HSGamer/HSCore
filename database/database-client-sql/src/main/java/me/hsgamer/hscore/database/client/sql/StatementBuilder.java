@@ -56,6 +56,17 @@ public class StatementBuilder {
   }
 
   /**
+   * Set the values
+   *
+   * @param values the values
+   *
+   * @return the builder for chaining
+   */
+  public StatementBuilder setValues(List<Object> values) {
+    return setValues(values.toArray());
+  }
+
+  /**
    * Add values to the current values
    *
    * @param values the values
@@ -72,6 +83,17 @@ public class StatementBuilder {
       this.values = newValues;
     }
     return this;
+  }
+
+  /**
+   * Add values to the current values
+   *
+   * @param values the values
+   *
+   * @return the builder for chaining
+   */
+  public StatementBuilder addValues(List<Object> values) {
+    return addValues(values.toArray());
   }
 
   /**
