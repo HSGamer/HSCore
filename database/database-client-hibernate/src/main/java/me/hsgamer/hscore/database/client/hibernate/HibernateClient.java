@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.database.client.hibernate;
 
-import me.hsgamer.hscore.database.BaseClient;
+import me.hsgamer.hscore.database.Client;
 import me.hsgamer.hscore.database.Driver;
 import me.hsgamer.hscore.database.Setting;
 import org.hibernate.SessionFactory;
@@ -12,7 +12,8 @@ import java.util.function.Consumer;
 /**
  * The Hibernate client
  */
-public class HibernateClient extends BaseClient<Configuration> {
+public class HibernateClient implements Client<Configuration> {
+  private final Setting setting;
   private final Configuration configuration;
 
   /**
@@ -21,7 +22,7 @@ public class HibernateClient extends BaseClient<Configuration> {
    * @param setting the setting
    */
   public HibernateClient(Setting setting) {
-    super(setting);
+    this.setting = setting;
     Driver driver = setting.getDriver();
 
     this.configuration = new Configuration()
@@ -31,6 +32,11 @@ public class HibernateClient extends BaseClient<Configuration> {
       .setProperty(AvailableSettings.JAKARTA_JDBC_PASSWORD, setting.getPassword());
 
     setting.getClientProperties().forEach((key, value) -> configuration.setProperty(key, value.toString()));
+  }
+
+  @Override
+  public Setting getSetting() {
+    return setting;
   }
 
   @Override

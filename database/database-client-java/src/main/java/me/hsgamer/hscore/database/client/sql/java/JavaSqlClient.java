@@ -2,7 +2,7 @@ package me.hsgamer.hscore.database.client.sql.java;
 
 import me.hsgamer.hscore.database.Driver;
 import me.hsgamer.hscore.database.Setting;
-import me.hsgamer.hscore.database.client.sql.BaseSqlClient;
+import me.hsgamer.hscore.database.client.sql.SqlClient;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,7 +12,8 @@ import java.util.Properties;
 /**
  * The SQL client with the Java's Driver Manager
  */
-public class JavaSqlClient extends BaseSqlClient<Properties> {
+public class JavaSqlClient implements SqlClient<Properties> {
+  private final Setting setting;
   private final Properties properties;
   private final String dbURL;
   private final java.sql.Driver sqlDriver;
@@ -23,7 +24,7 @@ public class JavaSqlClient extends BaseSqlClient<Properties> {
    * @param setting the setting
    */
   public JavaSqlClient(Setting setting) {
-    super(setting);
+    this.setting = setting;
     Driver driver = setting.getDriver();
     this.properties = new Properties();
     try {
@@ -35,6 +36,11 @@ public class JavaSqlClient extends BaseSqlClient<Properties> {
     properties.setProperty("password", setting.getPassword());
     setting.getClientProperties().forEach((k, v) -> properties.setProperty(k, String.valueOf(v)));
     this.dbURL = driver.convertURL(setting);
+  }
+
+  @Override
+  public Setting getSetting() {
+    return setting;
   }
 
   @Override
