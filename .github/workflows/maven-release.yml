@@ -40,7 +40,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./target/site/apidocs
+          publish_dir: ./javadocs
 
       - name: "Release"
         uses: softprops/action-gh-release@v2

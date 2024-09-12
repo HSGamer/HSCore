@@ -108,6 +108,9 @@
             <id>attach-javadocs</id>
           </execution>
         </executions>
+        <configuration>
+          <outputDirectory>${project.build.directory}/reports</outputDirectory>
+        </configuration>
       </plugin>
     </plugins>
   </build>
