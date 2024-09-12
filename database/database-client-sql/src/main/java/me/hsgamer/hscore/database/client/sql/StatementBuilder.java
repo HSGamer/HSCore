@@ -22,13 +22,19 @@ public class StatementBuilder {
   private @Language("SQL") String statement;
   private Object[] values;
 
+  private StatementBuilder(Connection connection) {
+    this.connection = connection;
+  }
+
   /**
    * Create a new builder
    *
    * @param connection the connection
+   *
+   * @return the builder
    */
-  public StatementBuilder(Connection connection) {
-    this.connection = connection;
+  public static StatementBuilder create(Connection connection) {
+    return new StatementBuilder(connection);
   }
 
   /**

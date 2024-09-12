@@ -33,7 +33,7 @@ public interface SqlClient<T> extends Client<T> {
    * @throws SQLException if there is an SQL error
    */
   default StatementBuilder createStatementBuilder() throws SQLException {
-    return new StatementBuilder(this.getConnection());
+    return StatementBuilder.create(this.getConnection());
   }
 
   /**
@@ -60,7 +60,7 @@ public interface SqlClient<T> extends Client<T> {
    * @throws SQLException if there is an SQL error
    */
   default BatchBuilder createBatchBuilder(@Language("SQL") String statement) throws SQLException {
-    return new BatchBuilder(this.getConnection(), statement);
+    return BatchBuilder.create(this.getConnection(), statement);
   }
 
   /**

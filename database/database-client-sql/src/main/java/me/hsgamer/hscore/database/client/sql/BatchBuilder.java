@@ -20,15 +20,21 @@ public class BatchBuilder {
   private final @Language("SQL") String statement;
   private final List<Object[]> values = new ArrayList<>();
 
+  private BatchBuilder(Connection connection, @Language("SQL") String statement) {
+    this.connection = connection;
+    this.statement = statement;
+  }
+
   /**
    * Create a new builder
    *
    * @param connection the connection
    * @param statement  the statement
+   *
+   * @return the builder
    */
-  public BatchBuilder(Connection connection, @Language("SQL") String statement) {
-    this.connection = connection;
-    this.statement = statement;
+  public static BatchBuilder create(Connection connection, @Language("SQL") String statement) {
+    return new BatchBuilder(connection, statement);
   }
 
   /**
