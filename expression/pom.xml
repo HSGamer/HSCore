@@ -19,7 +19,7 @@
     <dependency>
       <groupId>com.ezylang</groupId>
       <artifactId>EvalEx</artifactId>
-      <version>3.3.0</version>
+      <version>3.4.0</version>
     </dependency>
   </dependencies>
 </project>
