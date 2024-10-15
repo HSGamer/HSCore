@@ -6,7 +6,7 @@
   <parent>
     <groupId>me.hsgamer</groupId>
     <artifactId>hscore-database</artifactId>
-    <version>4.5.7</version>
+    <version>4.6.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>hscore-database-client-h2</artifactId>
