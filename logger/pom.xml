@@ -13,11 +13,11 @@
   <artifactId>hscore-logger</artifactId>
 
   <modules>
-    <module>logger-common</module>
-    <module>logger-provider</module>
-    <module>logger-service</module>
-    <module>logger-jul</module>
-    <module>logger-system</module>
-    <module>logger-slf4j</module>
+    <module>common</module>
+    <module>provider</module>
+    <module>service</module>
+    <module>jul</module>
+    <module>system</module>
+    <module>slf4j</module>
   </modules>
 </project>

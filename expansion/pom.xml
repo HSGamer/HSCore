@@ -12,10 +12,10 @@
   <artifactId>hscore-expansion</artifactId>
 
   <modules>
-    <module>expansion-common</module>
-    <module>expansion-manifest</module>
-    <module>expansion-properties</module>
-    <module>expansion-extra</module>
-    <module>expansion-gson</module>
+    <module>common</module>
+    <module>manifest</module>
+    <module>properties</module>
+    <module>extra</module>
+    <module>gson</module>
   </modules>
 </project>

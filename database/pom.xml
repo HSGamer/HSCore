@@ -12,19 +12,19 @@
   <artifactId>hscore-database</artifactId>
   <packaging>pom</packaging>
   <modules>
-    <module>database-common</module>
-    <module>database-driver-mysql</module>
-    <module>database-driver-sqlite</module>
-    <module>database-driver-mariadb</module>
-    <module>database-driver-postgresql</module>
-    <module>database-client-sql</module>
-    <module>database-client-hikari</module>
-    <module>database-client-java</module>
-    <module>database-client-hibernate</module>
-    <module>database-client-jpa</module>
-    <module>database-driver-h2</module>
-    <module>database-driver-sqlserver</module>
-    <module>database-client-h2</module>
+    <module>common</module>
+    <module>driver-mysql</module>
+    <module>driver-sqlite</module>
+    <module>driver-mariadb</module>
+    <module>driver-postgresql</module>
+    <module>client-sql</module>
+    <module>client-hikari</module>
+    <module>client-java</module>
+    <module>client-hibernate</module>
+    <module>client-jpa</module>
+    <module>driver-h2</module>
+    <module>driver-sqlserver</module>
+    <module>client-h2</module>
   </modules>
 
 </project>

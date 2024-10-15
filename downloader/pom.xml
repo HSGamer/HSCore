@@ -12,8 +12,8 @@
   <artifactId>hscore-downloader</artifactId>
   <packaging>pom</packaging>
   <modules>
-    <module>downloader-core</module>
-    <module>downloader-json</module>
-    <module>downloader-web-stream</module>
+    <module>core</module>
+    <module>json</module>
+    <module>web-stream</module>
   </modules>
 </project>

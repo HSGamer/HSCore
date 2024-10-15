@@ -12,14 +12,14 @@
   <artifactId>hscore-config</artifactId>
 
   <modules>
-    <module>config-common</module>
-    <module>config-annotation</module>
-    <module>config-annotated</module>
-    <module>config-proxy</module>
-    <module>config-simplixstorage</module>
-    <module>config-simpleconfiguration</module>
-    <module>config-configurate</module>
-    <module>config-gson</module>
+    <module>common</module>
+    <module>annotation</module>
+    <module>annotated</module>
+    <module>proxy</module>
+    <module>simplixstorage</module>
+    <module>simpleconfiguration</module>
+    <module>configurate</module>
+    <module>gson</module>
   </modules>
 
 </project>

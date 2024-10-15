@@ -13,8 +13,8 @@
   <artifactId>hscore-license</artifactId>
 
   <modules>
-    <module>license-common</module>
-    <module>license-spigotmc</module>
-    <module>license-polymart</module>
+    <module>common</module>
+    <module>spigotmc</module>
+    <module>polymart</module>
   </modules>
 </project>

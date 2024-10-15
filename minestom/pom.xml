@@ -12,8 +12,8 @@
   <artifactId>hscore-minestom</artifactId>
   <packaging>pom</packaging>
   <modules>
-    <module>minestom-board</module>
-    <module>minestom-gui</module>
+    <module>board</module>
+    <module>gui</module>
   </modules>
 
   <properties>

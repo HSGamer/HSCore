@@ -12,7 +12,7 @@
   <artifactId>hscore-action</artifactId>
 
   <modules>
-    <module>action-common</module>
-    <module>action-builder</module>
+    <module>common</module>
+    <module>builder</module>
   </modules>
 </project>

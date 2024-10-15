@@ -12,11 +12,11 @@
   <artifactId>hscore-checker</artifactId>
 
   <modules>
-    <module>checker-common</module>
-    <module>checker-spigotmc</module>
-    <module>checker-github</module>
-    <module>checker-polymart</module>
-    <module>checker-modrinth</module>
+    <module>common</module>
+    <module>spigotmc</module>
+    <module>github</module>
+    <module>polymart</module>
+    <module>modrinth</module>
   </modules>
 
 </project>
