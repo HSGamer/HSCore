@@ -3,78 +3,22 @@ package me.hsgamer.hscore.ui;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 /**
- * A simple implementation of {@link Holder}
- *
- * @param <D> The type of {@link Display}
+ * The base implementation for {@link UI}
  */
-public abstract class BaseHolder<D extends Display> implements Holder<D> {
-  protected final Map<UUID, D> displayMap = new ConcurrentHashMap<>();
+public abstract class BaseUI implements UI {
+  protected final UUID uuid;
   private final Map<Class<?>, List<Consumer<Object>>> classListMap = new HashMap<>();
 
   /**
-   * Make a new display
+   * Create a new UI
    *
-   * @param uuid the unique id
-   *
-   * @return the display
+   * @param uuid the unique id of the UI
    */
-  @NotNull
-  protected abstract D newDisplay(UUID uuid);
-
-  /**
-   * Called when the display is removed
-   *
-   * @param display the display
-   */
-  protected void onRemoveDisplay(@NotNull D display) {
-    // EMPTY
-  }
-
-  @Override
-  @NotNull
-  public D createDisplay(@NotNull UUID uuid) {
-    return displayMap.computeIfAbsent(uuid, uuid1 -> {
-      D display = newDisplay(uuid1);
-      display.init();
-      return display;
-    });
-  }
-
-  @Override
-  public void removeDisplay(@NotNull UUID uuid) {
-    Optional.ofNullable(displayMap.remove(uuid)).ifPresent(display -> {
-      onRemoveDisplay(display);
-      display.stop();
-    });
-  }
-
-  @Override
-  public void removeAllDisplay() {
-    displayMap.values().forEach(display -> {
-      onRemoveDisplay(display);
-      display.stop();
-    });
-    displayMap.clear();
-  }
-
-  @Override
-  public Optional<@NotNull D> getDisplay(@NotNull UUID uuid) {
-    return Optional.ofNullable(displayMap.get(uuid));
-  }
-
-  @Override
-  public void update() {
-    displayMap.values().forEach(D::update);
-  }
-
-  @Override
-  public void stop() {
-    clearAllEventConsumer();
-    removeAllDisplay();
+  protected BaseUI(UUID uuid) {
+    this.uuid = uuid;
   }
 
   /**
@@ -121,7 +65,17 @@ public abstract class BaseHolder<D extends Display> implements Holder<D> {
   }
 
   @Override
-  public <E> void handleEvent(@NotNull E event) {
+  public void stop() {
+    clearAllEventConsumer();
+  }
+
+  @Override
+  public UUID getUniqueId() {
+    return uuid;
+  }
+
+  @Override
+  public void handleEvent(@NotNull Object event) {
     Set<Class<?>> eventClassSet = new HashSet<>();
     Queue<Class<?>> eventClassQueue = new LinkedList<>();
     eventClassQueue.add(event.getClass());
