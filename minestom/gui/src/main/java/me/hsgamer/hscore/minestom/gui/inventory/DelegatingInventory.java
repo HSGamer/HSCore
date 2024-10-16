@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.minestom.gui.inventory;
 
-import me.hsgamer.hscore.minestom.gui.MinestomGUIDisplay;
+import me.hsgamer.hscore.minestom.gui.MinestomGUI;
 import me.hsgamer.hscore.minestom.gui.event.MinestomClickEvent;
 import me.hsgamer.hscore.minestom.gui.event.MinestomCloseEvent;
 import me.hsgamer.hscore.minestom.gui.event.MinestomOpenEvent;
@@ -21,37 +21,37 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * A custom inventory used by {@link MinestomGUIDisplay}
+ * A custom inventory used by {@link MinestomGUI}
  */
 public class DelegatingInventory extends Inventory implements Initializable {
   private final EventNode<InventoryEvent> eventNode;
-  private final MinestomGUIDisplay display;
+  private final MinestomGUI gui;
 
   /**
    * Create a new inventory
    *
    * @param inventoryType the inventory type
    * @param title         the title
-   * @param display       the display
+   * @param gui           the gui
    */
-  public DelegatingInventory(@NotNull InventoryType inventoryType, @NotNull Component title, @NotNull MinestomGUIDisplay display) {
+  public DelegatingInventory(@NotNull InventoryType inventoryType, @NotNull Component title, @NotNull MinestomGUI gui) {
     super(inventoryType, title);
-    this.display = display;
+    this.gui = gui;
     eventNode = EventNode.event("inventory-" + UUID.randomUUID(), EventFilter.INVENTORY, event -> Objects.equals(event.getInventory(), this));
   }
 
   @Override
   public void init() {
-    eventNode.addListener(InventoryOpenEvent.class, event -> display.getHolder().handleEvent(new MinestomOpenEvent(event)));
+    eventNode.addListener(InventoryOpenEvent.class, event -> gui.handleEvent(new MinestomOpenEvent(event)));
     eventNode.addListener(InventoryPreClickEvent.class, event -> {
       boolean wasCancelled = event.isCancelled();
       event.setCancelled(true);
-      display.getHolder().handleEvent(new MinestomClickEvent(event));
+      gui.handleEvent(new MinestomClickEvent(event));
       if (!wasCancelled && !event.isCancelled()) {
         event.setCancelled(false);
       }
     });
-    eventNode.addListener(InventoryCloseEvent.class, event -> display.getHolder().handleEvent(new MinestomCloseEvent(event)));
+    eventNode.addListener(InventoryCloseEvent.class, event -> gui.handleEvent(new MinestomCloseEvent(event)));
     MinecraftServer.getGlobalEventHandler().addChild(eventNode);
   }
 
@@ -71,11 +71,11 @@ public class DelegatingInventory extends Inventory implements Initializable {
   }
 
   /**
-   * Get the display related to this inventory
+   * Get the gui related to this inventory
    *
-   * @return the display
+   * @return the gui
    */
-  public MinestomGUIDisplay getDisplay() {
-    return display;
+  public MinestomGUI getGUI() {
+    return gui;
   }
 }
