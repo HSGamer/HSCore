@@ -17,7 +17,7 @@ import org.bukkit.plugin.Plugin;
 import java.util.function.Consumer;
 
 /**
- * The Listener for {@link BukkitGUIHolder} and {@link BukkitGUIDisplay}.
+ * The Listener for {@link BukkitGUI}
  * Need to register this for others to work.
  */
 public class BukkitGUIListener implements Listener {
@@ -54,10 +54,10 @@ public class BukkitGUIListener implements Listener {
     return init(plugin, EventPriority.LOW, EventPriority.LOW, EventPriority.NORMAL, EventPriority.NORMAL);
   }
 
-  private static void handleIfDisplay(InventoryEvent event, Consumer<BukkitGUIDisplay> consumer) {
+  private static void handleIfDisplay(InventoryEvent event, Consumer<BukkitGUI> consumer) {
     InventoryHolder holder = event.getInventory().getHolder();
-    if (holder instanceof BukkitGUIDisplay) {
-      consumer.accept((BukkitGUIDisplay) holder);
+    if (holder instanceof BukkitGUI) {
+      consumer.accept((BukkitGUI) holder);
     }
   }
 
@@ -70,11 +70,11 @@ public class BukkitGUIListener implements Listener {
   }
 
   private void onInventoryClick(InventoryClickEvent event) {
-    handleIfDisplay(event, display -> {
+    handleIfDisplay(event, gui -> {
       boolean wasCancelled = event.isCancelled();
       event.setCancelled(true);
 
-      display.getHolder().handleEvent(new BukkitClickEvent(event));
+      gui.handleEvent(new BukkitClickEvent(event));
 
       if (!wasCancelled && !event.isCancelled()) {
         event.setCancelled(false);
@@ -83,15 +83,15 @@ public class BukkitGUIListener implements Listener {
   }
 
   private void onInventoryOpen(InventoryOpenEvent event) {
-    handleIfDisplay(event, display -> display.getHolder().handleEvent(new BukkitOpenEvent(event)));
+    handleIfDisplay(event, gui -> gui.handleEvent(new BukkitOpenEvent(event)));
   }
 
   private void onInventoryClose(InventoryCloseEvent event) {
-    handleIfDisplay(event, display -> display.getHolder().handleEvent(new BukkitCloseEvent(event)));
+    handleIfDisplay(event, gui -> gui.handleEvent(new BukkitCloseEvent(event)));
   }
 
   private void onInventoryDrag(InventoryDragEvent event) {
-    handleIfDisplay(event, display -> display.getHolder().handleEvent(new BukkitDragEvent(event)));
+    handleIfDisplay(event, gui -> gui.handleEvent(new BukkitDragEvent(event)));
   }
 
   private void onPluginDisable(PluginDisableEvent event) {
