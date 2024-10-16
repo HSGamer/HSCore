@@ -1,9 +1,10 @@
 package me.hsgamer.hscore.minecraft.gui.simple;
 
+import me.hsgamer.hscore.minecraft.gui.GUI;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
-import me.hsgamer.hscore.minecraft.gui.button.ButtonMap;
-import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
+import me.hsgamer.hscore.minecraft.gui.object.ActionItem;
 import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
+import me.hsgamer.hscore.ui.property.Initializable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -11,9 +12,9 @@ import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 
 /**
- * A simple {@link ButtonMap} with a list of {@link Button}s
+ * A simple button map with a list of {@link Button}s
  */
-public class SimpleButtonMap implements ButtonMap {
+public class SimpleButtonMap implements Initializable {
   private final Map<Button, Collection<Integer>> buttonSlotMap = new LinkedHashMap<>();
   private Button defaultButton = Button.EMPTY;
 
@@ -93,23 +94,39 @@ public class SimpleButtonMap implements ButtonMap {
     removeAllButton().forEach(Button::stop);
   }
 
-  @Override
-  public @NotNull Map<@NotNull Integer, @NotNull DisplayButton> getButtons(@NotNull UUID uuid, InventorySize inventorySize) {
-    Map<Integer, DisplayButton> map = new HashMap<>();
-    IntFunction<DisplayButton> getDisplayButton = i -> map.computeIfAbsent(i, s -> new DisplayButton());
+  /**
+   * Get the buttons
+   *
+   * @param uuid          the unique id
+   * @param inventorySize the inventory size
+   *
+   * @return the buttons
+   */
+  public @NotNull Map<@NotNull Integer, @NotNull ActionItem> getButtons(@NotNull UUID uuid, InventorySize inventorySize) {
+    Map<Integer, ActionItem> map = new HashMap<>();
+    IntFunction<ActionItem> getDisplayButton = i -> map.computeIfAbsent(i, s -> new ActionItem());
 
     Button defaultButton = getDefaultButton();
-    DisplayButton defaultDisplayButton = defaultButton.display(uuid);
-    if (defaultDisplayButton != null) {
-      inventorySize.getSlots().forEach(i -> getDisplayButton.apply(i).apply(defaultDisplayButton));
+    ActionItem defaultActionItem = defaultButton.display(uuid);
+    if (defaultActionItem != null) {
+      inventorySize.getSlots().forEach(i -> getDisplayButton.apply(i).apply(defaultActionItem));
     }
 
     buttonSlotMap.forEach((button, slots) -> {
-      DisplayButton displayButton = button.display(uuid);
-      if (displayButton == null) return;
-      slots.forEach(slot -> getDisplayButton.apply(slot).apply(displayButton));
+      ActionItem actionItem = button.display(uuid);
+      if (actionItem == null) return;
+      slots.forEach(slot -> getDisplayButton.apply(slot).apply(actionItem));
     });
 
     return map;
+  }
+
+  /**
+   * Apply the buttons to the GUI
+   *
+   * @param gui the GUI
+   */
+  public void apply(GUI gui) {
+    gui.updateItems(getButtons(gui.getUniqueId(), gui.getInventorySize()));
   }
 }

@@ -1,8 +1,8 @@
 package me.hsgamer.hscore.minecraft.gui.button.impl;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
-import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
+import me.hsgamer.hscore.minecraft.gui.object.ActionItem;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,8 +40,8 @@ public class SimpleButton implements Button {
   }
 
   @Override
-  public DisplayButton display(@NotNull UUID uuid) {
-    return new DisplayButton()
+  public ActionItem display(@NotNull UUID uuid) {
+    return new ActionItem()
       .setItem(itemFunction.apply(uuid))
       .setClickAction(consumer);
   }

@@ -1,5 +1,6 @@
 package me.hsgamer.hscore.minecraft.gui.button;
 
+import me.hsgamer.hscore.minecraft.gui.object.ActionItem;
 import me.hsgamer.hscore.ui.property.Initializable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,5 +24,5 @@ public interface Button extends Initializable {
    * @return the display button
    */
   @Nullable
-  DisplayButton display(@NotNull final UUID uuid);
+  ActionItem display(@NotNull final UUID uuid);
 }

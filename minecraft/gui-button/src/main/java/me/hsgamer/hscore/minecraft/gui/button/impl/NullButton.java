@@ -1,8 +1,8 @@
 package me.hsgamer.hscore.minecraft.gui.button.impl;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
-import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
+import me.hsgamer.hscore.minecraft.gui.object.ActionItem;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -24,7 +24,7 @@ public class NullButton implements Button {
   }
 
   @Override
-  public @NotNull DisplayButton display(@NotNull UUID uuid) {
-    return new DisplayButton().setClickAction(consumer);
+  public @NotNull ActionItem display(@NotNull UUID uuid) {
+    return new ActionItem().setClickAction(consumer);
   }
 }

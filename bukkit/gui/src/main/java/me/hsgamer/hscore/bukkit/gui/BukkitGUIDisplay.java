@@ -2,7 +2,6 @@ package me.hsgamer.hscore.bukkit.gui;
 
 import me.hsgamer.hscore.bukkit.gui.object.BukkitInventorySize;
 import me.hsgamer.hscore.bukkit.gui.object.BukkitItem;
-import me.hsgamer.hscore.minecraft.gui.InventoryGUIDisplay;
 import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.bukkit.Bukkit;

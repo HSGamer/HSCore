@@ -3,7 +3,7 @@ package me.hsgamer.hscore.bukkit.gui.button.impl;
 import me.hsgamer.hscore.bukkit.gui.event.BukkitClickEvent;
 import me.hsgamer.hscore.bukkit.gui.object.BukkitItem;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
-import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
+import me.hsgamer.hscore.minecraft.gui.object.ActionItem;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -24,8 +24,8 @@ public class OutputButton implements Button {
   private BiFunction<@NotNull UUID, @Nullable ItemStack, @Nullable ItemStack> displayItemFunction = (uuid, item) -> item;
 
   @Override
-  public @Nullable DisplayButton display(@NotNull UUID uuid) {
-    return new DisplayButton()
+  public @Nullable ActionItem display(@NotNull UUID uuid) {
+    return new ActionItem()
       .setItem(new BukkitItem(displayItemFunction.apply(uuid, getOutputItem(uuid))))
       .setClickAction(event -> {
         if (!(event instanceof BukkitClickEvent)) return;

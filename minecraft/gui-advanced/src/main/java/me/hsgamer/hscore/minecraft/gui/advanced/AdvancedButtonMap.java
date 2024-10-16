@@ -1,19 +1,20 @@
 package me.hsgamer.hscore.minecraft.gui.advanced;
 
+import me.hsgamer.hscore.minecraft.gui.GUI;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
-import me.hsgamer.hscore.minecraft.gui.button.ButtonMap;
-import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
 import me.hsgamer.hscore.minecraft.gui.mask.Mask;
+import me.hsgamer.hscore.minecraft.gui.object.ActionItem;
 import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
+import me.hsgamer.hscore.ui.property.Initializable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * An advanced {@link ButtonMap} that uses {@link Mask}
+ * An advanced button map that uses {@link Mask}
  */
-public class AdvancedButtonMap implements ButtonMap {
+public class AdvancedButtonMap implements Initializable {
   private final List<Mask> masks = new LinkedList<>();
 
   /**
@@ -73,9 +74,16 @@ public class AdvancedButtonMap implements ButtonMap {
     removeAllMasks().forEach(Mask::stop);
   }
 
-  @Override
-  public @NotNull Map<@NotNull Integer, @NotNull DisplayButton> getButtons(@NotNull UUID uuid, InventorySize inventorySize) {
-    Map<Integer, DisplayButton> map = new HashMap<>();
+  /**
+   * Get the buttons
+   *
+   * @param uuid          the unique id
+   * @param inventorySize the inventory size
+   *
+   * @return the buttons
+   */
+  public @NotNull Map<@NotNull Integer, @NotNull ActionItem> getButtons(@NotNull UUID uuid, InventorySize inventorySize) {
+    Map<Integer, ActionItem> map = new HashMap<>();
     for (Mask mask : masks) {
       Optional<Map<Integer, Button>> buttons = mask.generateButtons(uuid, inventorySize);
       if (!buttons.isPresent()) continue;
@@ -84,13 +92,22 @@ public class AdvancedButtonMap implements ButtonMap {
           return;
         }
 
-        DisplayButton displayButton = button.display(uuid);
-        if (displayButton == null) {
+        ActionItem actionItem = button.display(uuid);
+        if (actionItem == null) {
           return;
         }
-        map.computeIfAbsent(slot, s -> new DisplayButton()).apply(displayButton);
+        map.computeIfAbsent(slot, s -> new ActionItem()).apply(actionItem);
       });
     }
     return map;
+  }
+
+  /**
+   * Apply the buttons to the GUI
+   *
+   * @param gui the GUI
+   */
+  public void apply(GUI gui) {
+    gui.updateItems(getButtons(gui.getUniqueId(), gui.getInventorySize()));
   }
 }

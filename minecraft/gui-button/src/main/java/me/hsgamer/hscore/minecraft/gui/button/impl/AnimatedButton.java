@@ -3,7 +3,7 @@ package me.hsgamer.hscore.minecraft.gui.button.impl;
 import me.hsgamer.hscore.animate.Animation;
 import me.hsgamer.hscore.minecraft.gui.GUIProperties;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
-import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
+import me.hsgamer.hscore.minecraft.gui.object.ActionItem;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -86,7 +86,7 @@ public class AnimatedButton implements Button {
   }
 
   @Override
-  public DisplayButton display(@NotNull UUID uuid) {
+  public ActionItem display(@NotNull UUID uuid) {
     return getAnimation(uuid).getCurrentFrame().display(uuid);
   }
 

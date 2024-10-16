@@ -14,7 +14,7 @@
   <dependencies>
     <dependency>
       <groupId>me.hsgamer</groupId>
-      <artifactId>hscore-minecraft-gui</artifactId>
+      <artifactId>hscore-minecraft-gui-button</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

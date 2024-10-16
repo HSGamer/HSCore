@@ -1,7 +1,6 @@
 package me.hsgamer.hscore.bukkit.gui;
 
 import me.hsgamer.hscore.bukkit.gui.event.BukkitDragEvent;
-import me.hsgamer.hscore.minecraft.gui.GUIHolder;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;

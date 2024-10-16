@@ -1,9 +1,9 @@
 package me.hsgamer.hscore.minecraft.gui.button.impl;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
-import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.event.ViewerEvent;
+import me.hsgamer.hscore.minecraft.gui.object.ActionItem;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -125,19 +125,19 @@ public class PredicateButton implements Button {
   }
 
   @Override
-  public DisplayButton display(@NotNull UUID uuid) {
-    DisplayButton displayButton;
+  public ActionItem display(@NotNull UUID uuid) {
+    ActionItem actionItem;
     if (viewPredicate.test(uuid)) {
-      displayButton = button.display(uuid);
+      actionItem = button.display(uuid);
     } else {
-      displayButton = fallbackButton.display(uuid);
+      actionItem = fallbackButton.display(uuid);
     }
 
-    if (displayButton == null) {
+    if (actionItem == null) {
       return null;
     }
 
-    Optional.ofNullable(displayButton.getAction())
+    Optional.ofNullable(actionItem.getAction())
       .map(displayButtonAction -> (Consumer<ViewerEvent>) event -> {
         if (event instanceof ClickEvent) {
           ClickEvent clickEvent = (ClickEvent) event;
@@ -155,9 +155,9 @@ public class PredicateButton implements Button {
           displayButtonAction.accept(event);
         }
       })
-      .ifPresent(displayButton::setAction);
+      .ifPresent(actionItem::setAction);
 
-    return displayButton;
+    return actionItem;
   }
 
   @Override

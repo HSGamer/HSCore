@@ -1,6 +1,5 @@
 package me.hsgamer.hscore.minestom.gui;
 
-import me.hsgamer.hscore.minecraft.gui.GUIHolder;
 import me.hsgamer.hscore.minecraft.gui.GUIProperties;
 import me.hsgamer.hscore.minestom.gui.event.MinestomCloseEvent;
 import net.kyori.adventure.text.Component;

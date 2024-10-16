@@ -1,7 +1,7 @@
 package me.hsgamer.hscore.minecraft.gui.button.impl;
 
 import me.hsgamer.hscore.minecraft.gui.button.Button;
-import me.hsgamer.hscore.minecraft.gui.button.DisplayButton;
+import me.hsgamer.hscore.minecraft.gui.object.ActionItem;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -93,14 +93,14 @@ public class ListButton implements Button {
   }
 
   @Override
-  public DisplayButton display(@NotNull UUID uuid) {
+  public ActionItem display(@NotNull UUID uuid) {
     if (keepCurrentIndex && currentIndexMap.containsKey(uuid)) {
       return buttons.get(currentIndexMap.get(uuid)).display(uuid);
     }
 
     for (int i = 0; i < buttons.size(); i++) {
       Button button = buttons.get(i);
-      DisplayButton item = button.display(uuid);
+      ActionItem item = button.display(uuid);
       if (item != null) {
         currentIndexMap.put(uuid, i);
         return item;

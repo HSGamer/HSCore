@@ -1,20 +1,19 @@
-package me.hsgamer.hscore.minecraft.gui.button;
+package me.hsgamer.hscore.minecraft.gui.object;
 
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.event.ViewerEvent;
-import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
 /**
- * A button that is displayed on the inventory
+ * An item with an action
  */
-public class DisplayButton {
+public class ActionItem {
   /**
-   * The empty button
+   * The empty action item
    */
-  public static final DisplayButton EMPTY = new DisplayButton();
+  public static final ActionItem EMPTY = new ActionItem();
 
   private Item item;
   private Consumer<ViewerEvent> action;
@@ -36,7 +35,7 @@ public class DisplayButton {
    *
    * @return the current instance
    */
-  public DisplayButton setItem(@Nullable Item item) {
+  public ActionItem setItem(@Nullable Item item) {
     this.item = item;
     return this;
   }
@@ -58,7 +57,7 @@ public class DisplayButton {
    *
    * @return the current instance
    */
-  public DisplayButton setAction(@Nullable Consumer<ViewerEvent> action) {
+  public ActionItem setAction(@Nullable Consumer<ViewerEvent> action) {
     this.action = action;
     return this;
   }
@@ -70,7 +69,7 @@ public class DisplayButton {
    *
    * @return the current instance
    */
-  public DisplayButton setClickAction(@Nullable Consumer<ClickEvent> action) {
+  public ActionItem setClickAction(@Nullable Consumer<ClickEvent> action) {
     this.action = action == null ? null : event -> {
       if (event instanceof ClickEvent) {
         action.accept((ClickEvent) event);
@@ -82,14 +81,14 @@ public class DisplayButton {
   /**
    * Apply the display button to this instance
    *
-   * @param displayButton the display button
+   * @param actionItem the display button
    */
-  public void apply(DisplayButton displayButton) {
-    if (displayButton.item != null) {
-      this.item = displayButton.item;
+  public void apply(ActionItem actionItem) {
+    if (actionItem.item != null) {
+      this.item = actionItem.item;
     }
-    if (displayButton.action != null) {
-      this.action = displayButton.action;
+    if (actionItem.action != null) {
+      this.action = actionItem.action;
     }
   }
 }

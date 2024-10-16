@@ -1,6 +1,5 @@
 package me.hsgamer.hscore.minestom.gui;
 
-import me.hsgamer.hscore.minecraft.gui.InventoryGUIDisplay;
 import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
 import me.hsgamer.hscore.minestom.gui.inventory.DelegatingInventory;
