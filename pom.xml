@@ -46,7 +46,6 @@
     <module>variable</module>
     <module>builder</module>
     <module>collections</module>
-    <module>expression</module>
     <module>web</module>
     <module>request</module>
     <module>serializer</module>
