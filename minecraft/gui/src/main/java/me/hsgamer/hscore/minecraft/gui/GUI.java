@@ -29,25 +29,6 @@ public abstract class GUI extends BaseUI {
   private final AtomicReference<Map<Integer, ActionItem>> itemsRef = new AtomicReference<>(Collections.emptyMap());
 
   /**
-   * Create a new UI
-   *
-   * @param uuid the unique id of the UI
-   */
-  protected GUI(UUID uuid) {
-    super(uuid);
-  }
-
-  /**
-   * Initialize the inventory
-   */
-  protected abstract void initInventory();
-
-  /**
-   * Clear the inventory
-   */
-  protected abstract void clearInventory();
-
-  /**
    * Set the item to the slot
    *
    * @param slot the slot
@@ -64,8 +45,10 @@ public abstract class GUI extends BaseUI {
 
   /**
    * Open the inventory
+   *
+   * @param uuid the UUID of the player
    */
-  public abstract void open();
+  public abstract void open(UUID uuid);
 
   /**
    * Handle open event
@@ -168,8 +151,6 @@ public abstract class GUI extends BaseUI {
 
   @Override
   public void init() {
-    initInventory();
-
     addEventConsumer(OpenEvent.class, this::onOpen);
 
     addEventConsumer(ClickEvent.class, this::onClick);
@@ -196,7 +177,6 @@ public abstract class GUI extends BaseUI {
 
   @Override
   public void stop() {
-    clearInventory();
     clearItems();
   }
 

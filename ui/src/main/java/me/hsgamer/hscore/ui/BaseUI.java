@@ -9,17 +9,7 @@ import java.util.function.Consumer;
  * The base implementation for {@link UI}
  */
 public abstract class BaseUI implements UI {
-  protected final UUID uuid;
   private final Map<Class<?>, List<Consumer<Object>>> classListMap = new HashMap<>();
-
-  /**
-   * Create a new UI
-   *
-   * @param uuid the unique id of the UI
-   */
-  protected BaseUI(UUID uuid) {
-    this.uuid = uuid;
-  }
 
   /**
    * Add an event consumer
@@ -67,11 +57,6 @@ public abstract class BaseUI implements UI {
   @Override
   public void stop() {
     clearAllEventConsumer();
-  }
-
-  @Override
-  public UUID getUniqueId() {
-    return uuid;
   }
 
   @Override

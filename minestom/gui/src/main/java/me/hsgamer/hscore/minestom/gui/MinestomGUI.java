@@ -22,67 +22,13 @@ import java.util.function.Predicate;
  * The GUI for Minestom
  */
 public class MinestomGUI extends GUI {
-  private InventoryType inventoryType = InventoryType.CHEST_3_ROW;
-  private Component title = Component.empty();
+  private final DelegatingInventory inventory;
+  private final InventorySize inventorySize;
   private Predicate<UUID> closePredicate = uuid -> true;
-  private DelegatingInventory inventory;
-  private InventorySize inventorySize;
 
-  /**
-   * Create a new UI
-   *
-   * @param uuid the unique id of the UI
-   */
-  public MinestomGUI(UUID uuid) {
-    super(uuid);
-  }
-
-  /**
-   * Get the inventory type
-   *
-   * @return the inventory type
-   */
-  @NotNull
-  public InventoryType getInventoryType() {
-    return inventoryType;
-  }
-
-  /**
-   * Set the inventory type
-   *
-   * @param inventoryType the inventory type
-   */
-  public void setInventoryType(@NotNull InventoryType inventoryType) {
-    this.inventoryType = inventoryType;
-  }
-
-  /**
-   * Get the title
-   *
-   * @return the title
-   */
-  @NotNull
-  public Component getTitle() {
-    return title;
-  }
-
-  /**
-   * Set the title
-   *
-   * @param title the title
-   */
-  public void setTitle(@NotNull Component title) {
-    this.title = title;
-  }
-
-  /**
-   * Get the close predicate
-   *
-   * @return the close predicate
-   */
-  @NotNull
-  public Predicate<UUID> getClosePredicate() {
-    return closePredicate;
+  public MinestomGUI(InventoryType inventoryType, Component title) {
+    this.inventory = new DelegatingInventory(inventoryType, title, this);
+    this.inventorySize = new MinestomInventorySize(inventory);
   }
 
   /**
@@ -94,15 +40,18 @@ public class MinestomGUI extends GUI {
     this.closePredicate = closePredicate;
   }
 
-  @Override
-  protected void initInventory() {
-    this.inventory = new DelegatingInventory(inventoryType, title, this);
-    this.inventory.init();
-    this.inventorySize = new MinestomInventorySize(inventory);
+  /**
+   * Open the GUI for the player
+   *
+   * @param player the player
+   */
+  public void open(Player player) {
+    player.openInventory(inventory);
   }
 
   @Override
   public void init() {
+    inventory.init();
     addEventConsumer(MinestomCloseEvent.class, event -> {
       UUID uuid = event.getViewerID();
       if (closePredicate != null && !closePredicate.test(uuid)) {
@@ -115,10 +64,9 @@ public class MinestomGUI extends GUI {
   }
 
   @Override
-  protected void clearInventory() {
-    if (inventory != null) {
-      inventory.stop();
-    }
+  public void stop() {
+    super.stop();
+    inventory.stop();
   }
 
   @Override
@@ -132,17 +80,14 @@ public class MinestomGUI extends GUI {
 
   @Override
   public InventorySize getInventorySize() {
-    if (inventorySize == null) {
-      throw new IllegalStateException("Inventory size is not initialized");
-    }
     return inventorySize;
   }
 
   @Override
-  public void open() {
+  public void open(UUID uuid) {
     Player player = MinecraftServer.getConnectionManager().getOnlinePlayerByUuid(uuid);
     if (player != null) {
-      player.openInventory(inventory);
+      open(player);
     }
   }
 }

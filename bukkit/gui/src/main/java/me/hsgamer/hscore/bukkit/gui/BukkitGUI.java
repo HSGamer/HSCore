@@ -22,90 +22,42 @@ import static me.hsgamer.hscore.bukkit.gui.BukkitGUIUtils.normalizeToChestSize;
  * The GUI for Bukkit
  */
 public class BukkitGUI extends GUI implements InventoryHolder {
-  private InventoryType inventoryType = InventoryType.CHEST;
-  private int size = InventoryType.CHEST.getDefaultSize();
-  private String title = "";
-  private Inventory inventory;
-  private InventorySize inventorySize;
+  private final Inventory inventory;
+  private final InventorySize inventorySize;
 
   /**
-   * Create a new UI
+   * Create a GUI
    *
-   * @param uuid the unique id of the UI
+   * @param inventory the inventory
    */
-  public BukkitGUI(UUID uuid) {
-    super(uuid);
+  public BukkitGUI(Inventory inventory) {
+    this.inventory = inventory;
+    this.inventorySize = new BukkitInventorySize(inventory);
   }
 
   /**
-   * Get the inventory type
-   *
-   * @return the inventory type
-   */
-  public InventoryType getInventoryType() {
-    return inventoryType;
-  }
-
-  /**
-   * Set the inventory type
+   * Create a GUI
    *
    * @param inventoryType the inventory type
+   * @param size          the size of the inventory if the inventory type is CHEST
+   * @param title         the title of the inventory
    */
-  public void setInventoryType(InventoryType inventoryType) {
-    this.inventoryType = inventoryType;
-  }
-
-  /**
-   * Get the size of the inventory
-   *
-   * @return the size
-   */
-  public int getSize() {
-    return size;
-  }
-
-  /**
-   * Set the size of the inventory
-   *
-   * @param size the size
-   */
-  public void setSize(int size) {
-    this.size = size;
-  }
-
-  /**
-   * Get the title of the inventory
-   *
-   * @return the title
-   */
-  public String getTitle() {
-    return title;
-  }
-
-  /**
-   * Set the title of the inventory
-   *
-   * @param title the title
-   */
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  @Override
-  protected void initInventory() {
-    inventory = inventoryType == InventoryType.CHEST && size > 0
-      ? Bukkit.createInventory(this, normalizeToChestSize(size))
-      : Bukkit.createInventory(this, inventoryType);
-    inventorySize = new BukkitInventorySize(inventory);
-  }
-
-  @Override
-  protected void clearInventory() {
-    if (inventory != null) {
-      inventory.clear();
+  public BukkitGUI(InventoryType inventoryType, int size, String title) {
+    if (inventoryType == InventoryType.CHEST) {
+      this.inventory = Bukkit.createInventory(this, normalizeToChestSize(size), title);
+    } else {
+      this.inventory = Bukkit.createInventory(this, inventoryType, title);
     }
-    inventory = null;
-    inventorySize = null;
+    this.inventorySize = new BukkitInventorySize(inventory);
+  }
+
+  /**
+   * Open the inventory for the player
+   *
+   * @param player the player
+   */
+  public void open(Player player) {
+    player.openInventory(inventory);
   }
 
   @Override
@@ -119,25 +71,25 @@ public class BukkitGUI extends GUI implements InventoryHolder {
 
   @Override
   public InventorySize getInventorySize() {
-    if (inventorySize == null) {
-      throw new IllegalStateException("Inventory size is not initialized");
-    }
     return inventorySize;
   }
 
   @Override
-  public void open() {
+  public void open(UUID uuid) {
     Player player = Bukkit.getPlayer(uuid);
     if (player != null) {
-      player.openInventory(inventory);
+      open(player);
     }
   }
 
   @Override
+  public void stop() {
+    super.stop();
+    inventory.clear();
+  }
+
+  @Override
   public Inventory getInventory() {
-    if (inventory == null) {
-      throw new IllegalStateException("Inventory is not initialized");
-    }
     return inventory;
   }
 }

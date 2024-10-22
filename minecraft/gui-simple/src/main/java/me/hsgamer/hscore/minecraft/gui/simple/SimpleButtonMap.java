@@ -124,9 +124,10 @@ public class SimpleButtonMap implements Initializable {
   /**
    * Apply the buttons to the GUI
    *
-   * @param gui the GUI
+   * @param uuid the unique id
+   * @param gui  the GUI
    */
-  public void apply(GUI gui) {
-    gui.updateItems(getButtons(gui.getUniqueId(), gui.getInventorySize()));
+  public void apply(UUID uuid, GUI gui) {
+    gui.updateItems(getButtons(uuid, gui.getInventorySize()));
   }
 }
