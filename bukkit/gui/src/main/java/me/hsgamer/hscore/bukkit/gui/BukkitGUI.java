@@ -8,20 +8,16 @@ import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-import static me.hsgamer.hscore.bukkit.gui.BukkitGUIUtils.normalizeToChestSize;
-
 /**
  * The GUI for Bukkit
  */
-public class BukkitGUI extends GUI implements InventoryHolder {
+public class BukkitGUI extends GUI {
   private final Inventory inventory;
   private final InventorySize inventorySize;
 
@@ -36,28 +32,21 @@ public class BukkitGUI extends GUI implements InventoryHolder {
   }
 
   /**
-   * Create a GUI
-   *
-   * @param inventoryType the inventory type
-   * @param size          the size of the inventory if the inventory type is CHEST
-   * @param title         the title of the inventory
-   */
-  public BukkitGUI(InventoryType inventoryType, int size, String title) {
-    if (inventoryType == InventoryType.CHEST) {
-      this.inventory = Bukkit.createInventory(this, normalizeToChestSize(size), title);
-    } else {
-      this.inventory = Bukkit.createInventory(this, inventoryType, title);
-    }
-    this.inventorySize = new BukkitInventorySize(inventory);
-  }
-
-  /**
    * Open the inventory for the player
    *
    * @param player the player
    */
   public void open(Player player) {
     player.openInventory(inventory);
+  }
+
+  /**
+   * Get the inventory of the GUI
+   *
+   * @return the inventory
+   */
+  public Inventory getInventory() {
+    return inventory;
   }
 
   @Override
@@ -86,10 +75,5 @@ public class BukkitGUI extends GUI implements InventoryHolder {
   public void stop() {
     super.stop();
     inventory.clear();
-  }
-
-  @Override
-  public Inventory getInventory() {
-    return inventory;
   }
 }
