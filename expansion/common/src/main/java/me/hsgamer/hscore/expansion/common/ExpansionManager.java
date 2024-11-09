@@ -7,10 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
+import java.util.function.*;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
@@ -82,6 +79,11 @@ public class ExpansionManager {
    */
   @NotNull
   private UnaryOperator<Map<String, ExpansionClassLoader>> sortAndFilterFunction = UnaryOperator.identity();
+
+  /**
+   * The function to remap the expansion file
+   */
+  private BiFunction<File, ExpansionDescription, Optional<File>> remapper = (file, description) -> Optional.empty();
 
   /**
    * Create a new expansion manager
@@ -198,6 +200,15 @@ public class ExpansionManager {
   }
 
   /**
+   * Get the function to remap the expansion file
+   *
+   * @param remapper the remapper
+   */
+  public void setRemapper(BiFunction<File, ExpansionDescription, Optional<File>> remapper) {
+    this.remapper = remapper;
+  }
+
+  /**
    * Load all expansions from the expansion directory. Also call {@link Expansion#onLoad()}
    */
   public void loadExpansions() {
@@ -208,17 +219,27 @@ public class ExpansionManager {
       .filter(file -> file.isFile() && file.getName().toLowerCase(Locale.ROOT).endsWith(".jar"))
       .forEach(file -> {
         ExpansionDescription description;
-        ExpansionClassLoader loader;
         try (final JarFile jar = new JarFile(file)) {
           description = descriptionFactory.apply(jar);
-          if (initClassLoaders.containsKey(description.getName())) {
-            return;
-          }
-          loader = new ExpansionClassLoader(this, file, description, this.parentClassLoader);
         } catch (final Exception e) {
           exceptionHandler.accept(new InvalidExpansionFileException("Cannot load expansion file " + file.getName(), file, e));
           return;
         }
+
+        if (initClassLoaders.containsKey(description.getName())) {
+          return;
+        }
+
+        File finalFile = this.remapper.apply(file, description).orElse(file);
+
+        ExpansionClassLoader loader;
+        try {
+          loader = new ExpansionClassLoader(this, finalFile, description, this.parentClassLoader);
+        } catch (final Exception e) {
+          exceptionHandler.accept(new InvalidExpansionFileException("Cannot load expansion file " + file.getName(), file, e));
+          return;
+        }
+
         initClassLoaders.put(description.getName(), loader);
       });
 
