@@ -2,14 +2,15 @@ package me.hsgamer.hscore.ui;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
  * The base implementation for {@link UI}
  */
 public abstract class BaseUI implements UI {
-  private final LinkedList<Consumer<Object>> eventConsumerList = new LinkedList<>();
+  private final List<Consumer<Object>> eventConsumerList = new ArrayList<>();
 
   /**
    * Add an event consumer
