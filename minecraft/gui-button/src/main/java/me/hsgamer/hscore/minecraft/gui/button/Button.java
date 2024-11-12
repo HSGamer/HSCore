@@ -1,6 +1,5 @@
 package me.hsgamer.hscore.minecraft.gui.button;
 
-import me.hsgamer.hscore.minecraft.gui.object.ActionItem;
 import me.hsgamer.hscore.ui.property.Initializable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

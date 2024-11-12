@@ -70,7 +70,7 @@ public class MinestomGUI extends GUI {
   }
 
   @Override
-  protected void setItem(int slot, @Nullable Item item) {
+  public void setItem(int slot, @Nullable Item item) {
     if (item == null) {
       inventory.setItemStack(slot, net.minestom.server.item.ItemStack.AIR);
     } else if (item instanceof MinestomItem minestomItem) {

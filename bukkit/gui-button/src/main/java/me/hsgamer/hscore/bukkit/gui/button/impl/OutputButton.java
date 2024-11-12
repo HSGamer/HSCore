@@ -3,7 +3,7 @@ package me.hsgamer.hscore.bukkit.gui.button.impl;
 import me.hsgamer.hscore.bukkit.gui.event.BukkitClickEvent;
 import me.hsgamer.hscore.bukkit.gui.object.BukkitItem;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
-import me.hsgamer.hscore.minecraft.gui.object.ActionItem;
+import me.hsgamer.hscore.minecraft.gui.button.ActionItem;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;

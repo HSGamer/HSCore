@@ -7,8 +7,6 @@ import net.minestom.server.event.inventory.InventoryPreClickEvent;
  * The click event for Minestom
  */
 public class MinestomClickEvent extends MinestomEvent<InventoryPreClickEvent> implements ClickEvent, MinestomCancellableEvent, MinestomViewerEvent {
-  private boolean buttonExecute = true;
-
   /**
    * Create a new event
    *
@@ -21,15 +19,5 @@ public class MinestomClickEvent extends MinestomEvent<InventoryPreClickEvent> im
   @Override
   public int getSlot() {
     return event.getSlot();
-  }
-
-  @Override
-  public boolean isButtonExecute() {
-    return buttonExecute;
-  }
-
-  @Override
-  public void setButtonExecute(boolean buttonExecute) {
-    this.buttonExecute = buttonExecute;
   }
 }

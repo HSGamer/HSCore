@@ -2,8 +2,8 @@ package me.hsgamer.hscore.minecraft.gui.button.impl;
 
 import me.hsgamer.hscore.animate.Animation;
 import me.hsgamer.hscore.minecraft.gui.GUIProperties;
+import me.hsgamer.hscore.minecraft.gui.button.ActionItem;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
-import me.hsgamer.hscore.minecraft.gui.object.ActionItem;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

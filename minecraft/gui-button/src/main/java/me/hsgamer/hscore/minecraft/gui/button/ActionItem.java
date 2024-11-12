@@ -1,7 +1,8 @@
-package me.hsgamer.hscore.minecraft.gui.object;
+package me.hsgamer.hscore.minecraft.gui.button;
 
 import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.event.ViewerEvent;
+import me.hsgamer.hscore.minecraft.gui.object.Item;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;

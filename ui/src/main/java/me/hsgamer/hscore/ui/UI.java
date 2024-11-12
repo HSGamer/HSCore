@@ -1,12 +1,11 @@
 package me.hsgamer.hscore.ui;
 
 import me.hsgamer.hscore.ui.property.Initializable;
-import me.hsgamer.hscore.ui.property.Updatable;
 
 /**
  * The User Interface
  */
-public interface UI extends Initializable, Updatable {
+public interface UI extends Initializable {
   /**
    * Handle the event
    *

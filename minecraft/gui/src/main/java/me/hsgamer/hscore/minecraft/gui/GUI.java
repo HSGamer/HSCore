@@ -1,32 +1,26 @@
 package me.hsgamer.hscore.minecraft.gui;
 
-import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.event.CloseEvent;
-import me.hsgamer.hscore.minecraft.gui.event.OpenEvent;
 import me.hsgamer.hscore.minecraft.gui.event.ViewerEvent;
-import me.hsgamer.hscore.minecraft.gui.object.ActionItem;
 import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
 import me.hsgamer.hscore.minecraft.gui.object.Item;
 import me.hsgamer.hscore.ui.BaseUI;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 
 /**
  * The UI for Minecraft
  */
 public abstract class GUI extends BaseUI {
   /**
-   * The buttons reference
+   * The {@link ViewerEvent} consumer reference
    */
-  private final AtomicReference<Map<Integer, ActionItem>> itemsRef = new AtomicReference<>(Collections.emptyMap());
+  private final AtomicReference<Consumer<ViewerEvent>> viewerEventConsumerRef = new AtomicReference<>(null);
 
   /**
    * Set the item to the slot
@@ -34,7 +28,7 @@ public abstract class GUI extends BaseUI {
    * @param slot the slot
    * @param item the item
    */
-  protected abstract void setItem(int slot, @Nullable Item item);
+  public abstract void setItem(int slot, @Nullable Item item);
 
   /**
    * Get the size of the inventory
@@ -51,67 +45,22 @@ public abstract class GUI extends BaseUI {
   public abstract void open(UUID uuid);
 
   /**
-   * Handle open event
+   * Set the {@link ViewerEvent} consumer
    *
-   * @param event the event
+   * @param consumer the consumer
    */
-  protected void onOpen(@NotNull final OpenEvent event) {
-    // EMPTY
+  public void setViewerEventConsumer(@Nullable final Consumer<ViewerEvent> consumer) {
+    viewerEventConsumerRef.set(consumer);
   }
 
   /**
-   * Handle click event
+   * Set the items
    *
-   * @param event the event
+   * @param items the items
    */
-  protected void onClick(@NotNull final ClickEvent event) {
-    // EMPTY
-  }
-
-  /**
-   * Handle close event
-   *
-   * @param event the event
-   */
-  protected void onClose(@NotNull final CloseEvent event) {
-    // EMPTY
-  }
-
-  /**
-   * Modify the items
-   *
-   * @param operator the operator
-   */
-  public void modifyItems(UnaryOperator<Map<Integer, ActionItem>> operator) {
-    this.itemsRef.updateAndGet(buttons -> {
-      Map<Integer, ActionItem> newButtons = new HashMap<>(buttons);
-      return operator.apply(newButtons);
-    });
-  }
-
-  /**
-   * Add an item
-   *
-   * @param slot the slot
-   * @param item the item
-   */
-  public void addItem(int slot, ActionItem item) {
-    modifyItems(items -> {
-      items.put(slot, item);
-      return items;
-    });
-  }
-
-  /**
-   * Remove an item
-   *
-   * @param slot the slot
-   */
-  public void removeItem(int slot) {
-    modifyItems(items -> {
-      items.remove(slot);
-      return items;
-    });
+  public void setItems(Map<Integer, Item> items) {
+    InventorySize size = getInventorySize();
+    size.getSlots().forEach(slot -> setItem(slot, items.get(slot)));
   }
 
   /**
@@ -121,69 +70,25 @@ public abstract class GUI extends BaseUI {
     setItems(Collections.emptyMap());
   }
 
-  /**
-   * Get the items
-   *
-   * @return the items
-   */
-  public Map<Integer, ActionItem> getItems() {
-    return this.itemsRef.get();
-  }
-
-  /**
-   * Set the items
-   *
-   * @param items the items
-   */
-  public void setItems(Map<Integer, ActionItem> items) {
-    this.itemsRef.set(items);
-  }
-
-  /**
-   * Set the items and update the GUI
-   *
-   * @param items the items
-   */
-  public void updateItems(Map<Integer, ActionItem> items) {
-    setItems(items);
-    update();
-  }
-
   @Override
   public void init() {
-    addEventConsumer(OpenEvent.class, this::onOpen);
-
-    addEventConsumer(ClickEvent.class, this::onClick);
-    addEventConsumer(ClickEvent.class, event -> {
-      if (event.isButtonExecute()) {
-        int slot = event.getSlot();
-        ActionItem item = getItems().get(slot);
-        if (item == null) return;
-        Consumer<ViewerEvent> action = item.getAction();
-        if (action == null) return;
-        action.accept(event);
+    addEventConsumer(ViewerEvent.class, event -> {
+      Consumer<ViewerEvent> consumer = viewerEventConsumerRef.get();
+      if (consumer != null) {
+        consumer.accept(event);
       }
     });
 
-    addEventConsumer(CloseEvent.class, this::onClose);
     addEventConsumer(CloseEvent.class, event -> {
       if (event.isRemoveDisplay()) {
         stop();
       }
     });
-
-    update();
   }
 
   @Override
   public void stop() {
+    super.stop();
     clearItems();
-  }
-
-  @Override
-  public void update() {
-    InventorySize size = getInventorySize();
-    Map<Integer, ActionItem> items = getItems();
-    size.getSlots().forEach(slot -> setItem(slot, items.getOrDefault(slot, ActionItem.EMPTY).getItem()));
   }
 }

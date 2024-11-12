@@ -7,8 +7,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
  * The Bukkit implementation of {@link ClickEvent}
  */
 public class BukkitClickEvent extends BukkitInventoryEvent<InventoryClickEvent> implements BukkitCancellableEvent, ClickEvent {
-  private boolean buttonExecute = true;
-
   /**
    * Create a new event
    *
@@ -21,15 +19,5 @@ public class BukkitClickEvent extends BukkitInventoryEvent<InventoryClickEvent> 
   @Override
   public int getSlot() {
     return event.getRawSlot();
-  }
-
-  @Override
-  public boolean isButtonExecute() {
-    return buttonExecute;
-  }
-
-  @Override
-  public void setButtonExecute(boolean buttonExecute) {
-    this.buttonExecute = buttonExecute;
   }
 }

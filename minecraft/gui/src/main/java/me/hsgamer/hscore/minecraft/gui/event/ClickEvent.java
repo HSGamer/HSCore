@@ -10,18 +10,4 @@ public interface ClickEvent extends ViewerEvent, CancellableEvent {
    * @return the slot
    */
   int getSlot();
-
-  /**
-   * Check if the buttons can be executed
-   *
-   * @return true if the buttons can be executed
-   */
-  boolean isButtonExecute();
-
-  /**
-   * Set if the buttons can be executed
-   *
-   * @param buttonExecute true if the buttons can be executed
-   */
-  void setButtonExecute(boolean buttonExecute);
 }

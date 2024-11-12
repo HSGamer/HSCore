@@ -2,13 +2,17 @@ package me.hsgamer.hscore.minecraft.gui.advanced;
 
 import me.hsgamer.hscore.minecraft.gui.GUI;
 import me.hsgamer.hscore.minecraft.gui.button.Button;
+import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
+import me.hsgamer.hscore.minecraft.gui.event.ViewerEvent;
 import me.hsgamer.hscore.minecraft.gui.mask.Mask;
-import me.hsgamer.hscore.minecraft.gui.object.ActionItem;
+import me.hsgamer.hscore.minecraft.gui.button.ActionItem;
 import me.hsgamer.hscore.minecraft.gui.object.InventorySize;
+import me.hsgamer.hscore.minecraft.gui.object.Item;
 import me.hsgamer.hscore.ui.property.Initializable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -109,6 +113,20 @@ public class AdvancedButtonMap implements Initializable {
    * @param gui  the GUI
    */
   public void apply(UUID uuid, GUI gui) {
-    gui.updateItems(getButtons(uuid, gui.getInventorySize()));
+    Map<Integer, ActionItem> buttons = getButtons(uuid, gui.getInventorySize());
+    Map<Integer, Item> items = buttons.entrySet().stream()
+      .filter(entry -> entry.getValue().getItem() != null)
+      .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getItem()));
+    gui.setItems(items);
+    gui.setViewerEventConsumer(event -> {
+      if (event instanceof ClickEvent) {
+        ClickEvent clickEvent = (ClickEvent) event;
+        ActionItem actionItem = buttons.get(clickEvent.getSlot());
+        if (actionItem == null) return;
+        Consumer<ViewerEvent> action = actionItem.getAction();
+        if (action == null) return;
+        action.accept(event);
+      }
+    });
   }
 }

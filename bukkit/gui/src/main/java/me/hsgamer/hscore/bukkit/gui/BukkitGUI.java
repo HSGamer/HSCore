@@ -50,7 +50,7 @@ public class BukkitGUI extends GUI {
   }
 
   @Override
-  protected void setItem(int slot, @Nullable Item item) {
+  public void setItem(int slot, @Nullable Item item) {
     if (item == null) {
       inventory.setItem(slot, new ItemStack(Material.AIR));
     } else if (item instanceof BukkitItem) {
