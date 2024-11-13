@@ -9,6 +9,8 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Function;
+
 import static me.hsgamer.hscore.bukkit.gui.BukkitGUIUtils.normalizeToChestSize;
 
 /**
@@ -32,6 +34,21 @@ public class HolderBukkitGUIProvider extends BukkitGUIProvider {
   /**
    * Create a new {@link BukkitGUI}
    *
+   * @param inventoryFunction the function to create the inventory
+   *
+   * @return the new {@link BukkitGUI}
+   */
+  public BukkitGUI create(Function<InventoryHolder, Inventory> inventoryFunction) {
+    Holder holder = new Holder(plugin);
+    Inventory inventory = inventoryFunction.apply(holder);
+    BukkitGUI gui = new BukkitGUI(inventory);
+    holder.gui = gui;
+    return gui;
+  }
+
+  /**
+   * Create a new {@link BukkitGUI}
+   *
    * @param inventoryType the type of the inventory
    * @param size          the size of the inventory (only for CHEST)
    * @param title         the title of the inventory
@@ -39,16 +56,15 @@ public class HolderBukkitGUIProvider extends BukkitGUIProvider {
    * @return the new {@link BukkitGUI}
    */
   public BukkitGUI create(InventoryType inventoryType, int size, String title) {
-    Holder holder = new Holder(plugin);
-    Inventory inventory;
-    if (inventoryType == InventoryType.CHEST) {
-      inventory = Bukkit.createInventory(holder, normalizeToChestSize(size), title);
-    } else {
-      inventory = Bukkit.createInventory(holder, inventoryType, title);
-    }
-    BukkitGUI gui = new BukkitGUI(inventory);
-    holder.gui = gui;
-    return gui;
+    return create(holder -> {
+      Inventory inventory;
+      if (inventoryType == InventoryType.CHEST) {
+        inventory = Bukkit.createInventory(holder, normalizeToChestSize(size), title);
+      } else {
+        inventory = Bukkit.createInventory(holder, inventoryType, title);
+      }
+      return inventory;
+    });
   }
 
   @Override
