@@ -69,7 +69,7 @@ public class SimpleButton implements Button {
   }
 
   @Override
-  public @NotNull ActionItem getItem(InventoryContext context) {
+  public @NotNull ActionItem getItem(@NotNull InventoryContext context) {
     return new ActionItem()
       .setItem(itemFunction.apply(context.getViewerID()))
       .setAction(new Action() {

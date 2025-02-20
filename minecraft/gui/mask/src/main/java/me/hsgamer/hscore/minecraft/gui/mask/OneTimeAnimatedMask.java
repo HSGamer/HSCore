@@ -97,7 +97,7 @@ public class OneTimeAnimatedMask implements ButtonMap {
   }
 
   @Override
-  public @Nullable Map<Integer, ActionItem> getItemMap(InventoryContext context) {
+  public @Nullable Map<Integer, ActionItem> getItemMap(@NotNull InventoryContext context) {
     Animation<ButtonMap> animation = getAnimation(context.getViewerID());
     long currentMillis = System.currentTimeMillis();
     if (animation.isFirstRun(currentMillis)) {

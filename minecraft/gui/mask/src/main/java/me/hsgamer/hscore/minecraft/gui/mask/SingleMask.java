@@ -39,7 +39,7 @@ public class SingleMask implements ButtonMap {
   }
 
   @Override
-  public @Nullable Map<Integer, ActionItem> getItemMap(InventoryContext context) {
+  public @Nullable Map<Integer, ActionItem> getItemMap(@NotNull InventoryContext context) {
     ActionItem actionItem = this.button.getItem(context);
     return actionItem == null ? null : Collections.singletonMap(this.slot, actionItem);
   }

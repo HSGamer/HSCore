@@ -1,4 +1,4 @@
 /**
- * Contains the providers for the {@link me.hsgamer.hscore.bukkit.gui.BukkitGUI}
+ * Contains the listeners for the GUI holder
  */
 package me.hsgamer.hscore.bukkit.gui.holder.listener;

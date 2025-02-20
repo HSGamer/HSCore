@@ -23,6 +23,11 @@ public class MinestomInventoryContext implements InventoryContext {
     this.inventory = inventory;
   }
 
+  /**
+   * Get the Minestom inventory
+   *
+   * @return the Minestom inventory
+   */
   public Inventory getInventory() {
     return inventory;
   }

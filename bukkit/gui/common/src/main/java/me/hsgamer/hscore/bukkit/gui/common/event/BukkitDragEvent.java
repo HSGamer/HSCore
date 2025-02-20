@@ -6,7 +6,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import java.util.Collection;
 
 /**
- * The Drag event
+ * The Bukkit implementation of {@link DragEvent}
  */
 public class BukkitDragEvent extends BukkitInventoryEvent<InventoryDragEvent> implements BukkitCancellableEvent, DragEvent {
   /**

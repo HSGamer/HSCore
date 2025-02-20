@@ -22,7 +22,7 @@ public abstract class PaginatedMask implements ButtonMap {
    *
    * @return the map contains the slots and the buttons
    */
-  protected abstract @Nullable Map<@NotNull Integer, @NotNull ActionItem> getItemMap(InventoryContext context, int pageNumber);
+  protected abstract @Nullable Map<@NotNull Integer, @NotNull ActionItem> getItemMap(@NotNull InventoryContext context, int pageNumber);
 
   /**
    * Get the exact page from the input page
@@ -129,7 +129,7 @@ public abstract class PaginatedMask implements ButtonMap {
   }
 
   @Override
-  public @Nullable Map<Integer, ActionItem> getItemMap(InventoryContext context) {
+  public @Nullable Map<Integer, ActionItem> getItemMap(@NotNull InventoryContext context) {
     return getItemMap(context, this.getPage(context.getViewerID()));
   }
 }

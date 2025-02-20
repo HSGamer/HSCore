@@ -18,20 +18,40 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
+/**
+ * The {@link GUIHolder} for Bukkit
+ */
 public class BukkitGUIHolder extends GUIHolder<BukkitInventoryContext> {
   private final BiFunction<UUID, BukkitGUIHolder, Inventory> inventoryFunction;
   private boolean moveItemOnBottom = false;
   private boolean cancelDragEvent = true;
 
+  /**
+   * Create a new holder
+   *
+   * @param viewerID          the unique ID of the viewer
+   * @param buttonMap         the button map
+   * @param inventoryFunction the function to create the inventory
+   */
   public BukkitGUIHolder(UUID viewerID, ButtonMap buttonMap, BiFunction<UUID, BukkitGUIHolder, Inventory> inventoryFunction) {
     super(viewerID, buttonMap);
     this.inventoryFunction = inventoryFunction;
   }
 
+  /**
+   * Set whether to allow moving items in the bottom inventory
+   *
+   * @param moveItemOnBottom true to allow
+   */
   public void setMoveItemOnBottom(boolean moveItemOnBottom) {
     this.moveItemOnBottom = moveItemOnBottom;
   }
 
+  /**
+   * Set whether to cancel the drag event
+   *
+   * @param cancelDragEvent true to cancel
+   */
   public void setCancelDragEvent(boolean cancelDragEvent) {
     this.cancelDragEvent = cancelDragEvent;
   }

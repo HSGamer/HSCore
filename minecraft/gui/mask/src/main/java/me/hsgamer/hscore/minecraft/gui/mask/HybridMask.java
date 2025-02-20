@@ -52,7 +52,7 @@ public class HybridMask implements ButtonMap {
   }
 
   @Override
-  public @NotNull Map<Integer, ActionItem> getItemMap(InventoryContext context) {
+  public @NotNull Map<Integer, ActionItem> getItemMap(@NotNull InventoryContext context) {
     Map<Integer, ActionItem> itemMap = new HashMap<>();
     for (ButtonMap mask : maskList) {
       Map<Integer, ActionItem> map = mask.getItemMap(context);

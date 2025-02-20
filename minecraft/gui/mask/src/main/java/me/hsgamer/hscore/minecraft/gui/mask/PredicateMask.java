@@ -86,7 +86,7 @@ public class PredicateMask implements ButtonMap {
   }
 
   @Override
-  public @Nullable Map<Integer, ActionItem> getItemMap(InventoryContext context) {
+  public @Nullable Map<Integer, ActionItem> getItemMap(@NotNull InventoryContext context) {
     if (viewPredicate.test(context.getViewerID())) {
       return mask.getItemMap(context);
     } else {

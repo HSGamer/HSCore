@@ -25,7 +25,7 @@ public abstract class MaskPaginatedMask extends PaginatedMask {
   public abstract List<@NotNull ButtonMap> getMasks(@NotNull UUID uuid);
 
   @Override
-  protected @Nullable Map<@NotNull Integer, @NotNull ActionItem> getItemMap(InventoryContext context, int pageNumber) {
+  protected @Nullable Map<@NotNull Integer, @NotNull ActionItem> getItemMap(@NotNull InventoryContext context, int pageNumber) {
     List<ButtonMap> masks = getMasks(context.getViewerID());
     if (masks.isEmpty()) {
       return null;

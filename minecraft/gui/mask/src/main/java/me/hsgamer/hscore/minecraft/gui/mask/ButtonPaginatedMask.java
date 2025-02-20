@@ -48,7 +48,7 @@ public abstract class ButtonPaginatedMask extends PaginatedMask {
   public abstract List<@NotNull Button> getButtons(@NotNull UUID uuid);
 
   @Override
-  protected @Nullable Map<@NotNull Integer, @NotNull ActionItem> getItemMap(InventoryContext context, int pageNumber) {
+  protected @Nullable Map<@NotNull Integer, @NotNull ActionItem> getItemMap(@NotNull InventoryContext context, int pageNumber) {
     List<Integer> slots = this.maskSlot.apply(context);
     List<Button> buttons = getButtons(context.getViewerID());
     if (buttons.isEmpty() || slots.isEmpty()) {

@@ -54,7 +54,7 @@ public class ListMask implements ButtonMap {
   }
 
   @Override
-  public @Nullable Map<Integer, ActionItem> getItemMap(InventoryContext context) {
+  public @Nullable Map<Integer, ActionItem> getItemMap(@NotNull InventoryContext context) {
     for (ButtonMap mask : masks) {
       Map<Integer, ActionItem> itemMap = mask.getItemMap(context);
       if (itemMap != null) {

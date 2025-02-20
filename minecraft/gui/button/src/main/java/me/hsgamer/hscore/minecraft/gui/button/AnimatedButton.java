@@ -63,7 +63,7 @@ public class AnimatedButton implements Button {
   }
 
   @Override
-  public @Nullable ActionItem getItem(InventoryContext context) {
+  public @Nullable ActionItem getItem(@NotNull InventoryContext context) {
     return getAnimation(context.getViewerID()).getCurrentFrame().getItem(context);
   }
 

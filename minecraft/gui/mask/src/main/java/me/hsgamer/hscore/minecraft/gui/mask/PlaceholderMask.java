@@ -35,7 +35,7 @@ public class PlaceholderMask implements ButtonMap {
   }
 
   @Override
-  public @Nullable Map<Integer, ActionItem> getItemMap(InventoryContext context) {
+  public @Nullable Map<Integer, ActionItem> getItemMap(@NotNull InventoryContext context) {
     return this.userMasks.getOrDefault(context.getViewerID(), this.defaultMask).getItemMap(context);
   }
 

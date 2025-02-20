@@ -23,6 +23,11 @@ public class BukkitInventoryContext implements InventoryContext {
     this.inventory = inventory;
   }
 
+  /**
+   * Get the inventory
+   *
+   * @return the inventory
+   */
   public Inventory getInventory() {
     return inventory;
   }

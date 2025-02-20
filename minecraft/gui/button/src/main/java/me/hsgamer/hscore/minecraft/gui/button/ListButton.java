@@ -37,7 +37,7 @@ public class ListButton implements Button {
   }
 
   /**
-   * Should the button keep the current index for the unique id on every {@link #getItem(InventoryContext)} times?
+   * Should the button keep the current index for the unique id on every {@link Button#getItem(InventoryContext)} times?
    *
    * @return true if it should
    */
@@ -46,7 +46,7 @@ public class ListButton implements Button {
   }
 
   /**
-   * Should the button keep the current index for the unique id on every {@link #getItem(InventoryContext)} times?
+   * Should the button keep the current index for the unique id on every {@link Button#getItem(InventoryContext)} times?
    *
    * @param keepCurrentIndex true if it should
    */
@@ -83,7 +83,7 @@ public class ListButton implements Button {
   }
 
   @Override
-  public @Nullable ActionItem getItem(InventoryContext context) {
+  public @Nullable ActionItem getItem(@NotNull InventoryContext context) {
     UUID uuid = context.getViewerID();
     if (keepCurrentIndex && currentIndexMap.containsKey(uuid)) {
       return buttons.get(currentIndexMap.get(uuid)).getItem(context);

@@ -1,7 +1,7 @@
 package me.hsgamer.hscore.minecraft.gui.common.event;
 
 /**
- * The event when a player clicks on the UI
+ * The event when a player clicks on the GUI
  */
 public interface ClickEvent extends ViewerEvent, CancellableEvent {
   /**

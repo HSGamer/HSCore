@@ -26,7 +26,7 @@ public class OutputButton implements Button {
   private BiFunction<@NotNull UUID, @Nullable ItemStack, @Nullable ItemStack> displayItemFunction = (uuid, item) -> item;
 
   @Override
-  public @Nullable ActionItem getItem(InventoryContext context) {
+  public @Nullable ActionItem getItem(@NotNull InventoryContext context) {
     UUID uuid = context.getViewerID();
     return new ActionItem()
       .setItem(displayItemFunction.apply(uuid, getOutputItem(uuid)))

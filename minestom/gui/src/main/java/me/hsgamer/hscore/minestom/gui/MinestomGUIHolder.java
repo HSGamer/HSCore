@@ -21,10 +21,20 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
 
+/**
+ * The {@link GUIHolder} for Minestom
+ */
 public class MinestomGUIHolder extends GUIHolder<MinestomInventoryContext> {
   private final EventNode<InventoryEvent> eventNode;
   private final Function<UUID, Inventory> inventoryFunction;
 
+  /**
+   * Create a new holder
+   *
+   * @param viewerID          the unique ID of the viewer
+   * @param buttonMap         the button map
+   * @param inventoryFunction the function to create the inventory
+   */
   public MinestomGUIHolder(UUID viewerID, ButtonMap buttonMap, Function<UUID, Inventory> inventoryFunction) {
     super(viewerID, buttonMap);
     this.inventoryFunction = inventoryFunction;

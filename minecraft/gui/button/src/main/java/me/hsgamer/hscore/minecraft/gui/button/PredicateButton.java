@@ -100,7 +100,7 @@ public class PredicateButton implements Button {
   }
 
   @Override
-  public @Nullable ActionItem getItem(InventoryContext context) {
+  public @Nullable ActionItem getItem(@NotNull InventoryContext context) {
     UUID uuid = context.getViewerID();
     ActionItem actionItem;
     if (viewPredicate.test(uuid)) {

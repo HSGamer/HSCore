@@ -75,7 +75,7 @@ public class MultiSlotsMask implements ButtonMap {
   }
 
   @Override
-  public @NotNull Map<Integer, ActionItem> getItemMap(InventoryContext context) {
+  public @NotNull Map<Integer, ActionItem> getItemMap(@NotNull InventoryContext context) {
     Map<Integer, ActionItem> map = new HashMap<>();
     List<Integer> slots = this.maskSlot.apply(context);
     if (!this.buttons.isEmpty() && !slots.isEmpty()) {

@@ -1,4 +1,4 @@
 /**
- * Contains the Minestom implementation of the {@link me.hsgamer.hscore.minecraft.gui.event}
+ * Contains the Minestom implementation of the UI event package
  */
 package me.hsgamer.hscore.minestom.gui.event;

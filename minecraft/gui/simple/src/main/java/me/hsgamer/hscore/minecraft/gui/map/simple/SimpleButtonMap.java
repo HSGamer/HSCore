@@ -70,7 +70,7 @@ public class SimpleButtonMap implements ButtonMap {
   }
 
   @Override
-  public @NotNull Map<Integer, ActionItem> getItemMap(InventoryContext context) {
+  public @NotNull Map<Integer, ActionItem> getItemMap(@NotNull InventoryContext context) {
     Map<Integer, ActionItem> map = new HashMap<>();
     IntFunction<ActionItem> getDisplayButton = i -> map.computeIfAbsent(i, s -> new ActionItem());
 

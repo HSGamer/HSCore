@@ -78,7 +78,7 @@ public class AnimatedMask implements ButtonMap {
   }
 
   @Override
-  public @Nullable Map<Integer, ActionItem> getItemMap(InventoryContext context) {
+  public @Nullable Map<Integer, ActionItem> getItemMap(@NotNull InventoryContext context) {
     return getAnimation(context.getViewerID()).getCurrentFrame().getItemMap(context);
   }
 }
