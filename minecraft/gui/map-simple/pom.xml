@@ -5,17 +5,17 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>me.hsgamer</groupId>
-    <artifactId>hscore-minecraft</artifactId>
+    <artifactId>hscore-minecraft-gui</artifactId>
     <version>4.6.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>hscore-minecraft-gui</artifactId>
-  <packaging>pom</packaging>
-  <modules>
-    <module>common</module>
-    <module>button</module>
-    <module>mask</module>
-    <module>map-simple</module>
-    <module>map-advanced</module>
-  </modules>
+  <artifactId>hscore-minecraft-gui-map-simple</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-minecraft-gui-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 </project>

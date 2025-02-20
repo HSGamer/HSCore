@@ -13,10 +13,6 @@
   <packaging>pom</packaging>
   <modules>
     <module>gui</module>
-    <module>gui-button</module>
-    <module>gui-mask</module>
-    <module>gui-simple</module>
-    <module>gui-advanced</module>
     <module>block</module>
     <module>block-impl</module>
     <module>block-utils</module>
