@@ -15,7 +15,6 @@
     <module>common</module>
     <module>button</module>
     <module>mask</module>
-    <module>map-simple</module>
-    <module>map-advanced</module>
+    <module>simple</module>
   </modules>
 </project>
