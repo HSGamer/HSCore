@@ -5,7 +5,7 @@ import java.util.UUID;
 public interface InventoryContext {
   UUID getViewerID();
 
-  int getInventorySize();
+  int getSize();
 
   int getSlot(int x, int y);
 

@@ -76,7 +76,7 @@ public class SimpleButtonMap implements ButtonMap {
 
     ActionItem defaultActionItem = defaultButton.getItem(context);
     if (defaultActionItem != null) {
-      for (int i = 0; i < context.getInventorySize(); i++) {
+      for (int i = 0; i < context.getSize(); i++) {
         getDisplayButton.apply(i).apply(defaultActionItem);
       }
     }

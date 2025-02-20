@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.minestom.gui.event;
 
-import me.hsgamer.hscore.minecraft.gui.event.OpenEvent;
+import me.hsgamer.hscore.minecraft.gui.holder.event.OpenEvent;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 
 /**

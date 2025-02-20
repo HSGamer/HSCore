@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.minestom.gui.event;
 
-import me.hsgamer.hscore.minecraft.gui.event.ViewerEvent;
+import me.hsgamer.hscore.minecraft.gui.common.event.ViewerEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 

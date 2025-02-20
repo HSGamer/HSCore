@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>hscore-minestom</artifactId>
     <groupId>me.hsgamer</groupId>
+    <artifactId>hscore-minecraft-gui</artifactId>
     <version>4.6.0-SNAPSHOT</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>hscore-minestom-gui</artifactId>
+  <artifactId>hscore-minecraft-gui-holder</artifactId>
 
   <dependencies>
     <dependency>
       <groupId>me.hsgamer</groupId>
-      <artifactId>hscore-minecraft-gui-holder</artifactId>
+      <artifactId>hscore-minecraft-gui-common</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

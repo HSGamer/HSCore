@@ -16,5 +16,6 @@
     <module>button</module>
     <module>mask</module>
     <module>simple</module>
+    <module>holder</module>
   </modules>
 </project>

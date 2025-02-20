@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.minestom.gui.event;
 
-import me.hsgamer.hscore.minecraft.gui.event.ClickEvent;
+import me.hsgamer.hscore.minecraft.gui.common.event.ClickEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 
 /**

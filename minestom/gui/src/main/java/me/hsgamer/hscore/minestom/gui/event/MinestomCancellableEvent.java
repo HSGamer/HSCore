@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.minestom.gui.event;
 
-import me.hsgamer.hscore.minecraft.gui.event.CancellableEvent;
+import me.hsgamer.hscore.minecraft.gui.common.event.CancellableEvent;
 
 /**
  * The cancellable event for Minestom
