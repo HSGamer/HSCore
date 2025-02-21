@@ -1,14 +1,13 @@
 package me.hsgamer.hscore.bukkit.gui.common.event;
 
-import me.hsgamer.hscore.minecraft.gui.common.event.DragEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 
 import java.util.Collection;
 
 /**
- * The Bukkit implementation of {@link DragEvent}
+ * The drag event
  */
-public class BukkitDragEvent extends BukkitInventoryEvent<InventoryDragEvent> implements BukkitCancellableEvent, DragEvent {
+public class BukkitDragEvent extends BukkitInventoryEvent<InventoryDragEvent> implements BukkitCancellableEvent {
   /**
    * Create a new event
    *
@@ -18,8 +17,12 @@ public class BukkitDragEvent extends BukkitInventoryEvent<InventoryDragEvent> im
     super(event);
   }
 
-  @Override
-  public Collection<Integer> getSlots() {
+  /**
+   * Get the raw slots
+   *
+   * @return the raw slots
+   */
+  public Collection<Integer> getRawSlots() {
     return getEvent().getRawSlots();
   }
 }

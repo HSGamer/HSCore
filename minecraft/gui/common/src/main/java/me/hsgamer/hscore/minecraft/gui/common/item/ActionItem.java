@@ -1,16 +1,17 @@
 package me.hsgamer.hscore.minecraft.gui.common.item;
 
-import me.hsgamer.hscore.minecraft.gui.common.action.Action;
+import me.hsgamer.hscore.minecraft.gui.common.event.ViewerEvent;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.UnaryOperator;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * The action item
  */
 public final class ActionItem {
   private @Nullable Object item;
-  private @Nullable Action action;
+  private @Nullable Consumer<ViewerEvent> action;
 
   /**
    * Get the item
@@ -38,7 +39,7 @@ public final class ActionItem {
    *
    * @return the action
    */
-  public @Nullable Action getAction() {
+  public @Nullable Consumer<ViewerEvent> getAction() {
     return action;
   }
 
@@ -49,7 +50,7 @@ public final class ActionItem {
    *
    * @return this object
    */
-  public ActionItem setAction(@Nullable Action action) {
+  public ActionItem setAction(@Nullable Consumer<ViewerEvent> action) {
     this.action = action;
     return this;
   }
@@ -57,13 +58,26 @@ public final class ActionItem {
   /**
    * Extend the action
    *
-   * @param operator the operator
+   * @param operator the operator with the event and the old action
    *
    * @return this object
    */
-  public ActionItem extendAction(UnaryOperator<@Nullable Action> operator) {
-    this.action = operator.apply(this.action);
+  public ActionItem extendAction(BiConsumer<ViewerEvent, Consumer<ViewerEvent>> operator) {
+    Consumer<ViewerEvent> oldAction = this.action != null ? this.action : event -> {
+    };
+    this.action = event -> operator.accept(event, oldAction);
     return this;
+  }
+
+  /**
+   * Call the action
+   *
+   * @param event the event
+   */
+  public void callAction(ViewerEvent event) {
+    if (action != null) {
+      action.accept(event);
+    }
   }
 
   /**

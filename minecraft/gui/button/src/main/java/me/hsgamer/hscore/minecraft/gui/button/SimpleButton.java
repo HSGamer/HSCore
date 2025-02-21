@@ -1,6 +1,5 @@
 package me.hsgamer.hscore.minecraft.gui.button;
 
-import me.hsgamer.hscore.minecraft.gui.common.action.Action;
 import me.hsgamer.hscore.minecraft.gui.common.button.Button;
 import me.hsgamer.hscore.minecraft.gui.common.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
@@ -72,10 +71,9 @@ public class SimpleButton implements Button {
   public @NotNull ActionItem getItem(@NotNull InventoryContext context) {
     return new ActionItem()
       .setItem(itemFunction.apply(context.getViewerID()))
-      .setAction(new Action() {
-        @Override
-        public void handleClick(ClickEvent event) {
-          consumer.accept(event);
+      .setAction(event -> {
+        if (event instanceof ClickEvent) {
+          consumer.accept((ClickEvent) event);
         }
       });
   }

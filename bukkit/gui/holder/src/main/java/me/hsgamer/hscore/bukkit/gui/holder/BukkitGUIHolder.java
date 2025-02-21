@@ -4,12 +4,10 @@ import me.hsgamer.hscore.bukkit.gui.common.event.BukkitClickEvent;
 import me.hsgamer.hscore.bukkit.gui.common.event.BukkitDragEvent;
 import me.hsgamer.hscore.bukkit.gui.common.inventory.BukkitInventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.event.ClickEvent;
-import me.hsgamer.hscore.minecraft.gui.common.event.DragEvent;
 import me.hsgamer.hscore.minecraft.gui.holder.GUIHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 
 import java.util.UUID;
@@ -93,17 +91,19 @@ public class BukkitGUIHolder extends GUIHolder<BukkitInventoryContext> {
     super.handleClick(event);
   }
 
-  @Override
-  public void handleDrag(DragEvent event) {
-    if (cancelDragEvent && event instanceof BukkitDragEvent) {
-      InventoryDragEvent dragEvent = ((BukkitDragEvent) event).getEvent();
-      for (int slot : dragEvent.getRawSlots()) {
-        if (slot < dragEvent.getInventory().getSize()) {
+  /**
+   * Handle the drag event
+   *
+   * @param event the event
+   */
+  public void handleDrag(BukkitDragEvent event) {
+    if (cancelDragEvent && event != null) {
+      for (int slot : event.getRawSlots()) {
+        if (slot < getInventoryContext().getSize()) {
           event.setCancelled(true);
           break;
         }
       }
     }
-    super.handleDrag(event);
   }
 }

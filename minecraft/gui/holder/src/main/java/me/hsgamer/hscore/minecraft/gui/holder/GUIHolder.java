@@ -1,10 +1,8 @@
 package me.hsgamer.hscore.minecraft.gui.holder;
 
-import me.hsgamer.hscore.minecraft.gui.common.action.Action;
 import me.hsgamer.hscore.minecraft.gui.common.button.ButtonMap;
 import me.hsgamer.hscore.minecraft.gui.common.element.GUIElement;
 import me.hsgamer.hscore.minecraft.gui.common.event.ClickEvent;
-import me.hsgamer.hscore.minecraft.gui.common.event.DragEvent;
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;
 import me.hsgamer.hscore.minecraft.gui.holder.event.CloseEvent;
@@ -19,7 +17,7 @@ import java.util.stream.Collectors;
  *
  * @param <T> the type of the inventory context
  */
-public abstract class GUIHolder<T extends InventoryContext> implements GUIElement, Action {
+public abstract class GUIHolder<T extends InventoryContext> implements GUIElement {
   private final UUID viewerID;
   private final AtomicReference<Map<Integer, ActionItem>> itemMapRef = new AtomicReference<>(null);
   private ButtonMap buttonMap = ButtonMap.EMPTY;
@@ -70,24 +68,8 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
    * {@inheritDoc}
    * Override this method to add custom behavior.
    */
-  @Override
   public void handleClick(ClickEvent event) {
-    getItem(event.getSlot())
-      .map(ActionItem::getAction)
-      .ifPresent(action -> action.handleClick(event));
-  }
-
-  /**
-   * {@inheritDoc}
-   * Override this method to add custom behavior.
-   */
-  @Override
-  public void handleDrag(DragEvent event) {
-    for (int slot : event.getSlots()) {
-      getItem(slot)
-        .map(ActionItem::getAction)
-        .ifPresent(action -> action.handleDrag(event));
-    }
+    getItem(event.getSlot()).ifPresent(item -> item.callAction(event));
   }
 
   /**

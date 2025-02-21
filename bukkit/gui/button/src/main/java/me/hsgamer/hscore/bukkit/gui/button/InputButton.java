@@ -1,9 +1,7 @@
 package me.hsgamer.hscore.bukkit.gui.button;
 
 import me.hsgamer.hscore.bukkit.gui.common.event.BukkitClickEvent;
-import me.hsgamer.hscore.minecraft.gui.common.action.Action;
 import me.hsgamer.hscore.minecraft.gui.common.button.Button;
-import me.hsgamer.hscore.minecraft.gui.common.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;
 import org.bukkit.Material;
@@ -31,20 +29,17 @@ public class InputButton implements Button {
     UUID uuid = context.getViewerID();
     return new ActionItem()
       .setItem(displayItemFunction.apply(uuid, getInputItem(uuid)))
-      .setAction(new Action() {
-        @Override
-        public void handleClick(ClickEvent event) {
-          if (!(event instanceof BukkitClickEvent)) return;
-          UUID viewerID = event.getViewerID();
-          InventoryClickEvent bukkitEvent = ((BukkitClickEvent) event).getEvent();
-          ItemStack cursorItem = Optional.ofNullable(bukkitEvent.getCursor())
-            .filter(itemStack -> itemStack.getType() != Material.AIR)
-            .map(ItemStack::clone)
-            .orElse(null);
-          ItemStack storeItem = getInputItem(viewerID);
-          bukkitEvent.getWhoClicked().setItemOnCursor(storeItem);
-          setInputItem(viewerID, cursorItem);
-        }
+      .setAction(event -> {
+        if (!(event instanceof BukkitClickEvent)) return;
+        UUID viewerID = event.getViewerID();
+        InventoryClickEvent bukkitEvent = ((BukkitClickEvent) event).getEvent();
+        ItemStack cursorItem = Optional.ofNullable(bukkitEvent.getCursor())
+          .filter(itemStack -> itemStack.getType() != Material.AIR)
+          .map(ItemStack::clone)
+          .orElse(null);
+        ItemStack storeItem = getInputItem(viewerID);
+        bukkitEvent.getWhoClicked().setItemOnCursor(storeItem);
+        setInputItem(viewerID, cursorItem);
       });
   }
 
