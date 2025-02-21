@@ -9,11 +9,6 @@ import java.util.function.UnaryOperator;
  * The action item
  */
 public final class ActionItem {
-  /**
-   * An empty action item
-   */
-  public static final ActionItem EMPTY = new ActionItem();
-
   private @Nullable Object item;
   private @Nullable Action action;
 
