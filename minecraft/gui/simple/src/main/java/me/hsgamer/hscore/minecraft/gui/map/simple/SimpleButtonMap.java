@@ -31,11 +31,22 @@ public class SimpleButtonMap implements ButtonMap {
   /**
    * Set the button
    *
+   * @param x      the x coordinate
+   * @param y      the y coordinate
+   * @param button the button
+   */
+  public void setButton(int x, int y, @NotNull Button button) {
+    buttonSlotMap.computeIfAbsent(button, b -> new LinkedList<>()).add(context -> context.getSlot(x, y));
+  }
+
+  /**
+   * Set the button
+   *
    * @param position the position
    * @param button   the button
    */
   public void setButton(InventoryPosition position, @NotNull Button button) {
-    buttonSlotMap.computeIfAbsent(button, b -> new LinkedList<>()).add(context -> context.getSlot(position));
+    setButton(position.getX(), position.getY(), button);
   }
 
   /**
