@@ -5,7 +5,7 @@ import me.hsgamer.hscore.bukkit.gui.common.event.BukkitDragEvent;
 import me.hsgamer.hscore.bukkit.gui.holder.BukkitGUIHolder;
 import me.hsgamer.hscore.bukkit.gui.holder.event.BukkitCloseEvent;
 import me.hsgamer.hscore.bukkit.gui.holder.event.BukkitOpenEvent;
-import me.hsgamer.hscore.minecraft.gui.common.element.GUIElement;
+import me.hsgamer.hscore.minecraft.gui.common.GUIElement;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;

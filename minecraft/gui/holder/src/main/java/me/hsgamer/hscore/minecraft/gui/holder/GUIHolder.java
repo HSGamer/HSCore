@@ -1,7 +1,7 @@
 package me.hsgamer.hscore.minecraft.gui.holder;
 
 import me.hsgamer.hscore.minecraft.gui.common.button.ButtonMap;
-import me.hsgamer.hscore.minecraft.gui.common.element.GUIElement;
+import me.hsgamer.hscore.minecraft.gui.common.GUIElement;
 import me.hsgamer.hscore.minecraft.gui.common.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;

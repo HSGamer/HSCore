@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.minecraft.gui.common.element;
+package me.hsgamer.hscore.minecraft.gui.common;
 
 /**
  * An element of the GUI
