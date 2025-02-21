@@ -3,7 +3,6 @@ package me.hsgamer.hscore.bukkit.gui.holder;
 import me.hsgamer.hscore.bukkit.gui.common.event.BukkitClickEvent;
 import me.hsgamer.hscore.bukkit.gui.common.event.BukkitDragEvent;
 import me.hsgamer.hscore.bukkit.gui.common.inventory.BukkitInventoryContext;
-import me.hsgamer.hscore.minecraft.gui.common.button.ButtonMap;
 import me.hsgamer.hscore.minecraft.gui.common.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.common.event.DragEvent;
 import me.hsgamer.hscore.minecraft.gui.holder.GUIHolder;
@@ -12,8 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 import java.util.function.BiFunction;
@@ -30,11 +27,10 @@ public class BukkitGUIHolder extends GUIHolder<BukkitInventoryContext> {
    * Create a new holder
    *
    * @param viewerID          the unique ID of the viewer
-   * @param buttonMap         the button map
    * @param inventoryFunction the function to create the inventory
    */
-  public BukkitGUIHolder(UUID viewerID, ButtonMap buttonMap, BiFunction<UUID, BukkitGUIHolder, Inventory> inventoryFunction) {
-    super(viewerID, buttonMap);
+  public BukkitGUIHolder(UUID viewerID, BiFunction<UUID, BukkitGUIHolder, Inventory> inventoryFunction) {
+    super(viewerID);
     this.inventoryFunction = inventoryFunction;
   }
 
@@ -57,18 +53,9 @@ public class BukkitGUIHolder extends GUIHolder<BukkitInventoryContext> {
   }
 
   @Override
-  protected BukkitInventoryContext createInventoryContext(UUID uuid) {
-    Inventory inventory = inventoryFunction.apply(uuid, this);
-    return new BukkitInventoryContext(uuid, inventory);
-  }
-
-  @Override
-  protected void setItem(int slot, @Nullable Object item) {
-    if (item == null) {
-      getInventoryContext().getInventory().setItem(slot, null);
-    } else if (item instanceof ItemStack) {
-      getInventoryContext().getInventory().setItem(slot, (ItemStack) item);
-    }
+  protected BukkitInventoryContext createInventoryContext() {
+    Inventory inventory = inventoryFunction.apply(getViewerID(), this);
+    return new BukkitInventoryContext(getViewerID(), inventory);
   }
 
   @Override

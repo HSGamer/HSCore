@@ -1,6 +1,5 @@
 package me.hsgamer.hscore.minestom.gui;
 
-import me.hsgamer.hscore.minecraft.gui.common.button.ButtonMap;
 import me.hsgamer.hscore.minecraft.gui.holder.GUIHolder;
 import me.hsgamer.hscore.minestom.gui.event.MinestomClickEvent;
 import me.hsgamer.hscore.minestom.gui.event.MinestomCloseEvent;
@@ -14,8 +13,6 @@ import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.inventory.Inventory;
-import net.minestom.server.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -32,11 +29,10 @@ public class MinestomGUIHolder extends GUIHolder<MinestomInventoryContext> {
    * Create a new holder
    *
    * @param viewerID          the unique ID of the viewer
-   * @param buttonMap         the button map
    * @param inventoryFunction the function to create the inventory
    */
-  public MinestomGUIHolder(UUID viewerID, ButtonMap buttonMap, Function<UUID, Inventory> inventoryFunction) {
-    super(viewerID, buttonMap);
+  public MinestomGUIHolder(UUID viewerID, Function<UUID, Inventory> inventoryFunction) {
+    super(viewerID);
     this.inventoryFunction = inventoryFunction;
     eventNode = EventNode.event("inventory-" + UUID.randomUUID(), EventFilter.INVENTORY, event -> Objects.equals(event.getInventory(), getInventoryContext().getInventory()));
     eventNode.addListener(InventoryOpenEvent.class, event -> handleOpen(new MinestomOpenEvent(event)));
@@ -52,17 +48,8 @@ public class MinestomGUIHolder extends GUIHolder<MinestomInventoryContext> {
   }
 
   @Override
-  protected MinestomInventoryContext createInventoryContext(UUID uuid) {
-    return new MinestomInventoryContext(uuid, inventoryFunction.apply(uuid));
-  }
-
-  @Override
-  protected void setItem(int slot, @Nullable Object item) {
-    if (item == null) {
-      getInventoryContext().getInventory().setItemStack(slot, net.minestom.server.item.ItemStack.AIR);
-    } else if (item instanceof ItemStack itemStack) {
-      getInventoryContext().getInventory().setItemStack(slot, itemStack);
-    }
+  protected MinestomInventoryContext createInventoryContext() {
+    return new MinestomInventoryContext(getViewerID(), inventoryFunction.apply(getViewerID()));
   }
 
   @Override

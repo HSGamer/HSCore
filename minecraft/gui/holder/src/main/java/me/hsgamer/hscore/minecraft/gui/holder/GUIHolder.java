@@ -9,37 +9,67 @@ import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;
 import me.hsgamer.hscore.minecraft.gui.holder.event.CloseEvent;
 import me.hsgamer.hscore.minecraft.gui.holder.event.OpenEvent;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+/**
+ * The base holder for Minecraft GUI implementation
+ *
+ * @param <T> the type of the inventory context
+ */
 public abstract class GUIHolder<T extends InventoryContext> implements GUIElement, Action {
   private final UUID viewerID;
-  private final ButtonMap buttonMap;
   private final AtomicReference<Map<Integer, ActionItem>> itemMapRef = new AtomicReference<>(null);
+  private ButtonMap buttonMap = ButtonMap.EMPTY;
   private T inventoryContext;
 
-  public GUIHolder(UUID viewerID, ButtonMap buttonMap) {
+  /**
+   * Create a new holder
+   *
+   * @param viewerID the unique ID of the viewer
+   */
+  public GUIHolder(UUID viewerID) {
     this.viewerID = viewerID;
-    this.buttonMap = buttonMap;
   }
 
-  protected abstract T createInventoryContext(UUID uuid);
+  /**
+   * Create the inventory context
+   *
+   * @return the inventory context
+   */
+  protected abstract T createInventoryContext();
 
-  protected abstract void setItem(int slot, @Nullable Object item);
-
+  /**
+   * Open the inventory
+   *
+   * @param uuid the unique ID of the viewer
+   */
   public abstract void open(UUID uuid);
 
+  /**
+   * Handle the open event. Override this method to add custom behavior.
+   *
+   * @param event the event
+   */
   public void handleOpen(OpenEvent event) {
 
   }
 
+  /**
+   * Handle the close event. Override this method to add custom behavior.
+   *
+   * @param event the event
+   */
   public void handleClose(CloseEvent event) {
 
   }
 
+  /**
+   * {@inheritDoc}
+   * Override this method to add custom behavior.
+   */
   @Override
   public void handleClick(ClickEvent event) {
     getItem(event.getSlot())
@@ -47,6 +77,10 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
       .ifPresent(action -> action.handleClick(event));
   }
 
+  /**
+   * {@inheritDoc}
+   * Override this method to add custom behavior.
+   */
   @Override
   public void handleDrag(DragEvent event) {
     for (int slot : event.getSlots()) {
@@ -56,6 +90,9 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
     }
   }
 
+  /**
+   * Update the inventory
+   */
   public void update() {
     itemMapRef.accumulateAndGet(buttonMap.getItemMap(inventoryContext), (oldMap, newMap) -> {
       Collection<Integer> removedSlots = null;
@@ -70,24 +107,27 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
             .filter(slot -> !newMap.containsKey(slot))
             .collect(Collectors.toList());
         }
-        newMap.forEach(this::setItem);
+        newMap.forEach(getInventoryContext()::setItem);
       }
 
       if (removedSlots != null) {
-        removedSlots.forEach(slot -> setItem(slot, null));
+        removedSlots.forEach(getInventoryContext()::removeItem);
       }
 
       return newMap;
     });
   }
 
+  /**
+   * Open the inventory
+   */
   public void open() {
     open(inventoryContext.getViewerID());
   }
 
   @Override
   public void init() {
-    inventoryContext = createInventoryContext(viewerID);
+    inventoryContext = createInventoryContext();
     update();
   }
 
@@ -97,10 +137,20 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
     itemMapRef.set(null);
   }
 
+  /**
+   * Get the unique ID of the viewer
+   *
+   * @return the unique ID of the viewer
+   */
   public UUID getViewerID() {
     return viewerID;
   }
 
+  /**
+   * Get the inventory context
+   *
+   * @return the inventory context
+   */
   public T getInventoryContext() {
     if (inventoryContext == null) {
       throw new IllegalStateException("InventoryContext is not initialized");
@@ -108,11 +158,41 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
     return inventoryContext;
   }
 
+  /**
+   * Get the item in the slot
+   *
+   * @param slot the slot
+   *
+   * @return the item
+   */
   public Optional<ActionItem> getItem(int slot) {
     return Optional.ofNullable(itemMapRef.get()).map(map -> map.get(slot));
   }
 
+  /**
+   * Get the item map
+   *
+   * @return the item map
+   */
   public Map<Integer, ActionItem> getItemMap() {
     return Optional.ofNullable(itemMapRef.get()).map(Collections::unmodifiableMap).orElseGet(Collections::emptyMap);
+  }
+
+  /**
+   * Get the button map
+   *
+   * @return the button map
+   */
+  public ButtonMap getButtonMap() {
+    return buttonMap;
+  }
+
+  /**
+   * Set the button map
+   *
+   * @param buttonMap the button map
+   */
+  public void setButtonMap(ButtonMap buttonMap) {
+    this.buttonMap = buttonMap;
   }
 }

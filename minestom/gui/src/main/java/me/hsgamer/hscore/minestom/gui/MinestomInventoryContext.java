@@ -2,6 +2,8 @@ package me.hsgamer.hscore.minestom.gui;
 
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
 import net.minestom.server.inventory.Inventory;
+import net.minestom.server.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -50,5 +52,14 @@ public class MinestomInventoryContext implements InventoryContext {
       default -> inventory.getSize();
     };
     return x + y * slotPerRow;
+  }
+
+  @Override
+  public void setItem(int slot, @Nullable Object item) {
+    if (item == null) {
+      inventory.setItemStack(slot, net.minestom.server.item.ItemStack.AIR);
+    } else if (item instanceof ItemStack itemStack) {
+      inventory.setItemStack(slot, itemStack);
+    }
   }
 }

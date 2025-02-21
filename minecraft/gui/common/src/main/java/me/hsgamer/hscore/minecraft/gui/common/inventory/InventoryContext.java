@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.minecraft.gui.common.inventory;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.UUID;
 
 /**
@@ -31,6 +33,14 @@ public interface InventoryContext {
   int getSlot(int x, int y);
 
   /**
+   * Get the item in the slot
+   *
+   * @param slot   the slot
+   * @param object the object
+   */
+  void setItem(int slot, @Nullable Object object);
+
+  /**
    * Get the inventory slot from the position
    *
    * @param position the position
@@ -39,5 +49,14 @@ public interface InventoryContext {
    */
   default int getSlot(InventoryPosition position) {
     return getSlot(position.getX(), position.getY());
+  }
+
+  /**
+   * Remove the item in the slot
+   *
+   * @param slot the slot
+   */
+  default void removeItem(int slot) {
+    setItem(slot, null);
   }
 }

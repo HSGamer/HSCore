@@ -2,6 +2,8 @@ package me.hsgamer.hscore.bukkit.gui.common.inventory;
 
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -61,5 +63,14 @@ public class BukkitInventoryContext implements InventoryContext {
         break;
     }
     return x + y * slotPerRow;
+  }
+
+  @Override
+  public void setItem(int slot, @Nullable Object item) {
+    if (item == null) {
+      inventory.setItem(slot, null);
+    } else if (item instanceof ItemStack) {
+      inventory.setItem(slot, (ItemStack) item);
+    }
   }
 }
