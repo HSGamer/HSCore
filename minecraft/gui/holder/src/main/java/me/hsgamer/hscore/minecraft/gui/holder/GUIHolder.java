@@ -40,6 +40,17 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
   protected abstract T createInventoryContext();
 
   /**
+   * Check if the item can be set in the slot
+   *
+   * @param slot the slot
+   *
+   * @return true if the item can be set
+   */
+  protected boolean canSetItem(int slot) {
+    return slot >= 0 && slot < getInventoryContext().getSize();
+  }
+
+  /**
    * Handle the open event. Override this method to add custom behavior.
    *
    * @param event the event
@@ -82,11 +93,19 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
             .filter(slot -> !newMap.containsKey(slot))
             .collect(Collectors.toList());
         }
-        newMap.forEach((slot, item) -> getInventoryContext().setItem(slot, item.getItem()));
+        newMap.forEach((slot, item) -> {
+          if (canSetItem(slot)) {
+            getInventoryContext().setItem(slot, item.getItem());
+          }
+        });
       }
 
       if (removedSlots != null) {
-        removedSlots.forEach(getInventoryContext()::removeItem);
+        removedSlots.forEach(slot -> {
+          if (canSetItem(slot)) {
+            getInventoryContext().removeItem(slot);
+          }
+        });
       }
 
       return newMap;
