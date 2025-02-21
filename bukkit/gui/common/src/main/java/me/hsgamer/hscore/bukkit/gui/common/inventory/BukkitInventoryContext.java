@@ -1,6 +1,8 @@
 package me.hsgamer.hscore.bukkit.gui.common.inventory;
 
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -68,5 +70,13 @@ public class BukkitInventoryContext implements InventoryContext {
   @Override
   public void setItem(int slot, @Nullable Object item) {
     inventory.setItem(slot, item instanceof ItemStack ? (ItemStack) item : null);
+  }
+
+  @Override
+  public void open(UUID uuid) {
+    Player player = Bukkit.getPlayer(uuid);
+    if (player != null) {
+      player.openInventory(inventory);
+    }
   }
 }

@@ -5,8 +5,6 @@ import me.hsgamer.hscore.bukkit.gui.common.event.BukkitDragEvent;
 import me.hsgamer.hscore.bukkit.gui.common.inventory.BukkitInventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.holder.GUIHolder;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
@@ -57,18 +55,10 @@ public class BukkitGUIHolder extends GUIHolder<BukkitInventoryContext> {
   }
 
   @Override
-  public void open(UUID uuid) {
-    Player player = Bukkit.getPlayer(uuid);
-    if (player != null) {
-      player.openInventory(getInventoryContext().getInventory());
-    }
-  }
-
-  @Override
   public void handleClick(ClickEvent event) {
     if (moveItemOnBottom && event instanceof BukkitClickEvent) {
       InventoryClickEvent clickEvent = ((BukkitClickEvent) event).getEvent();
-      if (clickEvent.getClickedInventory() != clickEvent.getInventory())
+      if (clickEvent.getClickedInventory() != clickEvent.getInventory()) {
         switch (clickEvent.getAction()) {
           case DROP_ALL_SLOT:
           case DROP_ONE_SLOT:
@@ -87,6 +77,8 @@ public class BukkitGUIHolder extends GUIHolder<BukkitInventoryContext> {
           default:
             break;
         }
+        return;
+      }
     }
     super.handleClick(event);
   }

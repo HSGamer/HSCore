@@ -5,7 +5,6 @@ import me.hsgamer.hscore.minestom.gui.event.MinestomClickEvent;
 import me.hsgamer.hscore.minestom.gui.event.MinestomCloseEvent;
 import me.hsgamer.hscore.minestom.gui.event.MinestomOpenEvent;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
@@ -50,14 +49,6 @@ public class MinestomGUIHolder extends GUIHolder<MinestomInventoryContext> {
   @Override
   protected MinestomInventoryContext createInventoryContext() {
     return new MinestomInventoryContext(getViewerID(), inventoryFunction.apply(getViewerID()));
-  }
-
-  @Override
-  public void open(UUID uuid) {
-    Player player = MinecraftServer.getConnectionManager().getOnlinePlayerByUuid(uuid);
-    if (player != null) {
-      player.openInventory(getInventoryContext().getInventory());
-    }
   }
 
   @Override

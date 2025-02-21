@@ -1,6 +1,8 @@
 package me.hsgamer.hscore.minestom.gui;
 
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -57,5 +59,13 @@ public class MinestomInventoryContext implements InventoryContext {
   @Override
   public void setItem(int slot, @Nullable Object item) {
     inventory.setItemStack(slot, item instanceof ItemStack itemStack ? itemStack : ItemStack.AIR);
+  }
+
+  @Override
+  public void open(UUID uuid) {
+    Player player = MinecraftServer.getConnectionManager().getOnlinePlayerByUuid(uuid);
+    if (player != null) {
+      player.openInventory(inventory);
+    }
   }
 }

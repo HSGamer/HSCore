@@ -1,7 +1,7 @@
 package me.hsgamer.hscore.minecraft.gui.holder;
 
-import me.hsgamer.hscore.minecraft.gui.common.button.ButtonMap;
 import me.hsgamer.hscore.minecraft.gui.common.GUIElement;
+import me.hsgamer.hscore.minecraft.gui.common.button.ButtonMap;
 import me.hsgamer.hscore.minecraft.gui.common.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;
@@ -38,13 +38,6 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
    * @return the inventory context
    */
   protected abstract T createInventoryContext();
-
-  /**
-   * Open the inventory
-   *
-   * @param uuid the unique ID of the viewer
-   */
-  public abstract void open(UUID uuid);
 
   /**
    * Handle the open event. Override this method to add custom behavior.
@@ -98,13 +91,6 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
 
       return newMap;
     });
-  }
-
-  /**
-   * Open the inventory
-   */
-  public void open() {
-    open(inventoryContext.getViewerID());
   }
 
   @Override
@@ -176,5 +162,21 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
    */
   public void setButtonMap(ButtonMap buttonMap) {
     this.buttonMap = buttonMap;
+  }
+
+  /**
+   * Open the inventory
+   *
+   * @param viewerID the unique ID of the player
+   */
+  public void open(UUID viewerID) {
+    getInventoryContext().open(viewerID);
+  }
+
+  /**
+   * Open the inventory
+   */
+  public void open() {
+    getInventoryContext().open();
   }
 }

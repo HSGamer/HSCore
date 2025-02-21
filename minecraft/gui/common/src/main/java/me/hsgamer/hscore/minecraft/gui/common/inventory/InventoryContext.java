@@ -41,6 +41,13 @@ public interface InventoryContext {
   void setItem(int slot, @Nullable Object object);
 
   /**
+   * Open the inventory
+   *
+   * @param viewerID the unique ID of the viewer
+   */
+  void open(UUID viewerID);
+
+  /**
    * Get the inventory slot from the position
    *
    * @param position the position
@@ -58,5 +65,12 @@ public interface InventoryContext {
    */
   default void removeItem(int slot) {
     setItem(slot, null);
+  }
+
+  /**
+   * Open the inventory
+   */
+  default void open() {
+    open(getViewerID());
   }
 }
