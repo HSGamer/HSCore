@@ -42,7 +42,7 @@ public class MaskUtils {
    * @return the stream of positions
    */
   @NotNull
-  public static Stream<InventoryPosition> generateOutlineSlots(@NotNull InventoryPosition position1, @NotNull InventoryPosition position2) {
+  public static Stream<InventoryPosition> generateOutlinePositions(@NotNull InventoryPosition position1, @NotNull InventoryPosition position2) {
     InventoryPosition max = InventoryPosition.maxPosition(position1, position2);
     InventoryPosition min = InventoryPosition.minPosition(position1, position2);
     Stream<InventoryPosition> top = IntStream.rangeClosed(min.getX(), max.getX()).mapToObj(x -> InventoryPosition.of(x, min.getY()));
