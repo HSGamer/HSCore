@@ -82,7 +82,7 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
             .filter(slot -> !newMap.containsKey(slot))
             .collect(Collectors.toList());
         }
-        newMap.forEach(getInventoryContext()::setItem);
+        newMap.forEach((slot, item) -> getInventoryContext().setItem(slot, item.getItem()));
       }
 
       if (removedSlots != null) {
