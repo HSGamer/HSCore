@@ -67,10 +67,6 @@ public class BukkitInventoryContext implements InventoryContext {
 
   @Override
   public void setItem(int slot, @Nullable Object item) {
-    if (item == null) {
-      inventory.setItem(slot, null);
-    } else if (item instanceof ItemStack) {
-      inventory.setItem(slot, (ItemStack) item);
-    }
+    inventory.setItem(slot, item instanceof ItemStack ? (ItemStack) item : null);
   }
 }

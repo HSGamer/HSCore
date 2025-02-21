@@ -56,10 +56,6 @@ public class MinestomInventoryContext implements InventoryContext {
 
   @Override
   public void setItem(int slot, @Nullable Object item) {
-    if (item == null) {
-      inventory.setItemStack(slot, net.minestom.server.item.ItemStack.AIR);
-    } else if (item instanceof ItemStack itemStack) {
-      inventory.setItemStack(slot, itemStack);
-    }
+    inventory.setItemStack(slot, item instanceof ItemStack itemStack ? itemStack : ItemStack.AIR);
   }
 }
