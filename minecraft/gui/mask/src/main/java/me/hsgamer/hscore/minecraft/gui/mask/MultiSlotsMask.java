@@ -4,16 +4,16 @@ import me.hsgamer.hscore.minecraft.gui.common.button.Button;
 import me.hsgamer.hscore.minecraft.gui.common.button.ButtonMap;
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;
-import me.hsgamer.hscore.minecraft.gui.mask.util.MaskSlot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * The masks with multiple slot
  */
 public class MultiSlotsMask implements ButtonMap {
-  protected final MaskSlot maskSlot;
+  protected final Function<InventoryContext, List<Integer>> maskSlot;
   protected final List<Button> buttons = new ArrayList<>();
 
   /**
@@ -21,7 +21,7 @@ public class MultiSlotsMask implements ButtonMap {
    *
    * @param maskSlot the mask slot
    */
-  public MultiSlotsMask(@NotNull MaskSlot maskSlot) {
+  public MultiSlotsMask(@NotNull Function<InventoryContext, List<Integer>> maskSlot) {
     this.maskSlot = maskSlot;
   }
 
@@ -50,7 +50,7 @@ public class MultiSlotsMask implements ButtonMap {
    * @return the mask slot
    */
   @NotNull
-  public MaskSlot getMaskSlot() {
+  public Function<InventoryContext, List<Integer>> getMaskSlot() {
     return maskSlot;
   }
 

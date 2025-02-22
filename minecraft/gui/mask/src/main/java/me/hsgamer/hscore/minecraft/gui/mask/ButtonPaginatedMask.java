@@ -3,7 +3,6 @@ package me.hsgamer.hscore.minecraft.gui.mask;
 import me.hsgamer.hscore.minecraft.gui.common.button.Button;
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;
-import me.hsgamer.hscore.minecraft.gui.mask.util.MaskSlot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,19 +10,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
 
 /**
  * The button paginated mask, those with a long list of {@link Button} divided into pages.
  */
 public abstract class ButtonPaginatedMask extends PaginatedMask {
-  private final MaskSlot maskSlot;
+  private final Function<InventoryContext, List<Integer>> maskSlot;
 
   /**
    * Create a new mask
    *
    * @param maskSlot the mask slot
    */
-  protected ButtonPaginatedMask(@NotNull MaskSlot maskSlot) {
+  protected ButtonPaginatedMask(@NotNull Function<InventoryContext, List<Integer>> maskSlot) {
     this.maskSlot = maskSlot;
   }
 
@@ -33,7 +33,7 @@ public abstract class ButtonPaginatedMask extends PaginatedMask {
    * @return the mask slot
    */
   @NotNull
-  public MaskSlot getMaskSlot() {
+  public Function<InventoryContext, List<Integer>> getMaskSlot() {
     return maskSlot;
   }
 
