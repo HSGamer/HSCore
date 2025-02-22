@@ -8,9 +8,11 @@ import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;
 import me.hsgamer.hscore.minecraft.gui.holder.event.CloseEvent;
 import me.hsgamer.hscore.minecraft.gui.holder.event.OpenEvent;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 /**
  * The base holder for Minecraft GUI implementation
@@ -81,31 +83,19 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
    */
   public void update() {
     itemMapRef.accumulateAndGet(buttonMap.getItemMap(inventoryContext), (oldMap, newMap) -> {
-      Collection<Integer> removedSlots = null;
-
-      if (newMap == null) {
-        if (oldMap != null) {
-          removedSlots = oldMap.keySet();
+      if (oldMap != null) {
+        for (int slot : oldMap.keySet()) {
+          if (newMap != null && newMap.containsKey(slot)) continue;
+          if (!canSetItem(slot)) continue;
+          getInventoryContext().removeItem(slot);
         }
-      } else {
-        if (oldMap != null) {
-          removedSlots = oldMap.keySet().stream()
-            .filter(slot -> !newMap.containsKey(slot))
-            .collect(Collectors.toList());
-        }
-        newMap.forEach((slot, item) -> {
-          if (canSetItem(slot)) {
-            getInventoryContext().setItem(slot, item.getItem());
-          }
-        });
       }
 
-      if (removedSlots != null) {
-        removedSlots.forEach(slot -> {
-          if (canSetItem(slot)) {
-            getInventoryContext().removeItem(slot);
-          }
-        });
+      if (newMap != null) {
+        for (int slot : newMap.keySet()) {
+          if (!canSetItem(slot)) continue;
+          getInventoryContext().setItem(slot, newMap.get(slot).getItem());
+        }
       }
 
       return newMap;
