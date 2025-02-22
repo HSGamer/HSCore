@@ -92,9 +92,10 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
       }
 
       if (newMap != null) {
-        for (int slot : newMap.keySet()) {
+        for (Map.Entry<Integer, ActionItem> entry : newMap.entrySet()) {
+          int slot = entry.getKey();
           if (!canSetItem(slot)) continue;
-          getInventoryContext().setItem(slot, newMap.get(slot).getItem());
+          getInventoryContext().setItem(slot, entry.getValue().getItem());
         }
       }
 
