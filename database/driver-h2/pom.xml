@@ -21,7 +21,6 @@
       <artifactId>hscore-database-common</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <!--suppress VulnerableLibrariesLocal -->
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>

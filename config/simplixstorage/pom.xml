@@ -24,7 +24,6 @@
       <artifactId>hscore-config-common</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <!--suppress VulnerableLibrariesLocal -->
     <dependency>
       <groupId>com.github.simplix-softworks</groupId>
       <artifactId>simplixstorage</artifactId>

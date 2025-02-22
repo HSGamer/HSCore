@@ -28,7 +28,6 @@
   </repositories>
 
   <dependencies>
-    <!--suppress VulnerableLibrariesLocal -->
     <dependency>
       <groupId>net.minestom</groupId>
       <artifactId>minestom-snapshots</artifactId>
