@@ -31,7 +31,7 @@
     <dependency>
       <groupId>net.minestom</groupId>
       <artifactId>minestom-snapshots</artifactId>
-      <version>7320437640</version>
+      <version>620ebe5d6b</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
