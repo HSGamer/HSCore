@@ -21,7 +21,7 @@ public class CronTimeParser {
    * @param definition  the cron definition
    * @param cronStrings the cron string list
    */
-  public static List<Cron> createCronList(@NotNull CronDefinition definition, @NotNull List<String> cronStrings) {
+  public static List<Cron> parse(@NotNull CronDefinition definition, @NotNull List<String> cronStrings) {
     List<Cron> cronList = new ArrayList<>();
     CronParser parser = new CronParser(definition);
     cronStrings.forEach(cronTime -> {
@@ -41,8 +41,8 @@ public class CronTimeParser {
    * @param definition  the cron definition
    * @param cronStrings the cron string array
    */
-  public static List<Cron> createCronList(@NotNull CronDefinition definition, @NotNull String... cronStrings) {
-    return createCronList(definition, Arrays.asList(cronStrings));
+  public static List<Cron> parse(@NotNull CronDefinition definition, @NotNull String... cronStrings) {
+    return parse(definition, Arrays.asList(cronStrings));
   }
 
   /**
@@ -53,8 +53,8 @@ public class CronTimeParser {
    *
    * @return the cron list
    */
-  public static List<Cron> createCronList(@NotNull CronType type, @NotNull List<String> cronStrings) {
-    return createCronList(CronDefinitionBuilder.instanceDefinitionFor(type), cronStrings);
+  public static List<Cron> parse(@NotNull CronType type, @NotNull List<String> cronStrings) {
+    return parse(CronDefinitionBuilder.instanceDefinitionFor(type), cronStrings);
   }
 
   /**
@@ -65,7 +65,7 @@ public class CronTimeParser {
    *
    * @return the cron list
    */
-  public static List<Cron> createCronList(@NotNull CronType type, @NotNull String... cronStrings) {
-    return createCronList(type, Arrays.asList(cronStrings));
+  public static List<Cron> parse(@NotNull CronType type, @NotNull String... cronStrings) {
+    return parse(type, Arrays.asList(cronStrings));
   }
 }
