@@ -1,16 +1,12 @@
 package me.hsgamer.hscore.minecraft.block.utils;
 
-import me.hsgamer.hscore.collections.map.CaseInsensitiveStringHashMap;
 import me.hsgamer.hscore.minecraft.block.box.BlockBox;
 import me.hsgamer.hscore.minecraft.block.impl.iterator.LinearPositionIterator;
 import me.hsgamer.hscore.minecraft.block.impl.iterator.RandomPositionIterator;
 import me.hsgamer.hscore.minecraft.block.impl.iterator.RandomTypePositionIterator;
 import me.hsgamer.hscore.minecraft.block.iterator.PositionIterator;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 import static me.hsgamer.hscore.minecraft.block.impl.iterator.LinearPositionIterator.*;
@@ -19,7 +15,7 @@ import static me.hsgamer.hscore.minecraft.block.impl.iterator.LinearPositionIter
  * The utility class for {@link PositionIterator}
  */
 public final class PositionIteratorUtils {
-  private static final Map<String, Function<BlockBox, PositionIterator>> TYPE_MAP = new CaseInsensitiveStringHashMap<>();
+  private static final Map<String, Function<BlockBox, PositionIterator>> TYPE_MAP = new HashMap<>();
 
   static {
     registerType("random", RandomPositionIterator::new);
