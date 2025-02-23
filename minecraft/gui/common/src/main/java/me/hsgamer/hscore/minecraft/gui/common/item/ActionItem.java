@@ -70,6 +70,44 @@ public final class ActionItem {
   }
 
   /**
+   * Set the action
+   *
+   * @param eventClass the event class
+   * @param action     the action
+   * @param <E>        the event type
+   *
+   * @return this object
+   */
+  public <E extends ViewerEvent> ActionItem setAction(Class<E> eventClass, Consumer<E> action) {
+    return extendAction((event, oldAction) -> {
+      if (eventClass.isInstance(event)) {
+        action.accept(eventClass.cast(event));
+      } else {
+        oldAction.accept(event);
+      }
+    });
+  }
+
+  /**
+   * Extend the action
+   *
+   * @param eventClass the event class
+   * @param operator   the operator with the event and the old action
+   * @param <E>        the event type
+   *
+   * @return this object
+   */
+  public <E extends ViewerEvent> ActionItem extendAction(Class<E> eventClass, BiConsumer<E, Consumer<ViewerEvent>> operator) {
+    return extendAction((event, oldAction) -> {
+      if (eventClass.isInstance(event)) {
+        operator.accept(eventClass.cast(event), oldAction);
+      } else {
+        oldAction.accept(event);
+      }
+    });
+  }
+
+  /**
    * Call the action
    *
    * @param event the event

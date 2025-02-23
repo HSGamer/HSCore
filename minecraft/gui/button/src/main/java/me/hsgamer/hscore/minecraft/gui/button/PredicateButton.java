@@ -112,22 +112,17 @@ public class PredicateButton implements GUIElement, Function<@NotNull InventoryC
       return null;
     }
 
-    return new ActionItem().apply(actionItem).extendAction((event, oldAction) -> {
-      if (event instanceof ClickEvent) {
-        ClickEvent clickEvent = (ClickEvent) event;
-        if (preventSpamClick && clickCheckList.contains(uuid)) {
-          return;
-        }
-        clickCheckList.add(uuid);
-        clickFuturePredicate.apply(clickEvent).thenAccept(result -> {
-          clickCheckList.remove(uuid);
-          if (Boolean.TRUE.equals(result)) {
-            oldAction.accept(event);
-          }
-        });
-      } else {
-        oldAction.accept(event);
+    return new ActionItem().apply(actionItem).extendAction(ClickEvent.class, (event, oldAction) -> {
+      if (preventSpamClick && clickCheckList.contains(uuid)) {
+        return;
       }
+      clickCheckList.add(uuid);
+      clickFuturePredicate.apply(event).thenAccept(result -> {
+        clickCheckList.remove(uuid);
+        if (Boolean.TRUE.equals(result)) {
+          oldAction.accept(event);
+        }
+      });
     });
   }
 

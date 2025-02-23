@@ -30,10 +30,9 @@ public class InputButton implements GUIElement, Function<@NotNull InventoryConte
     UUID uuid = context.getViewerID();
     return new ActionItem()
       .setItem(displayItemFunction.apply(uuid, getInputItem(uuid)))
-      .setAction(event -> {
-        if (!(event instanceof BukkitClickEvent)) return;
+      .setAction(BukkitClickEvent.class, event -> {
         UUID viewerID = event.getViewerID();
-        InventoryClickEvent bukkitEvent = ((BukkitClickEvent) event).getEvent();
+        InventoryClickEvent bukkitEvent = event.getEvent();
         ItemStack cursorItem = Optional.ofNullable(bukkitEvent.getCursor())
           .filter(itemStack -> itemStack.getType() != Material.AIR)
           .map(ItemStack::clone)
