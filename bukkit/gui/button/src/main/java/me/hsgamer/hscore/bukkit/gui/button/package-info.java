@@ -1,4 +1,4 @@
 /**
- * Contains the pre-made {@link me.hsgamer.hscore.minecraft.gui.common.button.Button}s for Bukkit
+ * Contains the pre-made buttons for Bukkit
  */
 package me.hsgamer.hscore.bukkit.gui.button;
