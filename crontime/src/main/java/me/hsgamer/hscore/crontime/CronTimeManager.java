@@ -1,14 +1,7 @@
 package me.hsgamer.hscore.crontime;
 
 import com.cronutils.model.Cron;
-import com.cronutils.model.CronType;
-import com.cronutils.model.definition.CronDefinition;
-import com.cronutils.model.definition.CronDefinitionBuilder;
 import com.cronutils.model.time.ExecutionTime;
-import com.cronutils.parser.CronParser;
-import me.hsgamer.hscore.logger.common.LogLevel;
-import me.hsgamer.hscore.logger.common.Logger;
-import me.hsgamer.hscore.logger.provider.LoggerProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
@@ -19,10 +12,6 @@ import java.util.*;
  * A simple cron-time manager to manage next execution time
  */
 public class CronTimeManager {
-  /**
-   * The internal logger
-   */
-  protected static final Logger LOGGER = LoggerProvider.getLogger(CronTimeManager.class);
   private final List<Cron> cronList;
 
   /**
@@ -41,55 +30,6 @@ public class CronTimeManager {
    */
   public CronTimeManager(@NotNull Cron... crons) {
     this.cronList = Arrays.asList(crons);
-  }
-
-  /**
-   * Create a new manager
-   *
-   * @param definition  the cron definition
-   * @param cronStrings the cron string list
-   */
-  public CronTimeManager(@NotNull CronDefinition definition, @NotNull List<String> cronStrings) {
-    this.cronList = new ArrayList<>();
-    CronParser parser = new CronParser(definition);
-    cronStrings.forEach(cronTime -> {
-      try {
-        Cron cron = parser.parse(cronTime);
-        cronList.add(cron);
-      } catch (Exception ex) {
-        LOGGER.log(LogLevel.WARN, "Cron time is invalid: `" + cronTime + "`", ex);
-      }
-    });
-  }
-
-  /**
-   * Create a new manager
-   *
-   * @param definition  the cron definition
-   * @param cronStrings the cron string list
-   */
-  public CronTimeManager(@NotNull CronDefinition definition, @NotNull String... cronStrings) {
-    this(definition, Arrays.asList(cronStrings));
-  }
-
-  /**
-   * Create a new manager
-   *
-   * @param cronType    the cron type
-   * @param cronStrings the cron string list
-   */
-  public CronTimeManager(@NotNull CronType cronType, @NotNull List<String> cronStrings) {
-    this(CronDefinitionBuilder.instanceDefinitionFor(cronType), cronStrings);
-  }
-
-  /**
-   * Create a new manager
-   *
-   * @param cronType    the cron type
-   * @param cronStrings the cron string list
-   */
-  public CronTimeManager(@NotNull CronType cronType, @NotNull String... cronStrings) {
-    this(cronType, Arrays.asList(cronStrings));
   }
 
   /**
