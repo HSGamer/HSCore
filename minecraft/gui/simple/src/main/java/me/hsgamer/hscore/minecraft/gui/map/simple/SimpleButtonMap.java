@@ -1,22 +1,22 @@
 package me.hsgamer.hscore.minecraft.gui.map.simple;
 
-import me.hsgamer.hscore.minecraft.gui.common.button.Button;
-import me.hsgamer.hscore.minecraft.gui.common.button.ButtonMap;
+import me.hsgamer.hscore.minecraft.gui.common.GUIElement;
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryPosition;
 import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
 /**
- * A simple button map with a list of {@link Button}s
+ * A simple button map
  */
-public class SimpleButtonMap implements ButtonMap {
-  private final Map<Button, Collection<Function<InventoryContext, Integer>>> buttonSlotMap = new LinkedHashMap<>();
-  private Button defaultButton = Button.EMPTY;
+public class SimpleButtonMap implements GUIElement, Function<@NotNull InventoryContext, @NotNull Map<Integer, ActionItem>> {
+  private final Map<Function<@NotNull InventoryContext, @Nullable ActionItem>, Collection<Function<InventoryContext, Integer>>> buttonSlotMap = new LinkedHashMap<>();
+  private Function<@NotNull InventoryContext, @Nullable ActionItem> defaultButton = context -> null;
 
   /**
    * Set the button
@@ -24,7 +24,7 @@ public class SimpleButtonMap implements ButtonMap {
    * @param slot   the slot
    * @param button the button
    */
-  public void setButton(int slot, @NotNull Button button) {
+  public void setButton(int slot, @NotNull Function<@NotNull InventoryContext, @Nullable ActionItem> button) {
     buttonSlotMap.computeIfAbsent(button, b -> new LinkedList<>()).add(context -> slot);
   }
 
@@ -35,7 +35,7 @@ public class SimpleButtonMap implements ButtonMap {
    * @param y      the y coordinate
    * @param button the button
    */
-  public void setButton(int x, int y, @NotNull Button button) {
+  public void setButton(int x, int y, @NotNull Function<@NotNull InventoryContext, @Nullable ActionItem> button) {
     buttonSlotMap.computeIfAbsent(button, b -> new LinkedList<>()).add(context -> context.getSlot(x, y));
   }
 
@@ -45,7 +45,7 @@ public class SimpleButtonMap implements ButtonMap {
    * @param position the position
    * @param button   the button
    */
-  public void setButton(InventoryPosition position, @NotNull Button button) {
+  public void setButton(InventoryPosition position, @NotNull Function<@NotNull InventoryContext, @Nullable ActionItem> button) {
     setButton(position.getX(), position.getY(), button);
   }
 
@@ -54,7 +54,7 @@ public class SimpleButtonMap implements ButtonMap {
    *
    * @return the button
    */
-  public @NotNull Button getDefaultButton() {
+  public @NotNull Function<@NotNull InventoryContext, @Nullable ActionItem> getDefaultButton() {
     return defaultButton;
   }
 
@@ -63,29 +63,29 @@ public class SimpleButtonMap implements ButtonMap {
    *
    * @param defaultButton the button
    */
-  public void setDefaultButton(@NotNull Button defaultButton) {
+  public void setDefaultButton(@NotNull Function<@NotNull InventoryContext, @Nullable ActionItem> defaultButton) {
     this.defaultButton = defaultButton;
   }
 
   @Override
   public void init() {
-    buttonSlotMap.keySet().forEach(Button::init);
-    defaultButton.init();
+    GUIElement.handleIfElement(buttonSlotMap.keySet(), GUIElement::init);
+    GUIElement.handleIfElement(defaultButton, GUIElement::init);
   }
 
   @Override
   public void stop() {
-    buttonSlotMap.keySet().forEach(Button::stop);
+    GUIElement.handleIfElement(buttonSlotMap.keySet(), GUIElement::stop);
     buttonSlotMap.clear();
-    defaultButton.stop();
+    GUIElement.handleIfElement(defaultButton, GUIElement::stop);
   }
 
   @Override
-  public @NotNull Map<Integer, ActionItem> getItemMap(@NotNull InventoryContext context) {
+  public @NotNull Map<Integer, ActionItem> apply(@NotNull InventoryContext context) {
     Map<Integer, ActionItem> map = new HashMap<>();
     IntFunction<ActionItem> getDisplayButton = i -> map.computeIfAbsent(i, s -> new ActionItem());
 
-    ActionItem defaultActionItem = defaultButton.getItem(context);
+    ActionItem defaultActionItem = defaultButton.apply(context);
     if (defaultActionItem != null) {
       for (int i = 0; i < context.getSize(); i++) {
         getDisplayButton.apply(i).apply(defaultActionItem);
@@ -93,7 +93,7 @@ public class SimpleButtonMap implements ButtonMap {
     }
 
     buttonSlotMap.forEach((button, slots) -> {
-      ActionItem actionItem = button.getItem(context);
+      ActionItem actionItem = button.apply(context);
       if (actionItem == null) return;
       slots.forEach(slot -> getDisplayButton.apply(slot.apply(context)).apply(actionItem));
     });

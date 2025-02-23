@@ -1,41 +1,27 @@
 package me.hsgamer.hscore.minecraft.gui.mask;
 
 import me.hsgamer.hscore.animate.Animation;
-import me.hsgamer.hscore.minecraft.gui.common.button.ButtonMap;
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 /**
  * The animated mask with child masks as frames, but only run once
  */
-public class OneTimeAnimatedMask implements ButtonMap {
-  private final List<ButtonMap> masks = new ArrayList<>();
-  private final Map<UUID, Animation<ButtonMap>> animationMap = new ConcurrentHashMap<>();
+public class OneTimeAnimatedMask extends MultiMask<Map<Integer, ActionItem>> {
+  private final Map<UUID, Animation<Function<@NotNull InventoryContext, @Nullable Map<Integer, ActionItem>>>> animationMap = new ConcurrentHashMap<>();
   private boolean viewLast = false;
   private long periodMillis = 50L;
 
-  /**
-   * Add mask(s)
-   *
-   * @param masks the mask (or frame)
-   * @param <T>   the type of the mask
-   */
-  public <T extends ButtonMap> void addMask(@NotNull Collection<@NotNull T> masks) {
-    this.masks.addAll(masks);
-  }
-
-  /**
-   * Add mask(s)
-   *
-   * @param mask the mask (or frame)
-   */
-  public void addMask(@NotNull ButtonMap... mask) {
-    addMask(Arrays.asList(mask));
+  @Override
+  protected boolean requireChildElements() {
+    return true;
   }
 
   /**
@@ -60,16 +46,6 @@ public class OneTimeAnimatedMask implements ButtonMap {
   }
 
   /**
-   * Get the list of masks
-   *
-   * @return the masks
-   */
-  @NotNull
-  public List<ButtonMap> getMasks() {
-    return masks;
-  }
-
-  /**
    * Reset the animation for the unique id
    *
    * @param uuid the unique id
@@ -78,32 +54,24 @@ public class OneTimeAnimatedMask implements ButtonMap {
     getAnimation(uuid).reset();
   }
 
-  private Animation<ButtonMap> getAnimation(@NotNull UUID uuid) {
-    return animationMap.computeIfAbsent(uuid, key -> new Animation<>(masks, periodMillis));
-  }
-
-  @Override
-  public void init() {
-    if (this.masks.isEmpty()) {
-      throw new IllegalArgumentException("There is no child mask for this one-time animated mask");
-    }
-    this.masks.forEach(ButtonMap::init);
+  private Animation<Function<@NotNull InventoryContext, @Nullable Map<Integer, ActionItem>>> getAnimation(@NotNull UUID uuid) {
+    return animationMap.computeIfAbsent(uuid, key -> new Animation<>(elements, periodMillis));
   }
 
   @Override
   public void stop() {
     this.animationMap.clear();
-    this.masks.forEach(ButtonMap::stop);
+    super.stop();
   }
 
   @Override
-  public @Nullable Map<Integer, ActionItem> getItemMap(@NotNull InventoryContext context) {
-    Animation<ButtonMap> animation = getAnimation(context.getViewerID());
+  public @Nullable Map<Integer, ActionItem> apply(@NotNull InventoryContext context) {
+    Animation<Function<@NotNull InventoryContext, @Nullable Map<Integer, ActionItem>>> animation = getAnimation(context.getViewerID());
     long currentMillis = System.currentTimeMillis();
     if (animation.isFirstRun(currentMillis)) {
-      return animation.getCurrentFrame(currentMillis).getItemMap(context);
+      return animation.getCurrentFrame(currentMillis).apply(context);
     } else if (viewLast) {
-      return masks.get(masks.size() - 1).getItemMap(context);
+      return elements.get(elements.size() - 1).apply(context);
     } else {
       return null;
     }

@@ -1,6 +1,5 @@
 package me.hsgamer.hscore.minecraft.gui.mask;
 
-import me.hsgamer.hscore.minecraft.gui.common.button.Button;
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +12,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 /**
- * The button paginated mask, those with a long list of {@link Button} divided into pages.
+ * The button paginated mask, those with a long list of buttons divided into pages.
  */
 public abstract class ButtonPaginatedMask extends PaginatedMask {
   private final Function<InventoryContext, List<Integer>> maskSlot;
@@ -45,12 +44,12 @@ public abstract class ButtonPaginatedMask extends PaginatedMask {
    * @return the buttons
    */
   @NotNull
-  public abstract List<@NotNull Button> getButtons(@NotNull UUID uuid);
+  public abstract List<@NotNull Function<@NotNull InventoryContext, @Nullable ActionItem>> getButtons(@NotNull UUID uuid);
 
   @Override
   protected @Nullable Map<@NotNull Integer, @NotNull ActionItem> getItemMap(@NotNull InventoryContext context, int pageNumber) {
     List<Integer> slots = this.maskSlot.apply(context);
-    List<Button> buttons = getButtons(context.getViewerID());
+    List<Function<@NotNull InventoryContext, @Nullable ActionItem>> buttons = getButtons(context.getViewerID());
     if (buttons.isEmpty() || slots.isEmpty()) {
       return null;
     }
@@ -68,7 +67,7 @@ public abstract class ButtonPaginatedMask extends PaginatedMask {
       if (index >= buttonsSize) {
         break;
       }
-      ActionItem actionItem = buttons.get(index).getItem(context);
+      ActionItem actionItem = buttons.get(index).apply(context);
       if (actionItem != null) {
         map.put(slots.get(i), actionItem);
       }

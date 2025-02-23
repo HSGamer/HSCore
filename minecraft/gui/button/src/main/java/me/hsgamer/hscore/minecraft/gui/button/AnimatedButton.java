@@ -1,22 +1,27 @@
 package me.hsgamer.hscore.minecraft.gui.button;
 
 import me.hsgamer.hscore.animate.Animation;
-import me.hsgamer.hscore.minecraft.gui.common.button.Button;
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 /**
  * The animated button with child buttons as frames
  */
-public class AnimatedButton implements Button {
-  private final List<Button> buttons = new ArrayList<>();
-  private final Map<UUID, Animation<Button>> animationMap = new ConcurrentHashMap<>();
+public class AnimatedButton extends MultiButton {
+  private final Map<UUID, Animation<Function<@NotNull InventoryContext, @Nullable ActionItem>>> animationMap = new ConcurrentHashMap<>();
   private long periodMillis = 50L;
+
+  @Override
+  protected boolean requireChildButtons() {
+    return true;
+  }
 
   /**
    * Set the period of the animation
@@ -30,54 +35,18 @@ public class AnimatedButton implements Button {
     this.periodMillis = periodMillis;
   }
 
-  /**
-   * Add button(s)
-   *
-   * @param buttons the buttons (or frames)
-   * @param <T>     the type of the button
-   */
-  public <T extends Button> void addButton(@NotNull Collection<@NotNull T> buttons) {
-    this.buttons.addAll(buttons);
-  }
-
-  /**
-   * Add button(s)
-   *
-   * @param button the button (or frame)
-   */
-  public void addButton(@NotNull Button... button) {
-    addButton(Arrays.asList(button));
-  }
-
-  /**
-   * Get the list of buttons
-   *
-   * @return the buttons
-   */
-  public List<Button> getButtons() {
-    return buttons;
-  }
-
-  private Animation<Button> getAnimation(UUID uuid) {
+  private Animation<Function<@NotNull InventoryContext, @Nullable ActionItem>> getAnimation(UUID uuid) {
     return animationMap.computeIfAbsent(uuid, key -> new Animation<>(buttons, periodMillis));
-  }
-
-  @Override
-  public @Nullable ActionItem getItem(@NotNull InventoryContext context) {
-    return getAnimation(context.getViewerID()).getCurrentFrame().getItem(context);
-  }
-
-  @Override
-  public void init() {
-    if (this.buttons.isEmpty()) {
-      throw new IllegalArgumentException("There is no child button for this animated button");
-    }
-    this.buttons.forEach(Button::init);
   }
 
   @Override
   public void stop() {
     this.animationMap.clear();
-    this.buttons.forEach(Button::stop);
+    super.stop();
+  }
+
+  @Override
+  public @Nullable ActionItem apply(@NotNull InventoryContext context) {
+    return getAnimation(context.getViewerID()).getCurrentFrame().apply(context);
   }
 }

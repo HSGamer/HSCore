@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.minecraft.gui.mask;
 
-import me.hsgamer.hscore.minecraft.gui.common.button.ButtonMap;
+import me.hsgamer.hscore.minecraft.gui.common.GUIElement;
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;
 import org.jetbrains.annotations.NotNull;
@@ -9,8 +9,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
-public abstract class PaginatedMask implements ButtonMap {
+public abstract class PaginatedMask implements GUIElement, Function<@NotNull InventoryContext, @Nullable Map<Integer, ActionItem>> {
   protected final Map<UUID, Integer> pageNumberMap = new ConcurrentHashMap<>();
   protected boolean cycle = false;
 
@@ -129,7 +130,7 @@ public abstract class PaginatedMask implements ButtonMap {
   }
 
   @Override
-  public @Nullable Map<Integer, ActionItem> getItemMap(@NotNull InventoryContext context) {
+  public @Nullable Map<Integer, ActionItem> apply(@NotNull InventoryContext context) {
     return getItemMap(context, this.getPage(context.getViewerID()));
   }
 }

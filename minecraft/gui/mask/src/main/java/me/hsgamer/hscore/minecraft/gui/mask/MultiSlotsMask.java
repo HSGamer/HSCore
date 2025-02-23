@@ -1,20 +1,19 @@
 package me.hsgamer.hscore.minecraft.gui.mask;
 
-import me.hsgamer.hscore.minecraft.gui.common.button.Button;
-import me.hsgamer.hscore.minecraft.gui.common.button.ButtonMap;
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
  * The masks with multiple slot
  */
-public class MultiSlotsMask implements ButtonMap {
+public class MultiSlotsMask extends MultiMask<ActionItem> {
   protected final Function<InventoryContext, List<Integer>> maskSlot;
-  protected final List<Button> buttons = new ArrayList<>();
 
   /**
    * Create a new mask
@@ -23,25 +22,6 @@ public class MultiSlotsMask implements ButtonMap {
    */
   public MultiSlotsMask(@NotNull Function<InventoryContext, List<Integer>> maskSlot) {
     this.maskSlot = maskSlot;
-  }
-
-  /**
-   * Add button(s)
-   *
-   * @param buttons the buttons
-   * @param <T>     the type of the button
-   */
-  public <T extends Button> void addButton(@NotNull Collection<@NotNull T> buttons) {
-    this.buttons.addAll(buttons);
-  }
-
-  /**
-   * Add button(s)
-   *
-   * @param button the button
-   */
-  public void addButton(@NotNull Button... button) {
-    addButton(Arrays.asList(button));
   }
 
   /**
@@ -54,35 +34,15 @@ public class MultiSlotsMask implements ButtonMap {
     return maskSlot;
   }
 
-  /**
-   * Get the buttons
-   *
-   * @return the buttons
-   */
-  @NotNull
-  public List<@NotNull Button> getButtons() {
-    return Collections.unmodifiableList(buttons);
-  }
-
   @Override
-  public void init() {
-    this.buttons.forEach(Button::init);
-  }
-
-  @Override
-  public void stop() {
-    this.buttons.forEach(Button::stop);
-  }
-
-  @Override
-  public @NotNull Map<Integer, ActionItem> getItemMap(@NotNull InventoryContext context) {
+  public @NotNull Map<Integer, ActionItem> apply(@NotNull InventoryContext context) {
     Map<Integer, ActionItem> map = new HashMap<>();
     List<Integer> slots = this.maskSlot.apply(context);
-    if (!this.buttons.isEmpty() && !slots.isEmpty()) {
+    if (!this.elements.isEmpty() && !slots.isEmpty()) {
       int slotsSize = slots.size();
-      int buttonsSize = this.buttons.size();
+      int buttonsSize = this.elements.size();
       for (int i = 0; i < slotsSize; i++) {
-        ActionItem item = this.buttons.get(i % buttonsSize).getItem(context);
+        ActionItem item = this.elements.get(i % buttonsSize).apply(context);
         if (item != null) {
           map.put(slots.get(i), item);
         }

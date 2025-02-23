@@ -1,9 +1,12 @@
 package me.hsgamer.hscore.minecraft.gui.map.simple;
 
-import me.hsgamer.hscore.minecraft.gui.common.button.Button;
+import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
+import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 
 /**
  * The builder for {@link SimpleButtonMap}
@@ -60,7 +63,7 @@ public class SimpleGUIBuilder {
    * @return {@code this} for builder chain
    */
   @NotNull
-  public SimpleGUIBuilder add(@NotNull final Button button) {
+  public SimpleGUIBuilder add(@NotNull final Function<@NotNull InventoryContext, @Nullable ActionItem> button) {
     this.simpleButtonMap.setButton(this.slot.get(), button);
     return this.next();
   }

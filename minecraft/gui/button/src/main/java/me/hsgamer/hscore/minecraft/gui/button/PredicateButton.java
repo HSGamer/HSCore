@@ -1,6 +1,6 @@
 package me.hsgamer.hscore.minecraft.gui.button;
 
-import me.hsgamer.hscore.minecraft.gui.common.button.Button;
+import me.hsgamer.hscore.minecraft.gui.common.GUIElement;
 import me.hsgamer.hscore.minecraft.gui.common.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;
@@ -17,11 +17,11 @@ import java.util.function.Predicate;
 /**
  * The button with predicates
  */
-public class PredicateButton implements Button {
+public class PredicateButton implements GUIElement, Function<@NotNull InventoryContext, @Nullable ActionItem> {
   private final Set<UUID> clickCheckList = new ConcurrentSkipListSet<>();
 
-  private Button button = EMPTY;
-  private Button fallbackButton = EMPTY;
+  private Function<@NotNull InventoryContext, @Nullable ActionItem> button = context -> null;
+  private Function<@NotNull InventoryContext, @Nullable ActionItem> fallbackButton = context -> null;
   private Predicate<UUID> viewPredicate = uuid -> true;
   private Function<ClickEvent, CompletableFuture<Boolean>> clickFuturePredicate = clickEvent -> CompletableFuture.completedFuture(true);
   private boolean preventSpamClick = false;
@@ -67,7 +67,7 @@ public class PredicateButton implements Button {
    *
    * @return the button
    */
-  public Button getButton() {
+  public Function<@NotNull InventoryContext, @Nullable ActionItem> getButton() {
     return button;
   }
 
@@ -76,7 +76,7 @@ public class PredicateButton implements Button {
    *
    * @param button the button
    */
-  public void setButton(@NotNull Button button) {
+  public void setButton(@NotNull Function<@NotNull InventoryContext, @Nullable ActionItem> button) {
     this.button = button;
   }
 
@@ -85,7 +85,7 @@ public class PredicateButton implements Button {
    *
    * @return the fallback button
    */
-  public Button getFallbackButton() {
+  public Function<@NotNull InventoryContext, @Nullable ActionItem> getFallbackButton() {
     return fallbackButton;
   }
 
@@ -94,18 +94,18 @@ public class PredicateButton implements Button {
    *
    * @param fallbackButton the fallback button
    */
-  public void setFallbackButton(@NotNull Button fallbackButton) {
+  public void setFallbackButton(@NotNull Function<@NotNull InventoryContext, @Nullable ActionItem> fallbackButton) {
     this.fallbackButton = fallbackButton;
   }
 
   @Override
-  public @Nullable ActionItem getItem(@NotNull InventoryContext context) {
+  public @Nullable ActionItem apply(@NotNull InventoryContext context) {
     UUID uuid = context.getViewerID();
     ActionItem actionItem;
     if (viewPredicate.test(uuid)) {
-      actionItem = button.getItem(context);
+      actionItem = button.apply(context);
     } else {
-      actionItem = fallbackButton.getItem(context);
+      actionItem = fallbackButton.apply(context);
     }
 
     if (actionItem == null) {
@@ -133,13 +133,13 @@ public class PredicateButton implements Button {
 
   @Override
   public void init() {
-    button.init();
-    fallbackButton.init();
+    GUIElement.handleIfElement(button, GUIElement::init);
+    GUIElement.handleIfElement(fallbackButton, GUIElement::init);
   }
 
   @Override
   public void stop() {
-    button.stop();
-    fallbackButton.stop();
+    GUIElement.handleIfElement(button, GUIElement::stop);
+    GUIElement.handleIfElement(fallbackButton, GUIElement::stop);
   }
 }

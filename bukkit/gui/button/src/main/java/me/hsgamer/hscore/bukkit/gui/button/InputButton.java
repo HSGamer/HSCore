@@ -1,7 +1,7 @@
 package me.hsgamer.hscore.bukkit.gui.button;
 
 import me.hsgamer.hscore.bukkit.gui.common.event.BukkitClickEvent;
-import me.hsgamer.hscore.minecraft.gui.common.button.Button;
+import me.hsgamer.hscore.minecraft.gui.common.GUIElement;
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;
 import org.bukkit.Material;
@@ -16,16 +16,17 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * The button that stores the input item
  */
-public class InputButton implements Button {
+public class InputButton implements GUIElement, Function<@NotNull InventoryContext, @Nullable ActionItem> {
   private final Map<UUID, ItemStack> map = new IdentityHashMap<>();
   private BiFunction<@NotNull UUID, @Nullable ItemStack, @Nullable ItemStack> displayItemFunction = (uuid, item) -> item;
 
   @Override
-  public @Nullable ActionItem getItem(@NotNull InventoryContext context) {
+  public @Nullable ActionItem apply(@NotNull InventoryContext context) {
     UUID uuid = context.getViewerID();
     return new ActionItem()
       .setItem(displayItemFunction.apply(uuid, getInputItem(uuid)))

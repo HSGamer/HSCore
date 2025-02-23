@@ -1,18 +1,20 @@
 package me.hsgamer.hscore.minecraft.gui.holder;
 
 import me.hsgamer.hscore.minecraft.gui.common.GUIElement;
-import me.hsgamer.hscore.minecraft.gui.common.button.ButtonMap;
 import me.hsgamer.hscore.minecraft.gui.common.event.ClickEvent;
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;
 import me.hsgamer.hscore.minecraft.gui.holder.event.CloseEvent;
 import me.hsgamer.hscore.minecraft.gui.holder.event.OpenEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
 /**
  * The base holder for Minecraft GUI implementation
@@ -22,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public abstract class GUIHolder<T extends InventoryContext> implements GUIElement {
   private final UUID viewerID;
   private final AtomicReference<Map<Integer, ActionItem>> itemMapRef = new AtomicReference<>(null);
-  private ButtonMap buttonMap = ButtonMap.EMPTY;
+  private Function<@NotNull InventoryContext, @Nullable Map<Integer, ActionItem>> buttonMap = context -> null;
   private T inventoryContext;
 
   /**
@@ -82,7 +84,7 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
    * Update the inventory
    */
   public void update() {
-    itemMapRef.accumulateAndGet(buttonMap.getItemMap(inventoryContext), (oldMap, newMap) -> {
+    itemMapRef.accumulateAndGet(buttonMap.apply(inventoryContext), (oldMap, newMap) -> {
       if (oldMap != null) {
         for (int slot : oldMap.keySet()) {
           if (newMap != null && newMap.containsKey(slot)) continue;
@@ -161,7 +163,7 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
    *
    * @return the button map
    */
-  public ButtonMap getButtonMap() {
+  public Function<@NotNull InventoryContext, @Nullable Map<Integer, ActionItem>> getButtonMap() {
     return buttonMap;
   }
 
@@ -170,7 +172,7 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
    *
    * @param buttonMap the button map
    */
-  public void setButtonMap(ButtonMap buttonMap) {
+  public void setButtonMap(Function<@NotNull InventoryContext, @Nullable Map<Integer, ActionItem>> buttonMap) {
     this.buttonMap = buttonMap;
   }
 
