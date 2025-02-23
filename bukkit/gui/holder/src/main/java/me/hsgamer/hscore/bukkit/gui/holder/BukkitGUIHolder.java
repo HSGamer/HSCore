@@ -9,13 +9,13 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import java.util.UUID;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * The {@link GUIHolder} for Bukkit
  */
 public class BukkitGUIHolder extends GUIHolder<BukkitInventoryContext> {
-  private final BiFunction<UUID, BukkitGUIHolder, Inventory> inventoryFunction;
+  private final Function<BukkitGUIHolder, Inventory> inventoryFunction;
   private boolean moveItemOnBottom = false;
   private boolean cancelDragEvent = true;
 
@@ -25,7 +25,7 @@ public class BukkitGUIHolder extends GUIHolder<BukkitInventoryContext> {
    * @param viewerID          the unique ID of the viewer
    * @param inventoryFunction the function to create the inventory
    */
-  public BukkitGUIHolder(UUID viewerID, BiFunction<UUID, BukkitGUIHolder, Inventory> inventoryFunction) {
+  public BukkitGUIHolder(UUID viewerID, Function<BukkitGUIHolder, Inventory> inventoryFunction) {
     super(viewerID);
     this.inventoryFunction = inventoryFunction;
   }
@@ -50,8 +50,7 @@ public class BukkitGUIHolder extends GUIHolder<BukkitInventoryContext> {
 
   @Override
   protected BukkitInventoryContext createInventoryContext() {
-    Inventory inventory = inventoryFunction.apply(getViewerID(), this);
-    return new BukkitInventoryContext(getViewerID(), inventory);
+    return new BukkitInventoryContext(getViewerID(), inventoryFunction.apply(this));
   }
 
   @Override

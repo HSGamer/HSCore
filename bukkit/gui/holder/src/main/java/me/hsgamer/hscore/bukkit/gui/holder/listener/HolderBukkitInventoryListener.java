@@ -38,10 +38,10 @@ public class HolderBukkitInventoryListener extends BukkitInventoryListener {
    *
    * @return the inventory function
    */
-  public BiFunction<UUID, BukkitGUIHolder, Inventory> create(BiFunction<UUID, InventoryHolder, Inventory> inventoryFunction) {
-    return (uuid, guiHolder) -> {
+  public Function<BukkitGUIHolder, Inventory> create(BiFunction<UUID, InventoryHolder, Inventory> inventoryFunction) {
+    return (guiHolder) -> {
       Holder holder = new Holder(plugin);
-      Inventory inventory = inventoryFunction.apply(uuid, holder);
+      Inventory inventory = inventoryFunction.apply(guiHolder.getViewerID(), holder);
       holder.holder = guiHolder;
       return inventory;
     };
@@ -56,7 +56,7 @@ public class HolderBukkitInventoryListener extends BukkitInventoryListener {
    *
    * @return the inventory function
    */
-  public BiFunction<UUID, BukkitGUIHolder, Inventory> create(
+  public Function<BukkitGUIHolder, Inventory> create(
     Function<UUID, InventoryType> inventoryTypeFunction,
     Function<UUID, Integer> sizeFunction,
     Function<UUID, String> titleFunction
