@@ -42,7 +42,6 @@
     <module>common</module>
     <module>gson</module>
     <module>logger</module>
-    <module>extra</module>
     <module>variable</module>
     <module>builder</module>
     <module>web</module>
