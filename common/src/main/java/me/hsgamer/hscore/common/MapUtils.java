@@ -1,9 +1,7 @@
 package me.hsgamer.hscore.common;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * Methods on Map
@@ -120,5 +118,33 @@ public class MapUtils {
    */
   public static Optional<Map<String, Object>> castOptionalStringObjectMap(Object object) {
     return castOptionalStringObjectMap(object, true);
+  }
+
+  /**
+   * Create a new map with lowercase keys
+   *
+   * @param map         the map
+   * @param mapSupplier the map constructor
+   * @param <V>         the value type
+   * @param <M>         the map type
+   *
+   * @return the new map
+   */
+  public static <V, M extends Map<String, V>> M createLowercaseStringMap(Map<String, V> map, Supplier<M> mapSupplier) {
+    M newMap = mapSupplier.get();
+    map.forEach((k, v) -> newMap.put(k.toLowerCase(Locale.ROOT), v));
+    return newMap;
+  }
+
+  /**
+   * Create a {@link LinkedHashMap} with lowercase keys
+   *
+   * @param map the map
+   * @param <V> the value type
+   *
+   * @return the new map
+   */
+  public static <V> Map<String, V> createLowercaseStringMap(Map<String, V> map) {
+    return createLowercaseStringMap(map, LinkedHashMap::new);
   }
 }
