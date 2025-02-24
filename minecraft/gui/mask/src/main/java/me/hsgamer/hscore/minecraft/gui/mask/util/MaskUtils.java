@@ -55,55 +55,55 @@ public class MaskUtils {
   }
 
   /**
-   * Create a mask slot from the positions
+   * Create a slot function from the positions
    *
    * @param positions the positions
    *
-   * @return the mask slot
+   * @return the slot function
    */
-  public static @NotNull Function<InventoryContext, List<Integer>> createPositionMaskSlot(@NotNull List<InventoryPosition> positions) {
+  public static @NotNull Function<InventoryContext, List<Integer>> createPositionSlots(@NotNull List<InventoryPosition> positions) {
     return context -> positions.stream().map(context::getSlot).collect(Collectors.toList());
   }
 
   /**
-   * Create a mask slot from the positions
+   * Create a slot function from the positions
    *
    * @param positions the positions
    *
-   * @return the mask slot
+   * @return the slot function
    */
-  public static @NotNull Function<InventoryContext, List<Integer>> createPositionMaskSlot(@NotNull InventoryPosition... positions) {
-    return MaskUtils.createPositionMaskSlot(Arrays.asList(positions));
+  public static @NotNull Function<InventoryContext, List<Integer>> createPositionSlots(@NotNull InventoryPosition... positions) {
+    return MaskUtils.createPositionSlots(Arrays.asList(positions));
   }
 
   /**
-   * Create a static mask slot
+   * Create a static slot function
    *
    * @param slots the slots
    *
-   * @return the mask slot
+   * @return the slot function
    */
-  public static @NotNull Function<InventoryContext, List<Integer>> createStaticMaskSlot(@NotNull List<Integer> slots) {
+  public static @NotNull Function<InventoryContext, List<Integer>> createStaticSlots(@NotNull List<Integer> slots) {
     return context -> slots;
   }
 
   /**
-   * Create a static mask slot
+   * Create a static slot function
    *
    * @param slots the slots
    *
-   * @return the mask slot
+   * @return the slot function
    */
-  public static @NotNull Function<InventoryContext, List<Integer>> createStaticMaskSlot(@NotNull Integer... slots) {
-    return createStaticMaskSlot(Arrays.asList(slots));
+  public static @NotNull Function<InventoryContext, List<Integer>> createStaticSlots(@NotNull Integer... slots) {
+    return createStaticSlots(Arrays.asList(slots));
   }
 
   /**
-   * Create a background mask slot
+   * Create a background slot function
    *
-   * @return the mask slot
+   * @return the slot function
    */
-  public static @NotNull Function<InventoryContext, List<Integer>> createBackgroundMaskSlot() {
+  public static @NotNull Function<InventoryContext, List<Integer>> createBackgroundSlots() {
     return context -> IntStream.range(0, context.getSize()).boxed().collect(Collectors.toList());
   }
 }
