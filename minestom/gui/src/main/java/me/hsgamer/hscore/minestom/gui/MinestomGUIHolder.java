@@ -1,10 +1,12 @@
 package me.hsgamer.hscore.minestom.gui;
 
+import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;
 import me.hsgamer.hscore.minecraft.gui.holder.GUIHolder;
 import me.hsgamer.hscore.minestom.gui.event.MinestomClickEvent;
 import me.hsgamer.hscore.minestom.gui.event.MinestomCloseEvent;
 import me.hsgamer.hscore.minestom.gui.event.MinestomOpenEvent;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
@@ -12,6 +14,8 @@ import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.inventory.Inventory;
+import net.minestom.server.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -49,6 +53,20 @@ public class MinestomGUIHolder extends GUIHolder<MinestomInventoryContext> {
   @Override
   protected MinestomInventoryContext createInventoryContext() {
     return new MinestomInventoryContext(getViewerID(), inventoryFunction.apply(getViewerID()));
+  }
+
+  @Override
+  protected void setItem(int slot, @Nullable ActionItem item) {
+    Object i = item != null ? item.getItem() : null;
+    getInventoryContext().getInventory().setItemStack(slot, i instanceof ItemStack ? (ItemStack) i : ItemStack.AIR);
+  }
+
+  @Override
+  public void open(UUID uuid) {
+    Player player = MinecraftServer.getConnectionManager().getOnlinePlayerByUuid(uuid);
+    if (player != null) {
+      player.openInventory(getInventoryContext().getInventory());
+    }
   }
 
   @Override

@@ -44,6 +44,14 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
   protected abstract T createInventoryContext();
 
   /**
+   * Set the item in the slot
+   *
+   * @param slot the slot
+   * @param item the item
+   */
+  protected abstract void setItem(int slot, @Nullable ActionItem item);
+
+  /**
    * Check if the item can be set in the slot
    *
    * @param slot the slot
@@ -53,6 +61,13 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
   protected boolean canSetItem(int slot) {
     return slot >= 0 && slot < getInventoryContext().getSize();
   }
+
+  /**
+   * Open the inventory
+   *
+   * @param viewerID the unique ID of the player
+   */
+  public abstract void open(UUID viewerID);
 
   /**
    * Handle the open event. Override this method to add custom behavior.
@@ -89,7 +104,7 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
         for (int slot : oldMap.keySet()) {
           if (newMap != null && newMap.containsKey(slot)) continue;
           if (!canSetItem(slot)) continue;
-          getInventoryContext().removeItem(slot);
+          this.setItem(slot, null);
         }
       }
 
@@ -97,7 +112,7 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
         for (Map.Entry<Integer, ActionItem> entry : newMap.entrySet()) {
           int slot = entry.getKey();
           if (!canSetItem(slot)) continue;
-          getInventoryContext().setItem(slot, entry.getValue().getItem());
+          this.setItem(slot, entry.getValue());
         }
       }
 
@@ -178,17 +193,8 @@ public abstract class GUIHolder<T extends InventoryContext> implements GUIElemen
 
   /**
    * Open the inventory
-   *
-   * @param viewerID the unique ID of the player
-   */
-  public void open(UUID viewerID) {
-    getInventoryContext().open(viewerID);
-  }
-
-  /**
-   * Open the inventory
    */
   public void open() {
-    getInventoryContext().open();
+    open(viewerID);
   }
 }

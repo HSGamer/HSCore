@@ -4,9 +4,14 @@ import me.hsgamer.hscore.bukkit.gui.common.event.BukkitClickEvent;
 import me.hsgamer.hscore.bukkit.gui.common.event.BukkitDragEvent;
 import me.hsgamer.hscore.bukkit.gui.common.inventory.BukkitInventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.event.ClickEvent;
+import me.hsgamer.hscore.minecraft.gui.common.item.ActionItem;
 import me.hsgamer.hscore.minecraft.gui.holder.GUIHolder;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 import java.util.function.Function;
@@ -51,6 +56,20 @@ public class BukkitGUIHolder extends GUIHolder<BukkitInventoryContext> {
   @Override
   protected BukkitInventoryContext createInventoryContext() {
     return new BukkitInventoryContext(getViewerID(), inventoryFunction.apply(this));
+  }
+
+  @Override
+  protected void setItem(int slot, @Nullable ActionItem item) {
+    Object i = item != null ? item.getItem() : null;
+    getInventoryContext().getInventory().setItem(slot, i instanceof ItemStack ? (ItemStack) i : null);
+  }
+
+  @Override
+  public void open(UUID uuid) {
+    Player player = Bukkit.getPlayer(uuid);
+    if (player != null) {
+      player.openInventory(getInventoryContext().getInventory());
+    }
   }
 
   @Override
