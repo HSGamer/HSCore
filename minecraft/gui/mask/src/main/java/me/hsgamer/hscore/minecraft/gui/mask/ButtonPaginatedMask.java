@@ -50,9 +50,7 @@ public abstract class ButtonPaginatedMask extends PaginatedMask {
   protected @Nullable Map<@NotNull Integer, @NotNull ActionItem> getItemMap(@NotNull InventoryContext context, int pageNumber) {
     List<Integer> slots = this.maskSlot.apply(context);
     List<Function<@NotNull InventoryContext, @Nullable ActionItem>> buttons = getButtons(context.getViewerID());
-    if (buttons.isEmpty() || slots.isEmpty()) {
-      return null;
-    }
+    if (buttons.isEmpty() || slots.isEmpty()) return null;
 
     int pageAmount = (int) Math.ceil((double) buttons.size() / slots.size());
     pageNumber = this.getAndSetExactPage(context.getViewerID(), pageNumber, pageAmount);
