@@ -97,4 +97,13 @@ public class MaskUtils {
   public static @NotNull Function<InventoryContext, List<Integer>> createStaticMaskSlot(@NotNull Integer... slots) {
     return createStaticMaskSlot(Arrays.asList(slots));
   }
+
+  /**
+   * Create a background mask slot
+   *
+   * @return the mask slot
+   */
+  public static @NotNull Function<InventoryContext, List<Integer>> createBackgroundMaskSlot() {
+    return context -> IntStream.range(0, context.getSize()).boxed().collect(Collectors.toList());
+  }
 }
