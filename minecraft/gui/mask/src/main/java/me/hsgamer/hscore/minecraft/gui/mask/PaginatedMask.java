@@ -34,23 +34,10 @@ public abstract class PaginatedMask implements GUIElement, Function<@NotNull Inv
    * @return the exact page
    */
   protected int getExactPage(int page, int pageAmount) {
-    if (pageAmount <= 0) {
-      return 0;
-    }
-
-    int exactPage = page;
-    if (this.cycle) {
-      while (exactPage < 0) {
-        exactPage += pageAmount;
-      }
-      exactPage = exactPage % pageAmount;
-    } else if (exactPage < 0) {
-      exactPage = 0;
-    } else if (exactPage >= pageAmount) {
-      exactPage = pageAmount - 1;
-    }
-
-    return exactPage;
+    if (pageAmount <= 0) return 0;
+    return this.cycle
+      ? (page % pageAmount + pageAmount) % pageAmount
+      : Math.max(0, Math.min(page, pageAmount - 1));
   }
 
   /**
