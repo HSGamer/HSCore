@@ -18,20 +18,15 @@ import java.util.function.Function;
 public class PlaceholderMask implements GUIElement, Function<@NotNull InventoryContext, @Nullable Map<Integer, ActionItem>> {
   protected final Map<UUID, Function<@NotNull InventoryContext, @Nullable Map<Integer, ActionItem>>> userMasks = new ConcurrentHashMap<>();
   protected Function<@NotNull InventoryContext, @Nullable Map<Integer, ActionItem>> defaultMask = context -> null;
-  protected boolean initDefaultMask = true;
 
   @Override
   public void init() {
-    if (initDefaultMask) {
-      GUIElement.handleIfElement(defaultMask, GUIElement::init);
-    }
+    GUIElement.handleIfElement(defaultMask, GUIElement::init);
   }
 
   @Override
   public void stop() {
-    if (initDefaultMask) {
-      GUIElement.handleIfElement(defaultMask, GUIElement::stop);
-    }
+    GUIElement.handleIfElement(defaultMask, GUIElement::stop);
     this.userMasks.clear();
   }
 
@@ -83,15 +78,6 @@ public class PlaceholderMask implements GUIElement, Function<@NotNull InventoryC
    */
   public void setDefaultMask(@NotNull Function<@NotNull InventoryContext, @Nullable Map<Integer, ActionItem>> defaultMask) {
     this.defaultMask = defaultMask;
-  }
-
-  /**
-   * Should the default mask be initialized?
-   *
-   * @param initDefaultMask true if yes
-   */
-  public void setInitDefaultMask(boolean initDefaultMask) {
-    this.initDefaultMask = initDefaultMask;
   }
 
   /**

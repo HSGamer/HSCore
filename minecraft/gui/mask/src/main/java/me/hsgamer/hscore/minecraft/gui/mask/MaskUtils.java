@@ -1,4 +1,4 @@
-package me.hsgamer.hscore.minecraft.gui.mask.util;
+package me.hsgamer.hscore.minecraft.gui.mask;
 
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryContext;
 import me.hsgamer.hscore.minecraft.gui.common.inventory.InventoryPosition;
