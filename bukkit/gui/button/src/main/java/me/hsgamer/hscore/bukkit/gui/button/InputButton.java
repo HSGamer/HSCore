@@ -31,15 +31,14 @@ public class InputButton implements GUIElement, Function<@NotNull InventoryConte
     return new ActionItem()
       .setItem(displayItemFunction.apply(uuid, getInputItem(uuid)))
       .setAction(BukkitClickEvent.class, event -> {
-        UUID viewerID = event.getViewerID();
         InventoryClickEvent bukkitEvent = event.getEvent();
         ItemStack cursorItem = Optional.ofNullable(bukkitEvent.getCursor())
           .filter(itemStack -> itemStack.getType() != Material.AIR)
           .map(ItemStack::clone)
           .orElse(null);
-        ItemStack storeItem = getInputItem(viewerID);
+        ItemStack storeItem = getInputItem(uuid);
         bukkitEvent.getWhoClicked().setItemOnCursor(storeItem);
-        setInputItem(viewerID, cursorItem);
+        setInputItem(uuid, cursorItem);
       });
   }
 

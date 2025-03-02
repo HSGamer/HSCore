@@ -30,15 +30,14 @@ public class OutputButton implements GUIElement, Function<@NotNull InventoryCont
     return new ActionItem()
       .setItem(displayItemFunction.apply(uuid, getOutputItem(uuid)))
       .setAction(BukkitClickEvent.class, event -> {
-        UUID viewerID = event.getViewerID();
         InventoryClickEvent bukkitEvent = event.getEvent();
         ItemStack item = bukkitEvent.getCursor();
         if (item != null && item.getType() != Material.AIR) {
           return;
         }
-        ItemStack storeItem = getOutputItem(viewerID);
+        ItemStack storeItem = getOutputItem(uuid);
         bukkitEvent.getWhoClicked().setItemOnCursor(storeItem);
-        setOutputItem(viewerID, null);
+        setOutputItem(uuid, null);
       });
   }
 
