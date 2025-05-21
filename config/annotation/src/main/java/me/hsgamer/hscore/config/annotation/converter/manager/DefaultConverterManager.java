@@ -22,6 +22,7 @@ public final class DefaultConverterManager {
   static {
     registerProvider(new PrimitiveConverterProvider());
     registerProvider(new DefaultArrayConverterProvider());
+    registerProvider(new EnumConverterProvider());
     registerConverter(String.class, new SimpleConverter(Objects::toString));
     registerConverter(URI.class, StringConverter.of(URI::create, URI::toString));
     registerConverter(URL.class, StringConverter.of(s -> {
