@@ -6,7 +6,7 @@
   <parent>
     <artifactId>hscore</artifactId>
     <groupId>me.hsgamer</groupId>
-    <version>4.6.1-SNAPSHOT</version>
+    <version>4.7.0-SNAPSHOT</version>
   </parent>
   <packaging>pom</packaging>
   <artifactId>hscore-bukkit</artifactId>
@@ -22,7 +22,6 @@
     <module>config-converter</module>
     <module>click-type</module>
     <module>item</module>
-    <module>gui</module>
     <module>channel</module>
     <module>block</module>
     <module>variable</module>
