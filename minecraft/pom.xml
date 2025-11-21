@@ -16,6 +16,5 @@
     <module>block-impl</module>
     <module>block-utils</module>
     <module>click-type</module>
-    <module>item</module>
   </modules>
 </project>

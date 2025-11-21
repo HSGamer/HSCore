@@ -21,7 +21,6 @@
     <module>config</module>
     <module>config-converter</module>
     <module>click-type</module>
-    <module>item</module>
     <module>channel</module>
     <module>block</module>
     <module>variable</module>
