@@ -13,11 +13,6 @@ import java.util.regex.Pattern;
  * The variable manager for the instance
  */
 public class VariableManager implements StringReplacer {
-  /**
-   * The global variable manager
-   */
-  public static final VariableManager GLOBAL = new VariableManager();
-
   private final Function<String, VariableSession> sessionFunction;
   private final List<Variable> variableEntries = new ArrayList<>();
   private final List<StringReplacer> externalReplacers = new ArrayList<>();
