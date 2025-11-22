@@ -3,9 +3,6 @@ package me.hsgamer.hscore.action.builder;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -13,14 +10,6 @@ import java.util.stream.Stream;
  * The input for the {@link ActionBuilder}
  */
 public interface ActionInput {
-  /**
-   * The pattern to parse the input from the string.
-   * The format is: {@code <type>(<option>): <value>}. Note that the {@code <option>} and {@code <value>} are optional.
-   * Also, the allowed characters of the {@code <type>} are alphanumeric, {@code _}, {@code -} and {@code $}.
-   * To get the {@code <type>}, {@code <option>} and {@code <value>}, use {@link Matcher#group(int)} with the index 1, 3 and 5 respectively.
-   */
-  Pattern PATTERN = Pattern.compile("\\s*([\\w\\-$]+)\\s*(\\((.*)\\))?\\s*(:\\s*(.*)\\s*)?");
-
   /**
    * Create an instance of {@link ActionInput}
    *
@@ -51,25 +40,45 @@ public interface ActionInput {
 
   /**
    * Create an instance of {@link ActionInput} from the input.
-   * It will use the {@link #PATTERN} to parse the input.
-   * If the input doesn't match the pattern, it will use the input as the value.
+   * It will parse the input to extract type, option, and value.
+   * The format is: {@code <type>(<option>): <value>}. Note that the {@code <option>} and {@code <value>} are optional.
+   * If the input doesn't match the expected format, it will use the input as the value.
    *
    * @param input the input
    *
    * @return the instance
-   *
-   * @see #PATTERN
    */
   static ActionInput create(String input) {
-    Matcher matcher = PATTERN.matcher(input);
-    if (matcher.matches()) {
-      String type = matcher.group(1);
-      String option = Optional.ofNullable(matcher.group(3)).orElse("");
-      String value = Optional.ofNullable(matcher.group(5)).orElse("");
-      return create(type, option, value);
+    input = input.trim();
+
+    // Find the colon to separate type/option from value
+    int colonIndex = input.indexOf(':');
+    String typeOptionPart = colonIndex == -1 ? input : input.substring(0, colonIndex);
+    String value = colonIndex == -1 ? "" : input.substring(colonIndex + 1).trim();
+
+    typeOptionPart = typeOptionPart.trim();
+
+    // Find the opening parenthesis to separate type from option
+    int openParenIndex = typeOptionPart.indexOf('(');
+    String type;
+    String option = "";
+
+    if (openParenIndex == -1) {
+      type = typeOptionPart;
     } else {
+      type = typeOptionPart.substring(0, openParenIndex).trim();
+      int closeParenIndex = typeOptionPart.lastIndexOf(')');
+      if (closeParenIndex > openParenIndex) {
+        option = typeOptionPart.substring(openParenIndex + 1, closeParenIndex).trim();
+      }
+    }
+
+    // If no type is found, use the entire input as value
+    if (type.isEmpty() && value.isEmpty()) {
       return create("", "", input);
     }
+
+    return create(type, option, value);
   }
 
   /**
