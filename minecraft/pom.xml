@@ -12,9 +12,6 @@
   <artifactId>hscore-minecraft</artifactId>
   <packaging>pom</packaging>
   <modules>
-    <module>block</module>
-    <module>block-impl</module>
-    <module>block-utils</module>
     <module>click-type</module>
   </modules>
 </project>

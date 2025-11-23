@@ -22,7 +22,6 @@
     <module>config-converter</module>
     <module>click-type</module>
     <module>channel</module>
-    <module>block</module>
     <module>variable</module>
     <module>action</module>
     <module>action-builder</module>

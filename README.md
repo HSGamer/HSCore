@@ -15,6 +15,7 @@ Part of the code in this repository was moved to the following repositories:
 - [MineLib](https://github.com/ProjectUnified/MineLib)
 - [CraftUX](https://github.com/ProjectUnified/CraftUX)
 - [CraftItem](https://github.com/ProjectUnified/CraftItem)
+- [BlockUtil](https://github.com/ProjectUnified/BlockUtil)
 
 ## Add as a dependency
 
