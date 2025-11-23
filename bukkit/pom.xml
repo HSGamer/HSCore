@@ -13,7 +13,7 @@
   <name>HSCore Bukkit</name>
 
   <properties>
-    <spigot.version>1.12.2-R0.1-SNAPSHOT</spigot.version>
+    <spigot.version>1.12.2-R0.1-20190527.155359-34</spigot.version>
   </properties>
 
   <modules>
