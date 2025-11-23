@@ -10,6 +10,7 @@
   </parent>
   <packaging>pom</packaging>
   <artifactId>hscore-expansion</artifactId>
+  <name>HSCore Expansion</name>
 
   <modules>
     <module>common</module>

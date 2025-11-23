@@ -10,4 +10,5 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>hscore-builder</artifactId>
+  <name>HSCore Builder</name>
 </project>

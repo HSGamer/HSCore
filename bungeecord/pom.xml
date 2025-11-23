@@ -11,6 +11,7 @@
   <packaging>pom</packaging>
 
   <artifactId>hscore-bungeecord</artifactId>
+  <name>HSCore Bungeecord</name>
 
   <modules>
     <module>config</module>

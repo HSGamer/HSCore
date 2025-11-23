@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>hscore-logger-jul</artifactId>
+  <name>HSCore Logger Jul</name>
 
   <dependencies>
     <dependency>

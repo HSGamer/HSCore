@@ -10,6 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>hscore-config-annotated</artifactId>
+  <name>HSCore Config Annotated</name>
 
   <dependencies>
     <dependency>

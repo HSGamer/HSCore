@@ -10,6 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>hscore-database-client-java</artifactId>
+  <name>HSCore Database Client Java</name>
 
   <dependencies>
     <dependency>

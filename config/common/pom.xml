@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>hscore-config-common</artifactId>
+  <name>HSCore Config Common</name>
 
   <dependencies>
     <dependency>

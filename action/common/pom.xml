@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>hscore-action-common</artifactId>
+  <name>HSCore Action Common</name>
 
   <dependencies>
     <dependency>

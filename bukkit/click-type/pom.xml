@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>hscore-bukkit-click-type</artifactId>
+  <name>HSCore Bukkit Click Type</name>
 
   <dependencies>
     <dependency>

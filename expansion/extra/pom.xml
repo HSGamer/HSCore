@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>hscore-expansion-extra</artifactId>
+  <name>HSCore Expansion Extra</name>
 
   <dependencies>
     <dependency>

@@ -10,5 +10,6 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>hscore-bungeecord-channel</artifactId>
+  <name>HSCore Bungeecord Channel</name>
 
 </project>

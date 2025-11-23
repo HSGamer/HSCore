@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>hscore-config-gson</artifactId>
+  <name>HSCore Config Gson</name>
 
   <dependencies>
     <dependency>

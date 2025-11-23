@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>hscore-expansion-manifest</artifactId>
+  <name>HSCore Expansion Manifest</name>
 
   <dependencies>
     <dependency>

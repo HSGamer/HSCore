@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>hscore-bukkit-expansion</artifactId>
+  <name>HSCore Bukkit Expansion</name>
 
   <dependencies>
     <dependency>

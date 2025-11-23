@@ -10,4 +10,5 @@
   </parent>
 
   <artifactId>hscore-logger-common</artifactId>
+  <name>HSCore Logger Common</name>
 </project>

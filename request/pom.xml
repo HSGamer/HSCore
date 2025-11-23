@@ -10,4 +10,5 @@
   </parent>
 
   <artifactId>hscore-request</artifactId>
+  <name>HSCore Request</name>
 </project>

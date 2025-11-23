@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>hscore-license-polymart</artifactId>
+  <name>HSCore License Polymart</name>
 
   <dependencies>
     <dependency>

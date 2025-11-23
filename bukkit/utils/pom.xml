@@ -9,6 +9,7 @@
     <version>4.7.0-SNAPSHOT</version>
   </parent>
   <artifactId>hscore-bukkit-utils</artifactId>
+  <name>HSCore Bukkit Utils</name>
 
   <dependencies>
     <dependency>

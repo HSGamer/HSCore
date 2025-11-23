@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>hscore-license-spigotmc</artifactId>
+  <name>HSCore License Spigotmc</name>
 
   <dependencies>
     <dependency>

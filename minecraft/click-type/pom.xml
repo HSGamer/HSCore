@@ -10,4 +10,5 @@
   </parent>
 
   <artifactId>hscore-minecraft-click-type</artifactId>
+  <name>HSCore Minecraft Click Type</name>
 </project>

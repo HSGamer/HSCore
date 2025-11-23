@@ -11,6 +11,7 @@
   <packaging>pom</packaging>
 
   <artifactId>hscore-logger</artifactId>
+  <name>HSCore Logger</name>
 
   <modules>
     <module>common</module>

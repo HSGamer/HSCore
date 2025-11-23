@@ -10,6 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>hscore-config-configurate</artifactId>
+  <name>HSCore Config Configurate</name>
 
   <dependencies>
     <dependency>

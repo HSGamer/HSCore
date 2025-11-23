@@ -10,6 +10,7 @@
   </parent>
   <packaging>pom</packaging>
   <artifactId>hscore-action</artifactId>
+  <name>HSCore Action</name>
 
   <modules>
     <module>common</module>

@@ -10,4 +10,5 @@
   </parent>
 
   <artifactId>hscore-license-common</artifactId>
+  <name>HSCore License Common</name>
 </project>

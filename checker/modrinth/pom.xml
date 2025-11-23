@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>hscore-checker-modrinth</artifactId>
+  <name>HSCore Checker Modrinth</name>
 
   <dependencies>
     <dependency>

@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>hscore-minecraft</artifactId>
+  <name>HSCore Minecraft</name>
   <packaging>pom</packaging>
   <modules>
     <module>click-type</module>

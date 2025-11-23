@@ -9,4 +9,5 @@
     <version>4.7.0-SNAPSHOT</version>
   </parent>
   <artifactId>hscore-web</artifactId>
+  <name>HSCore Web</name>
 </project>

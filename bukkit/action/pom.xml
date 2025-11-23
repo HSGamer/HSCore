@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>hscore-bukkit-action</artifactId>
+  <name>HSCore Bukkit Action</name>
 
   <properties>
     <minelib.version>1.3.0</minelib.version>

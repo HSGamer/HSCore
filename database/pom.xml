@@ -10,6 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>hscore-database</artifactId>
+  <name>HSCore Database</name>
   <packaging>pom</packaging>
   <modules>
     <module>common</module>

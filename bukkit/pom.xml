@@ -10,6 +10,7 @@
   </parent>
   <packaging>pom</packaging>
   <artifactId>hscore-bukkit</artifactId>
+  <name>HSCore Bukkit</name>
 
   <properties>
     <spigot.version>1.12.2-R0.1-SNAPSHOT</spigot.version>

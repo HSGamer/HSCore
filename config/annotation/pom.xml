@@ -10,4 +10,5 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>hscore-config-annotation</artifactId>
+  <name>HSCore Config Annotation</name>
 </project>

@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>hscore-expansion-properties</artifactId>
+  <name>HSCore Expansion Properties</name>
 
   <dependencies>
     <dependency>

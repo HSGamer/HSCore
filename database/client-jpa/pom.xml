@@ -10,6 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>hscore-database-client-jpa</artifactId>
+  <name>HSCore Database Client Jpa</name>
 
   <properties>
     <java.version>11</java.version>

@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>hscore-logger-slf4j</artifactId>
+  <name>HSCore Logger Slf4j</name>
 
   <dependencies>
     <dependency>

@@ -11,6 +11,7 @@
   <packaging>pom</packaging>
 
   <artifactId>hscore-license</artifactId>
+  <name>HSCore License</name>
 
   <modules>
     <module>common</module>

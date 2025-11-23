@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>hscore-bukkit-action-builder</artifactId>
+  <name>HSCore Bukkit Action Builder</name>
 
   <dependencies>
     <dependency>

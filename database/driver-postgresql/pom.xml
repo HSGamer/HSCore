@@ -10,6 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>hscore-database-driver-postgresql</artifactId>
+  <name>HSCore Database Driver Postgresql</name>
 
   <dependencies>
     <dependency>

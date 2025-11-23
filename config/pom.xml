@@ -10,6 +10,7 @@
   </parent>
   <packaging>pom</packaging>
   <artifactId>hscore-config</artifactId>
+  <name>HSCore Config</name>
 
   <modules>
     <module>common</module>

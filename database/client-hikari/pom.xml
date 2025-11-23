@@ -10,6 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>hscore-database-client-hikari</artifactId>
+  <name>HSCore Database Client Hikari</name>
 
   <properties>
     <java.version>11</java.version>

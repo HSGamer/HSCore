@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>hscore-checker-polymart</artifactId>
+  <name>HSCore Checker Polymart</name>
 
   <dependencies>
     <dependency>

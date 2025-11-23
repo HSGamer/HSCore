@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>hscore-logger-service</artifactId>
+  <name>HSCore Logger Service</name>
 
   <dependencies>
     <dependency>

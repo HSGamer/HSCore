@@ -10,4 +10,5 @@
   </parent>
 
   <artifactId>hscore-serializer</artifactId>
+  <name>HSCore Serializer</name>
 </project>
