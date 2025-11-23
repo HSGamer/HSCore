@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.hsgamer</groupId>
   <artifactId>hscore</artifactId>
-  <version>4.6.1-SNAPSHOT</version>
+  <version>4.7.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>HSCore</name>
@@ -57,10 +57,8 @@
     <module>minecraft</module>
     <module>bukkit</module>
     <module>bungeecord</module>
-    <module>minestom</module>
     <module>license</module>
     <module>action</module>
-    <module>animate</module>
   </modules>
 
   <properties>
@@ -129,7 +127,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>3.2.7</version>
+            <version>3.2.8</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
@@ -143,7 +141,7 @@
           <plugin>
             <groupId>org.sonatype.central</groupId>
             <artifactId>central-publishing-maven-plugin</artifactId>
-            <version>0.7.0</version>
+            <version>0.9.0</version>
             <extensions>true</extensions>
             <configuration>
               <publishingServerId>central</publishingServerId>

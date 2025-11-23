@@ -22,13 +22,6 @@ public class VariableBundle {
   }
 
   /**
-   * Create a new bundle for the global variable manager
-   */
-  public VariableBundle() {
-    this(VariableManager.GLOBAL);
-  }
-
-  /**
    * Register new variable
    *
    * @param prefix   the prefix

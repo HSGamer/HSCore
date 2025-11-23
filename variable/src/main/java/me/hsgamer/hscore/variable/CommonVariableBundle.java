@@ -7,21 +7,19 @@ import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * The utility class to register common variables to the {@link VariableBundle}
+ * The {@link VariableBundle} for common variables
  */
-public final class CommonVariableBundle {
-  private CommonVariableBundle() {
-    // EMPTY
-  }
-
+public final class CommonVariableBundle extends VariableBundle {
   /**
-   * Register the common variables to the {@link VariableBundle}
+   * Create a new bundle for the variable manager
    *
-   * @param bundle the bundle
+   * @param variableManager the variable manager
    */
-  public static void registerVariables(VariableBundle bundle) {
+  public CommonVariableBundle(VariableManager variableManager) {
+    super(variableManager);
+
     // Random
-    bundle.register("random_", StringReplacer.of(original -> {
+    register("random_", StringReplacer.of(original -> {
       original = original.trim();
       if (original.contains(":")) {
         String[] split = original.split(":", 2);
@@ -46,6 +44,6 @@ public final class CommonVariableBundle {
     }));
 
     // UUID
-    bundle.register("uuid", StringReplacer.of((original, uuid) -> uuid.toString()), true);
+    register("uuid", StringReplacer.of((original, uuid) -> uuid.toString()), true);
   }
 }

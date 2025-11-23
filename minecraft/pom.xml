@@ -6,17 +6,12 @@
   <parent>
     <groupId>me.hsgamer</groupId>
     <artifactId>hscore</artifactId>
-    <version>4.6.1-SNAPSHOT</version>
+    <version>4.7.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>hscore-minecraft</artifactId>
   <packaging>pom</packaging>
   <modules>
-    <module>gui</module>
-    <module>block</module>
-    <module>block-impl</module>
-    <module>block-utils</module>
     <module>click-type</module>
-    <module>item</module>
   </modules>
 </project>
