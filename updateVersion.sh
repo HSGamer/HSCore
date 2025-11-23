@@ -6,7 +6,7 @@ MODULE_DIRS=()
 find_modules() {
   local dir="$1"
   POM_FILE="$dir/pom.xml"
-  if [[ -f "$POM_FILE" && $(grep -q '<packaging>pom</packaging>' "$POM_FILE")$? -eq 0 ]]; then
+  if [[ -f "$POM_FILE" ]] && grep -q '<packaging>pom</packaging>' "$POM_FILE"; then
     MODULE_DIRS+=("$dir")
     for subdir in "$dir"/*/; do
       [[ -d "$subdir" ]] || continue
