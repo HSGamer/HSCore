@@ -121,30 +121,28 @@ public class MapUtils {
   }
 
   /**
-   * Create a new map with lowercase keys
+   * Create a new string-object map with lowercase keys
    *
-   * @param map         the map
+   * @param map         the original map
    * @param mapSupplier the map constructor
-   * @param <V>         the value type
    * @param <M>         the map type
    *
    * @return the new map
    */
-  public static <V, M extends Map<String, V>> M createLowercaseStringMap(Map<String, V> map, Supplier<M> mapSupplier) {
+  public static <M extends Map<String, Object>> M createLowercaseStringObjectMap(Map<?, ?> map, Supplier<M> mapSupplier) {
     M newMap = mapSupplier.get();
-    map.forEach((k, v) -> newMap.put(k.toLowerCase(Locale.ROOT), v));
+    map.forEach((k, v) -> newMap.put(Objects.toString(k).toLowerCase(Locale.ROOT), v));
     return newMap;
   }
 
   /**
-   * Create a {@link LinkedHashMap} with lowercase keys
+   * Create a string-object {@link LinkedHashMap} with lowercase keys
    *
-   * @param map the map
-   * @param <V> the value type
+   * @param map the original map
    *
    * @return the new map
    */
-  public static <V> Map<String, V> createLowercaseStringMap(Map<String, V> map) {
-    return createLowercaseStringMap(map, LinkedHashMap::new);
+  public static <V> Map<String, Object> createLowercaseStringObjectMap(Map<?, ?> map) {
+    return createLowercaseStringObjectMap(map, LinkedHashMap::new);
   }
 }
