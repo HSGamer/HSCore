@@ -6,7 +6,7 @@
   <parent>
     <groupId>me.hsgamer</groupId>
     <artifactId>hscore</artifactId>
-    <version>4.7.0</version>
+    <version>4.7.1</version>
   </parent>
   <packaging>pom</packaging>
   <artifactId>hscore-action</artifactId>
