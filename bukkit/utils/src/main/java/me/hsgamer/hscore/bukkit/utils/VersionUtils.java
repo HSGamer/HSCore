@@ -12,17 +12,29 @@ import java.util.regex.Pattern;
 public final class VersionUtils {
   private static final int MAJOR_VERSION;
   private static final int MINOR_VERSION;
+  private static final int PATCH_VERSION;
   private static final boolean IS_CRAFTBUKKIT_MAPPED;
   private static final String CRAFTBUKKIT_PACKAGE_VERSION;
 
   static {
-    Matcher versionMatcher = Pattern.compile("MC: \\d\\.(\\d+)(\\.(\\d+))?").matcher(Bukkit.getVersion());
+    Matcher versionMatcher = Pattern.compile("MC: (\\d+)\\.(\\d+)(\\.(\\d+))?").matcher(Bukkit.getVersion());
     if (versionMatcher.find()) {
-      MAJOR_VERSION = Integer.parseInt(versionMatcher.group(1));
-      MINOR_VERSION = Optional.ofNullable(versionMatcher.group(3)).filter(s -> !s.isEmpty()).map(Integer::parseInt).orElse(0);
+      int majorVersion = Integer.parseInt(versionMatcher.group(1));
+      int minorVersion = Integer.parseInt(versionMatcher.group(2));
+      int patchVersion = Optional.ofNullable(versionMatcher.group(4)).filter(s -> !s.isEmpty()).map(Integer::parseInt).orElse(0);
+      if (majorVersion == 1) {
+        MAJOR_VERSION = minorVersion;
+        MINOR_VERSION = patchVersion;
+        PATCH_VERSION = 0;
+      } else {
+        MAJOR_VERSION = majorVersion;
+        MINOR_VERSION = minorVersion;
+        PATCH_VERSION = patchVersion;
+      }
     } else {
       MAJOR_VERSION = -1;
       MINOR_VERSION = -1;
+      PATCH_VERSION = -1;
     }
 
     Matcher packageMatcher = Pattern.compile("v\\d+_\\d+_R\\d+").matcher(Bukkit.getServer().getClass().getPackage().getName());
@@ -57,14 +69,66 @@ public final class VersionUtils {
   }
 
   /**
-   * Check if the server version is at least the given version
+   * Get the patch version of the server
    *
-   * @param version the version to check
+   * @return the version
+   */
+  public static int getPatchVersion() {
+    return PATCH_VERSION;
+  }
+
+  /**
+   * Compare the server version with the given version
+   *
+   * @param majorVersion the major version
+   * @param minorVersion the minor version
+   * @param patchVersion the patch version
+   *
+   * @return 0 if the versions are the same, -1 if the given version is lower, 1 if the given version is higher
+   */
+  public static int compare(int majorVersion, int minorVersion, int patchVersion) {
+    int compare = Integer.compare(majorVersion, MAJOR_VERSION);
+    if (compare == 0) {
+      compare = Integer.compare(minorVersion, MINOR_VERSION);
+    }
+    if (compare == 0) {
+      compare = Integer.compare(patchVersion, PATCH_VERSION);
+    }
+    return compare;
+  }
+
+  /**
+   * Compare the server version with the given version
+   *
+   * @param majorVersion the major version
+   * @param minorVersion the minor version
+   *
+   * @return 0 if the versions are the same, -1 if the given version is lower, 1 if the given version is higher
+   */
+  public static int compare(int majorVersion, int minorVersion) {
+    return compare(majorVersion, minorVersion, getPatchVersion());
+  }
+
+  /**
+   * Compare the server version with the given version
+   *
+   * @param majorVersion the major version
+   *
+   * @return 0 if the versions are the same, -1 if the given version is lower, 1 if the given version is higher
+   */
+  public static int compare(int majorVersion) {
+    return compare(majorVersion, getMinorVersion());
+  }
+
+  /**
+   * Check if the server major version is at least the given major version
+   *
+   * @param majorVersion the major version to check
    *
    * @return true if it is
    */
-  public static boolean isAtLeast(int version) {
-    return MAJOR_VERSION >= version;
+  public static boolean isAtLeast(int majorVersion) {
+    return compare(majorVersion) >= 0;
   }
 
   /**
@@ -76,7 +140,7 @@ public final class VersionUtils {
    * @return true if it is
    */
   public static boolean isAtLeast(int majorVersion, int minorVersion) {
-    return MAJOR_VERSION > majorVersion || (MAJOR_VERSION == majorVersion && MINOR_VERSION >= minorVersion);
+    return compare(majorVersion, minorVersion) >= 0;
   }
 
   /**
@@ -87,7 +151,7 @@ public final class VersionUtils {
    * @return true if it is
    */
   public static boolean isAt(int majorVersion) {
-    return MAJOR_VERSION == majorVersion;
+    return compare(majorVersion) == 0;
   }
 
   /**
@@ -99,7 +163,7 @@ public final class VersionUtils {
    * @return true if it is
    */
   public static boolean isAt(int majorVersion, int minorVersion) {
-    return MAJOR_VERSION == majorVersion && MINOR_VERSION == minorVersion;
+    return compare(majorVersion, minorVersion) == 0;
   }
 
   /**
@@ -110,7 +174,7 @@ public final class VersionUtils {
    * @return true if it is
    */
   public static boolean isNewerThan(int majorVersion) {
-    return MAJOR_VERSION > majorVersion;
+    return compare(majorVersion) > 0;
   }
 
   /**
@@ -122,7 +186,7 @@ public final class VersionUtils {
    * @return true if it is
    */
   public static boolean isNewerThan(int majorVersion, int minorVersion) {
-    return MAJOR_VERSION > majorVersion || (MAJOR_VERSION == majorVersion && MINOR_VERSION > minorVersion);
+    return compare(majorVersion, minorVersion) > 0;
   }
 
   /**
@@ -133,7 +197,7 @@ public final class VersionUtils {
    * @return true if it is
    */
   public static boolean isLowerThan(int majorVersion) {
-    return MAJOR_VERSION < majorVersion;
+    return compare(majorVersion) < 0;
   }
 
   /**
@@ -145,7 +209,7 @@ public final class VersionUtils {
    * @return true if it is
    */
   public static boolean isLowerThan(int majorVersion, int minorVersion) {
-    return MAJOR_VERSION < majorVersion || (MAJOR_VERSION == majorVersion && MINOR_VERSION < minorVersion);
+    return compare(majorVersion, minorVersion) < 0;
   }
 
   /**
