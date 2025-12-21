@@ -17,5 +17,9 @@ jobs:
           cache: maven
       - name: Unshallow
         run: git fetch --unshallow --quiet
+      - name: Set up Maven Daemon
+        uses: gauthamchandra/mvnd-action@v0.2.1
+        with:
+          version: '1.0.2'
       - name: Build
-        run: mvn clean verify
+        run: mvnd clean verify
