@@ -46,4 +46,9 @@ public class SpigotLicenseChecker implements LicenseChecker {
 
     return new LicenseResult(status, entry.toProperties());
   }
+
+  @Override
+  public String getUrl() {
+    return "https://www.spigotmc.org/resources/" + resource;
+  }
 }

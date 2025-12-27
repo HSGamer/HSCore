@@ -132,4 +132,9 @@ public class PolymartLicenseChecker implements LicenseChecker {
 
     return new LicenseResult(status, entry.toProperties());
   }
+
+  @Override
+  public String getUrl() {
+    return "https://polymart.org/product/" + resource;
+  }
 }
