@@ -62,6 +62,7 @@ me.hsgamer.hscore.gson
 me.hsgamer.hscore.license.common
 me.hsgamer.hscore.license.polymart
 me.hsgamer.hscore.license.spigotmc
+me.hsgamer.hscore.license.template
 me.hsgamer.hscore.logger.common
 me.hsgamer.hscore.logger.jul
 me.hsgamer.hscore.logger.provider
