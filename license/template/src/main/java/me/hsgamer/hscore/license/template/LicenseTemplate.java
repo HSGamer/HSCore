@@ -6,7 +6,6 @@ import me.hsgamer.hscore.license.common.LicenseStatus;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -127,7 +126,7 @@ public class LicenseTemplate {
       .flatMap(s -> {
         if (s.contains(URL_VARIABLE)) {
           return checkers.stream()
-            .map(checker -> s.replace(Pattern.quote(URL_VARIABLE), checker.getUrl()));
+            .map(checker -> s.replace(URL_VARIABLE, checker.getUrl()));
         } else {
           return Stream.of(s);
         }
