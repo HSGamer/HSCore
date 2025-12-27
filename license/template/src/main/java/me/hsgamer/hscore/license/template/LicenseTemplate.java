@@ -6,7 +6,6 @@ import me.hsgamer.hscore.license.common.LicenseStatus;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -101,28 +100,30 @@ public class LicenseTemplate {
   }
 
   /**
-   * Check the license and get the message
+   * Get the result of the license checker
    *
-   * @return the message
+   * @return the result
    */
-  public List<String> getMessage() {
+  public Map.Entry<LicenseStatus, List<String>> getResult() {
     List<LicenseResult> licenseResults = checkers.stream()
       .filter(LicenseChecker::isAvailable)
       .map(LicenseChecker::checkLicense)
       .collect(Collectors.toList());
 
+    LicenseStatus status = LicenseStatus.UNKNOWN;
     List<String> messages = Collections.emptyList();
-    for (LicenseStatus status : LicenseStatus.values()) {
-      if (licenseResults.stream().anyMatch(l -> l.getStatus().equals(status))) {
-        Function<List<LicenseResult>, List<String>> function = this.messages.get(status);
+    for (LicenseStatus licenseStatus : LicenseStatus.values()) {
+      if (licenseResults.stream().anyMatch(l -> l.getStatus().equals(licenseStatus))) {
+        Function<List<LicenseResult>, List<String>> function = this.messages.get(licenseStatus);
         if (function != null) {
           messages = function.apply(licenseResults);
+          status = licenseStatus;
         }
         break;
       }
     }
 
-    return messages.stream()
+    messages = messages.stream()
       .flatMap(s -> {
         if (s.contains(URL_VARIABLE)) {
           return checkers.stream()
@@ -132,16 +133,16 @@ public class LicenseTemplate {
         }
       })
       .collect(Collectors.toList());
+
+    return new AbstractMap.SimpleImmutableEntry<>(status, messages);
   }
 
   /**
    * Check the license and get the message
    *
-   * @param transform the function to transform the message
-   *
    * @return the message
    */
-  public List<String> getMessage(UnaryOperator<String> transform) {
-    return getMessage().stream().map(transform).collect(Collectors.toList());
+  public List<String> getMessage() {
+    return getResult().getValue();
   }
 }
