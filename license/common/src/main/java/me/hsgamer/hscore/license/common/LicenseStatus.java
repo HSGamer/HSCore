@@ -9,13 +9,13 @@ public enum LicenseStatus {
    */
   VALID,
   /**
-   * The license is invalid
-   */
-  INVALID,
-  /**
    * The checker is offline
    */
   OFFLINE,
+  /**
+   * The license is invalid
+   */
+  INVALID,
   /**
    * Unknown status
    */

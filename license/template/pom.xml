@@ -5,18 +5,18 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>me.hsgamer</groupId>
-    <artifactId>hscore</artifactId>
+    <artifactId>hscore-license</artifactId>
     <version>4.7.3-SNAPSHOT</version>
   </parent>
-  <packaging>pom</packaging>
 
-  <artifactId>hscore-license</artifactId>
-  <name>HSCore License</name>
+  <artifactId>hscore-license-template</artifactId>
+  <name>HSCore License Template</name>
 
-  <modules>
-    <module>common</module>
-    <module>spigotmc</module>
-    <module>polymart</module>
-    <module>template</module>
-  </modules>
+  <dependencies>
+    <dependency>
+      <groupId>me.hsgamer</groupId>
+      <artifactId>hscore-license-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 </project>
