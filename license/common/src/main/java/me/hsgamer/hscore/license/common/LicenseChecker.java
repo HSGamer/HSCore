@@ -5,6 +5,15 @@ package me.hsgamer.hscore.license.common;
  */
 public interface LicenseChecker {
   /**
+   * Check if the checker is available
+   *
+   * @return true if it's available
+   */
+  default boolean isAvailable() {
+    return true;
+  }
+
+  /**
    * Check the license
    *
    * @return the result
@@ -12,7 +21,7 @@ public interface LicenseChecker {
   LicenseResult checkLicense();
 
   /**
-   * Get the URL of the platform this license refers to
+   * Get the URL of the platform this checker refers to
    *
    * @return the URL
    */

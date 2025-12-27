@@ -1,5 +1,7 @@
 package me.hsgamer.hscore.license.polymart;
 
+import java.util.Objects;
+
 /**
  * The default {@link PolymartLicenseFetcher}
  */
@@ -38,6 +40,15 @@ public class DefaultPolymartLicenseFetcher implements PolymartLicenseFetcher {
 
   public static String getTimestamp() {
     return "%%__TIMESTAMP__%%";
+  }
+
+  public static String getAvailableIdentifier() {
+    return "%%__POLYMART__%%";
+  }
+
+  @Override
+  public boolean isAvailable() {
+    return Objects.equals(getAvailableIdentifier(), "1");
   }
 
   @Override

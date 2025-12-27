@@ -15,6 +15,13 @@ public interface PolymartLicenseFetcher {
   }
 
   /**
+   * Check if the fetcher is available
+   *
+   * @return true if it's available
+   */
+  boolean isAvailable();
+
+  /**
    * Fetch the license entry
    *
    * @return the license entry

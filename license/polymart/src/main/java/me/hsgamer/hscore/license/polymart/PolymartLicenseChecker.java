@@ -50,27 +50,6 @@ public class PolymartLicenseChecker implements LicenseChecker {
   }
 
   /**
-   * Check whether the checker can be used
-   *
-   * @param identifier the identifier
-   *
-   * @return true if it can be used
-   */
-  public static boolean isAvailable(String identifier) {
-    return "1".equals(identifier);
-  }
-
-  /**
-   * Check whether the checker can be used
-   *
-   * @return true if it can be used
-   */
-  public static boolean isAvailable() {
-    String identifier = "%%__POLYMART__%%"; // Will be replaced by Polymart
-    return isAvailable(identifier);
-  }
-
-  /**
    * Set the exception handler
    *
    * @param exceptionHandler the exception handler
@@ -111,6 +90,11 @@ public class PolymartLicenseChecker implements LicenseChecker {
       exceptionHandler.accept(e);
       return Optional.empty();
     }
+  }
+
+  @Override
+  public boolean isAvailable() {
+    return fetcher.isAvailable();
   }
 
   @Override
