@@ -1,93 +1,18 @@
 package me.hsgamer.hscore.variable;
 
+import io.github.projectunified.maptemplate.MapTemplate;
 import me.hsgamer.hscore.common.StringReplacer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * The variable manager for the instance
  */
 public class VariableManager implements StringReplacer {
-  private final Function<String, VariableSession> sessionFunction;
   private final List<Variable> variableEntries = new ArrayList<>();
   private final List<StringReplacer> externalReplacers = new ArrayList<>();
-
-  /**
-   * Create a new variable manager
-   *
-   * @param sessionFunction the function to create a new {@link VariableSession} from a string
-   */
-  public VariableManager(Function<String, VariableSession> sessionFunction) {
-    this.sessionFunction = sessionFunction;
-  }
-
-  /**
-   * Create a new variable manager with the default {@link VariableSession} with the user-defined ignore char.
-   * The default {@link VariableSession} uses the {@link Pattern} to check for variables with the format <code>{variable}</code>.
-   * Developers can add the ignore char to the start and end of the variable to ignore it.
-   *
-   * @param startIgnoreChar the ignore char at the start of the variable
-   * @param endIgnoreChar   the ignore char at the end of the variable
-   */
-  public VariableManager(char startIgnoreChar, char endIgnoreChar) {
-    this(new Function<String, VariableSession>() {
-      private final Pattern pattern = Pattern.compile("(.?)([{]([^{}]+)[}])(.?)");
-
-      @Override
-      public VariableSession apply(String s) {
-
-        return new VariableSession() {
-          private final Matcher matcher = pattern.matcher(s);
-          private final StringBuffer stringBuffer = new StringBuffer();
-
-          @Override
-          public boolean hasVariable() {
-            while (matcher.find()) {
-              char startChar = Optional.ofNullable(matcher.group(1)).filter(s -> !s.isEmpty()).map(s -> s.charAt(0)).orElse(' ');
-              char endChar = Optional.ofNullable(matcher.group(4)).filter(s -> !s.isEmpty()).map(s -> s.charAt(0)).orElse(' ');
-              if (startIgnoreChar == startChar && endIgnoreChar == endChar) {
-                String original = matcher.group(2);
-                matcher.appendReplacement(stringBuffer, Matcher.quoteReplacement(original));
-              } else {
-                return true;
-              }
-            }
-            return false;
-          }
-
-          @Override
-          public String getVariable() {
-            return matcher.group(3).trim();
-          }
-
-          @Override
-          public void replaceVariable(String replacement) {
-            String startChar = Optional.ofNullable(matcher.group(1)).filter(s -> !s.isEmpty()).orElse("");
-            String endChar = Optional.ofNullable(matcher.group(4)).filter(s -> !s.isEmpty()).orElse("");
-            matcher.appendReplacement(stringBuffer, Matcher.quoteReplacement(startChar + replacement + endChar));
-          }
-
-          @Override
-          public String getFinalString() {
-            matcher.appendTail(stringBuffer);
-            return stringBuffer.toString();
-          }
-        };
-      }
-    });
-  }
-
-  /**
-   * Create a new variable manager with the default {@link VariableSession} with the default ignore char <code>\</code>.
-   */
-  public VariableManager() {
-    this('\\', '\\');
-  }
 
   /**
    * Register new variable
@@ -199,17 +124,16 @@ public class VariableManager implements StringReplacer {
    */
   @NotNull
   public String setSingleVariables(@NotNull String message, @Nullable UUID uuid) {
-    VariableSession session = sessionFunction.apply(message);
-    while (session.hasVariable()) {
-      String identifier = session.getVariable();
-      variableEntries.stream()
-        .filter(entry -> entry.isWhole ? identifier.equalsIgnoreCase(entry.prefix) : identifier.toLowerCase(Locale.ROOT).startsWith(entry.prefix.toLowerCase(Locale.ROOT)))
-        .findFirst()
-        .map(entry -> entry.replacer.tryReplace(identifier.substring(entry.prefix.length()), uuid))
-        .ifPresent(session::replaceVariable);
-    }
-
-    message = session.getFinalString();
+    message = Objects.toString(
+      MapTemplate.builder()
+        .setVariableFunction(identifier -> variableEntries.stream()
+          .filter(entry -> entry.isWhole ? identifier.equalsIgnoreCase(entry.prefix) : identifier.toLowerCase(Locale.ROOT).startsWith(entry.prefix.toLowerCase(Locale.ROOT)))
+          .findFirst()
+          .map(entry -> entry.replacer.tryReplace(identifier.substring(entry.prefix.length()), uuid))
+          .orElse(null))
+        .build()
+        .apply(message)
+    );
 
     for (StringReplacer externalStringReplacer : externalReplacers) {
       String replaced = externalStringReplacer.tryReplace(message, uuid);
