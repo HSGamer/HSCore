@@ -42,6 +42,7 @@ public interface ActionInput {
    * Create an instance of {@link ActionInput} from the input.
    * It will parse the input to extract type, option, and value.
    * The format is: {@code <type>(<option>): <value>}. Note that the {@code <option>} and {@code <value>} are optional.
+   * Also, the allowed characters of the {@code <type>} are alphanumeric, {@code _}, {@code -} and {@code $}.
    * If the input doesn't match the expected format, it will use the input as the value.
    *
    * @param input the input
@@ -73,8 +74,9 @@ public interface ActionInput {
       }
     }
 
-    // If no type is found, use the entire input as value
-    if (type.isEmpty() && value.isEmpty()) {
+    boolean isValidType = type.chars().allMatch(c -> Character.isLetterOrDigit(c) || c == '_' || c == '-' || c == '$');
+
+    if (type.isEmpty() || !isValidType) {
       return create("", "", input);
     }
 
