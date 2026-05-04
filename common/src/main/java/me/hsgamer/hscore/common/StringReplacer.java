@@ -67,6 +67,52 @@ public interface StringReplacer {
   }
 
   /**
+   * Combine multiple string replacers to a switch-styled string replacer
+   *
+   * @param stringReplacers the string replacers
+   *
+   * @return the combined string replacer
+   */
+  @NotNull
+  static StringReplacer either(@NotNull Collection<? extends StringReplacer> stringReplacers) {
+    return new StringReplacer() {
+      @Override
+      public @Nullable String replace(@NotNull String original) {
+        for (StringReplacer replacer : stringReplacers) {
+          String replaced = replacer.replace(original);
+          if (replaced != null) {
+            return replaced;
+          }
+        }
+        return null;
+      }
+
+      @Override
+      public @Nullable String replace(@NotNull String original, @NotNull UUID uuid) {
+        for (StringReplacer replacer : stringReplacers) {
+          String replaced = replacer.replace(original, uuid);
+          if (replaced != null) {
+            return replaced;
+          }
+        }
+        return null;
+      }
+    };
+  }
+
+  /**
+   * Combine multiple string replacers to a switch-styled string replacer
+   *
+   * @param stringReplacers the string replacers
+   *
+   * @return the combined string replacer
+   */
+  @NotNull
+  static StringReplacer either(@NotNull StringReplacer... stringReplacers) {
+    return either(Arrays.asList(stringReplacers));
+  }
+
+  /**
    * Create a new {@link StringReplacer} from a {@link UnaryOperator} as {@link #replace(String)} and a {@link BiFunction} as {@link #replace(String, UUID)}
    *
    * @param operator the {@link UnaryOperator}
