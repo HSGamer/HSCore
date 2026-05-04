@@ -18,11 +18,5 @@
       <artifactId>hscore-common</artifactId>
       <version>${project.version}</version>
     </dependency>
-
-    <dependency>
-      <groupId>io.github.projectunified</groupId>
-      <artifactId>map-template</artifactId>
-      <version>1.0.0</version>
-    </dependency>
   </dependencies>
 </project>

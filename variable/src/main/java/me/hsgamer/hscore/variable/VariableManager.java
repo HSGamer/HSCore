@@ -1,18 +1,17 @@
 package me.hsgamer.hscore.variable;
 
-import io.github.projectunified.maptemplate.MapTemplate;
 import me.hsgamer.hscore.common.StringReplacer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.BiFunction;
 
 /**
  * The variable manager for the instance
  */
 public class VariableManager implements StringReplacer {
   private final List<Variable> variableEntries = new ArrayList<>();
-  private final List<StringReplacer> externalReplacers = new ArrayList<>();
 
   /**
    * Register new variable
@@ -62,96 +61,21 @@ public class VariableManager implements StringReplacer {
     return Collections.unmodifiableList(variableEntries);
   }
 
-  /**
-   * Add an external replacer
-   *
-   * @param replacer the external string replacer
-   */
-  public void addExternalReplacer(StringReplacer replacer) {
-    externalReplacers.add(replacer);
-  }
-
-  /**
-   * Remove an external replacer
-   *
-   * @param replacer the external string replacer
-   */
-  public void removeExternalReplacer(StringReplacer replacer) {
-    externalReplacers.remove(replacer);
-  }
-
-  /**
-   * Clear all external replacers
-   */
-  public void clearExternalReplacers() {
-    externalReplacers.clear();
-  }
-
-  /**
-   * Get all external replacers
-   *
-   * @return the external replacers
-   */
-  public List<StringReplacer> getExternalReplacers() {
-    return Collections.unmodifiableList(externalReplacers);
-  }
-
-  /**
-   * Replace the variables of the string until it cannot be replaced anymore
-   *
-   * @param message the string
-   * @param uuid    the unique id
-   *
-   * @return the replaced string
-   */
-  @NotNull
-  public String setVariables(@NotNull String message, @Nullable UUID uuid) {
-    String old;
-    do {
-      old = message;
-      message = setSingleVariables(message, uuid);
-    } while (!old.equals(message));
-    return message;
-  }
-
-  /**
-   * Replace the variables of the string (single time)
-   *
-   * @param message the string
-   * @param uuid    the unique id
-   *
-   * @return the replaced string
-   */
-  @NotNull
-  public String setSingleVariables(@NotNull String message, @Nullable UUID uuid) {
-    message = Objects.toString(
-      MapTemplate.builder()
-        .setVariableFunction(identifier -> variableEntries.stream()
-          .filter(entry -> entry.isWhole ? identifier.equalsIgnoreCase(entry.prefix) : identifier.toLowerCase(Locale.ROOT).startsWith(entry.prefix.toLowerCase(Locale.ROOT)))
-          .findFirst()
-          .map(entry -> entry.replacer.tryReplace(identifier.substring(entry.prefix.length()), uuid))
-          .orElse(null))
-        .build()
-        .apply(message)
-    );
-
-    for (StringReplacer externalStringReplacer : externalReplacers) {
-      String replaced = externalStringReplacer.tryReplace(message, uuid);
-      if (replaced != null) {
-        message = replaced;
-      }
-    }
-
-    return message;
+  private @Nullable String replace(@NotNull String original, BiFunction<StringReplacer, String, String> function) {
+    return variableEntries.stream()
+      .filter(entry -> entry.isWhole ? original.equalsIgnoreCase(entry.prefix) : original.toLowerCase(Locale.ROOT).startsWith(entry.prefix.toLowerCase(Locale.ROOT)))
+      .findFirst()
+      .map(entry -> function.apply(entry.replacer, original.substring(entry.prefix.length())))
+      .orElse(null);
   }
 
   @Override
   public @Nullable String replace(@NotNull String original) {
-    return setVariables(original, null);
+    return replace(original, StringReplacer::replace);
   }
 
   @Override
   public @Nullable String replace(@NotNull String original, @NotNull UUID uuid) {
-    return setVariables(original, uuid);
+    return replace(original, (replacer, remain) -> replacer.replace(remain, uuid));
   }
 }
