@@ -52,7 +52,6 @@
     <module>checker</module>
     <module>database</module>
     <module>downloader</module>
-    <module>crontime</module>
     <module>task</module>
     <module>minecraft</module>
     <module>bukkit</module>
