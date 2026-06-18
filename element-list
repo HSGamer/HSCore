@@ -30,7 +30,6 @@ me.hsgamer.hscore.config.proxy
 me.hsgamer.hscore.config.proxy.defaulthandler
 me.hsgamer.hscore.config.simpleconfiguration
 me.hsgamer.hscore.config.simplixstorage
-me.hsgamer.hscore.crontime
 me.hsgamer.hscore.database
 me.hsgamer.hscore.database.client.hibernate
 me.hsgamer.hscore.database.client.jpa
