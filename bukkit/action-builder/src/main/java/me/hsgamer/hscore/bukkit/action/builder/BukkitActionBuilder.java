@@ -32,6 +32,7 @@ public final class BukkitActionBuilder {
     actionBuilder.register(input -> new PermissionAction(plugin, input.getValue(), input.getOptionAsList()), "permission");
     actionBuilder.register(input -> new PlayerAction(plugin, input.getValue()), "player");
     actionBuilder.register(input -> new TellAction(input.getValue(), colorizer), "tell");
+    actionBuilder.register(input -> new SoundAction(plugin, input.getValue()), "sound", "raw-sound");
   }
 
   /**
