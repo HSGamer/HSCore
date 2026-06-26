@@ -58,6 +58,7 @@
     <module>bungeecord</module>
     <module>license</module>
     <module>action</module>
+    <module>bom</module>
   </modules>
 
   <properties>

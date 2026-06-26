@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>me.hsgamer</groupId>
+    <artifactId>hscore</artifactId>
+    <version>4.10.0</version>
+  </parent>
+
+  <artifactId>hscore-bom</artifactId>
+  <packaging>pom</packaging>
+  <name>HSCore BOM</name>
+  <description>Bill of Materials (BOM) for HSCore modules</description>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>eu.maveniverse.maven.plugins</groupId>
+        <artifactId>bom-builder3</artifactId>
+        <version>1.3.3</version>
+        <executions>
+          <execution>
+            <id>build-bom</id>
+            <phase>package</phase>
+            <goals>
+              <goal>build-bom</goal>
+            </goals>
+            <configuration>
+              <bomGroupId>${project.groupId}</bomGroupId>
+              <bomArtifactId>${project.artifactId}</bomArtifactId>
+              <bomVersion>${project.version}</bomVersion>
+              <bomName>${project.name}</bomName>
+              <bomDescription>${project.description}</bomDescription>
+              <reactorDependencies>REACTOR</reactorDependencies>
+              <attach>true</attach>
+              <dependencyExclusions>
+                <dependencyExclusion>
+                  <groupId>io.github.projectunified</groupId>
+                  <artifactId>faststats-bukkit-test-plugin</artifactId>
+                </dependencyExclusion>
+              </dependencyExclusions>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
