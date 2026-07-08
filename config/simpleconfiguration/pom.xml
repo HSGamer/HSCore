@@ -28,7 +28,7 @@
     <dependency>
       <groupId>com.github.Carleslc.Simple-YAML</groupId>
       <artifactId>Simple-Configuration</artifactId>
-      <version>1.8.4</version>
+      <version>1.8.5</version>
     </dependency>
   </dependencies>
 </project>
