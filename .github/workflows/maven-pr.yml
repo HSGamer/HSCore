@@ -20,6 +20,6 @@ jobs:
       - name: Set up Maven Daemon
         uses: gauthamchandra/mvnd-action@v0.2.1
         with:
-          version: '1.0.2'
+          version: '1.0.6'
       - name: Build
         run: mvnd clean verify
