@@ -47,10 +47,8 @@
     <module>web</module>
     <module>request</module>
     <module>serializer</module>
-    <module>config</module>
     <module>expansion</module>
     <module>checker</module>
-    <module>database</module>
     <module>downloader</module>
     <module>task</module>
     <module>minecraft</module>

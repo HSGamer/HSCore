@@ -19,8 +19,6 @@
   <modules>
     <module>expansion</module>
     <module>utils</module>
-    <module>config</module>
-    <module>config-converter</module>
     <module>click-type</module>
     <module>channel</module>
     <module>variable</module>
